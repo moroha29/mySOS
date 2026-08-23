@@ -59,6 +59,22 @@ describe('workbook pricing parity', () => {
     expect([1, 10, 21, 31, 51, 101, 301, 501].map((qty) => getTier(qty).label)).toEqual(['1–9', '10–20', '21–30', '31–50', '51–100', '101–300', '301–500', '500+']);
   });
 
+  it('combines independently tiered products in one quotation', () => {
+    const quote = calculateQuotation({
+      ...base,
+      items: [
+        { id: 'tee-line', quantity: 50, productId: 'tee', productOptions: { garment: 'premium_cotton_tee' }, prints: [{ method: 'dtf', option: 'front_left_chest' }], sizes: {} },
+        { id: 'polo-line', quantity: 25, productId: 'polo', productOptions: { garment: 'polo_cotton_pique' }, prints: [{ method: 'dtf', option: 'sleeve' }], sizes: {} },
+      ],
+    });
+    expect(quote.items.map((item) => item.tier.label)).toEqual(['31–50', '21–30']);
+    expect(quote.items[0].sellingPrice).toBe(555);
+    expect(quote.items[1].sellingPrice).toBe(342.5);
+    expect(quote.totalQuantity).toBe(75);
+    expect(quote.adjustedCost).toBe(409.125);
+    expect(quote.sellingPrice).toBe(897.5);
+  });
+
   it('rejects incompatible sublimation combinations', () => {
     const errors = validateQuotation({ ...base, prints: [{ method: 'sublimation', option: 'full' }] });
     expect(Object.values(errors)).toContain('Full sublimation printing is only available for jerseys.');

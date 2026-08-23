@@ -1,9 +1,9 @@
 import { addonData } from '../engines/addonEngine';
 
-export default function AddonSelector({ addons, onChange }) {
+export default function AddonSelector({ addons, onChange, step = 4 }) {
   const update = (id, patch) => onChange({ ...addons, [id]: { ...addons[id], ...patch } });
   return <section className="form-section" id="addons">
-    <div className="section-heading"><span>4</span><div><h2>Add-ons</h2><p>Per-piece quantities default to the order quantity.</p></div></div>
+    <div className="section-heading"><span>{step}</span><div><h2>Add-ons</h2><p>Per-piece quantities default to the combined quantity of all order items.</p></div></div>
     <div className="addon-grid">
       {addonData.map((addon) => {
         const selection = addons[addon.id] ?? {};

@@ -34,13 +34,14 @@ function PrintCard({ index, print, allowed, onChange, error }) {
   </div>;
 }
 
-export default function PrintSelector({ productId, prints, onChange, errors }) {
+export default function PrintSelector({ productId, prints, onChange, errors, compact = false }) {
   const allowed = getProduct(productId)?.allowedPrintMethods ?? [];
-  return <section className="form-section" id="printing">
-    <div className="section-heading"><span>3</span><div><h2>Printing options</h2><p>Add up to two print methods or placements.</p></div></div>
+  const Wrapper = compact ? 'div' : 'section';
+  return <Wrapper className={compact ? 'selector-block' : 'form-section'} id={compact ? undefined : 'printing'}>
+    {compact ? <h3>Printing</h3> : <div className="section-heading"><span>3</span><div><h2>Printing options</h2><p>Add up to two print methods or placements.</p></div></div>}
     <div className="print-grid">
       {prints.map((print, index) => <PrintCard key={index} index={index} print={print} allowed={allowed} onChange={(value) => onChange(prints.map((item, itemIndex) => itemIndex === index ? value : item))} error={errors[`print${index}`]} />)}
     </div>
     {errors.prints && <p className="field-error">{errors.prints}</p>}
-  </section>;
+  </Wrapper>;
 }

@@ -8,11 +8,12 @@ const Select = ({ value, onChange, options, placeholder = 'Select an option' }) 
   </select>
 );
 
-export default function ProductSelector({ productId, options, onProductChange, onOptionsChange, error }) {
+export default function ProductSelector({ productId, options, onProductChange, onOptionsChange, error, compact = false }) {
   const setOption = (key, value) => onOptionsChange({ ...options, [key]: value });
   const garments = productData.garments.filter((item) => item.category === productId);
-  return <section className="form-section" id="product">
-    <div className="section-heading"><span>2</span><div><h2>Product configuration</h2><p>Choose the garment and its construction details.</p></div></div>
+  const Wrapper = compact ? 'div' : 'section';
+  return <Wrapper className={compact ? 'selector-block' : 'form-section'} id={compact ? undefined : 'product'}>
+    {compact ? <h3>Product</h3> : <div className="section-heading"><span>2</span><div><h2>Product configuration</h2><p>Choose the garment and its construction details.</p></div></div>}
     <div className="form-grid">
       <Field label="Product type *"><Select value={productId} onChange={onProductChange} options={productData.products} placeholder="Choose a product" /></Field>
       {(productId === 'tee' || productId === 'polo') && <Field label="Garment type *"><Select value={options.garment} onChange={(value) => setOption('garment', value)} options={garments} /></Field>}
@@ -30,5 +31,5 @@ export default function ProductSelector({ productId, options, onProductChange, o
       </>}
     </div>
     {error && <p className="field-error">{error}</p>}
-  </section>;
+  </Wrapper>;
 }

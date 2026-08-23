@@ -6,6 +6,11 @@ const PALE = 'EAF3F0';
 const BORDER = 'D8E2DF';
 const currencyFormat = '"SGD "#,##0.00';
 
+function excelDate(dateString) {
+  const [year, month, day] = String(dateString).split('-').map(Number);
+  return new Date(Date.UTC(year, month - 1, day, 12));
+}
+
 const safeFilePart = (value) => String(value || 'Customer')
   .trim()
   .replace(/[^a-z0-9_-]+/gi, '_')
@@ -66,7 +71,7 @@ export function generateQuotationWorkbook(quote) {
   sheet.mergeCells('A4:E4');
   sheet.getCell('A4').value = 'CUSTOMER INFORMATION';
   styleSection(sheet.getRow(4));
-  sheet.addRow(['Customer name', quote.input.customerName, '', 'Order date', new Date(`${quote.input.orderDate}T00:00:00`)]);
+  sheet.addRow(['Customer name', quote.input.customerName, '', 'Order date', excelDate(quote.input.orderDate)]);
   sheet.addRow(['Customer type', quote.input.customerType, '', 'Reference', quote.input.orderReference]);
   sheet.getCell('E5').numFmt = 'dd mmm yyyy';
 
@@ -76,14 +81,20 @@ export function generateQuotationWorkbook(quote) {
   const headerRow = sheet.addRow(['Product / charge', 'Description', 'Quantity', 'Unit price', 'Subtotal']);
   styleHeader(headerRow);
   const itemRows = [];
-  itemRows.push(sheet.addRow([quote.product?.name ?? '', quote.productCost.description, quote.input.quantity, quote.productCost.unitCost, { formula: `C${sheet.rowCount + 1}*D${sheet.rowCount + 1}`, result: quote.apparelTotal }]));
-  quote.prints.forEach((print) => {
+  quote.items.forEach((item) => {
     const rowNumber = sheet.rowCount + 1;
-    itemRows.push(sheet.addRow(['Printing', print.description, quote.input.quantity, print.unitCost, { formula: `C${rowNumber}*D${rowNumber}`, result: print.unitCost * quote.input.quantity }]));
+    const printDescription = item.prints.map((print) => print.description).join(' + ');
+    const description = [item.productCost.description, printDescription, `Tier ${item.tier?.label ?? '—'}`].filter(Boolean).join(' · ');
+    itemRows.push(sheet.addRow([item.product?.name ?? '', description, Number(item.input.quantity), item.unitSellingPrice, { formula: `C${rowNumber}*D${rowNumber}`, result: item.sellingPrice }]));
   });
-  if (quote.setupFees > 0) itemRows.push(sheet.addRow(['Setup fees', 'One-time print setup / digitizing', 1, quote.setupFees, quote.setupFees]));
-  quote.addons.items.forEach((addon) => itemRows.push(sheet.addRow([addon.name, addon.type === 'flat' ? 'Flat fee' : 'Add-on', addon.quantity, addon.sellPrice, addon.totalSell])));
-  if (quote.shippingCost > 0) itemRows.push(sheet.addRow(['Shipping', quote.input.shippingMethod || 'Shipping', 1, quote.shippingCost, quote.shippingCost]));
+  quote.addons.items.forEach((addon) => {
+    const quotedTotal = addon.totalCost * quote.tier.sellMultiplier + addon.totalSell - addon.totalCost;
+    itemRows.push(sheet.addRow([addon.name, addon.type === 'flat' ? 'Flat add-on' : 'Order add-on', addon.quantity, quotedTotal / addon.quantity, quotedTotal]));
+  });
+  if (quote.shippingCost > 0) {
+    const quotedShipping = quote.shippingCost * (quote.tier.sellMultiplier + 1);
+    itemRows.push(sheet.addRow(['Shipping', quote.input.shippingMethod || 'Shipping', 1, quotedShipping, quotedShipping]));
+  }
   itemRows.forEach((row) => {
     row.height = 23;
     row.eachCell((cell) => { cell.border = { bottom: { style: 'thin', color: { argb: BORDER } } }; cell.alignment = { vertical: 'middle', wrapText: true }; });
@@ -96,9 +107,10 @@ export function generateQuotationWorkbook(quote) {
   sheet.mergeCells(`A${summaryStart}:E${summaryStart}`);
   sheet.getCell(`A${summaryStart}`).value = 'PRICING SUMMARY';
   styleSection(sheet.getRow(summaryStart));
-  const subtotalRow = sheet.addRow(['Tier applied', `${quote.tier.label} quantity tier`, '', 'Selling price', quote.sellingPrice]);
+  const tiersUsed = [...new Set(quote.items.map((item) => item.tier?.label).filter(Boolean))].join(', ');
+  const subtotalRow = sheet.addRow(['Item tiers applied', tiersUsed, '', 'Selling price', quote.sellingPrice]);
   subtotalRow.getCell(5).numFmt = currencyFormat;
-  const unitRow = sheet.addRow(['Unit price', '', '', '', quote.unitSellingPrice]);
+  const unitRow = sheet.addRow(['Average unit price', `${quote.totalQuantity} total pieces`, '', '', quote.unitSellingPrice]);
   unitRow.getCell(5).numFmt = currencyFormat;
   const grandRow = sheet.addRow(['GRAND TOTAL', '', '', '', quote.sellingPrice]);
   grandRow.height = 34;

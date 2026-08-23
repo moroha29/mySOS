@@ -1,6 +1,6 @@
 # mySOS Quotation Engine
 
-A fully static React quotation tool for mySOS agents. It converts the supplied Excel pricing workbook into a browser-based form, calculates prices locally, previews the quotation, and downloads a formatted `.xlsx` file.
+A fully static React quotation tool for mySOS agents. It converts the supplied Excel pricing workbook into a browser-based form, calculates prices locally, previews the quotation, and downloads a formatted `.xlsx` file. A single quotation can contain multiple products with different quantities and print configurations.
 
 Production URL: `https://moroha29.github.io/mySOS/quotation_engine/`
 
@@ -55,6 +55,7 @@ Pricing values never live inside React components. To add an option, update the 
 - DTF pricing, silkscreen flat minimums/per-piece tiers, embroidery stitch and placement pricing plus digitizing fees, and jersey sublimation pricing.
 - Eight add-ons with per-piece or flat-fee behavior and optional quantity overrides.
 - `QUOTATION_OUTPUT` totals: internal cost, tier-adjusted cost, selling price, profit, margin, and unit metrics.
+- Multi-item orders: every product line receives the tier for its own quantity, then the independently calculated lines are combined into one quotation. Global per-piece add-ons default to the combined order quantity.
 
 The source workbook mentions DTG as a supported Tee/Polo method but contains no separate `PRINT_DTG_ENGINE` or DTG rate table. The app exposes DTG and transparently maps it to the workbook's DTF option prices. Replace the alias in `src/data/printData.json` when approved DTG pricing becomes available.
 
