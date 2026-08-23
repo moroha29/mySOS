@@ -29,9 +29,8 @@ export default function App() {
   };
 
   return <>
-    <header className="app-header"><div className="brand"><div className="brand-mark">mS</div><div><strong>mySOS</strong><span>Quotation engine</span></div></div><div className="header-badge">Agent tool</div></header>
     <main>
-      <section className="hero"><div><span className="eyebrow">Fast, consistent agent pricing</span><h1>Build a client-ready quotation.</h1><p>Configure the order, review pricing instantly, and download a polished Excel quotation.</p></div><div className="hero-stat"><strong>100%</strong><span>Runs in your browser</span></div></section>
+      <header className="page-heading"><h1>Agent quotation</h1></header>
       <nav className="step-nav" aria-label="Quotation sections"><a href="#customer">01 Customer</a><a href="#products">02 Order items</a><a href="#addons">03 Add-ons</a><a href="#shipping">04 Finish</a><a href="#preview">05 Preview</a></nav>
       <div className="workspace"><QuotationForm value={form} onChange={setForm} errors={shownErrors} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
     </main>

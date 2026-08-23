@@ -4,22 +4,9 @@ html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, input, select, textarea { font: inherit; }
 button, select { cursor: pointer; }
-.app-header { height: 78px; padding: 0 max(24px, calc((100vw - 1320px) / 2)); display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid var(--line); }
-.brand { display: flex; align-items: center; gap: 12px; }
-.brand-mark { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: var(--green); color: white; font-family: Inter, sans-serif; font-weight: 700; }
-.brand > div:last-child { display: flex; flex-direction: column; line-height: 1.15; }
-.brand strong { font: 700 18px Inter, sans-serif; }
-.brand span { font-size: 12px; color: var(--muted); }
-.header-badge { padding: 8px 13px; border-radius: 99px; background: #f0f5f3; color: var(--green); font-size: 12px; font-weight: 700; }
 main { max-width: 1320px; margin: 0 auto; padding: 38px 24px 70px; }
-.hero { min-height: 236px; padding: 42px 48px; border-radius: 28px; background: var(--green); color: white; display: flex; align-items: flex-end; justify-content: space-between; overflow: hidden; position: relative; }
-.hero::after { content: ''; width: 370px; height: 370px; border: 70px solid rgba(255,255,255,.055); border-radius: 50%; position: absolute; right: -80px; top: -185px; }
-.eyebrow { color: #9fd1bf; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; font-weight: 700; }
-.hero h1 { margin: 12px 0 8px; max-width: 650px; font: 700 clamp(32px, 4vw, 54px)/1.05 Inter, sans-serif; letter-spacing: -.04em; }
-.hero p { margin: 0; max-width: 600px; color: #c6d7d3; font-size: 16px; }
-.hero-stat { z-index: 1; min-width: 150px; display: flex; flex-direction: column; text-align: right; }
-.hero-stat strong { font: 700 35px Inter, sans-serif; color: #f4a387; }
-.hero-stat span { color: #c6d7d3; font-size: 12px; }
+.page-heading { padding: 6px 2px 18px; }
+.page-heading h1 { margin: 0; color: var(--green); font-size: clamp(27px, 4vw, 38px); letter-spacing: -.035em; }
 .step-nav { margin: 18px 0 26px; padding: 9px; display: flex; gap: 6px; overflow-x: auto; background: #e8efec; border-radius: 14px; position: sticky; top: 8px; z-index: 5; box-shadow: 0 5px 16px rgba(18,59,53,.06); }
 .step-nav a { flex: 1 0 auto; padding: 10px 16px; border-radius: 9px; color: #526863; text-decoration: none; font-size: 13px; font-weight: 600; text-align: center; }
 .step-nav a:hover { background: #fff; color: var(--green); }
@@ -106,4 +93,4 @@ textarea { resize: vertical; }
 .privacy-note { margin: 11px 0 0; color: var(--muted); font-size: 10px; text-align: center; }
 footer { padding: 28px 24px; border-top: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 12px; }
 @media (max-width: 980px) { .workspace { grid-template-columns: 1fr; } .preview-card { position: static; order: 2; } }
-@media (max-width: 680px) { main { padding: 20px 14px 48px; } .app-header { padding: 0 16px; } .hero { min-height: 260px; padding: 30px 24px; align-items: flex-start; } .hero-stat { display: none; } .step-nav { margin-top: 12px; } .form-section, .preview-card { border-radius: 16px; } .form-section { padding: 20px 16px; } .order-item { padding: 16px 12px; } .form-grid, .print-grid, .addon-grid { grid-template-columns: 1fr; } .size-grid { grid-template-columns: repeat(4, 1fr); } .addon-card { min-height: 70px; } .check-row { gap: 12px; flex-direction: column; } }
+@media (max-width: 680px) { main { padding: 24px 14px 48px; } .page-heading { padding-bottom: 10px; } .step-nav { margin-top: 12px; } .form-section, .preview-card { border-radius: 16px; } .form-section { padding: 20px 16px; } .order-item { padding: 16px 12px; } .form-grid, .print-grid, .addon-grid { grid-template-columns: 1fr; } .size-grid { grid-template-columns: repeat(4, 1fr); } .addon-card { min-height: 70px; } .check-row { gap: 12px; flex-direction: column; } }
