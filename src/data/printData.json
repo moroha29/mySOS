@@ -1,0 +1,67 @@
+{
+  "methods": [
+    { "id": "none", "name": "None" },
+    { "id": "dtf", "name": "DTF" },
+    { "id": "dtg", "name": "DTG" },
+    { "id": "silkscreen", "name": "Silkscreen" },
+    { "id": "embroidery", "name": "Embroidery" },
+    { "id": "sublimation", "name": "Sublimation" }
+  ],
+  "dtf": {
+    "options": [
+      { "id": "front_left_chest", "name": "Front Left Chest", "cost": 1.5 },
+      { "id": "sleeve", "name": "Sleeve", "cost": 0.85 },
+      { "id": "fb_a4", "name": "F&B A4", "cost": 2.5 },
+      { "id": "a4_small_logo", "name": "A4 + 4\"x4\" (small sq logo)", "cost": 2.5 },
+      { "id": "fb_a3", "name": "F&B A3", "cost": 3.8 },
+      { "id": "flc_a4", "name": "FLC + A4", "cost": 3.8 },
+      { "id": "flc_a3", "name": "FLC + A3", "cost": 3.8 },
+      { "id": "a4_a3", "name": "A4 + A3", "cost": 4.5 },
+      { "id": "one_s_fb_a4", "name": "1S + F&B A4", "cost": 3.8 },
+      { "id": "one_s_fb_a3", "name": "1S + F&B A3", "cost": 5 }
+    ]
+  },
+  "dtg": {
+    "note": "The source workbook has no separate DTG engine; it uses the DTF option table for this supported garment method.",
+    "aliasOf": "dtf"
+  },
+  "silkscreen": {
+    "rates": [
+      { "technique": "Waterbase/Rubber", "size": "Within A4", "flat1To50": 40, "flat51To100": 40, "perPiece101To500": 0.3, "perPiece501Plus": 0.25 },
+      { "technique": "Waterbase/Rubber", "size": "A3", "flat1To50": 45, "flat51To100": 45, "perPiece101To500": 0.45, "perPiece501Plus": 0.3 },
+      { "technique": "CMYK Printing", "size": "Within A4", "flat1To50": 45, "flat51To100": 45, "perPiece101To500": 0.35, "perPiece501Plus": 0.3 },
+      { "technique": "CMYK Printing", "size": "A3", "flat1To50": 55, "flat51To100": 55, "perPiece101To500": 0.5, "perPiece501Plus": 0.45 },
+      { "technique": "Effect Printing", "size": "Logo 4x4", "flat1To50": 45, "flat51To100": 50, "perPiece101To500": 0.45, "perPiece501Plus": 0.45 },
+      { "technique": "Effect Printing", "size": "A4", "flat1To50": 60, "flat51To100": 75, "perPiece101To500": 0.75, "perPiece501Plus": 0.75 },
+      { "technique": "Effect Printing", "size": "A3", "flat1To50": 75, "flat51To100": 95, "perPiece101To500": 0.9, "perPiece501Plus": 0.9 }
+    ]
+  },
+  "embroidery": {
+    "stitchTiers": [
+      { "id": "up_to_5000", "name": "Up to 5,000", "cost": 2 },
+      { "id": "5001_10000", "name": "5,001–10,000", "cost": 3.5 },
+      { "id": "10001_20000", "name": "10,001–20,000", "cost": 5 },
+      { "id": "20001_40000", "name": "20,001–40,000", "cost": 7.5 },
+      { "id": "40001_60000", "name": "40,001–60,000", "cost": 10 },
+      { "id": "60000_plus", "name": "60,000+", "cost": 13 }
+    ],
+    "digitizing": [
+      { "id": "standard", "name": "Standard", "fee": 25 },
+      { "id": "complex", "name": "Complex", "fee": 50 }
+    ],
+    "placements": [
+      { "id": "chest", "name": "Chest", "multiplier": 1 },
+      { "id": "sleeve", "name": "Sleeve", "multiplier": 0.9 },
+      { "id": "cap_front", "name": "Cap Front", "multiplier": 1 },
+      { "id": "cap_side", "name": "Cap Side", "multiplier": 0.8 },
+      { "id": "back", "name": "Back", "multiplier": 1.1 }
+    ]
+  },
+  "sublimation": {
+    "options": [
+      { "id": "full", "name": "Full Sublimation Print (fabric + print)", "cost": 8 },
+      { "id": "premium", "name": "Premium Sublimation (complex gradient)", "cost": 10 },
+      { "id": "all_over", "name": "All-over Print (extended coverage)", "cost": 12 }
+    ]
+  }
+}

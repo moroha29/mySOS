@@ -1,0 +1,57 @@
+{
+  "products": [
+    { "id": "jersey_sublimation", "name": "Jersey (Sublimation)", "engine": "PRODUCT_JERSEY_SUBLIMATION", "allowedPrintMethods": ["sublimation"] },
+    { "id": "tee", "name": "Tee (DTF/DTG)", "engine": "PRODUCT_TEE_DTF_DTG", "allowedPrintMethods": ["dtf", "dtg", "silkscreen", "embroidery"] },
+    { "id": "polo", "name": "Polo", "engine": "PRODUCT_TEE_DTF_DTG", "allowedPrintMethods": ["dtf", "dtg", "silkscreen", "embroidery"] },
+    { "id": "cap", "name": "Cap", "engine": "PRODUCT_CAPS", "allowedPrintMethods": ["dtf", "silkscreen", "embroidery"] },
+    { "id": "custom_cutsew", "name": "Custom Cut & Sew", "engine": "PRODUCT_CUSTOM_CUTSEW", "allowedPrintMethods": ["dtf", "dtg", "silkscreen", "embroidery"] }
+  ],
+  "jersey": {
+    "fabrics": [
+      { "id": "polyester_dri_fit", "name": "Polyester Dri-Fit", "cost": 4.5 },
+      { "id": "mesh_knit", "name": "Mesh Knit", "cost": 5.5 },
+      { "id": "interlock", "name": "Interlock", "cost": 6 }
+    ],
+    "collars": [
+      { "id": "round_neck", "name": "Round Neck", "cost": 0.5 },
+      { "id": "v_neck", "name": "V-Neck", "cost": 0.6 },
+      { "id": "mandarin", "name": "Mandarin", "cost": 0.8 },
+      { "id": "polo_collar", "name": "Polo Collar", "cost": 1.2 }
+    ],
+    "sleeves": [
+      { "id": "short", "name": "Short", "cost": 0 },
+      { "id": "long", "name": "Long", "cost": 1.5 },
+      { "id": "raglan", "name": "Raglan", "cost": 0.8 }
+    ],
+    "customNameCost": 1,
+    "customNumberCost": 1.5,
+    "teamSetDiscount": -0.5
+  },
+  "garments": [
+    { "id": "cotton_round_neck_tee", "name": "Cotton Round Neck Tee", "category": "tee", "cost": 3 },
+    { "id": "cotton_v_neck_tee", "name": "Cotton V-Neck Tee", "category": "tee", "cost": 3.2 },
+    { "id": "premium_cotton_tee", "name": "Premium Cotton Tee", "category": "tee", "cost": 4.5 },
+    { "id": "dri_fit_round_neck", "name": "Dri-Fit Round Neck", "category": "tee", "cost": 4 },
+    { "id": "dri_fit_v_neck", "name": "Dri-Fit V-Neck", "category": "tee", "cost": 4.2 },
+    { "id": "polo_cotton_pique", "name": "Polo — Cotton Pique", "category": "polo", "cost": 6 },
+    { "id": "polo_dri_fit", "name": "Polo — Dri-Fit", "category": "polo", "cost": 6.5 },
+    { "id": "polo_premium_cvc", "name": "Polo — Premium CVC", "category": "polo", "cost": 7.5 }
+  ],
+  "caps": [
+    { "id": "snapback", "name": "Snapback", "cost": 3.5 },
+    { "id": "dad_cap", "name": "Dad Cap", "cost": 2.8 },
+    { "id": "trucker_mesh", "name": "Trucker Mesh", "cost": 3 },
+    { "id": "five_panel", "name": "5-Panel", "cost": 3.2 },
+    { "id": "bucket_hat", "name": "Bucket Hat", "cost": 4 },
+    { "id": "fitted_cap", "name": "Fitted Cap", "cost": 4.5 }
+  ],
+  "customCutSew": {
+    "fabricPerMetre": 8,
+    "metresPerGarment": 1.5,
+    "cutting": 2,
+    "sewing": { "basic": 5, "complex": 8 },
+    "finishing": 1.5,
+    "patternMaking": 15,
+    "samplePrototype": 50
+  }
+}

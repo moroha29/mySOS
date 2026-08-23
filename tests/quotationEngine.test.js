@@ -1,0 +1,66 @@
+import { describe, expect, it } from 'vitest';
+import { calculateQuotation, validateQuotation } from '../src/engines/quotationEngine';
+import { getTier } from '../src/engines/tierEngine';
+
+const base = {
+  customerName: 'Test Client', customerType: 'Corporate', orderDate: '2026-08-23', orderReference: 'TEST-001',
+  quantity: 50, productId: 'tee', productOptions: { garment: 'premium_cotton_tee' }, prints: [{ method: 'dtf', option: 'front_left_chest' }],
+  addons: {}, sizes: {}, shippingCost: 0,
+};
+
+describe('workbook pricing parity', () => {
+  it('prices a jersey sublimation quotation', () => {
+    const quote = calculateQuotation({ ...base, productId: 'jersey_sublimation', productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short' }, prints: [{ method: 'sublimation', option: 'full' }] });
+    expect(quote.internalCost).toBe(650);
+    expect(quote.adjustedCost).toBe(552.5);
+    expect(quote.sellingPrice).toBe(1202.5);
+  });
+
+  it('prices a tee with DTF', () => {
+    const quote = calculateQuotation(base);
+    expect(quote.internalCost).toBe(300);
+    expect(quote.adjustedCost).toBe(255);
+    expect(quote.sellingPrice).toBe(555);
+  });
+
+  it('prices a tee with silkscreen minimum-charge logic', () => {
+    const quote = calculateQuotation({ ...base, prints: [{ method: 'silkscreen', technique: 'Waterbase/Rubber', size: 'Within A4', colors: 2 }] });
+    expect(quote.prints[0].unitCost).toBe(1.6);
+    expect(quote.internalCost).toBe(305);
+    expect(quote.adjustedCost).toBe(259.25);
+    expect(quote.sellingPrice).toBe(564.25);
+  });
+
+  it('prices a cap with embroidery and digitizing', () => {
+    const quote = calculateQuotation({ ...base, quantity: 100, productId: 'cap', productOptions: { capType: 'snapback' }, prints: [{ method: 'embroidery', stitchTier: 'up_to_5000', digitizing: 'standard', placement: 'cap_front' }] });
+    expect(quote.setupFees).toBe(25);
+    expect(quote.internalCost).toBe(575);
+    expect(quote.adjustedCost).toBe(460);
+    expect(quote.sellingPrice).toBe(977.5);
+  });
+
+  it('prices a custom cut and sew quotation', () => {
+    const quote = calculateQuotation({ ...base, quantity: 30, productId: 'custom_cutsew', productOptions: { complexity: 'basic' }, prints: [{ method: 'dtf', option: 'sleeve' }] });
+    expect(quote.productCost.unitCost).toBe(20.5);
+    expect(quote.internalCost).toBe(640.5);
+    expect(quote.adjustedCost).toBe(576.45);
+    expect(quote.sellingPrice).toBe(1281);
+  });
+
+  it('prices multiple add-ons with cost and sell totals', () => {
+    const quote = calculateQuotation({ ...base, quantity: 20, addons: { packaging: { selected: true }, hang_tag: { selected: true }, design_fee: { selected: true } } });
+    expect(quote.addons.totalCost).toBe(46);
+    expect(quote.addons.totalSell).toBe(65);
+    expect(quote.adjustedCost).toBeCloseTo(157.7);
+    expect(quote.sellingPrice).toBeCloseTo(384.2);
+  });
+
+  it('selects all workbook quantity tiers at their boundaries', () => {
+    expect([1, 10, 21, 31, 51, 101, 301, 501].map((qty) => getTier(qty).label)).toEqual(['1–9', '10–20', '21–30', '31–50', '51–100', '101–300', '301–500', '500+']);
+  });
+
+  it('rejects incompatible sublimation combinations', () => {
+    const errors = validateQuotation({ ...base, prints: [{ method: 'sublimation', option: 'full' }] });
+    expect(Object.values(errors)).toContain('Full sublimation printing is only available for jerseys.');
+  });
+});
