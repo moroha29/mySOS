@@ -9,7 +9,7 @@ export function calculatePrintCost(print = {}, quantity = 0) {
   if (method === 'dtf' || method === 'dtg') {
     const option = byId(printData.dtf.options, print.option);
     return {
-      unitCost: option?.cost ?? 0,
+      unitCost: option?.baseCost ?? 0,
       setupFee: 0,
       description: `${method.toUpperCase()} — ${option?.name ?? ''}`,
     };
@@ -34,7 +34,7 @@ export function calculatePrintCost(print = {}, quantity = 0) {
     const digitizing = byId(printData.embroidery.digitizing, print.digitizing);
     const placement = byId(printData.embroidery.placements, print.placement);
     return {
-      unitCost: (stitch?.cost ?? 0) * (placement?.multiplier ?? 1),
+      unitCost: (stitch?.baseCost ?? 0) * (placement?.multiplier ?? 1),
       setupFee: digitizing?.fee ?? 0,
       description: `Embroidery — ${stitch?.name ?? ''}, ${placement?.name ?? ''}`,
     };
@@ -42,7 +42,7 @@ export function calculatePrintCost(print = {}, quantity = 0) {
 
   if (method === 'sublimation') {
     const option = byId(printData.sublimation.options, print.option);
-    return { unitCost: option?.cost ?? 0, setupFee: 0, description: `Sublimation — ${option?.name ?? ''}` };
+    return { unitCost: option?.baseCost ?? 0, setupFee: 0, description: `Sublimation — ${option?.name ?? ''}` };
   }
 
   return { unitCost: 0, setupFee: 0, description: '' };

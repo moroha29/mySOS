@@ -1,0 +1,45 @@
+{
+  "categories": [
+    { "id": "apparel", "name": "Apparel", "icon": "shirt", "description": "T-shirts, polos, jerseys and more" },
+    { "id": "bags", "name": "Bags", "icon": "bag", "description": "Tote bags, backpacks and pouches" },
+    { "id": "drinkware", "name": "Drinkware", "icon": "bottle", "description": "Bottles, tumblers and mugs" },
+    { "id": "corporate-gifts", "name": "Corporate Gifts", "icon": "gift", "description": "Premium gifts for every occasion" },
+    { "id": "stationery", "name": "Stationery", "icon": "notebook", "description": "Notebooks, pens, folders and more" },
+    { "id": "event-essentials", "name": "Event Essentials", "icon": "lanyard", "description": "Lanyards, badges, banners and more" }
+  ],
+  "benefits": [
+    { "title": "One Supplier", "shortTitle": "One Supplier. Endless Possibilities.", "description": "Source multiple products through one reliable partner." },
+    { "title": "Better Value", "shortTitle": "Premium Quality Without Premium Pricing.", "description": "Quality recommendations without unnecessary premium pricing." },
+    { "title": "Flexible Quantities", "shortTitle": "Flexible Order Quantities.", "description": "From small projects to larger scale orders." },
+    { "title": "Expert Guidance", "shortTitle": "Expert Recommendations.", "description": "We recommend the right products, materials and methods." },
+    { "title": "Built Around You", "shortTitle": "Tailored To Your Needs.", "description": "Solutions shaped around your industry, goals and budget." }
+  ],
+  "process": [
+    { "title": "Explore", "description": "Tell us what you need." },
+    { "title": "Recommend", "description": "We recommend the best solutions." },
+    { "title": "Quote", "description": "You receive a clear quotation." },
+    { "title": "Sample", "description": "We provide a sample for approval." },
+    { "title": "Produce", "description": "We produce with quality control." },
+    { "title": "Deliver", "description": "We deliver on time, every time." }
+  ],
+  "popularSolutions": [
+    { "name": "Orientation Pack", "icon": "welcome" },
+    { "name": "Welcome Kit", "icon": "bag" },
+    { "name": "Graduation Pack", "icon": "grad" },
+    { "name": "Sports Pack", "icon": "sports" },
+    { "name": "Event Pack", "icon": "lanyard" },
+    { "name": "Corporate Gifts", "icon": "gift" }
+  ],
+  "faq": [
+    { "question": "What is the minimum order quantity?", "answer": "Minimum quantities vary by product and customisation method. The quotation engine shows accurate options for the selected product." },
+    { "question": "How long is the production lead time?", "answer": "Most projects take two to four weeks after artwork and sample approval. Complex custom products may take longer." },
+    { "question": "Can you help with design?", "answer": "Yes. We can advise on product selection, print placement and artwork preparation." },
+    { "question": "Do you ship internationally?", "answer": "International delivery can be arranged. Shipping is quoted separately based on destination and order size." },
+    { "question": "What file formats do you accept?", "answer": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method." }
+  ],
+  "testimonials": [
+    { "quote": "Professional, responsive and the quality of our products is excellent.", "name": "Rachel Ong", "role": "Marketing Manager, NUS", "rating": 5 },
+    { "quote": "Great experience from start to finish. They understood our needs perfectly and delivered on time.", "name": "Benjamin Tan", "role": "Event Lead", "rating": 5 },
+    { "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted.", "name": "Alicia Lim", "role": "Student Council", "rating": 5 }
+  ]
+}

@@ -1,0 +1,43 @@
+[
+  {
+    "slug": "ntu-cca-jerseys-2024", "title": "NTU CCA Jerseys 2024", "category": "schools", "summary": "Custom jerseys for various NTU CCA teams.", "products": ["jersey-sublimation"], "quantity": 320, "year": 2024, "featured": true, "imageStyle": "team-green",
+    "gallery": ["team-green", "team-lineup", "jersey-detail", "production"],
+    "challenge": "NTU's CCA teams needed a new set of jerseys that looked great, stayed comfortable in Singapore's warm weather and gave every club a clear identity.",
+    "solution": "We recommended lightweight, breathable dry-fit jerseys with full sublimation printing for vibrant colours and durable detail. Each team received a unique design within one coordinated visual system.",
+    "process": ["Consultation", "Design", "Sampling", "Production", "Delivery"],
+    "outcomes": ["Delivered 320 jerseys across 8 different CCA teams", "High-quality finish with vibrant, long-lasting prints", "Comfortable fit for training and matches", "Delivered on time before the new season"],
+    "testimonial": { "quote": "The jerseys look amazing and the quality is top-notch. MySOS made the whole process so easy from design to delivery.", "name": "Rachel Ong", "organisation": "NUS Students' Union" }
+  },
+  {
+    "slug": "corporate-family-day-2024", "title": "Corporate Family Day 2024", "category": "businesses", "summary": "Branded event tees and goodie bags for 600+ participants.", "products": ["premium_cotton_tee"], "quantity": 640, "year": 2024, "featured": true, "imageStyle": "corporate-navy",
+    "gallery": ["corporate-navy", "event-pack", "tee-detail"], "challenge": "A large company needed coordinated merchandise for employees and families.", "solution": "We created an easy-to-distribute pack with comfortable event tees and reusable bags.", "process": ["Brief", "Recommendation", "Artwork", "Production", "Delivery"], "outcomes": ["More than 600 packs prepared", "Clear size labelling", "On-time venue delivery"], "testimonial": { "quote": "Everything arrived organised and ready to distribute.", "name": "Benjamin Tan", "organisation": "Event Committee" }
+  },
+  {
+    "slug": "school-orientation-pack", "title": "School Orientation Pack", "category": "schools", "summary": "Welcome kits for new students including tees and essentials.", "products": ["cotton_round_neck_tee"], "quantity": 480, "year": 2024, "featured": true, "imageStyle": "school-pack",
+    "gallery": ["school-pack", "tee-detail"], "challenge": "A school required consistent welcome packs across several programmes.", "solution": "We assembled clearly labelled packs with tees and useful orientation items.", "process": ["Planning", "Sizing", "Sampling", "Packing", "Delivery"], "outcomes": ["480 student packs completed", "Simple programme sorting", "Smooth orientation-day handout"], "testimonial": { "quote": "The packs made the first day feel welcoming and organised.", "name": "Programme Lead", "organisation": "Student Services" }
+  },
+  {
+    "slug": "sports-camp-2024", "title": "Sports Camp 2024", "category": "sports-teams", "summary": "Apparel and merchandise for a youth sports camp.", "products": ["dri_fit_round_neck", "snapback"], "quantity": 180, "year": 2024, "featured": true, "imageStyle": "sports-blue",
+    "gallery": ["sports-blue", "team-lineup"], "challenge": "Camp apparel needed to stay comfortable through long outdoor sessions.", "solution": "We paired breathable performance tees with durable branded caps.", "process": ["Consultation", "Design", "Sample", "Production", "Delivery"], "outcomes": ["180 participant kits", "Comfortable active fit", "Strong visual identity"], "testimonial": { "quote": "The team looked united and stayed comfortable all weekend.", "name": "Camp Director", "organisation": "Youth Sports Club" }
+  },
+  {
+    "slug": "sports-team-kit-2024", "title": "Sports Team Kit 2024", "category": "sports-teams", "summary": "Full kit for a local football team.", "products": ["jersey-sublimation"], "quantity": 65, "year": 2024, "featured": false, "imageStyle": "football-green",
+    "gallery": ["football-green", "jersey-detail"], "challenge": "A football club wanted a distinctive kit for a new season.", "solution": "Custom sublimated jerseys delivered strong colour and flexible player personalisation.", "process": ["Brief", "Design", "Sizing", "Production", "Delivery"], "outcomes": ["Full squad outfitted", "Player names and numbers", "Match-ready delivery"], "testimonial": { "quote": "The finished kit feels professional and completely ours.", "name": "Team Captain", "organisation": "Local Football Club" }
+  },
+  {
+    "slug": "music-festival-2024", "title": "Music Festival 2024", "category": "events", "summary": "Merchandise for an outdoor music festival.", "products": ["premium_cotton_tee", "snapback"], "quantity": 750, "year": 2024, "featured": true, "imageStyle": "festival",
+    "gallery": ["festival", "event-pack"], "challenge": "The organiser needed merchandise that worked for crew and retail sales.", "solution": "We produced a coordinated range with clear packing and delivery schedules.", "process": ["Range Plan", "Artwork", "Sampling", "Production", "Delivery"], "outcomes": ["750 merchandise units", "Crew and retail ranges", "Venue-ready packing"], "testimonial": { "quote": "The merchandise became part of the festival experience.", "name": "Festival Producer", "organisation": "Music Festival 2024" }
+  },
+  {
+    "slug": "community-charity-drive", "title": "Community Charity Drive", "category": "community", "summary": "T-shirts and tote bags for a charity fundraising event.", "products": ["cotton_round_neck_tee"], "quantity": 240, "year": 2024, "featured": false, "imageStyle": "community-green",
+    "gallery": ["community-green", "tee-detail"], "challenge": "A volunteer group needed affordable, welcoming event apparel.", "solution": "We kept the range simple and focused on easy sizing and distribution.", "process": ["Consultation", "Artwork", "Sizing", "Production", "Delivery"], "outcomes": ["240 volunteer items", "Easy distribution", "Strong campaign visibility"], "testimonial": { "quote": "The shirts helped everyone feel part of one team.", "name": "Volunteer Lead", "organisation": "Community Charity Drive" }
+  },
+  {
+    "slug": "product-launch-event", "title": "Product Launch Event", "category": "businesses", "summary": "Corporate gifts for a new product launch.", "products": ["polo_cotton_pique"], "quantity": 120, "year": 2023, "featured": false, "imageStyle": "launch",
+    "gallery": ["launch", "corporate-navy"], "challenge": "A product launch required polished gifts within a tight timeline.", "solution": "A concise premium range kept approvals and production moving quickly.", "process": ["Brief", "Selection", "Artwork", "Production", "Delivery"], "outcomes": ["120 guest gifts", "Premium presentation", "Delivered before launch day"], "testimonial": { "quote": "The gifts felt considered and elevated the launch.", "name": "Brand Manager", "organisation": "Technology Company" }
+  },
+  {
+    "slug": "church-camp-2024", "title": "Church Camp 2024", "category": "churches", "summary": "Apparel and merchandise for a youth camp.", "products": ["premium_cotton_tee"], "quantity": 210, "year": 2024, "featured": false, "imageStyle": "church-camp",
+    "gallery": ["church-camp", "team-lineup"], "challenge": "The organising team needed apparel for participants and volunteers.", "solution": "We created two coordinated shirt colours and a simple size allocation plan.", "process": ["Consultation", "Design", "Sizing", "Production", "Delivery"], "outcomes": ["210 participant shirts", "Volunteer colour variant", "Sorted by group"], "testimonial": { "quote": "The shirts brought the whole camp identity together.", "name": "Camp Coordinator", "organisation": "Youth Ministry" }
+  }
+]

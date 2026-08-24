@@ -1,4 +1,4 @@
-name: Deploy quotation engine to GitHub Pages
+name: Deploy MySOS website to GitHub Pages
 
 on:
   push:

@@ -10,14 +10,16 @@ const Select = ({ value, onChange, options, placeholder = 'Select an option' }) 
 
 export default function ProductSelector({ productId, options, onProductChange, onOptionsChange, error, compact = false }) {
   const setOption = (key, value) => onOptionsChange({ ...options, [key]: value });
-  const garments = productData.garments.filter((item) => item.category === productId);
+  const variants = productData.catalogue
+    .filter((item) => item.quotation.productId === productId && item.quotation.enabled)
+    .map((item) => ({ id: item.id, name: item.public.name }));
   const Wrapper = compact ? 'div' : 'section';
   return <Wrapper className={compact ? 'selector-block' : 'form-section'} id={compact ? undefined : 'product'}>
     {compact ? <h3>Product</h3> : <div className="section-heading"><span>2</span><div><h2>Product configuration</h2><p>Choose the garment and its construction details.</p></div></div>}
     <div className="form-grid">
-      <Field label="Product type *"><Select value={productId} onChange={onProductChange} options={productData.products} placeholder="Choose a product" /></Field>
-      {(productId === 'tee' || productId === 'polo') && <Field label="Garment type *"><Select value={options.garment} onChange={(value) => setOption('garment', value)} options={garments} /></Field>}
-      {productId === 'cap' && <Field label="Cap type *"><Select value={options.capType} onChange={(value) => setOption('capType', value)} options={productData.caps} /></Field>}
+      <Field label="Product type *"><Select value={productId} onChange={onProductChange} options={productData.quotationProducts} placeholder="Choose a product" /></Field>
+      {(productId === 'tee' || productId === 'polo') && <Field label="Garment type *"><Select value={options.garment} onChange={(value) => setOption('garment', value)} options={variants} /></Field>}
+      {productId === 'cap' && <Field label="Cap type *"><Select value={options.capType} onChange={(value) => setOption('capType', value)} options={variants} /></Field>}
       {productId === 'custom_cutsew' && <Field label="Sewing complexity *"><select value={options.complexity ?? ''} onChange={(event) => setOption('complexity', event.target.value)}><option value="">Select an option</option><option value="basic">Basic</option><option value="complex">Complex</option></select></Field>}
       {productId === 'jersey_sublimation' && <>
         <Field label="Fabric *"><Select value={options.fabric} onChange={(value) => setOption('fabric', value)} options={productData.jersey.fabrics} /></Field>

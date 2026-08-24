@@ -5,8 +5,9 @@ body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, input, select, textarea { font: inherit; }
 button, select { cursor: pointer; }
 main { max-width: 1320px; margin: 0 auto; padding: 38px 24px 70px; }
-.page-heading { padding: 6px 2px 18px; }
+.page-heading { padding: 6px 2px 18px; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; }
 .page-heading h1 { margin: 0; color: var(--green); font-size: clamp(27px, 4vw, 38px); letter-spacing: -.035em; }
+.quote-brand { color: var(--green); font-size: 20px; font-weight: 800; letter-spacing: -.04em; text-decoration: none; }
 .step-nav { margin: 18px 0 26px; padding: 9px; display: flex; gap: 6px; overflow-x: auto; background: #e8efec; border-radius: 14px; position: sticky; top: 8px; z-index: 5; box-shadow: 0 5px 16px rgba(18,59,53,.06); }
 .step-nav a { flex: 1 0 auto; padding: 10px 16px; border-radius: 9px; color: #526863; text-decoration: none; font-size: 13px; font-weight: 600; text-align: center; }
 .step-nav a:hover { background: #fff; color: var(--green); }

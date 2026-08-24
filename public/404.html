@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Redirecting to MySOS</title>
+  </head>
+  <body>
+    <p>Redirecting to MySOS…</p>
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        var base = '/mySOS/';
+        if (!path.startsWith(base)) return;
+        var route = path.slice(base.length);
+        var query = new URLSearchParams(window.location.search);
+        query.set('route', route);
+        window.location.replace(base + '?' + query.toString() + window.location.hash);
+      }());
+    </script>
+  </body>
+</html>

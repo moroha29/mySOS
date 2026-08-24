@@ -1,10 +1,13 @@
-# mySOS Quotation Engine
+# MySOS Website and Quotation Engine
 
-A fully static React quotation tool for mySOS agents. It converts the supplied Excel pricing workbook into a browser-based form, calculates prices locally, previews the quotation, and downloads a formatted `.xlsx` file. A single quotation can contain multiple products with different quantities and print configurations.
+A fully static React site for MySOS. The public website and agent quotation engine are built together and deployed to GitHub Pages with no backend.
 
-Production URL: `https://moroha29.github.io/mySOS/quotation_engine/`
+- Public website: `https://moroha29.github.io/mySOS/`
+- Agent quotation engine: `https://moroha29.github.io/mySOS/quotation_engine/`
 
-## Setup
+The public catalogue and quotation engine share the same structured product data. Public starting prices are intentionally separate from internal base costs and exact quotation calculations.
+
+## Run locally
 
 Requirements: Node.js 22 and npm.
 
@@ -13,56 +16,133 @@ npm install
 npm run dev
 ```
 
-Run the automated workbook-parity and Excel export tests:
+Run all pricing, Excel, catalogue, routing and integration tests:
 
 ```bash
 npm test
 ```
 
-Create the production site:
+Create the complete GitHub Pages artifact:
 
 ```bash
 npm run build
 ```
 
-The deployable artifact is written to `dist/quotation_engine`. Vite's base URL is `/mySOS/quotation_engine/`, while the GitHub Pages artifact root is `dist`, so both the HTML page and bundled assets resolve at the required subdirectory.
+The deployable files are written to `dist/`. The root `index.html` is the public site; `dist/quotation_engine/index.html` is the existing agent tool. Vite uses the exact case-sensitive base path `/mySOS/`.
 
-## Deployment
+## Content and pricing files
 
-1. Push the repository to `moroha29/mySOS` on the `main` branch.
-2. In GitHub, open **Settings → Pages** and select **GitHub Actions** as the source.
-3. The workflow in `.github/workflows/deploy.yml` installs locked dependencies, runs tests, builds the app, and deploys `dist` to GitHub Pages.
+| What to maintain | File |
+| --- | --- |
+| Products, public starting prices and product base costs | `src/data/productData.json` |
+| Printing methods and printing base costs | `src/data/printData.json` |
+| Add-on base costs and selling amounts | `src/data/addonData.json` |
+| Quantity cost/selling multipliers | `src/data/tierData.json` |
+| Industry solutions and recommended products | `src/data/solutions.json` |
+| Success stories and story detail content | `src/data/successStories.json` |
+| Benefits, process, FAQ, testimonials and public categories | `src/data/siteContent.json` |
+| Navigation, contact details, social links and WhatsApp | `src/data/siteConfig.json` |
 
-The workflow also supports manual runs from the Actions tab.
+## How to change a product price
+
+1. Open `src/data/productData.json`.
+2. Find the product in `catalogue` by its `id`.
+3. To change the public “From” price, edit `public.displayPricing.amount`.
+4. To change the quotation base cost, edit `quotation.baseCost`. These values serve different purposes and should not be treated as interchangeable.
+5. Commit the file. The GitHub Actions workflow tests, builds and redeploys the complete site.
+
+Component-priced jerseys and custom cut-and-sew products use their named cost fields below `jersey` and `customCutSew` instead of a single `quotation.baseCost`.
+
+## How to add a product
+
+1. Add an object to `catalogue` in `src/data/productData.json`.
+2. Give it a unique `id` and public `slug`.
+3. Fill in the `public` section: name, category, subcategory, description, visibility, featured state, image and display pricing. Use a root-relative path such as `/mySOS/assets/products/example.webp`. When no production image is available, `imageStyle` provides the built-in visual fallback.
+4. Fill in the `quotation` section. Use the existing `productId` values (`tee`, `polo`, `cap`, `jersey_sublimation`, or `custom_cutsew`) so the quotation form knows which configuration fields to show.
+5. List compatible `printingMethods`.
+6. Run `npm test` and `npm run build` before committing.
+
+Ordinary tee, polo and cap variants require no React source change. A genuinely new pricing model still requires a corresponding pure engine calculation and tests.
+
+## How to hide or disable a product
+
+- Hide it from the public website: set `public.visible` to `false`.
+- Remove it from featured sections: set `public.featured` to `false`.
+- Disable agent quotation selection and product preselection: set `quotation.enabled` to `false`.
+
+These controls are independent so an existing product can remain quoteable while temporarily hidden from the website, or remain visible as an enquiry item without supporting automated quotation.
+
+## How to change printing prices
+
+Open `src/data/printData.json`.
+
+- DTF/DTG: edit `dtf.options[].baseCost` (DTG intentionally aliases the workbook's DTF table).
+- Silkscreen: edit the named flat and per-piece rate fields in `silkscreen.rates`.
+- Embroidery: edit `embroidery.stitchTiers[].baseCost`, digitizing fees, or placement multipliers.
+- Sublimation: edit `sublimation.options[].baseCost`.
+
+Do not place printing prices in React components.
+
+## How to change add-on prices
+
+Open `src/data/addonData.json` and edit:
+
+- `baseCost` for the cost used by quotation calculations.
+- `sellPrice` for the add-on selling amount.
+- `type` only when the add-on changes between per-piece and flat-fee behaviour.
+
+## How to change quantity tiers
+
+Open `src/data/tierData.json`. Each tier has an inclusive `minQty` and `maxQty`, a `costMultiplier`, a `sellMultiplier`, and preserved `marginAdjustment` metadata. Keep the ranges continuous and non-overlapping. The current engine intentionally does not apply `marginAdjustment` because the approved source workbook's output formula does not use it.
+
+## How to add a success story
+
+1. Add one object to `src/data/successStories.json`.
+2. Use a unique URL-safe `slug`.
+3. Add the category, summary, product IDs, quantity, year, challenge, solution, process, outcomes and testimonial. Gallery values may be `/mySOS/assets/...` image paths; style tokens remain available as fallbacks.
+4. Set `featured` to `true` to make the story eligible for the homepage.
+5. Commit. The listing, category filters and detail route are generated from the entry automatically.
+
+GitHub Pages uses `public/404.html` to restore nested public routes such as `/mySOS/success-stories/example/` after a direct refresh. No separate HTML file is required when a story is added.
+
+## WhatsApp configuration
+
+WhatsApp is configured in `src/data/siteConfig.json`. Store `number` in international format without spaces or a leading plus sign, and use `displayNumber` for the human-readable footer label. Setting `whatsapp.enabled` to `false` hides the outbound link without changing components.
 
 ## Architecture
 
 ```text
 src/
-├── components/        Agent form, selectors, add-ons, and live preview
-├── data/              Workbook pricing tables as editable JSON
-├── engines/           Pure product, print, tier, add-on, and quote calculations
-└── utils/             Professional ExcelJS workbook generation/download
+├── data/                 Shared catalogue, pricing and public content
+├── engines/              Pure product, print, tier, add-on and quote calculations
+├── components/           Existing agent quotation form and live preview
+├── public/               Public site shell, reusable UI and six page experiences
+├── utils/
+│   ├── catalogue.js      Public selectors, story lookup and quote preselection
+│   └── excelGenerator.js ExcelJS workbook generation and browser download
+├── App.jsx               Existing quotation application
+└── main.jsx              Quotation entry point
 ```
 
-Pricing values never live inside React components. To add an option, update the appropriate file in `src/data`; calculation routing stays in `src/engines`. The UI uses product compatibility metadata to restrict print methods and the engine performs a second validation pass before export.
+The public application starts at `src/public/main.jsx`. The two HTML entry points are configured in `vite.config.js`, so one build produces both required deployment surfaces. ExcelJS remains dynamically loaded only when an agent downloads a quotation.
 
-## Workbook logic reproduced
+## Quotation logic preserved
 
-- Eight quantity tiers with cost multiplier, selling multiplier, and margin-adjustment metadata.
-- Jersey fabric, collar, sleeve, custom-name, custom-number, and team-set adjustments.
-- Tee and polo garment pricing, cap pricing, and custom cut-and-sew component pricing.
-- DTF pricing, silkscreen flat minimums/per-piece tiers, embroidery stitch and placement pricing plus digitizing fees, and jersey sublimation pricing.
-- Eight add-ons with per-piece or flat-fee behavior and optional quantity overrides.
-- `QUOTATION_OUTPUT` totals: internal cost, tier-adjusted cost, selling price, profit, margin, and unit metrics.
-- Multi-item orders: every product line receives the tier for its own quantity, then the independently calculated lines are combined into one quotation. Global per-piece add-ons default to the combined order quantity.
+The engine preserves:
 
-The source workbook mentions DTG as a supported Tee/Polo method but contains no separate `PRINT_DTG_ENGINE` or DTG rate table. The app exposes DTG and transparently maps it to the workbook's DTF option prices. Replace the alias in `src/data/printData.json` when approved DTG pricing becomes available.
+- Eight quantity tiers with separate cost and selling multipliers.
+- Jersey fabric, collar, sleeve, name, number and team-set adjustments.
+- Tee, polo, cap and custom cut-and-sew cost calculations.
+- DTF/DTG, silkscreen, embroidery and sublimation calculations.
+- Per-piece and flat add-ons.
+- Separate raw internal cost, tier-adjusted cost, selling price, profit and margin values.
+- Independently tiered multi-product orders.
+- Form validation, live preview and formatted `.xlsx` generation.
 
-The workbook's `Margin Adj %` tier field is preserved and returned by the tier engine, but it is not applied again because the workbook's `QUOTATION_OUTPUT` formula does not use it. Applying it would break price parity.
+The public website displays only `public.displayPricing`. It never renders quotation base costs, internal costs or tier-adjusted costs. Because the project is fully static, bundled data should not be treated as secret.
 
-## Validation
+## Deployment
 
-The app checks required customer/order data, whole-number quantities, product-specific configuration, size totals, print details, and incompatible combinations. Jersey orders require exactly one sublimation method; sublimation is rejected for all other products.
+Push to `main` or manually run the GitHub Actions workflow. It uses Node.js 22, runs `npm ci`, `npm test`, and `npm run build`, then uploads `dist/` as the GitHub Pages artifact.
 
-Customer data stays in the browser. There is no server, database, API, authentication, or analytics dependency.
+In the repository settings, configure Pages to use **GitHub Actions**. The expected deployment URL is `https://moroha29.github.io/mySOS/`.

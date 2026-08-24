@@ -7,17 +7,18 @@ function validateOrderItem(item) {
   const errors = {};
   const quantity = Number(item.quantity);
   if (!Number.isInteger(quantity) || quantity < 1) errors.quantity = 'Quantity must be a whole number of at least 1.';
-  if (!item.productId) errors.productId = 'Select a product.';
-
   const product = getProduct(item.productId);
+  if (!item.productId) errors.productId = 'Select a product.';
+  else if (!product) errors.productId = 'Select a valid product.';
   if (item.productId === 'jersey_sublimation') {
     if (!item.productOptions?.fabric || !item.productOptions?.collar || !item.productOptions?.sleeve) errors.productOptions = 'Choose the jersey fabric, collar, and sleeve.';
     if (item.productOptions?.teamSet && quantity < 10) errors.teamSet = 'Team set pricing requires at least 10 pieces.';
   } else if (item.productId === 'tee' || item.productId === 'polo') {
-    const garment = productData.garments.find((entry) => entry.id === item.productOptions?.garment);
-    if (!garment || garment.category !== item.productId) errors.productOptions = `Choose a valid ${item.productId} garment.`;
-  } else if (item.productId === 'cap' && !item.productOptions?.capType) {
-    errors.productOptions = 'Choose a cap type.';
+    const garment = productData.catalogue.find((entry) => entry.id === item.productOptions?.garment);
+    if (!garment || garment.quotation.productId !== item.productId || !garment.quotation.enabled) errors.productOptions = `Choose a valid ${item.productId} garment.`;
+  } else if (item.productId === 'cap') {
+    const cap = productData.catalogue.find((entry) => entry.id === item.productOptions?.capType);
+    if (!cap || cap.quotation.productId !== 'cap' || !cap.quotation.enabled) errors.productOptions = 'Choose a valid cap type.';
   } else if (item.productId === 'custom_cutsew' && !['basic', 'complex'].includes(item.productOptions?.complexity)) {
     errors.productOptions = 'Choose the sewing complexity.';
   }

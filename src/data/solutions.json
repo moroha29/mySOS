@@ -1,0 +1,8 @@
+[
+  { "id": "schools", "name": "Schools", "description": "From orientation to graduation, we have got you covered.", "imageStyle": "school", "recommendedProducts": ["jersey-sublimation", "premium_cotton_tee", "polo_cotton_pique"] },
+  { "id": "businesses", "name": "Businesses", "description": "Build your brand with quality merchandise and gifts.", "imageStyle": "business", "recommendedProducts": ["polo_cotton_pique", "premium_cotton_tee", "custom_cutsew"] },
+  { "id": "events", "name": "Events", "description": "Make every event memorable with organised merchandise.", "imageStyle": "events", "recommendedProducts": ["premium_cotton_tee", "snapback", "dri_fit_round_neck"] },
+  { "id": "churches", "name": "Churches", "description": "Resources and merchandise for your church community.", "imageStyle": "church", "recommendedProducts": ["premium_cotton_tee", "polo_dri_fit", "snapback"] },
+  { "id": "sports-teams", "name": "Sports Teams", "description": "Unite your team on and off the field.", "imageStyle": "sports", "recommendedProducts": ["jersey-sublimation", "dri_fit_round_neck", "snapback"] },
+  { "id": "community", "name": "Community Organisations", "description": "Support your cause with meaningful merchandise.", "imageStyle": "community", "recommendedProducts": ["premium_cotton_tee", "cotton_round_neck_tee", "polo_cotton_pique"] }
+]
