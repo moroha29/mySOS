@@ -2,13 +2,13 @@ import { useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import solutions from '../../data/solutions.json';
 
-export function WhatsAppButton({ compact = false }) {
+export function WhatsAppButton({ compact = false, label = '' }) {
   const { whatsapp } = siteConfig;
   if (!whatsapp.enabled || !whatsapp.number) {
-    return <span className={`whatsapp-button is-disabled ${compact ? 'is-compact' : ''}`} aria-label="WhatsApp enquiries are currently unavailable">WA</span>;
+    return <span className={`whatsapp-button is-disabled ${compact ? 'is-compact' : ''} ${label ? 'has-label' : ''}`} aria-label="WhatsApp enquiries are currently unavailable">{label || 'WA'}</span>;
   }
   const href = `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`;
-  return <a className={`whatsapp-button ${compact ? 'is-compact' : ''}`} href={href} target="_blank" rel="noreferrer" aria-label="Contact MySOS on WhatsApp">WA</a>;
+  return <a className={`whatsapp-button ${compact ? 'is-compact' : ''} ${label ? 'has-label' : ''}`} href={href} target="_blank" rel="noreferrer" aria-label="Contact MySOS on WhatsApp">{label || 'WA'}</a>;
 }
 
 const productLinks = [
@@ -49,10 +49,11 @@ export function SiteHeader() {
 }
 
 export function SiteFooter() {
-  return <footer className="site-footer">
+  const productsFooter = globalThis.location?.pathname?.includes('/products');
+  return <footer className={`site-footer ${productsFooter ? 'products-footer' : ''}`}>
     <div className="footer-cta">
-      <div><h2>Bring your ideas to life with MySOS.</h2><p>We are ready to help.</p></div>
-      <div className="footer-cta-actions"><a className="button" href={siteConfig.quotationPath}>Get a Quote</a><WhatsAppButton /></div>
+      <div><h2>{productsFooter ? 'Ready to start your order?' : 'Bring your ideas to life with MySOS.'}</h2><p>{productsFooter ? 'Get in touch with us today.' : 'We are ready to help.'}</p></div>
+      <div className="footer-cta-actions"><a className="button" href={siteConfig.quotationPath}>Get a Quote</a>{productsFooter && <WhatsAppButton label="WhatsApp Us" />}<WhatsAppButton /></div>
     </div>
     <div className="footer-grid">
       <div><a className="site-logo footer-logo" href={siteConfig.basePath}>My<span>SOS</span></a><p>{siteConfig.tagline}</p></div>

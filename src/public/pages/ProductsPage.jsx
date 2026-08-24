@@ -2,10 +2,15 @@ import { useMemo, useState } from 'react';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { getPublicProducts } from '../../utils/catalogue';
-import { Hero, IconTile, ProductCard, SectionHeading } from '../components/Ui';
+import { Hero, IconTile, ProductCard } from '../components/Ui';
 
 const subcategories = [
-  { id: 'all', name: 'All' }, { id: 'tshirts', name: 'T-Shirts' }, { id: 'polos', name: 'Polos' }, { id: 'jerseys', name: 'Jerseys' }, { id: 'caps', name: 'Caps' }, { id: 'jackets', name: 'Jackets' }
+  { id: 'all', name: 'All' },
+  { id: 'tshirts', name: 'T-Shirts' },
+  { id: 'polos', name: 'Polos' },
+  { id: 'jerseys', name: 'Jerseys' },
+  { id: 'caps', name: 'Caps' },
+  { id: 'jackets', name: 'Jackets' }
 ];
 
 export default function ProductsPage() {
@@ -13,24 +18,48 @@ export default function ProductsPage() {
   const requestedCategory = params.get('category') || 'apparel';
   const category = siteContent.categories.some((item) => item.id === requestedCategory) ? requestedCategory : 'apparel';
   const [subcategory, setSubcategory] = useState(params.get('subcategory') || 'all');
-  const products = useMemo(() => getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined }), [category, subcategory]);
+  const products = useMemo(
+    () => getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined }),
+    [category, subcategory]
+  );
   const methods = printData.methods.filter((method) => method.public?.visible);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
-  return <main>
-    <div className="page-shell"><Hero title="Custom Merchandise," accent="Made Simple." description="Explore our wide range of products that can be customised for your organisation, event or business." /></div>
-    <section className="section section-tight"><SectionHeading eyebrow="Browse by category" title="Everything you need, in one place." />
-      <div className="browse-row">{siteContent.categories.map((item) => <a key={item.id} className={item.id === category ? 'is-active' : ''} href={`?category=${item.id}`}><IconTile icon={item.icon} label={item.name} /><span>{item.name}</span></a>)}</div>
+
+  return <main className="products-page">
+    <div className="page-shell products-hero-shell">
+      <Hero title="Custom Merchandise," accent="Made Simple." description="Explore our wide range of products that can be customised for your organisation, event or business." />
+    </div>
+
+    <section className="section section-tight products-browse">
+      <div className="products-section-title"><span className="eyebrow">Browse by category</span></div>
+      <div className="browse-row">{siteContent.categories.map((item) => <a
+        key={item.id}
+        className={item.id === category ? 'is-active' : ''}
+        href={`?category=${item.id}`}
+        aria-current={item.id === category ? 'page' : undefined}
+      ><IconTile icon={item.icon} label={item.name} /><span>{item.name}</span><small aria-hidden="true">⌄</small></a>)}</div>
     </section>
-    <section className="section product-collection"><SectionHeading eyebrow={`${activeCategory.name} collection`} title={category === 'apparel' ? 'Made to wear. Made to remember.' : `Custom ${activeCategory.name.toLowerCase()} for every brief.`} />
+
+    <section className="section product-collection">
+      <div className="products-section-title products-section-title-left"><span className="eyebrow">{activeCategory.name} collection</span></div>
       {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Product subcategories">{subcategories.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={subcategory === tab.id} onClick={() => setSubcategory(tab.id)}>{tab.name}</button>)}</div>}
       <div className="product-grid">{products.map((product) => <ProductCard key={product.id} product={product} />)}</div>
       {products.length === 0 && <div className="empty-state"><h3>No products are published in this category yet.</h3><p>Contact MySOS and we will help source what you need.</p></div>}
     </section>
-    <section className="section customization"><SectionHeading eyebrow="Printing & customisation methods" title="The right finish for every idea." />
+
+    <section className="section customization">
+      <div className="products-section-title products-section-title-left"><span className="eyebrow">Printing &amp; customisation methods</span></div>
       <div className="method-grid">{methods.map((method) => <article key={method.id}><IconTile icon={method.public.icon} label={method.name} /><h3>{method.name}</h3><p>{method.public.description}</p></article>)}</div>
+      <div className="printing-action"><a href="#faq">Learn More About Printing Methods <span aria-hidden="true">→</span></a></div>
     </section>
-    <section className="recommendation-banner"><div><span className="eyebrow">Need help deciding?</span><h2>Our experts can recommend the best products, materials and printing methods for your needs.</h2><a className="button" href="/mySOS/quotation_engine/">Get Recommendations <span>→</span></a></div><div className="advisor-art" aria-hidden="true"><span>MY</span><span>SOS</span></div></section>
-    <section className="section faq-section" id="faq"><SectionHeading eyebrow="Frequently asked questions" title="Good questions, clear answers." />
+
+    <section className="recommendation-banner">
+      <div><span className="eyebrow">Need help deciding?</span><p>Our experts can recommend the best products, materials and printing methods for your needs.</p><a className="button" href="/mySOS/quotation_engine/">Get Recommendations <span aria-hidden="true">→</span></a></div>
+      <div className="advisor-art" aria-hidden="true"><span>MY</span><span>SOS</span></div>
+    </section>
+
+    <section className="section faq-section" id="faq">
+      <div className="products-section-title products-section-title-left"><span className="eyebrow">Frequently asked questions</span></div>
       <div className="faq-list">{siteContent.faq.map((item) => <details key={item.question}><summary>{item.question}<span>+</span></summary><p>{item.answer}</p></details>)}</div>
     </section>
   </main>;
