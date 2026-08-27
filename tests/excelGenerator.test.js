@@ -105,7 +105,7 @@ describe('Excel quotation output', () => {
         },
         {
           id: 'jersey-detail', quantity: 12, productId: 'jersey_sublimation',
-          productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', customNameAndNumber: true, knittedCollar: true, knittedCollarUnitCost: 1.2 },
+          productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', customNameAndNumber: true, knittedCollar: true, knittedCollarUnitCost: 99 },
           prints: [{ method: 'sublimation', option: 'full' }, { method: 'none' }],
           sizes: { M: 6, L: 6 },
         },
@@ -123,7 +123,7 @@ describe('Excel quotation output', () => {
     expect(teeDescription).toContain('Manual quotation price');
     expect(sheet.getCell('D10').value).toBe(14.5);
     expect(jerseyDescription).toContain('Custom name & number');
-    expect(jerseyDescription).toContain('Knitted collar');
+    expect(jerseyDescription).not.toContain('Knitted collar');
     expect(jerseyDescription).toContain('Sizes: M 6, L 6');
     expect(sheet.getRow(10).height).toBeGreaterThan(23);
   });

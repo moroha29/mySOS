@@ -37,10 +37,8 @@ export default function ProductSelector({ productId, options, onProductChange, o
         <Field label="Sleeve *"><Select value={options.sleeve} onChange={(value) => setOption('sleeve', value)} options={productData.jersey.sleeves} /></Field>
         <div className="check-row wide">
           <label><input type="checkbox" checked={Boolean(options.customNameAndNumber || options.customName || options.customNumber)} onChange={(event) => setCustomNameAndNumber(event.target.checked)} /> Custom name &amp; number</label>
-          <label><input type="checkbox" checked={Boolean(options.knittedCollar)} onChange={(event) => setOption('knittedCollar', event.target.checked)} /> Knitted collar</label>
           <label><input type="checkbox" checked={Boolean(options.teamSet)} onChange={(event) => setOption('teamSet', event.target.checked)} /> Team set (10+)</label>
         </div>
-        {options.knittedCollar && <Field label="Knitted collar cost / piece (SGD) *" className="wide"><input type="number" min="0.01" step="0.01" value={options.knittedCollarUnitCost ?? ''} onChange={(event) => setOption('knittedCollarUnitCost', event.target.value)} placeholder="Not priced in mysos.xlsx" /></Field>}
       </>}
     </div>
     {error && <p className="field-error">{error}</p>}

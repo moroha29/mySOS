@@ -53,7 +53,7 @@ The deployable files are written to `dist/`. The root `index.html` is the public
 
 Component-priced jerseys and custom cut-and-sew products use their named cost fields below `jersey` and `customCutSew` instead of a single `quotation.baseCost`.
 
-Jersey custom name and number are combined in the form but retain the workbook's combined SGD 2.50 cost. Knitted collar is not present in `mysos.xlsx`, so selecting it requires the current supplier cost instead of relying on an invented default.
+Jersey custom name and number are combined in the form but retain the workbook's combined SGD 2.50 cost. Options without a matching row in `mysos.xlsx` are excluded until the workbook is updated.
 
 Salespeople can select **Other / Blank Product** for an item that is not in the catalogue, then enter its name, description and exact customer quotation price per piece. No cost or tier suggestion is invented because this route has no pricing row in `mysos.xlsx`; product and branding specifications belong in the description. Cost and gross-profit displays are marked unavailable when an order contains an unlisted product.
 

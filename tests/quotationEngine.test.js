@@ -18,29 +18,31 @@ describe('workbook pricing parity', () => {
     expect(quote.unitSellingPrice).toBe(24.05);
   });
 
-  it('treats custom name and number as one jersey option and prices a knitted collar separately', () => {
+  it('treats custom name and number as one jersey option', () => {
     const quote = calculateQuotation({
       ...base,
       productId: 'jersey_sublimation',
       productOptions: {
         fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short',
-        customNameAndNumber: true, knittedCollar: true, knittedCollarUnitCost: 1.2,
+        customNameAndNumber: true,
       },
       prints: [{ method: 'sublimation', option: 'full' }],
     });
-    expect(quote.productCost.unitCost).toBe(8.7);
+    expect(quote.productCost.unitCost).toBe(7.5);
     expect(quote.productCost.description).toContain('Custom name & number');
-    expect(quote.productCost.description).toContain('Knitted collar');
   });
 
-  it('requires a supplier cost for knitted collar because the workbook has no price for it', () => {
-    const errors = validateQuotation({
+  it('ignores obsolete knitted-collar fields that are not in the workbook', () => {
+    const input = {
       ...base,
       productId: 'jersey_sublimation',
-      productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', knittedCollar: true },
+      productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', knittedCollar: true, knittedCollarUnitCost: 99 },
       prints: [{ method: 'sublimation', option: 'full' }],
-    });
-    expect(errors.productOptions).toBe('Enter the knitted collar supplier cost; it is not priced in mysos.xlsx.');
+    };
+    const quote = calculateQuotation(input);
+    expect(validateQuotation(input)).toEqual({});
+    expect(quote.productCost.unitCost).toBe(5);
+    expect(quote.productCost.description).not.toContain('Knitted collar');
   });
 
   it('requires a manual quotation for an unlisted product without inventing a cost', () => {

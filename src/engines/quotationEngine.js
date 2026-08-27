@@ -13,8 +13,6 @@ function validateOrderItem(item) {
   if (item.productId === 'jersey_sublimation') {
     if (!item.productOptions?.fabric || !item.productOptions?.collar || !item.productOptions?.sleeve) errors.productOptions = 'Choose the jersey fabric, collar, and sleeve.';
     if (item.productOptions?.teamSet && quantity < 10) errors.teamSet = 'Team set pricing requires at least 10 pieces.';
-    const knittedCollarUnitCost = Number(item.productOptions?.knittedCollarUnitCost);
-    if (item.productOptions?.knittedCollar && (!Number.isFinite(knittedCollarUnitCost) || knittedCollarUnitCost <= 0)) errors.productOptions = 'Enter the knitted collar supplier cost; it is not priced in mysos.xlsx.';
   } else if (item.productId === 'tee' || item.productId === 'polo') {
     const garment = productData.catalogue.find((entry) => entry.id === item.productOptions?.garment);
     if (!garment || garment.quotation.productId !== item.productId || !garment.quotation.enabled) errors.productOptions = `Choose a valid ${item.productId} garment.`;

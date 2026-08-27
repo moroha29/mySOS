@@ -17,14 +17,11 @@ export function calculateProductCost(productId, options = {}) {
     const collar = findById(productData.jersey.collars, options.collar);
     const sleeve = findById(productData.jersey.sleeves, options.sleeve);
     const hasCustomNameAndNumber = options.customNameAndNumber || options.customName || options.customNumber;
-    const knittedCollarUnitCost = Number(options.knittedCollarUnitCost);
     const unitCost = (fabric?.baseCost ?? 0) + (collar?.baseCost ?? 0) + (sleeve?.baseCost ?? 0)
       + (hasCustomNameAndNumber ? productData.jersey.customNameAndNumberBaseCost : 0)
-      + (options.knittedCollar && Number.isFinite(knittedCollarUnitCost) ? Math.max(0, knittedCollarUnitCost) : 0)
       + (options.teamSet ? productData.jersey.teamSetBaseCostAdjustment : 0);
     const extras = [
       hasCustomNameAndNumber && 'Custom name & number',
-      options.knittedCollar && 'Knitted collar',
       options.teamSet && 'Team set',
     ].filter(Boolean);
     return { unitCost: Math.max(0, unitCost), costKnown: true, description: [fabric?.name, collar?.name, sleeve?.name, ...extras].filter(Boolean).join(' · ') };
