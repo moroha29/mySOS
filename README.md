@@ -53,11 +53,13 @@ The deployable files are written to `dist/`. The root `index.html` is the public
 
 Component-priced jerseys and custom cut-and-sew products use their named cost fields below `jersey` and `customCutSew` instead of a single `quotation.baseCost`.
 
-Jersey options use one combined `customNameAndNumberBaseCost` and a separate `knittedCollarBaseCost`. Update those values in `src/data/productData.json` when supplier costs change.
+Jersey custom name and number are combined in the form but retain the workbook's combined SGD 2.50 cost. Knitted collar is not present in `mysos.xlsx`, so selecting it requires the current supplier cost instead of relying on an invented default.
 
-Salespeople can select **Other / Blank Product** for an item that is not in the catalogue. Its entered unit cost feeds the normal quantity-tier suggestion; its name and description are carried into the live preview and Excel quotation. Printing or branding details for that line should be included in the description and supplier cost.
+Salespeople can select **Other / Blank Product** for an item that is not in the catalogue, then enter its name, description and exact customer quotation price per piece. No cost or tier suggestion is invented because this route has no pricing row in `mysos.xlsx`; product and branding specifications belong in the description. Cost and gross-profit displays are marked unavailable when an order contains an unlisted product.
 
 Every item shows its calculated cost, suggested quotation price and current quotation price. Leave the quotation-price override blank to use the tier suggestion, or enter a non-negative per-piece price to override it. The internal preview highlights quotations below cost; customer Excel exports contain only the quotation price.
+
+Printing method 2 is an optional second decoration or placement on the same product line. Its unit cost and setup fee are added independently. The shared calculated item description is used by both the live preview and Excel export, so both printing slots, jersey options, size breakdowns and manual quotation-price overrides stay aligned. Sublimation jerseys remain limited to one active sublimation method.
 
 ## How to add a product
 

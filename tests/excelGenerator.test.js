@@ -75,7 +75,7 @@ describe('Excel quotation output', () => {
       customerName: 'Custom Order', customerType: 'Corporate', orderDate: '2026-08-27', orderReference: 'CUSTOM-001',
       items: [{
         id: 'custom-line', quantity: 8, productId: 'custom_product',
-        productOptions: { customName: 'Travel Pouch', customDescription: 'Recycled canvas pouch with zip', customUnitCost: 7.25 },
+        productOptions: { customName: 'Travel Pouch', customDescription: 'Recycled canvas pouch with zip' },
         quotedUnitPrice: 9.5,
         prints: [{ method: 'none' }], sizes: {},
       }],
@@ -89,5 +89,42 @@ describe('Excel quotation output', () => {
     expect(sheet.getCell('B10').value).toContain('Manual quotation price');
     expect(sheet.getCell('D10').value).toBe(9.5);
     expect(sheet.getCell('E10').value).toMatchObject({ result: 76 });
+  });
+
+  it('keeps both printing methods, sizes, jersey extras, and manual prices in Excel', async () => {
+    const quote = calculateQuotation({
+      customerName: 'Detailed Order', customerType: 'School', orderDate: '2026-08-27', orderReference: 'DETAIL-001',
+      items: [
+        {
+          id: 'tee-detail', quantity: 50, productId: 'tee', productOptions: { garment: 'premium_cotton_tee' },
+          prints: [
+            { method: 'dtf', option: 'front_left_chest' },
+            { method: 'embroidery', stitchTier: 'up_to_5000', digitizing: 'standard', placement: 'sleeve' },
+          ],
+          sizes: { S: 20, M: 30 }, quotedUnitPrice: 14.5,
+        },
+        {
+          id: 'jersey-detail', quantity: 12, productId: 'jersey_sublimation',
+          productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', customNameAndNumber: true, knittedCollar: true, knittedCollarUnitCost: 1.2 },
+          prints: [{ method: 'sublimation', option: 'full' }, { method: 'none' }],
+          sizes: { M: 6, L: 6 },
+        },
+      ],
+      addons: {}, shippingCost: 0, notes: '',
+    });
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load(await quotationToBuffer(quote));
+    const sheet = workbook.getWorksheet('Quotation');
+    const teeDescription = sheet.getCell('B10').value;
+    const jerseyDescription = sheet.getCell('B11').value;
+    expect(teeDescription).toContain('Print 1: DTF');
+    expect(teeDescription).toContain('Print 2: Embroidery');
+    expect(teeDescription).toContain('Sizes: S 20, M 30');
+    expect(teeDescription).toContain('Manual quotation price');
+    expect(sheet.getCell('D10').value).toBe(14.5);
+    expect(jerseyDescription).toContain('Custom name & number');
+    expect(jerseyDescription).toContain('Knitted collar');
+    expect(jerseyDescription).toContain('Sizes: M 6, L 6');
+    expect(sheet.getRow(10).height).toBeGreaterThan(23);
   });
 });

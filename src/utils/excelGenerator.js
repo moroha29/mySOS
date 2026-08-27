@@ -45,7 +45,7 @@ export function generateQuotationWorkbook(quote) {
   workbook.created = new Date();
   workbook.calcProperties.fullCalcOnLoad = true;
   const sheet = workbook.addWorksheet('Quotation', {
-    pageSetup: { paperSize: 9, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 1, margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 } },
+    pageSetup: { paperSize: 9, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 0, margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.5, header: 0.2, footer: 0.2 } },
     views: [{ showGridLines: false }],
   });
   sheet.columns = [
@@ -83,21 +83,19 @@ export function generateQuotationWorkbook(quote) {
   const itemRows = [];
   quote.items.forEach((item) => {
     const rowNumber = sheet.rowCount + 1;
-    const printDescription = item.prints.map((print) => print.description).join(' + ');
     const pricingDescription = item.pricingMode === 'override' ? 'Manual quotation price' : `Tier ${item.tier?.label ?? '—'}`;
-    const description = [item.productCost.description, printDescription, pricingDescription].filter(Boolean).join(' · ');
+    const description = [item.description, pricingDescription].filter(Boolean).join(' · ');
     itemRows.push(sheet.addRow([item.product?.name ?? '', description, item.quantity, item.unitSellingPrice, { formula: `C${rowNumber}*D${rowNumber}`, result: item.sellingPrice }]));
   });
   quote.addons.items.forEach((addon) => {
-    const quotedTotal = addon.totalCost * quote.tier.sellMultiplier + addon.totalSell - addon.totalCost;
-    itemRows.push(sheet.addRow([addon.name, addon.type === 'flat' ? 'Flat add-on' : 'Order add-on', addon.quantity, quotedTotal / addon.quantity, quotedTotal]));
+    itemRows.push(sheet.addRow([addon.name, addon.type === 'flat' ? 'Flat add-on' : 'Order add-on', addon.quantity, addon.quotedUnitPrice, addon.quotedTotal]));
   });
   if (quote.shippingCost > 0) {
-    const quotedShipping = quote.shippingCost * (quote.tier.sellMultiplier + 1);
-    itemRows.push(sheet.addRow(['Shipping', quote.input.shippingMethod || 'Shipping', 1, quotedShipping, quotedShipping]));
+    itemRows.push(sheet.addRow(['Shipping', quote.input.shippingMethod || 'Shipping', 1, quote.quotedShipping, quote.quotedShipping]));
   }
   itemRows.forEach((row) => {
-    row.height = 23;
+    const descriptionLength = String(row.getCell(2).value ?? '').length;
+    row.height = descriptionLength > 110 ? 48 : descriptionLength > 60 ? 36 : 23;
     row.eachCell((cell) => { cell.border = { bottom: { style: 'thin', color: { argb: BORDER } } }; cell.alignment = { vertical: 'middle', wrapText: true }; });
     row.getCell(3).numFmt = '#,##0';
     row.getCell(4).numFmt = currencyFormat;

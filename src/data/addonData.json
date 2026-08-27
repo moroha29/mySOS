@@ -3,8 +3,8 @@
   { "id": "hang_tag", "name": "Hang Tag", "baseCost": 0.3, "sellPrice": 0.75, "type": "perPiece" },
   { "id": "woven_label", "name": "Woven Label", "baseCost": 0.4, "sellPrice": 0.8, "type": "perPiece" },
   { "id": "custom_tag", "name": "Custom Tag", "baseCost": 0.6, "sellPrice": 1.2, "type": "perPiece" },
-  { "id": "express_production", "name": "Express Production", "baseCost": 50, "sellPrice": 50, "type": "flat" },
-  { "id": "design_fee", "name": "Design Fee", "baseCost": 30, "sellPrice": 30, "type": "flat" },
-  { "id": "sample_fee", "name": "Sample Fee", "baseCost": 50, "sellPrice": 50, "type": "flat" },
-  { "id": "urgent_surcharge", "name": "Urgent Surcharge", "baseCost": 80, "sellPrice": 80, "type": "flat" }
+  { "id": "express_production", "name": "Express Production", "baseCost": 0, "sellPrice": 50, "type": "flat" },
+  { "id": "design_fee", "name": "Design Fee", "baseCost": 0, "sellPrice": 30, "type": "flat" },
+  { "id": "sample_fee", "name": "Sample Fee", "baseCost": 0, "sellPrice": 50, "type": "flat" },
+  { "id": "urgent_surcharge", "name": "Urgent Surcharge", "baseCost": 0, "sellPrice": 80, "type": "flat" }
 ]

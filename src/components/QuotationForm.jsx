@@ -21,6 +21,7 @@ function newItem() {
 
 function ItemEditor({ item, index, itemCount, onChange, onRemove, errors, quoteItem }) {
   const set = (key, value) => onChange({ ...item, [key]: value });
+  const customProduct = item.productId === 'custom_product';
   const hasPriceOverride = item.quotedUnitPrice !== undefined && item.quotedUnitPrice !== '';
   const costPerPiece = quoteItem?.unitCost ?? 0;
   const quotePerPiece = quoteItem?.unitSellingPrice ?? 0;
@@ -41,23 +42,23 @@ function ItemEditor({ item, index, itemCount, onChange, onRemove, errors, quoteI
       onOptionsChange={(productOptions) => set('productOptions', productOptions)}
       error={errors.productId || errors.productOptions || errors.teamSet}
     />
-    {item.productId === 'custom_product'
-      ? <div className="selector-block direct-price-note"><h3>Printing</h3><p>Add printing or branding specifications to the product description and include their supplier cost in the unit cost above.</p></div>
+    {customProduct
+      ? <div className="selector-block direct-price-note"><h3>Printing</h3><p>This product has no pricing engine. Add all product and branding specifications to the description, then enter the final customer quotation price below.</p></div>
       : <PrintSelector compact productId={item.productId} prints={item.prints} onChange={(prints) => set('prints', prints)} errors={errors} />}
     <div className="selector-block pricing-editor">
-      <div className="pricing-editor-heading"><h3>Cost vs quotation</h3><p>Leave the quotation price blank to use the suggested tier price.</p></div>
+      <div className="pricing-editor-heading"><h3>{customProduct ? 'Manual quotation' : 'Cost vs quotation'}</h3><p>{customProduct ? 'Other / Blank Product is not priced in mysos.xlsx, so enter its customer price manually.' : 'Leave the quotation price blank to use the suggested tier price.'}</p></div>
       <div className="price-metrics">
-        <div><span>Calculated cost / pc</span><strong>{money.format(costPerPiece)}</strong></div>
-        <div><span>Suggested quote / pc</span><strong>{money.format(suggestedPerPiece)}</strong></div>
-        <div className={quotePerPiece < costPerPiece ? 'loss' : ''}><span>Current quote / pc</span><strong>{money.format(quotePerPiece)}</strong></div>
+        <div><span>Calculated cost / pc</span><strong>{customProduct ? 'Not in workbook' : money.format(costPerPiece)}</strong></div>
+        <div><span>Suggested quote / pc</span><strong>{customProduct ? 'Manual entry' : money.format(suggestedPerPiece)}</strong></div>
+        <div className={!customProduct && quotePerPiece < costPerPiece ? 'loss' : ''}><span>Current quote / pc</span><strong>{money.format(quotePerPiece)}</strong></div>
       </div>
       <div className="price-override-row">
-        <Field label="Quotation price / piece (SGD)" error={errors.quotedUnitPrice}>
-          <input type="number" min="0" step="0.01" value={item.quotedUnitPrice ?? ''} onChange={(event) => set('quotedUnitPrice', event.target.value)} placeholder={suggestedPerPiece.toFixed(2)} />
+        <Field label={`Quotation price / piece (SGD)${customProduct ? ' *' : ''}`} error={errors.quotedUnitPrice}>
+          <input type="number" min={customProduct ? '0.01' : '0'} step="0.01" value={item.quotedUnitPrice ?? ''} onChange={(event) => set('quotedUnitPrice', event.target.value)} placeholder={customProduct ? 'Enter customer price' : suggestedPerPiece.toFixed(2)} />
         </Field>
-        {hasPriceOverride && <button type="button" className="reset-price" onClick={() => set('quotedUnitPrice', '')}>Use suggested price</button>}
+        {hasPriceOverride && !customProduct && <button type="button" className="reset-price" onClick={() => set('quotedUnitPrice', '')}>Use suggested price</button>}
       </div>
-      {quotePerPiece < costPerPiece && <p className="price-warning">The current quotation price is below cost.</p>}
+      {!customProduct && quotePerPiece < costPerPiece && <p className="price-warning">The current quotation price is below cost.</p>}
     </div>
     <details className="size-details"><summary>Optional size breakdown for this item</summary><div className="size-grid">{sizes.map((size) => <label key={size}><span>{size}</span><input type="number" min="0" step="1" value={item.sizes[size] ?? ''} onChange={(event) => set('sizes', { ...item.sizes, [size]: event.target.value })} /></label>)}</div>{errors.sizes && <p className="field-error">{errors.sizes}</p>}</details>
   </article>;

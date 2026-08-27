@@ -24,7 +24,7 @@ describe('workbook pricing parity', () => {
       productId: 'jersey_sublimation',
       productOptions: {
         fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short',
-        customNameAndNumber: true, knittedCollar: true,
+        customNameAndNumber: true, knittedCollar: true, knittedCollarUnitCost: 1.2,
       },
       prints: [{ method: 'sublimation', option: 'full' }],
     });
@@ -33,7 +33,17 @@ describe('workbook pricing parity', () => {
     expect(quote.productCost.description).toContain('Knitted collar');
   });
 
-  it('quotes an unlisted product from cost with an editable quotation price and no required printing', () => {
+  it('requires a supplier cost for knitted collar because the workbook has no price for it', () => {
+    const errors = validateQuotation({
+      ...base,
+      productId: 'jersey_sublimation',
+      productOptions: { fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short', knittedCollar: true },
+      prints: [{ method: 'sublimation', option: 'full' }],
+    });
+    expect(errors.productOptions).toBe('Enter the knitted collar supplier cost; it is not priced in mysos.xlsx.');
+  });
+
+  it('requires a manual quotation for an unlisted product without inventing a cost', () => {
     const input = {
       ...base,
       quantity: 12,
@@ -41,7 +51,6 @@ describe('workbook pricing parity', () => {
       productOptions: {
         customName: 'Travel Pouch',
         customDescription: 'Recycled canvas pouch with zip',
-        customUnitCost: '7.25',
       },
       quotedUnitPrice: '10',
       prints: [{ method: 'none' }, { method: 'none' }],
@@ -51,20 +60,24 @@ describe('workbook pricing parity', () => {
     expect(quote.product.name).toBe('Travel Pouch');
     expect(quote.productCost.description).toBe('Recycled canvas pouch with zip');
     expect(quote.items[0].pricingMode).toBe('override');
-    expect(quote.items[0].suggestedUnitSellingPrice).toBeCloseTo(15.95);
-    expect(quote.items[0].unitCost).toBeCloseTo(6.8875);
+    expect(quote.items[0].suggestedUnitSellingPrice).toBe(0);
+    expect(quote.items[0].unitCost).toBe(0);
+    expect(quote.items[0].costKnown).toBe(false);
+    expect(quote.hasUnknownCosts).toBe(true);
     expect(quote.sellingPrice).toBe(120);
     expect(quote.unitSellingPrice).toBe(10);
   });
 
-  it('requires the blank product name, description, and a positive unit price', () => {
+  it('requires the blank product name, description, and a positive quotation price', () => {
     const errors = validateQuotation({
       ...base,
       productId: 'custom_product',
-      productOptions: { customName: '', customDescription: '', customUnitCost: '0' },
+      productOptions: { customName: '', customDescription: '' },
+      quotedUnitPrice: '',
       prints: [{ method: 'none' }],
     });
     expect(errors.productOptions).toBe('Enter the custom product name and description.');
+    expect(errors.quotedUnitPrice).toBe('Enter a quotation price greater than zero for this unlisted product.');
   });
 
   it('never produces a negative total from incomplete team-set or negative form values', () => {
@@ -96,6 +109,23 @@ describe('workbook pricing parity', () => {
     expect(quote.unitSellingPrice).toBe(11.1);
   });
 
+  it('prices and describes both printing-method slots independently', () => {
+    const quote = calculateQuotation({
+      ...base,
+      prints: [
+        { method: 'dtf', option: 'front_left_chest' },
+        { method: 'embroidery', stitchTier: 'up_to_5000', digitizing: 'standard', placement: 'sleeve' },
+      ],
+      sizes: { S: 20, M: 30 },
+    });
+    expect(quote.prints.map((print) => print.slot)).toEqual([1, 2]);
+    expect(quote.items[0].description).toContain('Print 1: DTF');
+    expect(quote.items[0].description).toContain('Print 2: Embroidery');
+    expect(quote.items[0].description).toContain('Sizes: S 20, M 30');
+    expect(quote.internalCost).toBe(415);
+    expect(quote.sellingPrice).toBeCloseTo(767.75);
+  });
+
   it('prices a tee with silkscreen minimum-charge logic', () => {
     const quote = calculateQuotation({ ...base, prints: [{ method: 'silkscreen', technique: 'Waterbase/Rubber', size: 'Within A4', colors: 2 }] });
     expect(quote.prints[0].unitCost).toBe(1.6);
@@ -125,11 +155,24 @@ describe('workbook pricing parity', () => {
 
   it('prices multiple add-ons with cost and sell totals', () => {
     const quote = calculateQuotation({ ...base, quantity: 20, addons: { packaging: { selected: true }, hang_tag: { selected: true }, design_fee: { selected: true } } });
-    expect(quote.addons.totalCost).toBe(46);
+    expect(quote.addons.totalCost).toBe(16);
     expect(quote.addons.totalSell).toBe(65);
-    expect(quote.adjustedCost).toBeCloseTo(157.7);
-    expect(quote.sellingPrice).toBeCloseTo(384.2);
-    expect(quote.unitSellingPrice).toBeCloseTo(19.21);
+    expect(quote.adjustedCost).toBeCloseTo(129.2);
+    expect(quote.sellingPrice).toBeCloseTo(348.2);
+    expect(quote.unitSellingPrice).toBeCloseTo(17.41);
+    expect(quote.addons.quotedTotal).toBeCloseTo(84.2);
+    expect(quote.addons.items.reduce((sum, addon) => sum + addon.quotedTotal, 0)).toBeCloseTo(84.2);
+  });
+
+  it('keeps workbook flat-fee add-ons out of internal cost', () => {
+    const addons = calculateAddons({
+      express_production: { selected: true },
+      design_fee: { selected: true },
+      sample_fee: { selected: true },
+      urgent_surcharge: { selected: true },
+    }, 50);
+    expect(addons.totalCost).toBe(0);
+    expect(addons.totalSell).toBe(210);
   });
 
   it('selects all workbook quantity tiers at their boundaries', () => {
@@ -150,13 +193,13 @@ describe('workbook pricing parity', () => {
       shippingMethod: 'Local Delivery',
       shippingCost: 12,
     });
-    expect(quote.addons.totalCost).toBe(55);
+    expect(quote.addons.totalCost).toBe(25);
     expect(quote.addons.totalSell).toBe(80);
     expect(quote.shippingCost).toBe(12);
-    expect(quote.internalCost).toBe(367);
-    expect(quote.adjustedCost).toBeCloseTo(311.95);
-    expect(quote.sellingPrice).toBeCloseTo(715.95);
-    expect(quote.unitSellingPrice).toBeCloseTo(14.319);
+    expect(quote.internalCost).toBe(337);
+    expect(quote.adjustedCost).toBeCloseTo(286.45);
+    expect(quote.sellingPrice).toBeCloseTo(690.45);
+    expect(quote.unitSellingPrice).toBeCloseTo(13.809);
     expect(quote.profit).toBeCloseTo(404);
   });
 
@@ -193,7 +236,12 @@ describe('workbook pricing parity', () => {
     expect(invalidCap.productOptions).toBe('Choose a valid cap type.');
     const addons = calculateAddons({ packaging: { selected: true, quantity: 3 }, design_fee: { selected: true, quantity: 99 } }, 20);
     expect(addons.items.map((item) => [item.id, item.quantity])).toEqual([['packaging', 3], ['design_fee', 1]]);
-    expect(addons.totalCost).toBe(31.5);
+    expect(addons.totalCost).toBe(1.5);
     expect(addons.totalSell).toBe(33);
+  });
+
+  it('rejects negative or fractional size quantities', () => {
+    expect(validateQuotation({ ...base, sizes: { S: -1, M: 51 } }).sizes).toBe('Size quantities must be non-negative whole numbers.');
+    expect(validateQuotation({ ...base, sizes: { S: 20.5, M: 29.5 } }).sizes).toBe('Size quantities must be non-negative whole numbers.');
   });
 });

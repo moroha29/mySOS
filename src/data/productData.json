@@ -153,7 +153,6 @@
       { "id": "raglan", "name": "Raglan", "baseCost": 0.8 }
     ],
     "customNameAndNumberBaseCost": 2.5,
-    "knittedCollarBaseCost": 1.2,
     "teamSetBaseCostAdjustment": -0.5
   },
   "customCutSew": {

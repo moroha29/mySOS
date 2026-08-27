@@ -13,6 +13,8 @@ function validateOrderItem(item) {
   if (item.productId === 'jersey_sublimation') {
     if (!item.productOptions?.fabric || !item.productOptions?.collar || !item.productOptions?.sleeve) errors.productOptions = 'Choose the jersey fabric, collar, and sleeve.';
     if (item.productOptions?.teamSet && quantity < 10) errors.teamSet = 'Team set pricing requires at least 10 pieces.';
+    const knittedCollarUnitCost = Number(item.productOptions?.knittedCollarUnitCost);
+    if (item.productOptions?.knittedCollar && (!Number.isFinite(knittedCollarUnitCost) || knittedCollarUnitCost <= 0)) errors.productOptions = 'Enter the knitted collar supplier cost; it is not priced in mysos.xlsx.';
   } else if (item.productId === 'tee' || item.productId === 'polo') {
     const garment = productData.catalogue.find((entry) => entry.id === item.productOptions?.garment);
     if (!garment || garment.quotation.productId !== item.productId || !garment.quotation.enabled) errors.productOptions = `Choose a valid ${item.productId} garment.`;
@@ -22,16 +24,16 @@ function validateOrderItem(item) {
   } else if (item.productId === 'custom_cutsew' && !['basic', 'complex'].includes(item.productOptions?.complexity)) {
     errors.productOptions = 'Choose the sewing complexity.';
   } else if (item.productId === 'custom_product') {
-    const unitCost = Number(item.productOptions?.customUnitCost ?? item.productOptions?.customUnitPrice);
     if (!item.productOptions?.customName?.trim() || !item.productOptions?.customDescription?.trim()) {
       errors.productOptions = 'Enter the custom product name and description.';
-    } else if (!Number.isFinite(unitCost) || unitCost <= 0) {
-      errors.productOptions = 'Enter a custom product unit cost greater than zero.';
     }
   }
   if (item.quotedUnitPrice !== undefined && item.quotedUnitPrice !== '') {
     const quotedUnitPrice = Number(item.quotedUnitPrice);
     if (!Number.isFinite(quotedUnitPrice) || quotedUnitPrice < 0) errors.quotedUnitPrice = 'Quotation price cannot be negative.';
+  }
+  if (item.productId === 'custom_product' && (item.quotedUnitPrice === undefined || item.quotedUnitPrice === '' || !Number.isFinite(Number(item.quotedUnitPrice)) || Number(item.quotedUnitPrice) <= 0)) {
+    errors.quotedUnitPrice = 'Enter a quotation price greater than zero for this unlisted product.';
   }
 
   const prints = item.prints ?? [];
@@ -51,8 +53,11 @@ function validateOrderItem(item) {
     if (item.productId === 'jersey_sublimation' && (activePrints.length !== 1 || activePrints[0]?.method !== 'sublimation')) errors.prints = 'Jerseys require exactly one sublimation printing method.';
   }
 
-  const sizeTotal = Object.values(item.sizes ?? {}).reduce((sum, value) => sum + (Number(value) || 0), 0);
-  if (sizeTotal > 0 && sizeTotal !== quantity) errors.sizes = `Size breakdown totals ${sizeTotal}; it must equal this item's quantity of ${quantity}.`;
+  const sizeValues = Object.values(item.sizes ?? {}).filter((value) => value !== '');
+  const invalidSize = sizeValues.some((value) => !Number.isInteger(Number(value)) || Number(value) < 0);
+  const sizeTotal = sizeValues.reduce((sum, value) => sum + (Number(value) || 0), 0);
+  if (invalidSize) errors.sizes = 'Size quantities must be non-negative whole numbers.';
+  else if (sizeTotal > 0 && sizeTotal !== quantity) errors.sizes = `Size breakdown totals ${sizeTotal}; it must equal this item's quantity of ${quantity}.`;
   return errors;
 }
 
@@ -66,6 +71,16 @@ function normalizedItems(input) {
     sizes: input.sizes,
     quotedUnitPrice: input.quotedUnitPrice,
   }];
+}
+
+function buildItemDescription(productCost, prints, sizes = {}) {
+  const printDescriptions = prints.map((print) => `Print ${print.slot}: ${print.description}`);
+  const sizeEntries = Object.entries(sizes)
+    .map(([size, value]) => [size, Number(value)])
+    .filter(([, value]) => Number.isInteger(value) && value > 0)
+    .map(([size, value]) => `${size} ${value}`);
+  const sizeDescription = sizeEntries.length > 0 ? `Sizes: ${sizeEntries.join(', ')}` : '';
+  return [productCost.description, ...printDescriptions, sizeDescription].filter(Boolean).join(' · ');
 }
 
 export function validateQuotation(input) {
@@ -97,15 +112,18 @@ export function calculateOrderItem(item) {
     ? { ...selectedProduct, name: item.productOptions?.customName?.trim() || selectedProduct.name }
     : selectedProduct;
   const productCost = calculateProductCost(item.productId, item.productOptions);
+  const costKnown = productCost.costKnown !== false;
   const prints = (item.prints ?? [])
+    .map((print, index) => ({ ...print, slot: index + 1 }))
     .filter((print) => print.method && print.method !== 'none')
     .map((print) => ({ ...print, ...calculatePrintCost(print, quantity) }));
+  const description = buildItemDescription(productCost, prints, item.sizes);
   const apparelTotal = productCost.unitCost * quantity;
   const printingTotal = prints.reduce((sum, print) => sum + print.unitCost * quantity, 0);
   const setupFees = prints.reduce((sum, print) => sum + print.setupFee, 0);
   const internalCost = Math.max(0, apparelTotal + printingTotal + setupFees);
   const adjustedCost = Math.max(0, internalCost * (tier?.costMultiplier ?? 1));
-  const suggestedSellingPrice = Math.max(0, internalCost * (tier?.sellMultiplier ?? 1));
+  const suggestedSellingPrice = costKnown ? Math.max(0, internalCost * (tier?.sellMultiplier ?? 1)) : 0;
   const enteredQuotedUnitPrice = Number(item.quotedUnitPrice);
   const hasQuotedPriceOverride = item.quotedUnitPrice !== undefined
     && item.quotedUnitPrice !== ''
@@ -119,10 +137,12 @@ export function calculateOrderItem(item) {
     tier,
     productCost,
     prints,
+    description,
     apparelTotal,
     printingTotal,
     setupFees,
-    pricingMode: hasQuotedPriceOverride ? 'override' : 'tiered',
+    pricingMode: hasQuotedPriceOverride ? 'override' : (costKnown ? 'tiered' : 'manual-required'),
+    costKnown,
     internalCost,
     adjustedCost,
     suggestedSellingPrice,
@@ -141,14 +161,21 @@ export function calculateQuotation(input) {
   const enteredShippingCost = Number(input.shippingCost);
   const shippingCost = Number.isFinite(enteredShippingCost) ? Math.max(0, enteredShippingCost) : 0;
   const sharedInternalCost = addons.totalCost + shippingCost;
+  const sellMultiplier = tier?.sellMultiplier ?? 1;
+  const quotedAddonItems = addons.items.map((addon) => {
+    const quotedTotal = addon.totalCost * sellMultiplier + addon.totalSell - addon.totalCost;
+    return { ...addon, quotedTotal, quotedUnitPrice: addon.quantity > 0 ? quotedTotal / addon.quantity : 0 };
+  });
+  const quotedAddonsTotal = quotedAddonItems.reduce((sum, addon) => sum + addon.quotedTotal, 0);
+  const quotedShipping = shippingCost * (sellMultiplier + 1);
+  const quotedAddons = { ...addons, items: quotedAddonItems, quotedTotal: quotedAddonsTotal };
   const internalCost = Math.max(0, items.reduce((sum, item) => sum + item.internalCost, 0) + sharedInternalCost);
   const adjustedCost = Math.max(0, items.reduce((sum, item) => sum + item.adjustedCost, 0) + sharedInternalCost * (tier?.costMultiplier ?? 1));
   // Each item uses its own quantity tier. Shared charges use the combined-order tier.
   // For one item this remains identical to QUOTATION_OUTPUT!B28, including its separate shipping addition.
-  const sellingPrice = Math.max(0, items.reduce((sum, item) => sum + item.sellingPrice, 0)
-    + sharedInternalCost * (tier?.sellMultiplier ?? 1)
-    + addons.totalSell - addons.totalCost + shippingCost);
+  const sellingPrice = Math.max(0, items.reduce((sum, item) => sum + item.sellingPrice, 0) + quotedAddonsTotal + quotedShipping);
   const profit = sellingPrice - adjustedCost;
+  const hasUnknownCosts = items.some((item) => !item.costKnown);
   const first = items[0] ?? {};
 
   return {
@@ -156,13 +183,15 @@ export function calculateQuotation(input) {
     items,
     totalQuantity,
     tier,
-    addons,
+    addons: quotedAddons,
     shippingCost,
+    quotedShipping,
     internalCost,
     adjustedCost,
     sellingPrice,
     profit,
-    profitMargin: sellingPrice > 0 ? profit / sellingPrice : 0,
+    profitMargin: !hasUnknownCosts && sellingPrice > 0 ? profit / sellingPrice : 0,
+    hasUnknownCosts,
     unitCost: totalQuantity > 0 ? adjustedCost / totalQuantity : 0,
     unitSellingPrice: totalQuantity > 0 ? sellingPrice / totalQuantity : 0,
     // Backward-compatible fields for existing integrations and single-item tests.

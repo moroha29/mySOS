@@ -17,8 +17,10 @@ export function calculatePrintCost(print = {}, quantity = 0) {
 
   if (method === 'silkscreen') {
     const rate = printData.silkscreen.rates.find((item) => item.technique === print.technique && item.size === print.size);
-    const colors = Number(print.colors) || 0;
-    const qty = Number(quantity) || 0;
+    const enteredColors = Number(print.colors);
+    const enteredQuantity = Number(quantity);
+    const colors = Number.isFinite(enteredColors) ? Math.max(0, enteredColors) : 0;
+    const qty = Number.isFinite(enteredQuantity) ? Math.max(0, enteredQuantity) : 0;
     let perColor = 0;
     if (rate && qty > 0) {
       if (qty <= 50) perColor = rate.flat1To50 / qty;
