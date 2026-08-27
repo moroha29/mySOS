@@ -5,6 +5,7 @@ import AddonSelector from './AddonSelector';
 const customerTypes = ['Retail', 'Wholesale', 'School', 'Corporate'];
 const shippingMethods = ['Self Collect', 'Local Delivery', 'Interstate', 'International'];
 const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+const money = new Intl.NumberFormat('en-SG', { style: 'currency', currency: 'SGD' });
 const Field = ({ label, error, children, className = '' }) => <label className={`field ${className}`}><span>{label}</span>{children}{error && <small className="field-error">{error}</small>}</label>;
 
 function newItem() {
@@ -18,8 +19,12 @@ function newItem() {
   };
 }
 
-function ItemEditor({ item, index, itemCount, onChange, onRemove, errors }) {
+function ItemEditor({ item, index, itemCount, onChange, onRemove, errors, quoteItem }) {
   const set = (key, value) => onChange({ ...item, [key]: value });
+  const hasPriceOverride = item.quotedUnitPrice !== undefined && item.quotedUnitPrice !== '';
+  const costPerPiece = quoteItem?.unitCost ?? 0;
+  const quotePerPiece = quoteItem?.unitSellingPrice ?? 0;
+  const suggestedPerPiece = quoteItem?.suggestedUnitSellingPrice ?? 0;
   return <article className="order-item">
     <div className="order-item-header">
       <div><span className="item-number">{String(index + 1).padStart(2, '0')}</span><div><h3>Order item {index + 1}</h3><p>Priced on its own quantity tier</p></div></div>
@@ -37,13 +42,28 @@ function ItemEditor({ item, index, itemCount, onChange, onRemove, errors }) {
       error={errors.productId || errors.productOptions || errors.teamSet}
     />
     {item.productId === 'custom_product'
-      ? <div className="selector-block direct-price-note"><h3>Printing</h3><p>Add any printing or branding specifications to the product description. The entered unit price is quoted directly.</p></div>
+      ? <div className="selector-block direct-price-note"><h3>Printing</h3><p>Add printing or branding specifications to the product description and include their supplier cost in the unit cost above.</p></div>
       : <PrintSelector compact productId={item.productId} prints={item.prints} onChange={(prints) => set('prints', prints)} errors={errors} />}
+    <div className="selector-block pricing-editor">
+      <div className="pricing-editor-heading"><h3>Cost vs quotation</h3><p>Leave the quotation price blank to use the suggested tier price.</p></div>
+      <div className="price-metrics">
+        <div><span>Calculated cost / pc</span><strong>{money.format(costPerPiece)}</strong></div>
+        <div><span>Suggested quote / pc</span><strong>{money.format(suggestedPerPiece)}</strong></div>
+        <div className={quotePerPiece < costPerPiece ? 'loss' : ''}><span>Current quote / pc</span><strong>{money.format(quotePerPiece)}</strong></div>
+      </div>
+      <div className="price-override-row">
+        <Field label="Quotation price / piece (SGD)" error={errors.quotedUnitPrice}>
+          <input type="number" min="0" step="0.01" value={item.quotedUnitPrice ?? ''} onChange={(event) => set('quotedUnitPrice', event.target.value)} placeholder={suggestedPerPiece.toFixed(2)} />
+        </Field>
+        {hasPriceOverride && <button type="button" className="reset-price" onClick={() => set('quotedUnitPrice', '')}>Use suggested price</button>}
+      </div>
+      {quotePerPiece < costPerPiece && <p className="price-warning">The current quotation price is below cost.</p>}
+    </div>
     <details className="size-details"><summary>Optional size breakdown for this item</summary><div className="size-grid">{sizes.map((size) => <label key={size}><span>{size}</span><input type="number" min="0" step="1" value={item.sizes[size] ?? ''} onChange={(event) => set('sizes', { ...item.sizes, [size]: event.target.value })} /></label>)}</div>{errors.sizes && <p className="field-error">{errors.sizes}</p>}</details>
   </article>;
 }
 
-export default function QuotationForm({ value, onChange, errors }) {
+export default function QuotationForm({ value, onChange, errors, quote }) {
   const set = (key, next) => onChange({ ...value, [key]: next });
   const itemErrors = (index) => Object.fromEntries(Object.entries(errors)
     .filter(([key]) => key.startsWith(`item${index}.`))
@@ -63,7 +83,7 @@ export default function QuotationForm({ value, onChange, errors }) {
     <section className="form-section" id="products">
       <div className="section-heading"><span>2</span><div><h2>Order items</h2><p>Add different products and quantities to the same quotation.</p></div></div>
       <div className="order-items">
-        {value.items.map((item, index) => <ItemEditor key={item.id} item={item} index={index} itemCount={value.items.length} onChange={(next) => updateItem(index, next)} onRemove={() => set('items', value.items.filter((_, currentIndex) => currentIndex !== index))} errors={itemErrors(index)} />)}
+        {value.items.map((item, index) => <ItemEditor key={item.id} item={item} index={index} itemCount={value.items.length} onChange={(next) => updateItem(index, next)} onRemove={() => set('items', value.items.filter((_, currentIndex) => currentIndex !== index))} errors={itemErrors(index)} quoteItem={quote?.items?.[index]} />)}
       </div>
       {errors.items && <p className="field-error">{errors.items}</p>}
       <button className="add-item" type="button" onClick={() => set('items', [...value.items, newItem()])}><span>+</span> Add another product</button>

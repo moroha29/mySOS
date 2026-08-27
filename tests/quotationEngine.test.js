@@ -33,7 +33,7 @@ describe('workbook pricing parity', () => {
     expect(quote.productCost.description).toContain('Knitted collar');
   });
 
-  it('quotes an unlisted product at the entered direct unit price without requiring printing', () => {
+  it('quotes an unlisted product from cost with an editable quotation price and no required printing', () => {
     const input = {
       ...base,
       quantity: 12,
@@ -41,27 +41,51 @@ describe('workbook pricing parity', () => {
       productOptions: {
         customName: 'Travel Pouch',
         customDescription: 'Recycled canvas pouch with zip',
-        customUnitPrice: '7.25',
+        customUnitCost: '7.25',
       },
+      quotedUnitPrice: '10',
       prints: [{ method: 'none' }, { method: 'none' }],
     };
     const quote = calculateQuotation(input);
     expect(validateQuotation(input)).toEqual({});
     expect(quote.product.name).toBe('Travel Pouch');
     expect(quote.productCost.description).toBe('Recycled canvas pouch with zip');
-    expect(quote.items[0].pricingMode).toBe('direct');
-    expect(quote.sellingPrice).toBe(87);
-    expect(quote.unitSellingPrice).toBe(7.25);
+    expect(quote.items[0].pricingMode).toBe('override');
+    expect(quote.items[0].suggestedUnitSellingPrice).toBeCloseTo(15.95);
+    expect(quote.items[0].unitCost).toBeCloseTo(6.8875);
+    expect(quote.sellingPrice).toBe(120);
+    expect(quote.unitSellingPrice).toBe(10);
   });
 
   it('requires the blank product name, description, and a positive unit price', () => {
     const errors = validateQuotation({
       ...base,
       productId: 'custom_product',
-      productOptions: { customName: '', customDescription: '', customUnitPrice: '0' },
+      productOptions: { customName: '', customDescription: '', customUnitCost: '0' },
       prints: [{ method: 'none' }],
     });
     expect(errors.productOptions).toBe('Enter the custom product name and description.');
+  });
+
+  it('never produces a negative total from incomplete team-set or negative form values', () => {
+    const incompleteTeamSet = calculateQuotation({
+      ...base,
+      productId: 'jersey_sublimation',
+      productOptions: { teamSet: true },
+      prints: [{ method: 'sublimation' }],
+    });
+    expect(incompleteTeamSet.productCost.unitCost).toBe(0);
+    expect(incompleteTeamSet.sellingPrice).toBeGreaterThanOrEqual(0);
+
+    const invalidNumbers = calculateQuotation({ ...base, quantity: -5, shippingCost: -20, quotedUnitPrice: -4 });
+    expect(invalidNumbers.totalQuantity).toBe(0);
+    expect(invalidNumbers.shippingCost).toBe(0);
+    expect(invalidNumbers.sellingPrice).toBe(0);
+  });
+
+  it('rejects a negative manual quotation price', () => {
+    const errors = validateQuotation({ ...base, quotedUnitPrice: '-0.01' });
+    expect(errors.quotedUnitPrice).toBe('Quotation price cannot be negative.');
   });
 
   it('prices a tee with DTF', () => {

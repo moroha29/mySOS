@@ -22,12 +22,16 @@ function validateOrderItem(item) {
   } else if (item.productId === 'custom_cutsew' && !['basic', 'complex'].includes(item.productOptions?.complexity)) {
     errors.productOptions = 'Choose the sewing complexity.';
   } else if (item.productId === 'custom_product') {
-    const unitPrice = Number(item.productOptions?.customUnitPrice);
+    const unitCost = Number(item.productOptions?.customUnitCost ?? item.productOptions?.customUnitPrice);
     if (!item.productOptions?.customName?.trim() || !item.productOptions?.customDescription?.trim()) {
       errors.productOptions = 'Enter the custom product name and description.';
-    } else if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
-      errors.productOptions = 'Enter a custom product unit price greater than zero.';
+    } else if (!Number.isFinite(unitCost) || unitCost <= 0) {
+      errors.productOptions = 'Enter a custom product unit cost greater than zero.';
     }
+  }
+  if (item.quotedUnitPrice !== undefined && item.quotedUnitPrice !== '') {
+    const quotedUnitPrice = Number(item.quotedUnitPrice);
+    if (!Number.isFinite(quotedUnitPrice) || quotedUnitPrice < 0) errors.quotedUnitPrice = 'Quotation price cannot be negative.';
   }
 
   const prints = item.prints ?? [];
@@ -60,6 +64,7 @@ function normalizedItems(input) {
     productOptions: input.productOptions,
     prints: input.prints,
     sizes: input.sizes,
+    quotedUnitPrice: input.quotedUnitPrice,
   }];
 }
 
@@ -83,11 +88,12 @@ export function validateQuotation(input) {
 }
 
 export function calculateOrderItem(item) {
-  const quantity = Number(item.quantity) || 0;
+  const enteredQuantity = Number(item.quantity);
+  const quantity = Number.isFinite(enteredQuantity) ? Math.max(0, enteredQuantity) : 0;
   const tier = getTier(quantity);
   const selectedProduct = getProduct(item.productId);
-  const directPrice = item.productId === 'custom_product';
-  const product = directPrice && selectedProduct
+  const customProduct = item.productId === 'custom_product';
+  const product = customProduct && selectedProduct
     ? { ...selectedProduct, name: item.productOptions?.customName?.trim() || selectedProduct.name }
     : selectedProduct;
   const productCost = calculateProductCost(item.productId, item.productOptions);
@@ -97,12 +103,18 @@ export function calculateOrderItem(item) {
   const apparelTotal = productCost.unitCost * quantity;
   const printingTotal = prints.reduce((sum, print) => sum + print.unitCost * quantity, 0);
   const setupFees = prints.reduce((sum, print) => sum + print.setupFee, 0);
-  const enteredPriceTotal = (Number(item.productOptions?.customUnitPrice) || 0) * quantity;
-  const internalCost = directPrice ? enteredPriceTotal : apparelTotal + printingTotal + setupFees;
-  const adjustedCost = directPrice ? enteredPriceTotal : internalCost * (tier?.costMultiplier ?? 1);
-  const sellingPrice = directPrice ? enteredPriceTotal : internalCost * (tier?.sellMultiplier ?? 1);
+  const internalCost = Math.max(0, apparelTotal + printingTotal + setupFees);
+  const adjustedCost = Math.max(0, internalCost * (tier?.costMultiplier ?? 1));
+  const suggestedSellingPrice = Math.max(0, internalCost * (tier?.sellMultiplier ?? 1));
+  const enteredQuotedUnitPrice = Number(item.quotedUnitPrice);
+  const hasQuotedPriceOverride = item.quotedUnitPrice !== undefined
+    && item.quotedUnitPrice !== ''
+    && Number.isFinite(enteredQuotedUnitPrice)
+    && enteredQuotedUnitPrice >= 0;
+  const sellingPrice = hasQuotedPriceOverride ? enteredQuotedUnitPrice * quantity : suggestedSellingPrice;
   return {
     input: item,
+    quantity,
     product,
     tier,
     productCost,
@@ -110,29 +122,32 @@ export function calculateOrderItem(item) {
     apparelTotal,
     printingTotal,
     setupFees,
-    pricingMode: directPrice ? 'direct' : 'tiered',
+    pricingMode: hasQuotedPriceOverride ? 'override' : 'tiered',
     internalCost,
     adjustedCost,
+    suggestedSellingPrice,
     sellingPrice,
     unitCost: quantity > 0 ? adjustedCost / quantity : 0,
+    suggestedUnitSellingPrice: quantity > 0 ? suggestedSellingPrice / quantity : 0,
     unitSellingPrice: quantity > 0 ? sellingPrice / quantity : 0,
   };
 }
 
 export function calculateQuotation(input) {
   const items = normalizedItems(input).map(calculateOrderItem);
-  const totalQuantity = items.reduce((sum, item) => sum + (Number(item.input.quantity) || 0), 0);
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const tier = getTier(totalQuantity);
   const addons = calculateAddons(input.addons, totalQuantity);
-  const shippingCost = Number(input.shippingCost) || 0;
+  const enteredShippingCost = Number(input.shippingCost);
+  const shippingCost = Number.isFinite(enteredShippingCost) ? Math.max(0, enteredShippingCost) : 0;
   const sharedInternalCost = addons.totalCost + shippingCost;
-  const internalCost = items.reduce((sum, item) => sum + item.internalCost, 0) + sharedInternalCost;
-  const adjustedCost = items.reduce((sum, item) => sum + item.adjustedCost, 0) + sharedInternalCost * (tier?.costMultiplier ?? 1);
+  const internalCost = Math.max(0, items.reduce((sum, item) => sum + item.internalCost, 0) + sharedInternalCost);
+  const adjustedCost = Math.max(0, items.reduce((sum, item) => sum + item.adjustedCost, 0) + sharedInternalCost * (tier?.costMultiplier ?? 1));
   // Each item uses its own quantity tier. Shared charges use the combined-order tier.
   // For one item this remains identical to QUOTATION_OUTPUT!B28, including its separate shipping addition.
-  const sellingPrice = items.reduce((sum, item) => sum + item.sellingPrice, 0)
+  const sellingPrice = Math.max(0, items.reduce((sum, item) => sum + item.sellingPrice, 0)
     + sharedInternalCost * (tier?.sellMultiplier ?? 1)
-    + addons.totalSell - addons.totalCost + shippingCost;
+    + addons.totalSell - addons.totalCost + shippingCost);
   const profit = sellingPrice - adjustedCost;
   const first = items[0] ?? {};
 

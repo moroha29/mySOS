@@ -55,7 +55,9 @@ Component-priced jerseys and custom cut-and-sew products use their named cost fi
 
 Jersey options use one combined `customNameAndNumberBaseCost` and a separate `knittedCollarBaseCost`. Update those values in `src/data/productData.json` when supplier costs change.
 
-Salespeople can select **Other / Blank Product** for an item that is not in the catalogue. Its entered unit price is quoted directly without quantity-tier markup; its name and description are carried into the live preview and Excel quotation. Printing or branding details for that line should be included in the description.
+Salespeople can select **Other / Blank Product** for an item that is not in the catalogue. Its entered unit cost feeds the normal quantity-tier suggestion; its name and description are carried into the live preview and Excel quotation. Printing or branding details for that line should be included in the description and supplier cost.
+
+Every item shows its calculated cost, suggested quotation price and current quotation price. Leave the quotation-price override blank to use the tier suggestion, or enter a non-negative per-piece price to override it. The internal preview highlights quotations below cost; customer Excel exports contain only the quotation price.
 
 ## How to add a product
 
@@ -136,7 +138,7 @@ The engine preserves:
 
 - Eight quantity tiers with separate cost and selling multipliers.
 - Jersey fabric, collar, sleeve, combined custom name-and-number, knitted-collar and team-set adjustments.
-- Direct-price quotation lines for unlisted products.
+- Cost-based quotation lines for unlisted products with optional selling-price overrides.
 - Tee, polo, cap and custom cut-and-sew cost calculations.
 - DTF/DTG, silkscreen, embroidery and sublimation calculations.
 - Per-piece and flat add-ons.

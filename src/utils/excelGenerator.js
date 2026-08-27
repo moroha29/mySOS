@@ -84,9 +84,9 @@ export function generateQuotationWorkbook(quote) {
   quote.items.forEach((item) => {
     const rowNumber = sheet.rowCount + 1;
     const printDescription = item.prints.map((print) => print.description).join(' + ');
-    const pricingDescription = item.pricingMode === 'direct' ? 'Direct unit price' : `Tier ${item.tier?.label ?? '—'}`;
+    const pricingDescription = item.pricingMode === 'override' ? 'Manual quotation price' : `Tier ${item.tier?.label ?? '—'}`;
     const description = [item.productCost.description, printDescription, pricingDescription].filter(Boolean).join(' · ');
-    itemRows.push(sheet.addRow([item.product?.name ?? '', description, Number(item.input.quantity), item.unitSellingPrice, { formula: `C${rowNumber}*D${rowNumber}`, result: item.sellingPrice }]));
+    itemRows.push(sheet.addRow([item.product?.name ?? '', description, item.quantity, item.unitSellingPrice, { formula: `C${rowNumber}*D${rowNumber}`, result: item.sellingPrice }]));
   });
   quote.addons.items.forEach((addon) => {
     const quotedTotal = addon.totalCost * quote.tier.sellMultiplier + addon.totalSell - addon.totalCost;

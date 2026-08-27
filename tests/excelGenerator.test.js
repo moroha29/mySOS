@@ -70,12 +70,13 @@ describe('Excel quotation output', () => {
     expect(sheet.getCell('C11').value).toBe(25);
   });
 
-  it('writes a blank product name, description, and direct unit price', async () => {
+  it('writes a blank product name, description, and overridden quotation price', async () => {
     const quote = calculateQuotation({
       customerName: 'Custom Order', customerType: 'Corporate', orderDate: '2026-08-27', orderReference: 'CUSTOM-001',
       items: [{
         id: 'custom-line', quantity: 8, productId: 'custom_product',
-        productOptions: { customName: 'Travel Pouch', customDescription: 'Recycled canvas pouch with zip', customUnitPrice: 7.25 },
+        productOptions: { customName: 'Travel Pouch', customDescription: 'Recycled canvas pouch with zip', customUnitCost: 7.25 },
+        quotedUnitPrice: 9.5,
         prints: [{ method: 'none' }], sizes: {},
       }],
       addons: {}, shippingCost: 0, notes: '',
@@ -85,8 +86,8 @@ describe('Excel quotation output', () => {
     const sheet = workbook.getWorksheet('Quotation');
     expect(sheet.getCell('A10').value).toBe('Travel Pouch');
     expect(sheet.getCell('B10').value).toContain('Recycled canvas pouch with zip');
-    expect(sheet.getCell('B10').value).toContain('Direct unit price');
-    expect(sheet.getCell('D10').value).toBe(7.25);
-    expect(sheet.getCell('E10').value).toMatchObject({ result: 58 });
+    expect(sheet.getCell('B10').value).toContain('Manual quotation price');
+    expect(sheet.getCell('D10').value).toBe(9.5);
+    expect(sheet.getCell('E10').value).toMatchObject({ result: 76 });
   });
 });

@@ -37,7 +37,7 @@ export default function App() {
     <main>
       <header className="page-heading"><a className="quote-brand" href="/mySOS/" aria-label="Back to MySOS website">MySOS</a><h1>Agent quotation</h1></header>
       <nav className="step-nav" aria-label="Quotation sections"><a href="#customer">01 Customer</a><a href="#products">02 Order items</a><a href="#addons">03 Add-ons</a><a href="#shipping">04 Finish</a><a href="#preview">05 Preview</a></nav>
-      <div className="workspace"><QuotationForm value={form} onChange={setForm} errors={shownErrors} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
+      <div className="workspace"><QuotationForm value={form} onChange={setForm} errors={shownErrors} quote={quote} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
     </main>
     <footer>mySOS quotation engine · Pricing logic sourced from the approved workbook</footer>
   </>;

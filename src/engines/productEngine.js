@@ -26,7 +26,7 @@ export function calculateProductCost(productId, options = {}) {
       options.knittedCollar && 'Knitted collar',
       options.teamSet && 'Team set',
     ].filter(Boolean);
-    return { unitCost, description: [fabric?.name, collar?.name, sleeve?.name, ...extras].filter(Boolean).join(' · ') };
+    return { unitCost: Math.max(0, unitCost), description: [fabric?.name, collar?.name, sleeve?.name, ...extras].filter(Boolean).join(' · ') };
   }
 
   if (productId === 'tee' || productId === 'polo') {
@@ -47,7 +47,11 @@ export function calculateProductCost(productId, options = {}) {
   }
 
   if (productId === 'custom_product') {
-    return { unitCost: 0, description: options.customDescription?.trim() ?? '' };
+    const enteredUnitCost = Number(options.customUnitCost ?? options.customUnitPrice);
+    return {
+      unitCost: Number.isFinite(enteredUnitCost) ? Math.max(0, enteredUnitCost) : 0,
+      description: options.customDescription?.trim() ?? '',
+    };
   }
 
   return { unitCost: 0, description: '' };

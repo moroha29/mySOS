@@ -29,7 +29,7 @@ export default function ProductSelector({ productId, options, onProductChange, o
       {productId === 'custom_cutsew' && <Field label="Sewing complexity *"><select value={options.complexity ?? ''} onChange={(event) => setOption('complexity', event.target.value)}><option value="">Select an option</option><option value="basic">Basic</option><option value="complex">Complex</option></select></Field>}
       {productId === 'custom_product' && <>
         <Field label="Product name *"><input value={options.customName ?? ''} onChange={(event) => setOption('customName', event.target.value)} placeholder="Enter the product name" /></Field>
-        <Field label="Unit price (SGD) *"><input type="number" min="0" step="0.01" value={options.customUnitPrice ?? ''} onChange={(event) => setOption('customUnitPrice', event.target.value)} placeholder="0.00" /></Field>
+        <Field label="Unit cost (SGD) *"><input type="number" min="0" step="0.01" value={options.customUnitCost ?? options.customUnitPrice ?? ''} onChange={(event) => onOptionsChange({ ...options, customUnitCost: event.target.value, customUnitPrice: undefined })} placeholder="0.00" /></Field>
         <Field label="Product description *" className="wide"><textarea rows="3" value={options.customDescription ?? ''} onChange={(event) => setOption('customDescription', event.target.value)} placeholder="Specifications, material, colour, branding, or other details" /></Field>
       </>}
       {productId === 'jersey_sublimation' && <>
