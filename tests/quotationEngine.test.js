@@ -18,6 +18,52 @@ describe('workbook pricing parity', () => {
     expect(quote.unitSellingPrice).toBe(24.05);
   });
 
+  it('treats custom name and number as one jersey option and prices a knitted collar separately', () => {
+    const quote = calculateQuotation({
+      ...base,
+      productId: 'jersey_sublimation',
+      productOptions: {
+        fabric: 'polyester_dri_fit', collar: 'round_neck', sleeve: 'short',
+        customNameAndNumber: true, knittedCollar: true,
+      },
+      prints: [{ method: 'sublimation', option: 'full' }],
+    });
+    expect(quote.productCost.unitCost).toBe(8.7);
+    expect(quote.productCost.description).toContain('Custom name & number');
+    expect(quote.productCost.description).toContain('Knitted collar');
+  });
+
+  it('quotes an unlisted product at the entered direct unit price without requiring printing', () => {
+    const input = {
+      ...base,
+      quantity: 12,
+      productId: 'custom_product',
+      productOptions: {
+        customName: 'Travel Pouch',
+        customDescription: 'Recycled canvas pouch with zip',
+        customUnitPrice: '7.25',
+      },
+      prints: [{ method: 'none' }, { method: 'none' }],
+    };
+    const quote = calculateQuotation(input);
+    expect(validateQuotation(input)).toEqual({});
+    expect(quote.product.name).toBe('Travel Pouch');
+    expect(quote.productCost.description).toBe('Recycled canvas pouch with zip');
+    expect(quote.items[0].pricingMode).toBe('direct');
+    expect(quote.sellingPrice).toBe(87);
+    expect(quote.unitSellingPrice).toBe(7.25);
+  });
+
+  it('requires the blank product name, description, and a positive unit price', () => {
+    const errors = validateQuotation({
+      ...base,
+      productId: 'custom_product',
+      productOptions: { customName: '', customDescription: '', customUnitPrice: '0' },
+      prints: [{ method: 'none' }],
+    });
+    expect(errors.productOptions).toBe('Enter the custom product name and description.');
+  });
+
   it('prices a tee with DTF', () => {
     const quote = calculateQuotation(base);
     expect(quote.internalCost).toBe(300);

@@ -53,6 +53,10 @@ The deployable files are written to `dist/`. The root `index.html` is the public
 
 Component-priced jerseys and custom cut-and-sew products use their named cost fields below `jersey` and `customCutSew` instead of a single `quotation.baseCost`.
 
+Jersey options use one combined `customNameAndNumberBaseCost` and a separate `knittedCollarBaseCost`. Update those values in `src/data/productData.json` when supplier costs change.
+
+Salespeople can select **Other / Blank Product** for an item that is not in the catalogue. Its entered unit price is quoted directly without quantity-tier markup; its name and description are carried into the live preview and Excel quotation. Printing or branding details for that line should be included in the description.
+
 ## How to add a product
 
 1. Add an object to `catalogue` in `src/data/productData.json`.
@@ -131,7 +135,8 @@ The public application starts at `src/public/main.jsx`. The two HTML entry point
 The engine preserves:
 
 - Eight quantity tiers with separate cost and selling multipliers.
-- Jersey fabric, collar, sleeve, name, number and team-set adjustments.
+- Jersey fabric, collar, sleeve, combined custom name-and-number, knitted-collar and team-set adjustments.
+- Direct-price quotation lines for unlisted products.
 - Tee, polo, cap and custom cut-and-sew cost calculations.
 - DTF/DTG, silkscreen, embroidery and sublimation calculations.
 - Per-piece and flat add-ons.

@@ -16,11 +16,17 @@ export function calculateProductCost(productId, options = {}) {
     const fabric = findById(productData.jersey.fabrics, options.fabric);
     const collar = findById(productData.jersey.collars, options.collar);
     const sleeve = findById(productData.jersey.sleeves, options.sleeve);
+    const hasCustomNameAndNumber = options.customNameAndNumber || options.customName || options.customNumber;
     const unitCost = (fabric?.baseCost ?? 0) + (collar?.baseCost ?? 0) + (sleeve?.baseCost ?? 0)
-      + (options.customName ? productData.jersey.customNameBaseCost : 0)
-      + (options.customNumber ? productData.jersey.customNumberBaseCost : 0)
+      + (hasCustomNameAndNumber ? productData.jersey.customNameAndNumberBaseCost : 0)
+      + (options.knittedCollar ? productData.jersey.knittedCollarBaseCost : 0)
       + (options.teamSet ? productData.jersey.teamSetBaseCostAdjustment : 0);
-    return { unitCost, description: [fabric?.name, collar?.name, sleeve?.name].filter(Boolean).join(' · ') };
+    const extras = [
+      hasCustomNameAndNumber && 'Custom name & number',
+      options.knittedCollar && 'Knitted collar',
+      options.teamSet && 'Team set',
+    ].filter(Boolean);
+    return { unitCost, description: [fabric?.name, collar?.name, sleeve?.name, ...extras].filter(Boolean).join(' · ') };
   }
 
   if (productId === 'tee' || productId === 'polo') {
@@ -38,6 +44,10 @@ export function calculateProductCost(productId, options = {}) {
     const sewingCost = config.sewingBaseCost[options.complexity] ?? 0;
     const unitCost = config.fabricBaseCostPerMetre * config.metresPerGarment + config.cuttingBaseCost + sewingCost + config.finishingBaseCost;
     return { unitCost, description: `${options.complexity === 'complex' ? 'Complex' : 'Basic'} construction` };
+  }
+
+  if (productId === 'custom_product') {
+    return { unitCost: 0, description: options.customDescription?.trim() ?? '' };
   }
 
   return { unitCost: 0, description: '' };

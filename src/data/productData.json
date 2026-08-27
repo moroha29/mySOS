@@ -4,7 +4,8 @@
     { "id": "tee", "name": "Tee (DTF/DTG)", "engine": "PRODUCT_TEE_DTF_DTG" },
     { "id": "polo", "name": "Polo", "engine": "PRODUCT_TEE_DTF_DTG" },
     { "id": "cap", "name": "Cap", "engine": "PRODUCT_CAPS" },
-    { "id": "custom_cutsew", "name": "Custom Cut & Sew", "engine": "PRODUCT_CUSTOM_CUTSEW" }
+    { "id": "custom_cutsew", "name": "Custom Cut & Sew", "engine": "PRODUCT_CUSTOM_CUTSEW" },
+    { "id": "custom_product", "name": "Other / Blank Product", "engine": "PRODUCT_CUSTOM_DIRECT" }
   ],
   "catalogue": [
     {
@@ -151,8 +152,8 @@
       { "id": "long", "name": "Long", "baseCost": 1.5 },
       { "id": "raglan", "name": "Raglan", "baseCost": 0.8 }
     ],
-    "customNameBaseCost": 1,
-    "customNumberBaseCost": 1.5,
+    "customNameAndNumberBaseCost": 2.5,
+    "knittedCollarBaseCost": 1.2,
     "teamSetBaseCostAdjustment": -0.5
   },
   "customCutSew": {

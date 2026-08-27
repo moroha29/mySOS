@@ -10,8 +10,8 @@ export default function QuotationPreview({ quote, errors, onDownload, downloadin
       <small>Order items</small>
       {quote.items.map((item, index) => <div className="preview-item" key={item.input.id ?? index}>
         <div className="preview-line"><span>{item.product?.name || `Item ${index + 1}`}</span><strong>{item.input.quantity || 0} pcs</strong></div>
-        <div className="preview-meta"><span>{item.prints.map((print) => print.description).join(' + ') || 'Printing not selected'}</span><strong>{money.format(item.sellingPrice)}</strong></div>
-        <div className="item-tier">Tier {item.tier?.label ?? '—'} · {money.format(item.unitSellingPrice)} / pc</div>
+        <div className="preview-meta"><span>{item.pricingMode === 'direct' ? item.productCost.description : (item.prints.map((print) => print.description).join(' + ') || 'Printing not selected')}</span><strong>{money.format(item.sellingPrice)}</strong></div>
+        <div className="item-tier">{item.pricingMode === 'direct' ? 'Direct price' : `Tier ${item.tier?.label ?? '—'}`} · {money.format(item.unitSellingPrice)} / pc</div>
       </div>)}
     </div>
     {quote.addons.items.length > 0 && <div className="preview-group"><small>Add-ons</small>{quote.addons.items.map((addon) => <div className="preview-line muted" key={addon.id}><span>{addon.name}</span><strong>{money.format(addon.totalSell)}</strong></div>)}</div>}

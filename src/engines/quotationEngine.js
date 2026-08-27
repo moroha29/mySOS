@@ -21,22 +21,31 @@ function validateOrderItem(item) {
     if (!cap || cap.quotation.productId !== 'cap' || !cap.quotation.enabled) errors.productOptions = 'Choose a valid cap type.';
   } else if (item.productId === 'custom_cutsew' && !['basic', 'complex'].includes(item.productOptions?.complexity)) {
     errors.productOptions = 'Choose the sewing complexity.';
+  } else if (item.productId === 'custom_product') {
+    const unitPrice = Number(item.productOptions?.customUnitPrice);
+    if (!item.productOptions?.customName?.trim() || !item.productOptions?.customDescription?.trim()) {
+      errors.productOptions = 'Enter the custom product name and description.';
+    } else if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
+      errors.productOptions = 'Enter a custom product unit price greater than zero.';
+    }
   }
 
   const prints = item.prints ?? [];
   const activePrints = prints.filter((print) => print.method && print.method !== 'none');
-  if (activePrints.length === 0) errors.prints = 'Select at least one printing method.';
-  prints.forEach((print, index) => {
-    if (!print.method || print.method === 'none') return;
-    const key = `print${index}`;
-    if (print.method === 'sublimation' && item.productId !== 'jersey_sublimation') errors[key] = 'Full sublimation printing is only available for jerseys.';
-    else if (product && !product.allowedPrintMethods.includes(print.method)) errors[key] = `${print.method.toUpperCase()} is not compatible with ${product.name}.`;
-    if (print.method === 'sublimation' && !print.option) errors[key] = 'Choose a sublimation type.';
-    if ((print.method === 'dtf' || print.method === 'dtg') && !print.option) errors[key] = `Choose a ${print.method.toUpperCase()} print option.`;
-    if (print.method === 'silkscreen' && (!print.technique || !print.size || !Number.isInteger(Number(print.colors)) || Number(print.colors) < 1)) errors[key] = 'Choose a silkscreen technique, size, and at least one colour.';
-    if (print.method === 'embroidery' && (!print.stitchTier || !print.digitizing || !print.placement)) errors[key] = 'Complete the embroidery details.';
-  });
-  if (item.productId === 'jersey_sublimation' && (activePrints.length !== 1 || activePrints[0]?.method !== 'sublimation')) errors.prints = 'Jerseys require exactly one sublimation printing method.';
+  if (item.productId !== 'custom_product') {
+    if (activePrints.length === 0) errors.prints = 'Select at least one printing method.';
+    prints.forEach((print, index) => {
+      if (!print.method || print.method === 'none') return;
+      const key = `print${index}`;
+      if (print.method === 'sublimation' && item.productId !== 'jersey_sublimation') errors[key] = 'Full sublimation printing is only available for jerseys.';
+      else if (product && !product.allowedPrintMethods.includes(print.method)) errors[key] = `${print.method.toUpperCase()} is not compatible with ${product.name}.`;
+      if (print.method === 'sublimation' && !print.option) errors[key] = 'Choose a sublimation type.';
+      if ((print.method === 'dtf' || print.method === 'dtg') && !print.option) errors[key] = `Choose a ${print.method.toUpperCase()} print option.`;
+      if (print.method === 'silkscreen' && (!print.technique || !print.size || !Number.isInteger(Number(print.colors)) || Number(print.colors) < 1)) errors[key] = 'Choose a silkscreen technique, size, and at least one colour.';
+      if (print.method === 'embroidery' && (!print.stitchTier || !print.digitizing || !print.placement)) errors[key] = 'Complete the embroidery details.';
+    });
+    if (item.productId === 'jersey_sublimation' && (activePrints.length !== 1 || activePrints[0]?.method !== 'sublimation')) errors.prints = 'Jerseys require exactly one sublimation printing method.';
+  }
 
   const sizeTotal = Object.values(item.sizes ?? {}).reduce((sum, value) => sum + (Number(value) || 0), 0);
   if (sizeTotal > 0 && sizeTotal !== quantity) errors.sizes = `Size breakdown totals ${sizeTotal}; it must equal this item's quantity of ${quantity}.`;
@@ -76,7 +85,11 @@ export function validateQuotation(input) {
 export function calculateOrderItem(item) {
   const quantity = Number(item.quantity) || 0;
   const tier = getTier(quantity);
-  const product = getProduct(item.productId);
+  const selectedProduct = getProduct(item.productId);
+  const directPrice = item.productId === 'custom_product';
+  const product = directPrice && selectedProduct
+    ? { ...selectedProduct, name: item.productOptions?.customName?.trim() || selectedProduct.name }
+    : selectedProduct;
   const productCost = calculateProductCost(item.productId, item.productOptions);
   const prints = (item.prints ?? [])
     .filter((print) => print.method && print.method !== 'none')
@@ -84,9 +97,10 @@ export function calculateOrderItem(item) {
   const apparelTotal = productCost.unitCost * quantity;
   const printingTotal = prints.reduce((sum, print) => sum + print.unitCost * quantity, 0);
   const setupFees = prints.reduce((sum, print) => sum + print.setupFee, 0);
-  const internalCost = apparelTotal + printingTotal + setupFees;
-  const adjustedCost = internalCost * (tier?.costMultiplier ?? 1);
-  const sellingPrice = internalCost * (tier?.sellMultiplier ?? 1);
+  const enteredPriceTotal = (Number(item.productOptions?.customUnitPrice) || 0) * quantity;
+  const internalCost = directPrice ? enteredPriceTotal : apparelTotal + printingTotal + setupFees;
+  const adjustedCost = directPrice ? enteredPriceTotal : internalCost * (tier?.costMultiplier ?? 1);
+  const sellingPrice = directPrice ? enteredPriceTotal : internalCost * (tier?.sellMultiplier ?? 1);
   return {
     input: item,
     product,
@@ -96,6 +110,7 @@ export function calculateOrderItem(item) {
     apparelTotal,
     printingTotal,
     setupFees,
+    pricingMode: directPrice ? 'direct' : 'tiered',
     internalCost,
     adjustedCost,
     sellingPrice,

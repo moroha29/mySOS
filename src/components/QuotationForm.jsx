@@ -36,7 +36,9 @@ function ItemEditor({ item, index, itemCount, onChange, onRemove, errors }) {
       onOptionsChange={(productOptions) => set('productOptions', productOptions)}
       error={errors.productId || errors.productOptions || errors.teamSet}
     />
-    <PrintSelector compact productId={item.productId} prints={item.prints} onChange={(prints) => set('prints', prints)} errors={errors} />
+    {item.productId === 'custom_product'
+      ? <div className="selector-block direct-price-note"><h3>Printing</h3><p>Add any printing or branding specifications to the product description. The entered unit price is quoted directly.</p></div>
+      : <PrintSelector compact productId={item.productId} prints={item.prints} onChange={(prints) => set('prints', prints)} errors={errors} />}
     <details className="size-details"><summary>Optional size breakdown for this item</summary><div className="size-grid">{sizes.map((size) => <label key={size}><span>{size}</span><input type="number" min="0" step="1" value={item.sizes[size] ?? ''} onChange={(event) => set('sizes', { ...item.sizes, [size]: event.target.value })} /></label>)}</div>{errors.sizes && <p className="field-error">{errors.sizes}</p>}</details>
   </article>;
 }
