@@ -1,35 +1,50 @@
 import { useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
+import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
+import Icon from './Icons';
 
-export function WhatsAppButton({ compact = false, label = '' }) {
+const whatsappHref = () => {
   const { whatsapp } = siteConfig;
-  if (!whatsapp.enabled || !whatsapp.number) {
-    return <span className={`whatsapp-button is-disabled ${compact ? 'is-compact' : ''} ${label ? 'has-label' : ''}`} aria-label="WhatsApp enquiries are currently unavailable">{label || 'WA'}</span>;
-  }
-  const href = `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`;
-  return <a className={`whatsapp-button ${compact ? 'is-compact' : ''} ${label ? 'has-label' : ''}`} href={href} target="_blank" rel="noreferrer" aria-label="Contact MySOS on WhatsApp">{label || 'WA'}</a>;
+  if (!whatsapp.enabled || !whatsapp.number) return null;
+  return `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`;
+};
+
+export function WhatsAppButton({ className = '' }) {
+  const href = whatsappHref();
+  const content = <Icon name="whatsapp" size={20} />;
+  return href
+    ? <a className={`wa-circle ${className}`.trim()} href={href} target="_blank" rel="noreferrer" aria-label="Contact MySOS on WhatsApp">{content}</a>
+    : <span className={`wa-circle is-disabled ${className}`.trim()} aria-label="WhatsApp enquiries are currently unavailable">{content}</span>;
 }
 
-const productLinks = [
-  { label: 'Apparel', href: '/mySOS/products/?category=apparel' },
-  { label: 'Bags', href: '/mySOS/products/?category=bags' },
-  { label: 'Drinkware', href: '/mySOS/products/?category=drinkware' },
-  { label: 'Corporate Gifts', href: '/mySOS/products/?category=corporate-gifts' },
+export function WhatsAppBubble() {
+  const href = whatsappHref();
+  if (!href) return null;
+  return <a className="wa-bubble" href={href} target="_blank" rel="noreferrer" aria-label="Chat with MySOS on WhatsApp"><Icon name="whatsapp" size={30} /></a>;
+}
+
+const resourceLinks = [
+  { label: 'Printing Guides', href: '/mySOS/products/#faq' },
+  { label: 'Materials', href: '/mySOS/products/#printing' },
+  { label: 'Design Tips', href: '/mySOS/why-mysos/' },
+  { label: 'Buying Guides', href: '/mySOS/products/' },
+  { label: 'Case Studies', href: '/mySOS/success-stories/' },
 ];
 
+function dropdownFor(label) {
+  if (label === 'Products') return siteContent.categories.map((item) => ({ label: item.name, href: `/mySOS/products/?category=${item.id}` }));
+  if (label === 'Solutions') return solutions.map((item) => ({ label: item.name, href: `/mySOS/solutions/?industry=${item.id}` }));
+  if (label === 'Resources') return resourceLinks;
+  return null;
+}
+
 function NavigationItem({ item, onNavigate }) {
-  const dropdownLinks = item.label === 'Products' ? productLinks
-    : item.label === 'Solutions' ? solutions.map((solution) => ({ label: solution.name, href: `/mySOS/solutions/?industry=${solution.id}` }))
-      : item.label === 'Resources' ? [
-        { label: 'Frequently Asked Questions', href: '/mySOS/products/#faq' },
-        { label: 'Why MySOS', href: '/mySOS/why-mysos/' },
-        { label: 'Success Stories', href: '/mySOS/success-stories/' },
-      ] : null;
-  if (!dropdownLinks) return <a href={item.href} onClick={onNavigate}>{item.label}</a>;
+  const links = dropdownFor(item.label);
+  if (!links) return <a className="nav-link" href={item.href} onClick={onNavigate}>{item.label}</a>;
   return <div className="nav-group">
-    <a href={item.href} onClick={onNavigate}>{item.label}<span className="nav-chevron" aria-hidden="true">⌄</span></a>
-    <div className="nav-dropdown">{dropdownLinks.map((link) => <a key={link.href} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div>
+    <a className="nav-link" href={item.href} onClick={onNavigate}>{item.label}<Icon name="chevronDown" size={13} className="nav-chevron" /></a>
+    <div className="nav-dropdown">{links.map((link) => <a key={link.label} href={link.href} onClick={onNavigate}>{link.label}</a>)}</div>
   </div>;
 }
 
@@ -38,34 +53,74 @@ export function SiteHeader() {
   return <header className="site-header">
     <div className="site-header-inner">
       <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home">My<span>SOS</span></a>
-      <button className="menu-toggle" type="button" aria-expanded={open} aria-controls="primary-navigation" onClick={() => setOpen(!open)}><span /><span /><span /><span className="sr-only">Menu</span></button>
-      <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`} aria-label="Main navigation">
+      <button className="menu-toggle" type="button" aria-expanded={open} aria-controls="primary-navigation" onClick={() => setOpen(!open)}>
+        <span /><span /><span /><span className="sr-only">Menu</span>
+      </button>
+      <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`.trim()} aria-label="Main navigation">
         {siteConfig.navigation.map((item) => <NavigationItem key={item.label} item={item} onNavigate={() => setOpen(false)} />)}
-        <a className="button button-small mobile-quote" href={siteConfig.quotationPath}>Get a Quote</a>
+        <a className="btn btn-primary btn-sm mobile-quote" href={siteConfig.quotationPath}>Get a Quote</a>
       </nav>
-      <div className="header-actions"><a className="button button-small" href={siteConfig.quotationPath}>Get a Quote</a><WhatsAppButton compact /></div>
+      <div className="header-actions">
+        <a className="btn btn-primary btn-sm" href={siteConfig.quotationPath}>Get a Quote</a>
+        <WhatsAppButton />
+      </div>
     </div>
   </header>;
 }
 
+const socials = [
+  { id: 'facebook', label: 'Facebook' },
+  { id: 'instagram', label: 'Instagram' },
+  { id: 'linkedin', label: 'LinkedIn' },
+  { id: 'youtube', label: 'YouTube' },
+];
+
 export function SiteFooter() {
-  const productsFooter = globalThis.location?.pathname?.includes('/products');
-  return <footer className={`site-footer ${productsFooter ? 'products-footer' : ''}`}>
-    <div className="footer-cta">
-      <div><h2>{productsFooter ? 'Ready to start your order?' : 'Bring your ideas to life with MySOS.'}</h2><p>{productsFooter ? 'Get in touch with us today.' : 'We are ready to help.'}</p></div>
-      <div className="footer-cta-actions"><a className="button" href={siteConfig.quotationPath}>Get a Quote</a>{productsFooter && <WhatsAppButton label="WhatsApp Us" />}<WhatsAppButton /></div>
-    </div>
+  const { socialLinks = {} } = siteConfig;
+  return <footer className="site-footer">
     <div className="footer-grid">
-      <div><a className="site-logo footer-logo" href={siteConfig.basePath}>My<span>SOS</span></a><p>{siteConfig.tagline}</p></div>
-      <div><h3>Products</h3><a href="/mySOS/products/?category=apparel">Apparel</a><a href="/mySOS/products/?category=bags">Bags</a><a href="/mySOS/products/?category=drinkware">Drinkware</a><a href="/mySOS/products/">View all</a></div>
-      <div><h3>Solutions</h3>{solutions.slice(0, 4).map((item) => <a key={item.id} href={`/mySOS/solutions/?industry=${item.id}`}>{item.name}</a>)}</div>
-      <div><h3>Resources</h3><a href="/mySOS/why-mysos/">Why MySOS</a><a href="/mySOS/success-stories/">Success Stories</a><a href="/mySOS/products/#faq">FAQs</a></div>
-      <div><h3>Connect with us</h3><a href={`https://wa.me/${siteConfig.whatsapp.number}?text=${encodeURIComponent(siteConfig.whatsapp.defaultMessage)}`} target="_blank" rel="noreferrer">WhatsApp {siteConfig.whatsapp.displayNumber}</a>{siteConfig.email && <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>}</div>
+      <div className="footer-brand">
+        <a className="site-logo" href={siteConfig.basePath}>My<span>SOS</span></a>
+        <p>{siteConfig.tagline}</p>
+      </div>
+      <div>
+        <h3>Products</h3>
+        {siteContent.categories.map((item) => <a key={item.id} href={`/mySOS/products/?category=${item.id}`}>{item.name}</a>)}
+      </div>
+      <div>
+        <h3>Solutions</h3>
+        {solutions.map((item) => <a key={item.id} href={`/mySOS/solutions/?industry=${item.id}`}>{item.name.replace(' Organisations', '')}</a>)}
+      </div>
+      <div>
+        <h3>Resources</h3>
+        {resourceLinks.map((item) => <a key={item.label} href={item.href}>{item.label}</a>)}
+      </div>
+      <div>
+        <h3>Connect with us</h3>
+        <div className="footer-socials">
+          {socials.map((social) => {
+            const href = socialLinks[social.id];
+            return href
+              ? <a key={social.id} href={href} target="_blank" rel="noreferrer" aria-label={social.label}><Icon name={social.id} size={18} /></a>
+              : <span key={social.id} aria-label={`${social.label} (coming soon)`} role="img"><Icon name={social.id} size={18} /></span>;
+          })}
+        </div>
+        {siteConfig.whatsapp.displayNumber && <a className="footer-contact" href={whatsappHref() ?? '#'}>{siteConfig.whatsapp.displayNumber}</a>}
+        {siteConfig.email && <a className="footer-contact" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>}
+      </div>
     </div>
-    <div className="footer-bottom"><span>© 2026 MySOS. All rights reserved.</span><span>Static site · No customer data is collected here.</span></div>
+    <div className="footer-bottom">
+      <span>© 2024 MySOS. All rights reserved.</span>
+      <span className="footer-legal"><a href="/mySOS/">Terms of Service</a><i aria-hidden="true">|</i><a href="/mySOS/">Privacy Policy</a></span>
+    </div>
   </footer>;
 }
 
 export default function SiteShell({ children }) {
-  return <div className="site-app"><SiteHeader />{children}<SiteFooter /></div>;
+  return <div className="site-app">
+    <SiteHeader />
+    {children}
+    <SiteFooter />
+    <WhatsAppBubble />
+  </div>;
 }

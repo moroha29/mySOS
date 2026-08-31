@@ -1,57 +1,146 @@
+import siteConfig from '../../data/siteConfig.json';
 import { getDisplayPrice, getQuoteHref } from '../../utils/catalogue';
+import { firstImage, getImage } from '../../utils/imageRegistry';
+import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
+import Icon from './Icons';
+import { Product, Scene, Sketch, Workshop } from './Visuals';
 
-export const iconMap = {
-  shirt: 'T', bag: 'B', bottle: 'D', gift: 'G', notebook: 'N', lanyard: 'E',
-  school: 'S', business: 'B', events: 'E', church: 'C', sports: '◎', community: 'C',
-  layers: '≋', transfer: '↗', droplet: '◉', thread: '✣', spark: '✦', sun: '☼',
-  welcome: 'W', grad: 'G'
-};
+export const QUOTE_HREF = siteConfig.quotationPath;
 
-export function SectionHeading({ eyebrow, title, description, action }) {
-  return <div className="section-heading-public">
-    <div>{eyebrow && <span className="eyebrow">{eyebrow}</span>}<h2>{title}</h2>{description && <p>{description}</p>}</div>
+/* --------------------------------------------------------------- primitives */
+
+export function Arrow() {
+  return <Icon name="arrowRight" size={16} className="inline-arrow" />;
+}
+
+export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
+  return <a className={`btn btn-${variant} ${className}`.trim()} href={href} {...rest}>{children}</a>;
+}
+
+export function TextLink({ href, children, className = '' }) {
+  return <a className={`text-link ${className}`.trim()} href={href}>{children} <Arrow /></a>;
+}
+
+export function SectionHeading({ eyebrow, title, description, align = 'center', action }) {
+  // Without a title the eyebrow is the section heading, not a kicker above one.
+  return <div className={`section-heading align-${align} ${title ? '' : 'eyebrow-title'}`.trim()}>
+    <div>
+      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+      {title && <h2>{title}</h2>}
+      {description && <p>{description}</p>}
+    </div>
     {action}
   </div>;
 }
 
-export function IconTile({ icon, label }) {
-  return <span className="icon-tile" aria-hidden="true">{iconMap[icon] ?? label?.slice(0, 1)}</span>;
+/* -------------------------------------------------------------------- media */
+
+export function Photo({ style, label, className = '', image, imageKey, wide = false }) {
+  const src = image || getImage(imageKey);
+  if (src) return <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}><img src={src} alt="" loading="lazy" /></div>;
+  const scene = parseSceneVisual(style);
+  if (scene.kind === 'workshop') return <Workshop className={className} label={label} />;
+  if (scene.kind === 'sketch') return <Sketch className={className} label={label} />;
+  return <Scene kind={scene.kind} shirt={scene.shirt} wide={wide} className={className} label={label} />;
 }
 
-export function MerchVisual({ style = 'tee-navy', label, image }) {
-  return <div className={`merch-visual ${style}`} role="img" aria-label={label}>{image ? <img src={image} alt="" loading="lazy" /> : <><span className="merch-neck" /><span className="merch-mark">MySOS</span></>}</div>;
+export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }) {
+  const src = getImage(slug && `products/${slug}`);
+  if (src) return <div className={`product-visual has-photo ${className}`.trim()}><img src={src} alt="" loading="lazy" /></div>;
+  const { type, colour } = parseProductVisual(imageStyle);
+  return <Product type={type} color={colour} mark={mark} className={className} />;
 }
+
+/* -------------------------------------------------------------------- cards */
 
 export function ProductCard({ product }) {
-  return <article className="product-card">
-    <MerchVisual style={product.public.imageStyle} image={product.public.image} label={`${product.public.name} product`} />
-    <div className="product-card-copy"><h3>{product.public.name}</h3><p className="price-display">{getDisplayPrice(product)}</p><a href={getQuoteHref(product.id)} aria-label={`Get a quote for ${product.public.name}`}>Get a quote <span>→</span></a></div>
-  </article>;
+  const price = getDisplayPrice(product);
+  return <a className="product-card" href={getQuoteHref(product.id)}>
+    <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
+    <h3>{product.public.name}</h3>
+    {price && <p className="price">{price}</p>}
+  </a>;
 }
 
-export function StoryVisual({ style, title }) {
-  const image = style?.startsWith('/') ? style : null;
-  return <div className={`story-visual ${image ? 'has-image' : style}`} role="img" aria-label={`${title} project visual`}>{image ? <img src={image} alt="" loading="lazy" /> : <div className="people-row" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div>}</div>;
+export function CategoryCard({ category }) {
+  const src = getImage(`products/category-${category.id}`);
+  return <a className="category-card" href={`/mySOS/products/?category=${category.id}`}>
+    {src
+      ? <div className="product-visual category-thumb has-photo"><img src={src} alt="" loading="lazy" /></div>
+      : <Product type={category.visual} color={category.colour} mark="" className="category-thumb" />}
+    <span><strong>{category.name}</strong><small>{category.description}</small></span>
+  </a>;
 }
 
-export function SuccessStoryCard({ story }) {
+export function StoryCard({ story, showBadge = true }) {
+  const href = `/mySOS/success-stories/${story.slug}/`;
   return <article className="story-card">
-    <a href={`/mySOS/success-stories/${story.slug}/`}><StoryVisual style={story.imageStyle} title={story.title} /></a>
-    <div className="story-card-copy"><span className="story-category">{story.category.replace('-', ' ')}</span><h3><a href={`/mySOS/success-stories/${story.slug}/`}>{story.title}</a></h3><p>{story.summary}</p><a className="text-link" href={`/mySOS/success-stories/${story.slug}/`}>View Story <span>→</span></a></div>
+    <a className="story-card-media" href={href}>
+      <Photo style={story.imageStyle} label={`${story.title} project`} image={story.image} imageKey={`stories/${story.slug}/cover`} />
+      {showBadge && <span className="badge">{story.category.replace('-', ' ')}</span>}
+    </a>
+    <div className="story-card-body">
+      <h3><a href={href}>{story.title}</a></h3>
+      <p>{story.summary}</p>
+      <TextLink href={href}>View Story</TextLink>
+    </div>
   </article>;
 }
 
-export function ProcessSteps({ items }) {
-  return <ol className="process-steps">{items.map((item, index) => <li key={item.title ?? item}><span>{String(index + 1).padStart(2, '0')}</span><h3>{item.title ?? item}</h3>{item.description && <p>{item.description}</p>}</li>)}</ol>;
+export function SolutionCard({ solution, active = false }) {
+  const href = `/mySOS/solutions/?industry=${solution.id}`;
+  return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()}>
+    <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} imageKey={`solutions/${solution.id}`} /></a>
+    <div>
+      <h3>{solution.name}</h3>
+      <p>{solution.description}</p>
+      <TextLink href={href}>Explore Solutions</TextLink>
+    </div>
+  </article>;
 }
 
-export function Hero({ title, accent, description, children, visual = 'hero-products', compact = false }) {
-  return <section className={`public-hero ${compact ? 'is-compact' : ''}`}>
-    <div className="hero-copy"><h1>{title}<br /><em>{accent}</em></h1><p>{description}</p>{children}</div>
-    <div className={`hero-art ${visual}`} aria-hidden="true"><MerchVisual style="jersey" /><MerchVisual style="polo-navy" /><div className="hero-bag">YOUR<br />IDEA<br />HERE</div></div>
+/* ------------------------------------------------------------------ process */
+
+export function ProcessSteps({ items, variant = 'numbered' }) {
+  const steps = items.map((item) => (typeof item === 'string' ? { title: item } : item));
+  return <ol className={`process-steps process-${variant}`}>
+    {steps.map((step, index) => <li key={step.title}>
+      <span className="step-marker">{variant === 'icon' ? <Icon name={step.icon || 'consult'} size={22} /> : String(index + 1).padStart(2, '0')}</span>
+      <h3>{step.title}</h3>
+      {step.description && <p>{step.description}</p>}
+    </li>)}
+  </ol>;
+}
+
+/* ---------------------------------------------------------------- CTA bands */
+
+export function PageCTA({
+  title = 'Need something similar?',
+  description = "Let's create something amazing together.",
+  primaryLabel = 'Get a Quote',
+  primaryHref = QUOTE_HREF,
+  showWhatsApp = true,
+}) {
+  return <section className="page-cta">
+    <div className="page-cta-inner">
+      <div><h2>{title}</h2><p>{description}</p></div>
+      <div className="page-cta-actions">
+        <Button href={primaryHref}>{primaryLabel}</Button>
+        {showWhatsApp && <WhatsAppLink />}
+      </div>
+    </div>
   </section>;
 }
 
-export function PageCTA({ title = 'Need something similar?', description = "Let's create something amazing together." }) {
-  return <section className="page-cta"><div><h2>{title}</h2><p>{description}</p></div><div><a className="button" href="/mySOS/quotation_engine/">Get a Quote</a></div></section>;
+export function WhatsAppLink({ label = 'WhatsApp Us' }) {
+  const { whatsapp } = siteConfig;
+  const href = whatsapp.enabled && whatsapp.number
+    ? `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`
+    : null;
+  const content = <><Icon name="whatsapp" size={18} /> {label}</>;
+  return href
+    ? <a className="btn btn-ghost" href={href} target="_blank" rel="noreferrer">{content}</a>
+    : <span className="btn btn-ghost is-disabled">{content}</span>;
 }
+
+export { Icon };

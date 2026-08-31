@@ -3,3 +3,4 @@ dist/
 .analysis/
 *.log
 .DS_Store
+mysos.xlsx

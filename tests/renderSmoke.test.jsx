@@ -29,7 +29,9 @@ describe('production route rendering', () => {
     const markup = renderAt(pathname);
     expect(markup).toContain(expected);
     expect(markup).toContain('/mySOS/quotation_engine/');
-    expect(markup).not.toMatch(/undefined|NaN|\[object Object\]|Contact details can be set/i);
+    // Case-sensitive and word-bounded on purpose: a loose /NaN/i also matches
+    // real copy such as "Nanyang Technological University" in logo alt text.
+    expect(markup).not.toMatch(/\bundefined\b|\bNaN\b|\[object Object\]|Contact details can be set/);
     expect(consoleError).not.toHaveBeenCalled();
     consoleError.mockRestore();
   });
@@ -39,7 +41,7 @@ describe('production route rendering', () => {
     expect(apparel).toContain('product=premium-cotton-tee');
     expect(renderAt('/mySOS/products/', '?category=bags')).toContain('Canvas Tote Bag');
     const schools = renderAt('/mySOS/solutions/', '?industry=schools');
-    expect(schools).toContain('Ideas for Schools');
+    expect(schools).toContain('Recommended for Schools');
     expect(schools).toContain('Sublimation Jersey');
     expect(schools).toContain('product=sublimation-jersey');
     const stories = renderAt('/mySOS/success-stories/');

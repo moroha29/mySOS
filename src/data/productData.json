@@ -1,156 +1,864 @@
 {
   "quotationProducts": [
-    { "id": "jersey_sublimation", "name": "Jersey (Sublimation)", "engine": "PRODUCT_JERSEY_SUBLIMATION" },
-    { "id": "tee", "name": "Tee (DTF/DTG)", "engine": "PRODUCT_TEE_DTF_DTG" },
-    { "id": "polo", "name": "Polo", "engine": "PRODUCT_TEE_DTF_DTG" },
-    { "id": "cap", "name": "Cap", "engine": "PRODUCT_CAPS" },
-    { "id": "custom_cutsew", "name": "Custom Cut & Sew", "engine": "PRODUCT_CUSTOM_CUTSEW" },
-    { "id": "custom_product", "name": "Other / Blank Product", "engine": "PRODUCT_CUSTOM_DIRECT" }
+    {
+      "id": "jersey_sublimation",
+      "name": "Jersey (Sublimation)",
+      "engine": "PRODUCT_JERSEY_SUBLIMATION"
+    },
+    {
+      "id": "tee",
+      "name": "Tee (DTF/DTG)",
+      "engine": "PRODUCT_TEE_DTF_DTG"
+    },
+    {
+      "id": "polo",
+      "name": "Polo",
+      "engine": "PRODUCT_TEE_DTF_DTG"
+    },
+    {
+      "id": "cap",
+      "name": "Cap",
+      "engine": "PRODUCT_CAPS"
+    },
+    {
+      "id": "custom_cutsew",
+      "name": "Custom Cut & Sew",
+      "engine": "PRODUCT_CUSTOM_CUTSEW"
+    },
+    {
+      "id": "custom_product",
+      "name": "Other / Blank Product",
+      "engine": "PRODUCT_CUSTOM_DIRECT"
+    }
   ],
   "catalogue": [
     {
       "id": "premium_cotton_tee",
-      "public": { "slug": "premium-cotton-tee", "name": "Premium Cotton Tee", "category": "apparel", "subcategory": "tshirts", "description": "Soft premium cotton for teams, events and everyday wear.", "visible": true, "featured": true, "imageStyle": "tee-black", "displayPricing": { "show": true, "prefix": "From", "amount": 12.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "tee", "baseCost": 4.5, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "premium-cotton-tee",
+        "name": "Premium Cotton Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "Soft premium cotton for teams, events and everyday wear.",
+        "visible": true,
+        "featured": true,
+        "imageStyle": "tee-black",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 12.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 4.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "cotton_round_neck_tee",
-      "public": { "slug": "cotton-round-neck-tee", "name": "Classic Cotton Tee", "category": "apparel", "subcategory": "tshirts", "description": "A reliable everyday tee for campaigns and large group orders.", "visible": true, "featured": false, "imageStyle": "tee-navy", "displayPricing": { "show": true, "prefix": "From", "amount": 9.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "tee", "baseCost": 3, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "cotton-round-neck-tee",
+        "name": "Classic Cotton Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "A reliable everyday tee for campaigns and large group orders.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 9.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 3,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "cotton_v_neck_tee",
-      "public": { "slug": "cotton-v-neck-tee", "name": "Cotton V-Neck Tee", "category": "apparel", "subcategory": "tshirts", "description": "A clean V-neck silhouette with comfortable cotton construction.", "visible": false, "featured": false, "imageStyle": "tee-white", "displayPricing": { "show": true, "prefix": "From", "amount": 10.5, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "tee", "baseCost": 3.2, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "cotton-v-neck-tee",
+        "name": "Cotton V-Neck Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "A clean V-neck silhouette with comfortable cotton construction.",
+        "visible": false,
+        "featured": false,
+        "imageStyle": "tee-white",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 10.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 3.2,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "dri_fit_round_neck",
-      "public": { "slug": "dryfit-performance-tee", "name": "DryFit Performance Tee", "category": "apparel", "subcategory": "tshirts", "description": "Breathable performance fabric for active groups and outdoor events.", "visible": true, "featured": true, "imageStyle": "tee-green", "displayPricing": { "show": true, "prefix": "From", "amount": 12.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "tee", "baseCost": 4, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "dryfit-performance-tee",
+        "name": "DryFit Performance Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "Breathable performance fabric for active groups and outdoor events.",
+        "visible": true,
+        "featured": true,
+        "imageStyle": "tee-green",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 12.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 4,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "dri_fit_v_neck",
-      "public": { "slug": "dryfit-v-neck", "name": "DryFit V-Neck Tee", "category": "apparel", "subcategory": "tshirts", "description": "Lightweight sports-ready fabric in a versatile V-neck cut.", "visible": true, "featured": false, "imageStyle": "tee-blue", "displayPricing": { "show": true, "prefix": "From", "amount": 13.5, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "tee", "baseCost": 4.2, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "dryfit-v-neck",
+        "name": "DryFit V-Neck Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "Lightweight sports-ready fabric in a versatile V-neck cut.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-blue",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 13.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 4.2,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "polo_cotton_pique",
-      "public": { "slug": "polo-cotton-pique", "name": "Polo Shirt", "category": "apparel", "subcategory": "polos", "description": "Smart cotton pique polos for staff, clubs and corporate teams.", "visible": true, "featured": true, "imageStyle": "polo-navy", "displayPricing": { "show": true, "prefix": "From", "amount": 18.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "polo", "baseCost": 6, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "polo-cotton-pique",
+        "name": "Polo Shirt",
+        "category": "apparel",
+        "subcategory": "polos",
+        "description": "Smart cotton pique polos for staff, clubs and corporate teams.",
+        "visible": true,
+        "featured": true,
+        "imageStyle": "polo-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 18.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "polo",
+        "baseCost": 6,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "polo_dri_fit",
-      "public": { "slug": "dryfit-polo", "name": "DryFit Polo", "category": "apparel", "subcategory": "polos", "description": "A moisture-wicking polo for active teams and warm working days.", "visible": true, "featured": false, "imageStyle": "polo-green", "displayPricing": { "show": true, "prefix": "From", "amount": 19.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "polo", "baseCost": 6.5, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "dryfit-polo",
+        "name": "DryFit Polo",
+        "category": "apparel",
+        "subcategory": "polos",
+        "description": "A moisture-wicking polo for active teams and warm working days.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "polo-green",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 19.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "polo",
+        "baseCost": 6.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "polo_premium_cvc",
-      "public": { "slug": "premium-cvc-polo", "name": "Premium CVC Polo", "category": "apparel", "subcategory": "polos", "description": "A polished premium-blend polo for client-facing teams.", "visible": true, "featured": false, "imageStyle": "polo-black", "displayPricing": { "show": true, "prefix": "From", "amount": 22.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "polo", "baseCost": 7.5, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "premium-cvc-polo",
+        "name": "Premium CVC Polo",
+        "category": "apparel",
+        "subcategory": "polos",
+        "description": "A polished premium-blend polo for client-facing teams.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "polo-black",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 22.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "polo",
+        "baseCost": 7.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "jersey-sublimation",
-      "public": { "slug": "sublimation-jersey", "name": "Sublimation Jersey", "category": "apparel", "subcategory": "jerseys", "description": "Fully custom team jerseys with vibrant, long-lasting colour.", "visible": true, "featured": true, "imageStyle": "jersey", "displayPricing": { "show": true, "prefix": "From", "amount": 15.8, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "jersey_sublimation", "minimumQuantity": 1, "pricingModel": "component" },
-      "printingMethods": ["sublimation"]
+      "public": {
+        "slug": "sublimation-jersey",
+        "name": "Sublimation Jersey",
+        "category": "apparel",
+        "subcategory": "jerseys",
+        "description": "Fully custom team jerseys with vibrant, long-lasting colour.",
+        "visible": true,
+        "featured": true,
+        "imageStyle": "jersey",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 15.8,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "jersey_sublimation",
+        "minimumQuantity": 1,
+        "pricingModel": "component"
+      },
+      "printingMethods": [
+        "sublimation"
+      ]
     },
     {
       "id": "snapback",
-      "public": { "slug": "custom-snapback", "name": "Custom Snapback", "category": "apparel", "subcategory": "caps", "description": "Structured headwear ready for embroidery or printed artwork.", "visible": true, "featured": false, "imageStyle": "cap", "displayPricing": { "show": true, "prefix": "From", "amount": 12.5, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 3.5, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "custom-snapback",
+        "name": "Custom Snapback",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "Structured headwear ready for embroidery or printed artwork.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "cap",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 12.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 3.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "dad_cap",
-      "public": { "slug": "custom-dad-cap", "name": "Dad Cap", "category": "apparel", "subcategory": "caps", "description": "Relaxed everyday cap with a comfortable low-profile fit.", "visible": true, "featured": false, "imageStyle": "cap-green", "displayPricing": { "show": true, "prefix": "From", "amount": 10.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 2.8, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "custom-dad-cap",
+        "name": "Dad Cap",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "Relaxed everyday cap with a comfortable low-profile fit.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "cap-green",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 10.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 2.8,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "trucker_mesh",
-      "public": { "slug": "trucker-mesh-cap", "name": "Trucker Mesh Cap", "category": "apparel", "subcategory": "caps", "description": "Breathable mesh-back cap for outdoor crews and campaigns.", "visible": true, "featured": false, "imageStyle": "cap-navy", "displayPricing": { "show": true, "prefix": "From", "amount": 11.5, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 3, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "trucker-mesh-cap",
+        "name": "Trucker Mesh Cap",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "Breathable mesh-back cap for outdoor crews and campaigns.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "cap-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 11.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 3,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "five_panel",
-      "public": { "slug": "five-panel-cap", "name": "5-Panel Cap", "category": "apparel", "subcategory": "caps", "description": "A modern five-panel shape for lifestyle merchandise.", "visible": true, "featured": false, "imageStyle": "cap-blue", "displayPricing": { "show": true, "prefix": "From", "amount": 11.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 3.2, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "five-panel-cap",
+        "name": "5-Panel Cap",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "A modern five-panel shape for lifestyle merchandise.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "cap-blue",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 11.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 3.2,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "bucket_hat",
-      "public": { "slug": "custom-bucket-hat", "name": "Bucket Hat", "category": "apparel", "subcategory": "caps", "description": "A relaxed, high-visibility accessory for teams and events.", "visible": true, "featured": false, "imageStyle": "bucket", "displayPricing": { "show": true, "prefix": "From", "amount": 13.9, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 4, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "custom-bucket-hat",
+        "name": "Bucket Hat",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "A relaxed, high-visibility accessory for teams and events.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "bucket",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 13.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 4,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "fitted_cap",
-      "public": { "slug": "fitted-cap", "name": "Fitted Cap", "category": "apparel", "subcategory": "caps", "description": "A premium fitted silhouette with a structured crown.", "visible": true, "featured": false, "imageStyle": "cap-black", "displayPricing": { "show": true, "prefix": "From", "amount": 15.5, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "cap", "baseCost": 4.5, "minimumQuantity": 1, "pricingModel": "tiered" },
-      "printingMethods": ["dtf", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "fitted-cap",
+        "name": "Fitted Cap",
+        "category": "apparel",
+        "subcategory": "caps",
+        "description": "A premium fitted silhouette with a structured crown.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "cap-black",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 15.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "cap",
+        "baseCost": 4.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "custom_cutsew",
-      "public": { "slug": "custom-cut-and-sew", "name": "Custom Cut & Sew", "category": "apparel", "subcategory": "jackets", "description": "Made-to-order garments developed around your brand and brief.", "visible": true, "featured": true, "imageStyle": "jacket", "displayPricing": { "show": true, "prefix": "From", "amount": 45, "unit": "piece" } },
-      "quotation": { "enabled": true, "productId": "custom_cutsew", "minimumQuantity": 1, "pricingModel": "component" },
-      "printingMethods": ["dtf", "dtg", "silkscreen", "embroidery"]
+      "public": {
+        "slug": "custom-cut-and-sew",
+        "name": "Custom Cut & Sew",
+        "category": "apparel",
+        "subcategory": "jackets",
+        "description": "Made-to-order garments developed around your brand and brief.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "jacket",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 45,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "custom_cutsew",
+        "minimumQuantity": 1,
+        "pricingModel": "component"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
     },
     {
       "id": "canvas_tote_bag",
-      "public": { "slug": "canvas-tote-bag", "name": "Canvas Tote Bag", "category": "bags", "subcategory": "totes", "description": "A reusable everyday tote for events, campaigns and welcome kits.", "visible": true, "featured": false, "imageStyle": "bag-canvas", "displayPricing": { "show": true, "prefix": "From", "amount": 6.9, "unit": "piece" } },
-      "quotation": { "enabled": false, "productId": "", "minimumQuantity": 20, "pricingModel": "enquiry" },
-      "printingMethods": ["dtf", "silkscreen"]
+      "public": {
+        "slug": "canvas-tote-bag",
+        "name": "Canvas Tote Bag",
+        "category": "bags",
+        "subcategory": "totes",
+        "description": "A reusable everyday tote for events, campaigns and welcome kits.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "bag-canvas",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 6.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 20,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen"
+      ]
     },
     {
       "id": "insulated_bottle",
-      "public": { "slug": "insulated-bottle", "name": "Insulated Bottle", "category": "drinkware", "subcategory": "bottles", "description": "A practical stainless-steel bottle for staff and event gifts.", "visible": true, "featured": false, "imageStyle": "bottle", "displayPricing": { "show": true, "prefix": "From", "amount": 12.9, "unit": "piece" } },
-      "quotation": { "enabled": false, "productId": "", "minimumQuantity": 20, "pricingModel": "enquiry" },
-      "printingMethods": ["uv_printing", "silkscreen"]
+      "public": {
+        "slug": "insulated-bottle",
+        "name": "Insulated Bottle",
+        "category": "drinkware",
+        "subcategory": "bottles",
+        "description": "A practical stainless-steel bottle for staff and event gifts.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "bottle",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 12.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 20,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
     },
     {
       "id": "executive_gift_set",
-      "public": { "slug": "executive-gift-set", "name": "Executive Gift Set", "category": "corporate-gifts", "subcategory": "gift-sets", "description": "A polished coordinated set for recognition and client gifting.", "visible": true, "featured": false, "imageStyle": "gift-set", "displayPricing": { "show": true, "prefix": "From", "amount": 25, "unit": "set" } },
-      "quotation": { "enabled": false, "productId": "", "minimumQuantity": 10, "pricingModel": "enquiry" },
-      "printingMethods": ["uv_printing", "silkscreen"]
+      "public": {
+        "slug": "executive-gift-set",
+        "name": "Executive Gift Set",
+        "category": "corporate-gifts",
+        "subcategory": "gift-sets",
+        "description": "A polished coordinated set for recognition and client gifting.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "gift-set",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 25,
+          "unit": "set"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 10,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
     },
     {
       "id": "hardcover_notebook",
-      "public": { "slug": "hardcover-notebook", "name": "Hardcover Notebook", "category": "stationery", "subcategory": "notebooks", "description": "A useful branded notebook for conferences and employee kits.", "visible": true, "featured": false, "imageStyle": "notebook", "displayPricing": { "show": true, "prefix": "From", "amount": 8.5, "unit": "piece" } },
-      "quotation": { "enabled": false, "productId": "", "minimumQuantity": 20, "pricingModel": "enquiry" },
-      "printingMethods": ["silkscreen", "uv_printing"]
+      "public": {
+        "slug": "hardcover-notebook",
+        "name": "Hardcover Notebook",
+        "category": "stationery",
+        "subcategory": "notebooks",
+        "description": "A useful branded notebook for conferences and employee kits.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "notebook",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 8.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 20,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "silkscreen",
+        "uv_printing"
+      ]
     },
     {
       "id": "event_lanyard",
-      "public": { "slug": "event-lanyard", "name": "Event Lanyard", "category": "event-essentials", "subcategory": "lanyards", "description": "Custom lanyards for credentials, conferences and large events.", "visible": true, "featured": false, "imageStyle": "lanyard", "displayPricing": { "show": true, "prefix": "From", "amount": 3.5, "unit": "piece" } },
-      "quotation": { "enabled": false, "productId": "", "minimumQuantity": 50, "pricingModel": "enquiry" },
-      "printingMethods": ["sublimation", "silkscreen"]
+      "public": {
+        "slug": "event-lanyard",
+        "name": "Event Lanyard",
+        "category": "event-essentials",
+        "subcategory": "lanyards",
+        "description": "Custom lanyards for credentials, conferences and large events.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "lanyard",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 3.5,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "sublimation",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "long_sleeve_tee",
+      "public": {
+        "slug": "long-sleeve-tee",
+        "name": "Long Sleeve Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "Full-sleeve cotton tee for cooler venues and layered looks.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "long-sleeve-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 11.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "tee",
+        "baseCost": 4.8,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
+    },
+    {
+      "id": "pullover_hoodie",
+      "public": {
+        "slug": "pullover-hoodie",
+        "name": "Hoodie",
+        "category": "apparel",
+        "subcategory": "hoodies",
+        "description": "Brushed fleece pullover hoodie for teams, clubs and campus wear.",
+        "visible": true,
+        "featured": true,
+        "imageStyle": "hoodie-black",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 21.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "custom_cutsew",
+        "baseCost": 12,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
+    },
+    {
+      "id": "windbreaker_jacket",
+      "public": {
+        "slug": "windbreaker-jacket",
+        "name": "Windbreaker Jacket",
+        "category": "apparel",
+        "subcategory": "jackets",
+        "description": "Lightweight water-resistant shell for outdoor events and teams.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "windbreaker-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 21.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "custom_cutsew",
+        "baseCost": 12.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "embroidery"
+      ]
+    },
+    {
+      "id": "bomber_jacket",
+      "public": {
+        "slug": "bomber-jacket",
+        "name": "Bomber Jacket",
+        "category": "apparel",
+        "subcategory": "jackets",
+        "description": "Structured bomber with ribbed trims for a premium finish.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "bomber-black",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 31.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": true,
+        "productId": "custom_cutsew",
+        "baseCost": 18,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "embroidery"
+      ]
     }
   ],
   "jersey": {
     "fabrics": [
-      { "id": "polyester_dri_fit", "name": "Polyester Dri-Fit", "baseCost": 4.5 },
-      { "id": "mesh_knit", "name": "Mesh Knit", "baseCost": 5.5 },
-      { "id": "interlock", "name": "Interlock", "baseCost": 6 }
+      {
+        "id": "polyester_dri_fit",
+        "name": "Polyester Dri-Fit",
+        "baseCost": 4.5
+      },
+      {
+        "id": "mesh_knit",
+        "name": "Mesh Knit",
+        "baseCost": 5.5
+      },
+      {
+        "id": "interlock",
+        "name": "Interlock",
+        "baseCost": 6
+      }
     ],
     "collars": [
-      { "id": "round_neck", "name": "Round Neck", "baseCost": 0.5 },
-      { "id": "v_neck", "name": "V-Neck", "baseCost": 0.6 },
-      { "id": "mandarin", "name": "Mandarin", "baseCost": 0.8 },
-      { "id": "polo_collar", "name": "Polo Collar", "baseCost": 1.2 }
+      {
+        "id": "round_neck",
+        "name": "Round Neck",
+        "baseCost": 0.5
+      },
+      {
+        "id": "v_neck",
+        "name": "V-Neck",
+        "baseCost": 0.6
+      },
+      {
+        "id": "mandarin",
+        "name": "Mandarin",
+        "baseCost": 0.8
+      },
+      {
+        "id": "polo_collar",
+        "name": "Polo Collar",
+        "baseCost": 1.2
+      }
     ],
     "sleeves": [
-      { "id": "short", "name": "Short", "baseCost": 0 },
-      { "id": "long", "name": "Long", "baseCost": 1.5 },
-      { "id": "raglan", "name": "Raglan", "baseCost": 0.8 }
+      {
+        "id": "short",
+        "name": "Short",
+        "baseCost": 0
+      },
+      {
+        "id": "long",
+        "name": "Long",
+        "baseCost": 1.5
+      },
+      {
+        "id": "raglan",
+        "name": "Raglan",
+        "baseCost": 0.8
+      }
     ],
     "customNameAndNumberBaseCost": 2.5,
     "teamSetBaseCostAdjustment": -0.5
@@ -159,7 +867,10 @@
     "fabricBaseCostPerMetre": 8,
     "metresPerGarment": 1.5,
     "cuttingBaseCost": 2,
-    "sewingBaseCost": { "basic": 5, "complex": 8 },
+    "sewingBaseCost": {
+      "basic": 5,
+      "complex": 8
+    },
     "finishingBaseCost": 1.5,
     "patternMakingBaseCost": 15,
     "samplePrototypeBaseCost": 50
