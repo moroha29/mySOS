@@ -1,5 +1,9 @@
 # Image assets
 
+> **Status:** the brand wordmark, all 16 client logos, 13 product photos and the
+> scene/story slots below were migrated from mysourceofsolutions.com on
+> 2026-09-01. Remaining gaps are listed at the bottom.
+
 Every image slot on the public site resolves through `src/utils/imageRegistry.js`.
 Drop a correctly-named file into `src/assets/images/` and it appears automatically —
 no code change needed. Any slot with no file falls back to the drawn placeholder,
@@ -132,3 +136,39 @@ read at a glance.
   image survives. Product slots use `contain`, so leave even margins.
 - **Checking what's registered** — `availableImages()` in
   `src/utils/imageRegistry.js` returns every key currently resolving.
+
+
+---
+
+## Migrated from mysourceofsolutions.com (2026-09-01)
+
+| Group | Files | Notes |
+|---|---|---|
+| `brand/` | 2 | Real MySOS wordmark. `wordmark.png` (navy, for the white header) and `wordmark-light.png` (white lettering, green rosette preserved, for the navy footer). Source was a JPEG, so white was knocked out via luminance to keep antialiased edges. |
+| `logos/` | 16 | 14 real clients pulled from the live trusted-by carousel, plus SIT and SP supplied separately. Each trimmed to its content box and given an optical `scale` in `siteContent.json`. |
+| `products/` | 13 + 5 category tiles | Real product photography, squared on white at 800×800. |
+| `scenes/` | 10 | SMU Waikiki event photo and the model shot, cropped per slot. |
+| `stories/*/cover` | 6 | Product and event photography. |
+
+### Second pass — product & portfolio pages
+
+A further 55 images were harvested from `/tshirt`, `/caps`, `/totebags`,
+`/lanyards`, `/stickers`, `/corporategifts`, `/bottle` and `/portfolio`:
+
+| Group | Files | Notes |
+|---|---|---|
+| `solutions/` | 6 | All six industry cards now carry real photography. |
+| `benefits/` | 5 | All five Why-page rows. |
+| `products/` | +15 | Caps, totes, drawstring, jackets, singlets, notebook, gift set, stickers, lanyards — **including drinkware**, which the homepage alone did not cover. |
+| `scenes/band-industry`, `scenes/band-cta` | 2 | Photography washed behind the two navy bands at 16% with `mix-blend-mode: luminosity`. |
+
+### Still missing
+
+- `scenes/home-hero` and `scenes/products-hero` — need **transparent PNG** product
+  clusters. Nothing on the live site fits (its only cut-out is the MySOS rosette
+  mark), so both heroes still use the drawn placeholder cluster.
+- `stories/<slug>/hero`, `01`–`04`, `challenge`, `solution`, `outcome` — the
+  story detail pages still use placeholder artwork below the cover image. The
+  live site's `/portfolio-collections/*` case studies are the natural source.
+- Product photos for the polo, hoodie, bomber, long-sleeve and cut-and-sew lines,
+  which have no live-site equivalent.

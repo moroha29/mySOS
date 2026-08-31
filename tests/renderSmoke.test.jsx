@@ -59,7 +59,10 @@ describe('production route rendering', () => {
 
   it('keeps every root-relative public link inside the case-sensitive GitHub Pages base', () => {
     const markup = renderAt('/mySOS/');
-    const hrefs = [...markup.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+    // Anchors only: React also emits <link rel="preload"> hints for images whose
+    // URLs come from the bundler, and those carry Vite's `base` in a real build
+    // but not under the test transform.
+    const hrefs = [...markup.matchAll(/<a [^>]*href="([^"]+)"/g)].map((match) => match[1]);
     const rootRelative = hrefs.filter((href) => href.startsWith('/'));
     expect(rootRelative.length).toBeGreaterThan(10);
     expect(rootRelative.every((href) => href.startsWith('/mySOS/'))).toBe(true);

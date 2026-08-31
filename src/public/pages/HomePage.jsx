@@ -1,39 +1,45 @@
-import { useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { getStories } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, CategoryCard, PageCTA, ProcessSteps, SectionHeading, StoryCard, TextLink, QUOTE_HREF } from '../components/Ui';
+import { Button, CategoryCard, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink, QUOTE_HREF } from '../components/Ui';
 
-const PER_VIEW = 5;
+const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
+const CARD_WIDTH = 186;   // keep in sync with .trust-logo width in public.css
 
+function LogoCard({ logo, duplicate = false }) {
+  const src = getImage(`logos/${logo.key}`);
+  return <div className="trust-logo" style={{ '--logo-scale': logo.scale ?? 1 }} aria-hidden={duplicate || undefined}>
+    {src
+      ? <img className="crest-img" src={src} alt={duplicate ? '' : logo.name} loading="lazy" />
+      : <span className="crest-fallback" aria-label={duplicate ? undefined : logo.name} role={duplicate ? undefined : 'img'}><b>{logo.name}</b></span>}
+  </div>;
+}
+
+/*
+ * Continuous marquee. The list is rendered twice and the track slides exactly
+ * -50%, so the wrap is seamless. Driven by a CSS animation rather than a rAF
+ * loop: it runs on the compositor, survives tab throttling without jumping,
+ * and pauses on hover/focus purely declaratively.
+ */
 function TrustStrip() {
   const logos = siteContent.trustedBy;
-  const [start, setStart] = useState(0);
-  // Only a longer list than fits on screen is worth scrolling.
-  const scrollable = logos.length > PER_VIEW;
-  const visible = scrollable
-    ? Array.from({ length: PER_VIEW }, (_, i) => logos[(start + i) % logos.length])
-    : logos;
-  const step = (delta) => setStart((start + delta + logos.length) % logos.length);
+  // Duration derived from the track length so the speed stays constant as
+  // logos are added or removed.
+  const duration = Math.round((logos.length * CARD_WIDTH) / MARQUEE_SPEED);
 
   return <section className="trust-strip">
     <p className="mini-title">Trusted by organisations across Singapore</p>
     <div className="trust-row">
-      <button className="carousel-btn" type="button" aria-label="Previous logos" disabled={!scrollable} onClick={() => step(-1)}><Icon name="chevronLeft" size={16} /></button>
-      <div className="trust-track" style={{ '--per-view': Math.min(PER_VIEW, logos.length) }}>
-        {visible.map((logo) => {
-          const src = getImage(`logos/${logo.short.toLowerCase()}`);
-          return <div className="trust-logo" key={logo.name} style={{ '--logo-scale': logo.scale ?? 1 }}>
-            {src
-              ? <img className="crest-img" src={src} alt={logo.name} loading="lazy" />
-              : <span className="crest-fallback" aria-label={logo.name} role="img"><b>{logo.short}</b><small>{logo.sub}</small></span>}
-          </div>;
-        })}
+      <div className="trust-viewport">
+        <div className="trust-track" style={{ '--marquee-duration': `${duration}s` }}>
+          {logos.map((logo) => <LogoCard key={logo.key} logo={logo} />)}
+          {/* duplicate pass, hidden from assistive tech, purely for the seamless wrap */}
+          {logos.map((logo) => <LogoCard key={`dup-${logo.key}`} logo={logo} duplicate />)}
+        </div>
       </div>
-      <button className="carousel-btn" type="button" aria-label="Next logos" disabled={!scrollable} onClick={() => step(1)}><Icon name="chevronRight" size={16} /></button>
     </div>
   </section>;
 }
@@ -41,6 +47,7 @@ function TrustStrip() {
 export default function HomePage() {
   const featuredStories = getStories().filter((story) => story.featured).slice(0, 4);
   const heroShot = getImage('scenes/home-hero');
+  const bandBg = getImage('scenes/band-industry');
   return <main>
     <section className="hero">
       <div className="hero-inner">
@@ -79,7 +86,7 @@ export default function HomePage() {
       </div>
     </section>
 
-    <section className="industry-band">
+    <section className="industry-band" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
       <div className="section">
         <SectionHeading eyebrow="Don't know what you need?" description="Tell us what you're planning. We'll help you with the rest." />
         <div className="industry-nav">
@@ -115,6 +122,8 @@ export default function HomePage() {
       </div>
       <div className="center-action"><Button href="/mySOS/success-stories/" variant="outline">View All Success Stories <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
     </section>
+
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline">View All Success Stories <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <PageCTA title="Bring your ideas to life with MySOS." description="We're ready to help." />
   </main>;

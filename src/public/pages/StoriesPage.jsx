@@ -57,7 +57,7 @@ export default function StoriesPage() {
         </div>
         <div className="hero-collage" aria-hidden="true">
           {['field', 'hall', 'office', 'stage', 'outdoor'].map((kind, i) => (
-            <Photo key={kind} style={kind} imageKey={`scenes/stories-hero-${i + 1}`} />
+            <Photo key={kind} style={kind} imageKey={`scenes/stories-hero-${i + 1}`} eager />
           ))}
         </div>
       </div>

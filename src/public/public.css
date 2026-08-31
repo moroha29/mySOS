@@ -106,8 +106,14 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .site-header { position: sticky; top: 0; z-index: 60; height: 72px; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
 .site-header-inner { max-width: var(--content); height: 100%; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 28px; }
-.site-logo { font-size: 25px; font-weight: 900; letter-spacing: -.05em; color: var(--navy); }
-.site-logo span { color: var(--navy-soft); }
+.site-logo { display: inline-flex; align-items: center; }
+.wordmark { height: 34px; width: auto; display: block; }
+.footer-brand .wordmark { height: 32px; }
+/* lettered fallback, used only when no wordmark file is present */
+.site-logo-text { font-size: 25px; font-weight: 900; letter-spacing: -.05em; color: var(--navy); }
+.site-logo-text span { color: var(--navy-soft); }
+.footer-brand .site-logo-text { color: #fff; }
+.footer-brand .site-logo-text span { color: var(--green-light); }
 .primary-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 26px; }
 .nav-link { display: inline-flex; align-items: center; gap: 3px; font-size: 14px; font-weight: 700; color: var(--ink); white-space: nowrap; }
 .nav-link:hover { color: var(--green); }
@@ -178,7 +184,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .product-visual .garment { width: 100%; height: 100%; }
 /* supplied photography, letterboxed inside the same box the drawn art uses */
 .product-visual.has-photo img { width: 100%; height: 100%; object-fit: contain; }
-.category-thumb.has-photo img { object-fit: cover; border-radius: 8px; }
+.category-thumb.has-photo img { object-fit: contain; border-radius: 8px; background: #fff; }
 .hero-shot { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 26px rgba(0,0,0,.38)); }
 
 /* ========================================================== 6. trust strip */
@@ -186,20 +192,36 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .trust-strip { max-width: var(--content); margin: 0 auto; padding: 26px 24px 30px; }
 .trust-strip .mini-title { text-align: center; font-size: 13px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-light); }
 .trust-row { margin-top: 18px; display: flex; align-items: center; gap: 12px; }
-.trust-track {
-  flex: 1; min-width: 0; display: grid; gap: 10px; overflow: hidden;
-  grid-template-columns: repeat(var(--per-view, 5), minmax(0, 1fr));
-  grid-template-rows: auto; grid-auto-rows: 0;
+/* Marquee: the viewport masks, the track flows. Fixed-width cards keep the
+   wrap arithmetic stable regardless of each logo's own proportions. */
+.trust-viewport {
+  flex: 1; min-width: 0; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
 }
-/*
- * Supplied marks vary wildly in proportion (pure wordmarks vs crest-and-text),
- * so each sits in a fixed-height box and is capped by an optical `--logo-scale`
- * from the data rather than by its own pixel dimensions.
- */
-.trust-logo { min-width: 0; height: 56px; display: flex; align-items: center; justify-content: center; padding: 0 10px; }
+.trust-track {
+  display: flex; align-items: center; width: max-content;
+  will-change: transform;
+  animation: trust-marquee var(--marquee-duration, 90s) linear infinite;
+}
+/* the track holds exactly two passes, so -50% lands on a seamless repeat */
+@keyframes trust-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+.trust-row:hover .trust-track, .trust-row:focus-within .trust-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) { .trust-track { animation: none; } }
+.trust-logo {
+  flex: 0 0 auto; width: 186px; height: 64px;
+  display: flex; align-items: center; justify-content: center; padding: 0 14px;
+}
+/* Constrained on both axes: the real client set runs from portrait crests
+   (ratio 0.63) to wide wordmarks (3.57), so a height-only cap would leave the
+   tall ones towering and the wide ones overflowing their cell. */
 .trust-logo .crest-img {
-  max-width: 100%; width: auto; height: auto;
-  max-height: calc(var(--logo-scale, 1) * 46px);
+  width: auto; height: auto;
+  max-height: calc(var(--logo-scale, 1) * 52px);
+  max-width: 100%;
   object-fit: contain;
   opacity: .88; transition: opacity .16s;
 }
@@ -221,7 +243,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ======================================================== 8. industry band */
 
-.industry-band { background: linear-gradient(118deg, var(--navy-deep), var(--navy) 52%, #1b4dad); color: #fff; }
+.industry-band { position: relative; overflow: hidden; background: linear-gradient(118deg, var(--navy-deep), var(--navy) 52%, #1b4dad); color: #fff; }
+.industry-band::before, .page-cta::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: var(--band-bg); background-size: cover; background-position: center;
+  opacity: .16; mix-blend-mode: luminosity;
+}
+.industry-band > *, .page-cta > * { position: relative; z-index: 1; }
 .industry-band .section-heading h2, .industry-band .eyebrow { color: #fff; }
 .industry-band .section-heading p { color: #c6d3ea; }
 .industry-nav { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
@@ -313,7 +341,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .promo-art { position: relative; min-height: 190px; }
 .promo-art .scene { position: absolute; inset: 14px 14px 14px 0; border-radius: var(--radius-sm); }
 
-.page-cta { background: linear-gradient(112deg, var(--navy-deep), var(--navy) 54%, #1b4dad); color: #fff; }
+.page-cta { position: relative; overflow: hidden; background: linear-gradient(112deg, var(--navy-deep), var(--navy) 54%, #1b4dad); color: #fff; }
 .page-cta-inner { max-width: var(--content); margin: 0 auto; padding: 30px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
 .page-cta h2 { font-size: 23px; font-weight: 800; }
 .page-cta p { margin-top: 7px; font-size: 14.5px; color: #ccd8f0; }
@@ -444,17 +472,35 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .why-row p { margin-top: 7px; font-size: 14px; line-height: 1.65; color: var(--muted); }
 .why-row .scene { height: 84px; }
 
-.review-summary { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 24px; }
+.review-summary { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; margin-bottom: 26px; }
 .review-summary .rating-value { font-size: 22px; font-weight: 800; color: var(--ink); }
 .stars { display: inline-flex; gap: 2px; color: #f5a623; }
 .review-summary small { font-size: 13.5px; color: var(--muted); }
-.testimonial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.testimonial-grid blockquote { margin: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; }
-.testimonial-grid p { margin: 12px 0 18px; font-size: 14px; line-height: 1.7; color: var(--muted); }
-.testimonial-grid footer { display: flex; align-items: center; gap: 10px; }
-.avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--navy); color: #fff; font-size: 13px; font-weight: 800; }
-.testimonial-grid strong { display: block; font-size: 14px; }
-.testimonial-grid small { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+
+/* horizontally snapping rail, three cards at desktop width */
+.review-rail { display: flex; align-items: center; gap: 12px; }
+.review-track {
+  flex: 1; min-width: 0; display: flex; gap: 18px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 2px;
+  scrollbar-width: none; padding-bottom: 4px;
+}
+.review-track::-webkit-scrollbar { display: none; }
+.review-card {
+  flex: 0 0 calc((100% - 36px) / 3); scroll-snap-align: start;
+  margin: 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff;
+  display: flex; flex-direction: column;
+}
+.review-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.review-time { font-size: 12px; color: var(--muted-light); }
+.review-card p { margin: 12px 0 18px; flex: 1; font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+.review-card footer { display: flex; align-items: center; gap: 10px; }
+.avatar { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--navy); color: #fff; font-size: 12px; font-weight: 800; }
+.review-author { flex: 1; min-width: 0; }
+.review-author strong { display: block; font-size: 13.5px; }
+.review-author small { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+.review-source { flex: none; display: grid; place-items: center; opacity: .75; }
+.review-source:hover { opacity: 1; }
+.review-source.is-static { pointer-events: none; }
 
 .empty-state { padding: 48px 24px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); }
 .empty-state h3 { font-size: 17px; }
@@ -472,8 +518,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .footer-grid h3 { margin-bottom: 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
 .footer-grid a { display: block; padding: 4px 0; font-size: 13.5px; color: #b6c6e4; }
 .footer-grid a:hover { color: #fff; }
-.footer-brand .site-logo { color: #fff; font-size: 24px; }
-.footer-brand .site-logo span { color: var(--green-light); }
 .footer-brand p { margin-top: 10px; max-width: 220px; font-size: 13.5px; line-height: 1.6; color: #9db0d6; }
 .footer-socials { display: flex; gap: 10px; }
 .footer-socials a, .footer-socials span { width: 30px; height: 30px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 7px; color: #b6c6e4; }
@@ -525,7 +569,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .process-steps, .process-icon { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 10px; }
   .process-steps::before { display: none; }
   .browse-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .trust-track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .trust-logo { width: 158px; }
   .promo-band { grid-template-columns: 1fr; }
   .promo-art { min-height: 160px; }
   .promo-art .scene { inset: 0 14px 14px; }
@@ -534,7 +578,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .narrative-block, .feedback-block { grid-template-columns: 1fr; }
   .why-row { grid-template-columns: 46px 1fr; }
   .why-row .scene { display: none; }
-  .testimonial-grid { grid-template-columns: 1fr; }
+  .review-card { flex-basis: calc((100% - 18px) / 2); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }
 

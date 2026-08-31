@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
+import { getImage } from '../../utils/imageRegistry';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import Icon from './Icons';
+
+// Real wordmark when supplied; the lettered fallback keeps the header intact otherwise.
+function Wordmark({ variant = 'dark', className = '' }) {
+  const src = getImage(variant === 'light' ? 'brand/wordmark-light' : 'brand/wordmark');
+  if (src) return <img className={`wordmark ${className}`.trim()} src={src} alt="MySOS" />;
+  return <span className={`site-logo-text ${className}`.trim()}>My<span>SOS</span></span>;
+}
 
 const whatsappHref = () => {
   const { whatsapp } = siteConfig;
@@ -52,7 +60,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   return <header className="site-header">
     <div className="site-header-inner">
-      <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home">My<span>SOS</span></a>
+      <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home"><Wordmark /></a>
       <button className="menu-toggle" type="button" aria-expanded={open} aria-controls="primary-navigation" onClick={() => setOpen(!open)}>
         <span /><span /><span /><span className="sr-only">Menu</span>
       </button>
@@ -80,7 +88,7 @@ export function SiteFooter() {
   return <footer className="site-footer">
     <div className="footer-grid">
       <div className="footer-brand">
-        <a className="site-logo" href={siteConfig.basePath}>My<span>SOS</span></a>
+        <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home"><Wordmark variant="light" /></a>
         <p>{siteConfig.tagline}</p>
       </div>
       <div>
@@ -110,8 +118,12 @@ export function SiteFooter() {
       </div>
     </div>
     <div className="footer-bottom">
-      <span>© 2024 MySOS. All rights reserved.</span>
-      <span className="footer-legal"><a href="/mySOS/">Terms of Service</a><i aria-hidden="true">|</i><a href="/mySOS/">Privacy Policy</a></span>
+      <span>© 2026 {siteConfig.legalName ?? 'MySOS'}. All rights reserved.{siteConfig.companyRegistration ? ` Company Registration No. ${siteConfig.companyRegistration}` : ''}</span>
+      <span className="footer-legal">
+        <a href="/mySOS/">Privacy Policy</a><i aria-hidden="true">|</i>
+        <a href="/mySOS/">Terms &amp; Conditions</a><i aria-hidden="true">|</i>
+        <a href="/mySOS/">Refund Policy</a>
+      </span>
     </div>
   </footer>;
 }

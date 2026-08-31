@@ -8,33 +8,83 @@
   "trustedBy": [
     {
       "name": "Nanyang Technological University",
-      "short": "NTU",
-      "sub": "Singapore",
-      "scale": 1.0
+      "key": "ntu",
+      "scale": 0.8
+    },
+    {
+      "name": "National University of Singapore",
+      "key": "nus",
+      "scale": 0.91
     },
     {
       "name": "Singapore Management University",
-      "short": "SMU",
-      "sub": "Singapore",
-      "scale": 1.03
+      "key": "smu",
+      "scale": 0.84
+    },
+    {
+      "name": "Singapore University of Social Sciences",
+      "key": "suss",
+      "scale": 0.95
     },
     {
       "name": "Temasek Polytechnic",
-      "short": "Temasek",
-      "sub": "Polytechnic",
-      "scale": 0.94
+      "key": "temasek",
+      "scale": 0.71
     },
     {
       "name": "Singapore Institute of Technology",
-      "short": "SIT",
-      "sub": "Institute of Technology",
-      "scale": 1.07
+      "key": "sit",
+      "scale": 0.9
     },
     {
       "name": "Singapore Polytechnic",
-      "short": "SP",
-      "sub": "Singapore Polytechnic",
+      "key": "sp",
+      "scale": 0.63
+    },
+    {
+      "name": "Mediacorp",
+      "key": "mediacorp",
+      "scale": 1.0
+    },
+    {
+      "name": "Tan Tock Seng Hospital",
+      "key": "tan-tock-seng",
+      "scale": 1.0
+    },
+    {
+      "name": "St. Andrew's Autism Centre",
+      "key": "st-andrews",
+      "scale": 0.8
+    },
+    {
+      "name": "Chung Cheng High School",
+      "key": "chung-cheng",
+      "scale": 1.0
+    },
+    {
+      "name": "Regent Secondary School",
+      "key": "regent",
+      "scale": 0.91
+    },
+    {
+      "name": "Amity University",
+      "key": "amity",
+      "scale": 0.73
+    },
+    {
+      "name": "Stories Joo Chiat",
+      "key": "stories",
       "scale": 0.87
+    },
+    {
+      "name": "Healthcare Essentials",
+      "key": "healthcare-essentials",
+      "scale": 0.77
+    },
+    {
+      "name": "SkilledMaid Services",
+      "key": "skilledmaid",
+      "scale": 1.0
     }
   ],
   "categories": [
@@ -223,26 +273,35 @@
   ],
   "reviewSummary": {
     "rating": "4.9",
-    "count": "200+"
+    "count": "200+",
+    "googleMapsUri": "",
+    "placeId": ""
   },
   "testimonials": [
     {
-      "quote": "Professional, responsive and the quality of our products is excellent.",
       "name": "Rachel Ong",
       "role": "Marketing Manager, NUS",
-      "rating": 5
+      "rating": 5,
+      "relativeTime": "2 months ago",
+      "googleMapsUri": "",
+      "quote": "Professional, responsive and the quality of our products is excellent."
     },
     {
-      "quote": "Great experience from start to finish. They understood our needs perfectly and delivered on time.",
       "name": "Benjamin Tan",
       "role": "Events Lead, SIT",
-      "rating": 5
+      "rating": 5,
+      "relativeTime": "3 months ago",
+      "googleMapsUri": "",
+      "quote": "Great experience from start to finish. They understood our needs perfectly and delivered on time."
     },
     {
-      "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted.",
       "name": "Alicia Lim",
       "role": "Student Council, SMU",
-      "rating": 5
+      "rating": 5,
+      "relativeTime": "5 months ago",
+      "googleMapsUri": "",
+      "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted."
     }
-  ]
+  ],
+  "_reviewsNote": "PLACEHOLDER DATA. mysourceofsolutions.com publishes no reviews anywhere — its two Wix review apps are registered with widgetUrl \"/\" and render nothing. Replace every entry below with real reviews before launch, and fill reviewSummary.googleMapsUri so each card can link back to its source on Google (required if the data ever comes from the Places API)."
 }

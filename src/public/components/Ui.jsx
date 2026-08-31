@@ -1,4 +1,6 @@
+import { useRef } from 'react';
 import siteConfig from '../../data/siteConfig.json';
+import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getQuoteHref } from '../../utils/catalogue';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
@@ -35,9 +37,9 @@ export function SectionHeading({ eyebrow, title, description, align = 'center', 
 
 /* -------------------------------------------------------------------- media */
 
-export function Photo({ style, label, className = '', image, imageKey, wide = false }) {
+export function Photo({ style, label, className = '', image, imageKey, wide = false, eager = false }) {
   const src = image || getImage(imageKey);
-  if (src) return <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}><img src={src} alt="" loading="lazy" /></div>;
+  if (src) return <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}><img src={src} alt="" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined} /></div>;
   const scene = parseSceneVisual(style);
   if (scene.kind === 'workshop') return <Workshop className={className} label={label} />;
   if (scene.kind === 'sketch') return <Sketch className={className} label={label} />;
@@ -112,6 +114,67 @@ export function ProcessSteps({ items, variant = 'numbered' }) {
   </ol>;
 }
 
+/* --------------------------------------------------------- reviews slider */
+
+/*
+ * Mirrors the review-slider widgets sold for Wix: a rating badge plus a
+ * horizontally snapping track of review cards. Data is shaped like the Google
+ * Places `reviews` payload, so swapping the static list for a live fetch is a
+ * data change rather than a rewrite. `googleMapsUri` drives the per-review
+ * source link that Google's attribution policy requires.
+ */
+export function Testimonials({ eyebrow = 'What our clients say', action }) {
+  const { rating, count, googleMapsUri } = siteContent.reviewSummary ?? {};
+  const reviews = siteContent.testimonials ?? [];
+  const trackRef = useRef(null);
+
+  const scrollByCard = (direction) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 18 : track.clientWidth;
+    track.scrollBy({ left: direction * step, behavior: 'smooth' });
+  };
+
+  return <section className="section reviews">
+    <SectionHeading eyebrow={eyebrow} />
+
+    {rating && <div className="review-summary">
+      <Icon name="google" size={26} />
+      <span className="rating-value">{rating}</span>
+      <span className="stars" aria-label={`${rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
+      <small>Based on {count} reviews</small>
+      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">Read all on Google</a>}
+    </div>}
+
+    <div className="review-rail">
+      <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={16} /></button>
+      <div className="review-track" ref={trackRef}>
+        {reviews.map((review) => <blockquote className="review-card" key={review.name}>
+          <div className="review-head">
+            <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={13} />)}</span>
+            {review.relativeTime && <small className="review-time">{review.relativeTime}</small>}
+          </div>
+          <p>&ldquo;{review.quote}&rdquo;</p>
+          <footer>
+            <span className="avatar">{review.name.split(' ').map((part) => part[0]).join('')}</span>
+            <span className="review-author">
+              <strong>{review.name}</strong>
+              <small>{review.role}</small>
+            </span>
+            {review.googleMapsUri
+              ? <a className="review-source" href={review.googleMapsUri} target="_blank" rel="noreferrer" aria-label={`See ${review.name}'s review on Google`}><Icon name="google" size={16} /></a>
+              : <Icon name="google" size={16} className="review-source is-static" />}
+          </footer>
+        </blockquote>)}
+      </div>
+      <button className="carousel-btn" type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={16} /></button>
+    </div>
+
+    {action && <div className="center-action">{action}</div>}
+  </section>;
+}
+
 /* ---------------------------------------------------------------- CTA bands */
 
 export function PageCTA({
@@ -121,7 +184,8 @@ export function PageCTA({
   primaryHref = QUOTE_HREF,
   showWhatsApp = true,
 }) {
-  return <section className="page-cta">
+  const bandBg = getImage('scenes/band-cta');
+  return <section className="page-cta" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
     <div className="page-cta-inner">
       <div><h2>{title}</h2><p>{description}</p></div>
       <div className="page-cta-actions">

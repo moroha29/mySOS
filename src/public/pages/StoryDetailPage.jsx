@@ -90,7 +90,7 @@ export default function StoryDetailPage({ slug }) {
     </nav>
 
     <section className="story-hero">
-      <div className="story-hero-bg" aria-hidden="true"><Photo style={story.imageStyle} image={story.image} imageKey={`stories/${story.slug}/hero`} wide /></div>
+      <div className="story-hero-bg" aria-hidden="true"><Photo style={story.imageStyle} image={story.image} imageKey={`stories/${story.slug}/hero`} wide eager /></div>
       <div className="story-hero-inner">
         <a className="back-link" href="/mySOS/success-stories/"><Icon name="chevronLeft" size={14} /> Back to all stories</a>
         <div><span className="badge">{industry}</span></div>

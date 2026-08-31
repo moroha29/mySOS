@@ -21,7 +21,7 @@ export default function SolutionsPage() {
           <h1>Solutions Designed<em>Around Your Needs</em></h1>
           <p className="hero-lead">Every organisation is different. We provide curated solutions to help you achieve your goals.</p>
         </div>
-        <div className="hero-scene"><Photo style="hall" imageKey="scenes/solutions-hero" label="Teams we work with" wide /></div>
+        <div className="hero-scene"><Photo style="hall" imageKey="scenes/solutions-hero" label="Teams we work with" wide eager /></div>
       </div>
     </section>
 

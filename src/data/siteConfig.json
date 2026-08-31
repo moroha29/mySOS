@@ -1,21 +1,43 @@
 {
   "companyName": "MySOS",
-  "tagline": "We source. We customise. We deliver.",
+  "tagline": "You're One Step Away From Your Solution!",
   "basePath": "/mySOS/",
   "quotationPath": "/mySOS/quotation_engine/",
-  "email": "",
+  "email": "mysourceofsolutions@gmail.com",
   "whatsapp": {
     "enabled": true,
     "number": "6588547109",
     "displayNumber": "+65 8854 7109",
     "defaultMessage": "Hi MySOS, I would like to enquire about custom merchandise."
   },
-  "socialLinks": { "facebook": "", "instagram": "", "linkedin": "", "youtube": "" },
+  "socialLinks": {
+    "facebook": "",
+    "instagram": "",
+    "linkedin": "",
+    "youtube": ""
+  },
   "navigation": [
-    { "label": "Products", "href": "/mySOS/products/" },
-    { "label": "Solutions", "href": "/mySOS/solutions/" },
-    { "label": "Why MySOS", "href": "/mySOS/why-mysos/" },
-    { "label": "Success Stories", "href": "/mySOS/success-stories/" },
-    { "label": "Resources", "href": "/mySOS/products/#faq" }
-  ]
+    {
+      "label": "Products",
+      "href": "/mySOS/products/"
+    },
+    {
+      "label": "Solutions",
+      "href": "/mySOS/solutions/"
+    },
+    {
+      "label": "Why MySOS",
+      "href": "/mySOS/why-mysos/"
+    },
+    {
+      "label": "Success Stories",
+      "href": "/mySOS/success-stories/"
+    },
+    {
+      "label": "Resources",
+      "href": "/mySOS/products/#faq"
+    }
+  ],
+  "companyRegistration": "202322383G",
+  "legalName": "mysourceofsolutions"
 }

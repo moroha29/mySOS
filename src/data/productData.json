@@ -801,6 +801,285 @@
         "dtf",
         "embroidery"
       ]
+    },
+    {
+      "id": "custom_singlet",
+      "public": {
+        "slug": "custom-singlet",
+        "name": "Custom Singlet",
+        "category": "apparel",
+        "subcategory": "singlets",
+        "description": "Breathable printed singlets for sports days, camps and campus events.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 9.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 4.46,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "drawstring_bag",
+      "public": {
+        "slug": "drawstring-bag",
+        "name": "Drawstring Bag",
+        "category": "bags",
+        "subcategory": "drawstring",
+        "description": "Lightweight drawstring bags for event packs and sports kits.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 5.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 2.66,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "custom_towel",
+      "public": {
+        "slug": "custom-towel",
+        "name": "Custom Towel",
+        "category": "corporate-gifts",
+        "subcategory": "towels",
+        "description": "Soft absorbent towels with woven or printed branding.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 12.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 5.81,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "custom_medal",
+      "public": {
+        "slug": "custom-medal",
+        "name": "Custom Medal",
+        "category": "corporate-gifts",
+        "subcategory": "medals",
+        "description": "Die-struck medals with custom ribbons for races and competitions.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 6.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 3.11,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "picnic_mat",
+      "public": {
+        "slug": "picnic-mat",
+        "name": "Picnic Mat",
+        "category": "corporate-gifts",
+        "subcategory": "mats",
+        "description": "Foldable water-resistant mats for outdoor events and giveaways.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 18.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 8.5,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "stationery_set",
+      "public": {
+        "slug": "stationery-set",
+        "name": "Stationery Set",
+        "category": "stationery",
+        "subcategory": "pens",
+        "description": "Markers, pens and highlighters branded for classrooms and events.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 3.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 1.75,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "name_tent",
+      "public": {
+        "slug": "name-tent",
+        "name": "Name Tent",
+        "category": "stationery",
+        "subcategory": "name-tents",
+        "description": "Printed desk name tents for conferences, camps and classrooms.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 2.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 1.3,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "die_cut_sticker",
+      "public": {
+        "slug": "die-cut-sticker",
+        "name": "Die Cut Sticker",
+        "category": "event-essentials",
+        "subcategory": "stickers",
+        "description": "Kiss-cut and die-cut vinyl stickers in any shape.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 0.9,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 0.41,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
+    },
+    {
+      "id": "tattoo_sticker",
+      "public": {
+        "slug": "tattoo-sticker",
+        "name": "Tattoo Sticker",
+        "category": "event-essentials",
+        "subcategory": "stickers",
+        "description": "Skin-safe temporary tattoos for open houses and roadshows.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 0.8,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "custom_product",
+        "baseCost": 0.36,
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "silkscreen",
+        "uv_printing"
+      ]
     }
   ],
   "jersey": {
