@@ -8,6 +8,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    // scripts/prerender.mjs maps source asset paths onto their hashed build
+    // output through this manifest.
+    manifest: true,
     rollupOptions: {
       input: {
         site: resolve(import.meta.dirname, 'index.html'),

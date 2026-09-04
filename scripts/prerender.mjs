@@ -17,6 +17,7 @@
  */
 
 import { createServer } from 'vite';
+import { resolveAssetUrls } from './prerenderAssets.mjs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -36,6 +37,18 @@ const routes = [
   '/success-stories/',
   ...stories.map((story) => `/success-stories/${story.slug}/`),
 ];
+
+/*
+ * Vite's dev SSR pipeline resolves `import.meta.glob(..., '?url')` to source
+ * paths (/src/assets/images/logos/ntu.png), not the hashed build output. Those
+ * paths 404 in dist, so every prerendered <img> has to be rewritten through the
+ * client build's own manifest before the HTML is written.
+ */
+const manifest = JSON.parse(await readFile(path.join(dist, '.vite/manifest.json'), 'utf8'));
+const assetUrls = new Map();
+for (const [source, entry] of Object.entries(manifest)) {
+  if (entry?.file) assetUrls.set(`/${source}`, `${BASE}/${entry.file}`);
+}
 
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
 const ROOT_MARKER = '<div id="root"></div>';
@@ -58,7 +71,11 @@ try {
     const markup = renderToStaticMarkup(React.createElement(PublicApp));
     if (!markup || markup.length < 200) throw new Error(`${route} rendered suspiciously little markup (${markup.length} chars)`);
 
-    const html = template.replace(ROOT_MARKER, `<div id="root">${markup}</div>`);
+    const resolved = resolveAssetUrls(markup, assetUrls, BASE);
+    if (resolved.unresolved.length) {
+      throw new Error(`${route}: ${resolved.unresolved.length} asset(s) not in the build manifest, e.g. ${resolved.unresolved[0]}`);
+    }
+    const html = template.replace(ROOT_MARKER, `<div id="root">${resolved.html}</div>`);
     const outDir = path.join(dist, route === '/' ? '.' : route);
     await mkdir(outDir, { recursive: true });
     await writeFile(path.join(outDir, 'index.html'), html, 'utf8');
