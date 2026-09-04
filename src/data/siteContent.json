@@ -272,10 +272,11 @@
     }
   ],
   "reviewSummary": {
-    "rating": "4.9",
-    "count": "200+",
-    "googleMapsUri": "",
-    "placeId": ""
+    "rating": "",
+    "count": "",
+    "googleMapsUri": "https://www.google.com/search?q=mysourceofsolutions&ludocid=15290863019161496116#lrd=0x165bd792f59b5b9:0xd4340ee6c6472a34,1,,,,",
+    "googleListingUri": "https://www.google.com/maps?cid=15290863019161496116",
+    "cid": "15290863019161496116"
   },
   "testimonials": [
     {
@@ -303,5 +304,5 @@
       "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted."
     }
   ],
-  "_reviewsNote": "PLACEHOLDER DATA. mysourceofsolutions.com publishes no reviews anywhere — its two Wix review apps are registered with widgetUrl \"/\" and render nothing. Replace every entry below with real reviews before launch, and fill reviewSummary.googleMapsUri so each card can link back to its source on Google (required if the data ever comes from the Places API)."
+  "_reviewsNote": "HOW TO ADD REAL REVIEWS: replace every object in \"testimonials\" below. Required: name, quote, rating (1-5). Optional: role (shown under the name), relativeTime (e.g. \"2 months ago\"), googleMapsUri (per-review link; falls back to reviewSummary.googleMapsUri). Set reviewSummary.rating and .count to show the Google rating badge - leave both blank and the badge is hidden rather than showing an invented figure. THE THREE ENTRIES BELOW ARE PLACEHOLDERS AND MUST BE REPLACED."
 }

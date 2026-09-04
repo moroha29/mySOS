@@ -139,13 +139,17 @@ export function Testimonials({ eyebrow = 'What our clients say', action }) {
   return <section className="section reviews">
     <SectionHeading eyebrow={eyebrow} />
 
-    {rating && <div className="review-summary">
+    <div className="review-summary">
       <Icon name="google" size={26} />
-      <span className="rating-value">{rating}</span>
-      <span className="stars" aria-label={`${rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
-      <small>Based on {count} reviews</small>
-      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">Read all on Google</a>}
-    </div>}
+      {rating
+        ? <>
+          <span className="rating-value">{rating}</span>
+          <span className="stars" aria-label={`${rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
+          {count && <small>Based on {count} reviews</small>}
+        </>
+        : <small>Reviews from Google</small>}
+      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">Read all reviews on Google <Arrow /></a>}
+    </div>
 
     <div className="review-rail">
       <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={16} /></button>
@@ -162,8 +166,8 @@ export function Testimonials({ eyebrow = 'What our clients say', action }) {
               <strong>{review.name}</strong>
               <small>{review.role}</small>
             </span>
-            {review.googleMapsUri
-              ? <a className="review-source" href={review.googleMapsUri} target="_blank" rel="noreferrer" aria-label={`See ${review.name}'s review on Google`}><Icon name="google" size={16} /></a>
+            {(review.googleMapsUri || googleMapsUri)
+              ? <a className="review-source" href={review.googleMapsUri || googleMapsUri} target="_blank" rel="noreferrer" aria-label={`See ${review.name}'s review on Google`}><Icon name="google" size={16} /></a>
               : <Icon name="google" size={16} className="review-source is-static" />}
           </footer>
         </blockquote>)}
