@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "title": "Quotation request",
+  "notes": [
+    "Structure mirrors the MASTER_QUOTATION sheet in mysos.xlsx.",
+    "Engine-bound fields carry `optionsFrom` — their choices are read live from the pricing data, so they can never drift from the workbook. The admin portal may retitle, reorder, hide or require them, but not invent options.",
+    "Custom fields (added in the portal) carry inline `options` and an optional `priceRule`. They are captured on the quotation and can add a flat or per-piece amount, but they cannot reach into the pricing engines."
+  ],
+  "sections": [
+    {
+      "id": "customer",
+      "title": "Customer details",
+      "visible": true,
+      "fields": [
+        { "key": "customerName", "label": "Customer name", "type": "text", "required": true, "bind": "customer.name" },
+        { "key": "customerType", "label": "Customer type", "type": "select", "required": false, "bind": "customer.type",
+          "options": [
+            { "id": "retail", "name": "Retail" },
+            { "id": "wholesale", "name": "Wholesale" },
+            { "id": "school", "name": "School" },
+            { "id": "corporate", "name": "Corporate" }
+          ] },
+        { "key": "orderDate", "label": "Order date", "type": "date", "required": false, "bind": "customer.orderDate" },
+        { "key": "orderReference", "label": "Order reference", "type": "text", "required": false, "bind": "customer.reference" }
+      ]
+    },
+    {
+      "id": "product",
+      "title": "Product selection",
+      "visible": true,
+      "repeatsPerItem": true,
+      "fields": [
+        { "key": "productId", "label": "Product type", "type": "select", "required": true, "bind": "item.productId",
+          "optionsFrom": "productData.quotationProducts" },
+        { "key": "quantity", "label": "Item quantity", "type": "number", "required": true, "min": 1, "step": 1, "bind": "item.quantity" },
+        { "key": "printMethod1", "label": "Printing method 1", "type": "select", "required": false, "bind": "item.prints.0.method",
+          "optionsFrom": "printData.methods", "limitToProductMethods": true },
+        { "key": "printMethod2", "label": "Printing method 2", "type": "select", "required": false, "bind": "item.prints.1.method",
+          "optionsFrom": "printData.methods", "limitToProductMethods": true }
+      ]
+    },
+    {
+      "id": "sizes",
+      "title": "Size breakdown",
+      "visible": true,
+      "repeatsPerItem": true,
+      "fields": [
+        { "key": "sizes", "label": "Sizes", "type": "sizeGrid", "required": false, "bind": "item.sizes",
+          "sizes": ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
+          "help": "Must total the item quantity." }
+      ]
+    },
+    {
+      "id": "productDetailsJersey",
+      "title": "Product details — Jersey",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "productId", "equals": "jersey_sublimation" },
+      "fields": [
+        { "key": "fabric", "label": "Fabric type", "type": "select", "required": true, "bind": "item.productOptions.fabric", "optionsFrom": "productData.jersey.fabrics" },
+        { "key": "collar", "label": "Collar type", "type": "select", "required": true, "bind": "item.productOptions.collar", "optionsFrom": "productData.jersey.collars" },
+        { "key": "sleeve", "label": "Sleeve type", "type": "select", "required": true, "bind": "item.productOptions.sleeve", "optionsFrom": "productData.jersey.sleeves" },
+        { "key": "customNameAndNumber", "label": "Custom name & number", "type": "toggle", "required": false, "bind": "item.productOptions.customNameAndNumber" },
+        { "key": "teamSet", "label": "Team set (10+)", "type": "toggle", "required": false, "bind": "item.productOptions.teamSet" }
+      ]
+    },
+    {
+      "id": "productDetailsGarment",
+      "title": "Product details — Tee / Polo",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "productId", "in": ["tee", "polo"] },
+      "fields": [
+        { "key": "garment", "label": "Garment type", "type": "select", "required": true, "bind": "item.productOptions.garment", "optionsFrom": "catalogue.byProduct" }
+      ]
+    },
+    {
+      "id": "productDetailsCaps",
+      "title": "Product details — Caps",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "productId", "equals": "cap" },
+      "fields": [
+        { "key": "capType", "label": "Cap type", "type": "select", "required": true, "bind": "item.productOptions.capType", "optionsFrom": "catalogue.byProduct" }
+      ]
+    },
+    {
+      "id": "productDetailsCutSew",
+      "title": "Product details — Custom Cut & Sew",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "productId", "equals": "custom_cutsew" },
+      "fields": [
+        { "key": "complexity", "label": "Sewing complexity", "type": "select", "required": true, "bind": "item.productOptions.complexity",
+          "options": [
+            { "id": "basic", "name": "Basic" },
+            { "id": "complex", "name": "Complex (multi-panel / lined)" }
+          ] }
+      ]
+    },
+    {
+      "id": "productDetailsCustom",
+      "title": "Product details — Other / Blank",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "productId", "equals": "custom_product" },
+      "fields": [
+        { "key": "customDescription", "label": "Product description", "type": "textarea", "required": true, "bind": "item.productOptions.customDescription",
+          "help": "Not priced by the workbook — enter the customer price manually below." }
+      ]
+    },
+    {
+      "id": "printDetailsDtf",
+      "title": "Print details — DTF / DTG",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "printMethod", "includesAny": ["dtf", "dtg"] },
+      "fields": [
+        { "key": "dtfOption", "label": "Print option", "type": "select", "required": true, "bind": "item.prints.*.option", "optionsFrom": "printData.dtf.options" }
+      ]
+    },
+    {
+      "id": "printDetailsSilkscreen",
+      "title": "Print details — Silkscreen",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "printMethod", "includesAny": ["silkscreen"] },
+      "fields": [
+        { "key": "technique", "label": "Technique", "type": "select", "required": true, "bind": "item.prints.*.technique", "optionsFrom": "printData.silkscreen.techniques" },
+        { "key": "size", "label": "Size", "type": "select", "required": true, "bind": "item.prints.*.size", "optionsFrom": "printData.silkscreen.sizes" },
+        { "key": "colours", "label": "Number of colours", "type": "number", "required": true, "min": 1, "step": 1, "bind": "item.prints.*.colours" }
+      ]
+    },
+    {
+      "id": "printDetailsEmbroidery",
+      "title": "Print details — Embroidery",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "printMethod", "includesAny": ["embroidery"] },
+      "fields": [
+        { "key": "stitchTier", "label": "Stitch count", "type": "select", "required": true, "bind": "item.prints.*.stitchTier", "optionsFrom": "printData.embroidery.stitchTiers" },
+        { "key": "digitizing", "label": "Digitizing", "type": "select", "required": true, "bind": "item.prints.*.digitizing", "optionsFrom": "printData.embroidery.digitizing" },
+        { "key": "placement", "label": "Placement", "type": "select", "required": true, "bind": "item.prints.*.placement", "optionsFrom": "printData.embroidery.placements" }
+      ]
+    },
+    {
+      "id": "printDetailsSublimation",
+      "title": "Print details — Sublimation",
+      "visible": true,
+      "repeatsPerItem": true,
+      "showWhen": { "field": "printMethod", "includesAny": ["sublimation"] },
+      "fields": [
+        { "key": "sublimationOption", "label": "Sublimation type", "type": "select", "required": true, "bind": "item.prints.*.option", "optionsFrom": "printData.sublimation.options" }
+      ]
+    },
+    {
+      "id": "addons",
+      "title": "Add-ons",
+      "visible": true,
+      "fields": [
+        { "key": "addons", "label": "Add-ons", "type": "addonList", "required": false, "bind": "addons", "optionsFrom": "addonData" }
+      ]
+    },
+    {
+      "id": "shipping",
+      "title": "Shipping",
+      "visible": true,
+      "fields": [
+        { "key": "shippingMethod", "label": "Shipping method", "type": "select", "required": false, "bind": "shipping.method",
+          "options": [
+            { "id": "self_collect", "name": "Self Collect" },
+            { "id": "local_delivery", "name": "Local Delivery" },
+            { "id": "interstate", "name": "Interstate" },
+            { "id": "international", "name": "International" }
+          ] },
+        { "key": "shippingCost", "label": "Shipping cost override (SGD)", "type": "currency", "required": false, "min": 0, "bind": "shipping.cost" }
+      ]
+    }
+  ]
+}
