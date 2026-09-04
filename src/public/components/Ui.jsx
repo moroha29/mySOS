@@ -9,6 +9,11 @@ import { Product, Scene, Sketch, Workshop } from './Visuals';
 
 export const QUOTE_HREF = siteConfig.quotationPath;
 
+// On-screen wording lives in siteContent so it can be edited in the admin
+// portal. The fallback keeps a page rendering if a label is ever removed.
+export const label = (key, fallback = '') => siteContent.labels?.[key] ?? fallback;
+export const heading = (key, fallback = '') => siteContent.headings?.[key] ?? fallback;
+
 /* --------------------------------------------------------------- primitives */
 
 export function Arrow() {
@@ -84,7 +89,7 @@ export function StoryCard({ story, showBadge = true }) {
     <div className="story-card-body">
       <h3><a href={href}>{story.title}</a></h3>
       <p>{story.summary}</p>
-      <TextLink href={href}>View Story</TextLink>
+      <TextLink href={href}>{label('viewStoryLink', 'View Story')}</TextLink>
     </div>
   </article>;
 }
@@ -96,7 +101,7 @@ export function SolutionCard({ solution, active = false }) {
     <div>
       <h3>{solution.name}</h3>
       <p>{solution.description}</p>
-      <TextLink href={href}>Explore Solutions</TextLink>
+      <TextLink href={href}>{label('exploreSolutionsLink', 'Explore Solutions')}</TextLink>
     </div>
   </article>;
 }
@@ -123,7 +128,7 @@ export function ProcessSteps({ items, variant = 'numbered' }) {
  * data change rather than a rewrite. `googleMapsUri` drives the per-review
  * source link that Google's attribution policy requires.
  */
-export function Testimonials({ eyebrow = 'What our clients say', action }) {
+export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our clients say'), action }) {
   const { rating, count, googleMapsUri } = siteContent.reviewSummary ?? {};
   const reviews = siteContent.testimonials ?? [];
   const trackRef = useRef(null);
@@ -148,7 +153,7 @@ export function Testimonials({ eyebrow = 'What our clients say', action }) {
           {count && <small>Based on {count} reviews</small>}
         </>
         : <small>Reviews from Google</small>}
-      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">Read all reviews on Google <Arrow /></a>}
+      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">{label('readReviewsOnGoogleLink', 'Read all reviews on Google')} <Arrow /></a>}
     </div>
 
     <div className="review-rail">
@@ -184,7 +189,7 @@ export function Testimonials({ eyebrow = 'What our clients say', action }) {
 export function PageCTA({
   title = 'Need something similar?',
   description = "Let's create something amazing together.",
-  primaryLabel = 'Get a Quote',
+  primaryLabel = label('heroQuoteButton', 'Get a Quote'),
   primaryHref = QUOTE_HREF,
   showWhatsApp = true,
 }) {
@@ -200,12 +205,12 @@ export function PageCTA({
   </section>;
 }
 
-export function WhatsAppLink({ label = 'WhatsApp Us' }) {
+export function WhatsAppLink({ label: text = label('whatsAppButton', 'WhatsApp Us') }) {
   const { whatsapp } = siteConfig;
   const href = whatsapp.enabled && whatsapp.number
     ? `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`
     : null;
-  const content = <><Icon name="whatsapp" size={18} /> {label}</>;
+  const content = <><Icon name="whatsapp" size={18} /> {text}</>;
   return href
     ? <a className="btn btn-ghost" href={href} target="_blank" rel="noreferrer">{content}</a>
     : <span className="btn btn-ghost is-disabled">{content}</span>;

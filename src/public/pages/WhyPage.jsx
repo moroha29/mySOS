@@ -1,9 +1,8 @@
 import siteContent from '../../data/siteContent.json';
 import Icon from '../components/Icons';
-import { Button, PageCTA, Photo, ProcessSteps, SectionHeading, Testimonials } from '../components/Ui';
+import { Button, heading, label, PageCTA, Photo, ProcessSteps, SectionHeading, Testimonials } from '../components/Ui';
 
 export default function WhyPage() {
-  const { rating, count } = siteContent.reviewSummary;
   return <main>
     <section className="hero hero-compact">
       <div className="hero-inner">
@@ -29,11 +28,11 @@ export default function WhyPage() {
     </section>
 
     <section className="section">
-      <SectionHeading eyebrow="Our process" />
+      <SectionHeading eyebrow={heading('whyProcessHeading', 'Our process')} />
       <ProcessSteps items={siteContent.process} />
     </section>
 
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline">View All Reviews <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline">{label('viewAllReviewsButton', 'View All Reviews')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <PageCTA title="Bring your ideas to life with MySOS." description="We're ready to help." />
   </main>;

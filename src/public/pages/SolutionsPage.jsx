@@ -4,7 +4,7 @@ import solutions from '../../data/solutions.json';
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, Photo, ProductCard, SectionHeading, SolutionCard } from '../components/Ui';
+import { Button, heading, label, Photo, ProductCard, SectionHeading, SolutionCard } from '../components/Ui';
 
 export default function SolutionsPage() {
   const industryId = new URLSearchParams(globalThis.location?.search ?? '').get('industry');
@@ -26,7 +26,7 @@ export default function SolutionsPage() {
     </section>
 
     <section className="section section-tight">
-      <SectionHeading eyebrow="Choose your industry" />
+      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} />
       <div className="browse-row">
         {solutions.map((solution) => <a
           key={solution.id}
@@ -52,14 +52,14 @@ export default function SolutionsPage() {
     </section>}
 
     <section className="section">
-      <SectionHeading eyebrow="Popular solutions" />
+      <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} />
       <div className="popular-grid">
         {siteContent.popularSolutions.map((item) => <article key={item.name}>
           <Product type={item.visual} color={item.colour} mark="" />
           <h3>{item.name}</h3>
         </article>)}
       </div>
-      <div className="center-action"><Button href="/mySOS/products/" variant="outline">View All Solutions <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+      <div className="center-action"><Button href="/mySOS/products/" variant="outline">{label('viewAllSolutionsButton', 'View All Solutions')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
     </section>
 
     <section className="promo-band">
@@ -67,7 +67,7 @@ export default function SolutionsPage() {
         <span className="eyebrow">Not sure where to start?</span>
         <h2>Share your requirements and we&apos;ll recommend the best solutions for you.</h2>
         <p>Tell us about your industry, timeline and budget. We will come back with a shortlist that fits.</p>
-        <Button href="/mySOS/quotation_engine/">Find My Solution <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <Button href="/mySOS/quotation_engine/">{label('findMySolutionButton', 'Find My Solution')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" imageKey="scenes/solutions-promo" /></div>
     </section>

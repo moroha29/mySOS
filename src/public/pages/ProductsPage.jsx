@@ -5,7 +5,7 @@ import { getPublicProducts } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, PageCTA, Photo, ProductCard, SectionHeading, QUOTE_HREF } from '../components/Ui';
+import { Button, heading, PageCTA, Photo, ProductCard, SectionHeading, QUOTE_HREF } from '../components/Ui';
 
 const apparelTabs = [
   { id: 'all', name: 'All' },
@@ -50,7 +50,7 @@ export default function ProductsPage() {
     </section>
 
     <section className="section section-tight">
-      <SectionHeading eyebrow="Browse by category" />
+      <SectionHeading eyebrow={heading('browseCategoryHeading', 'Browse by category')} />
       <div className="browse-row">
         {siteContent.categories.map((item) => <a
           key={item.id}
@@ -86,7 +86,7 @@ export default function ProductsPage() {
     </section>
 
     <section className="section" id="printing">
-      <SectionHeading eyebrow="Printing &amp; customisation methods" align="left" />
+      <SectionHeading eyebrow={heading('printingMethodsHeading', 'Printing & customisation methods')} align="left" />
       <div className="method-grid">
         {methods.map((method) => <article key={method.id}>
           <span className="benefit-icon"><Icon name={method.public.icon} size={22} /></span>
@@ -108,7 +108,7 @@ export default function ProductsPage() {
     </section>
 
     <section className="section" id="faq">
-      <SectionHeading eyebrow="Frequently asked questions" align="left" />
+      <SectionHeading eyebrow={heading('faqHeading', 'Frequently asked questions')} align="left" />
       <div className="faq-list">
         {siteContent.faq.map((item) => <details key={item.question}>
           <summary>{item.question}<Icon name="plus" size={16} /></summary>

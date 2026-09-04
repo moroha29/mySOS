@@ -4,7 +4,7 @@ import { getStories } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, CategoryCard, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink, QUOTE_HREF } from '../components/Ui';
+import { Button, CategoryCard, heading, label, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink, QUOTE_HREF } from '../components/Ui';
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
 const CARD_WIDTH = 186;   // keep in sync with .trust-logo width in public.css
@@ -31,7 +31,7 @@ function TrustStrip() {
   const duration = Math.round((logos.length * CARD_WIDTH) / MARQUEE_SPEED);
 
   return <section className="trust-strip">
-    <p className="mini-title">Trusted by organisations across Singapore</p>
+    <p className="mini-title">{heading('trustedByHeading', 'Trusted by organisations across Singapore')}</p>
     <div className="trust-row">
       <div className="trust-viewport">
         <div className="trust-track" style={{ '--marquee-duration': `${duration}s` }}>
@@ -52,11 +52,11 @@ export default function HomePage() {
     <section className="hero">
       <div className="hero-inner">
         <div>
-          <h1>Custom Merchandise,<em>Made Simple.</em></h1>
-          <p className="hero-lead">We source, customise and deliver premium merchandise for your organisation, event or business.</p>
+          <h1>{heading('heroTitle', 'Custom Merchandise,')}<em>{heading('heroTitleAccent', 'Made Simple.')}</em></h1>
+          <p className="hero-lead">{heading('heroLead')}</p>
           <div className="hero-actions">
-            <Button href={QUOTE_HREF}>Get a Quote</Button>
-            <Button href="/mySOS/products/" variant="ghost">Explore Products <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+            <Button href={QUOTE_HREF}>{label('heroQuoteButton', 'Get a Quote')}</Button>
+            <Button href="/mySOS/products/" variant="ghost">{label('heroExploreButton', 'Explore Products')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
           </div>
           <ul className="hero-promises">
             {siteContent.heroPromises.map((promise) => <li key={promise}><Icon name="check" size={15} />{promise}</li>)}
@@ -79,28 +79,28 @@ export default function HomePage() {
     <TrustStrip />
 
     <section className="section">
-      <SectionHeading eyebrow="What can we make for you?" />
+      <SectionHeading eyebrow={heading('categoriesHeading', 'What can we make for you?')} />
       <div className="category-grid">
         {siteContent.categories.map((category) => <CategoryCard key={category.id} category={category} />)}
-        <div className="grid-action"><TextLink href="/mySOS/products/">View All Products</TextLink></div>
+        <div className="grid-action"><TextLink href="/mySOS/products/">{label('viewAllProductsLink', 'View All Products')}</TextLink></div>
       </div>
     </section>
 
     <section className="industry-band" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
       <div className="section">
-        <SectionHeading eyebrow="Don't know what you need?" description="Tell us what you're planning. We'll help you with the rest." />
+        <SectionHeading eyebrow={heading('industryHeading')} description={heading('industryDescription')} />
         <div className="industry-nav">
           {solutions.map((solution) => <a key={solution.id} href={`/mySOS/solutions/?industry=${solution.id}`}>
             <Icon name={solution.imageStyle} size={26} />
             <span>{solution.name.replace(' Organisations', '')}</span>
           </a>)}
         </div>
-        <div className="center-action"><Button href="/mySOS/solutions/">Find My Solution <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+        <div className="center-action"><Button href="/mySOS/solutions/">{label('findMySolutionButton', 'Find My Solution')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
       </div>
     </section>
 
     <section className="section">
-      <SectionHeading eyebrow="Why choose MySOS?" />
+      <SectionHeading eyebrow={heading('benefitsHeading', 'Why choose MySOS?')} />
       <div className="benefit-grid">
         {siteContent.benefits.map((benefit) => <article key={benefit.title}>
           <span className="benefit-icon"><Icon name={benefit.icon} size={22} /></span>
@@ -111,20 +111,20 @@ export default function HomePage() {
     </section>
 
     <section className="section">
-      <SectionHeading eyebrow="How it works" />
+      <SectionHeading eyebrow={heading('processHeading', 'How it works')} />
       <ProcessSteps items={siteContent.process} />
     </section>
 
     <section className="section">
-      <SectionHeading eyebrow="Real projects. Real results." />
+      <SectionHeading eyebrow={heading('storiesHeading', 'Real projects. Real results.')} />
       <div className="story-grid">
         {featuredStories.map((story) => <StoryCard key={story.slug} story={story} showBadge={false} />)}
       </div>
-      <div className="center-action"><Button href="/mySOS/success-stories/" variant="outline">View All Success Stories <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+      <div className="center-action"><Button href="/mySOS/success-stories/" variant="outline">{label('viewAllStoriesButton', 'View All Success Stories')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
     </section>
 
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline">View All Success Stories <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline">{label('viewAllStoriesButton', 'View All Success Stories')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
-    <PageCTA title="Bring your ideas to life with MySOS." description="We're ready to help." />
+    <PageCTA title={heading('closingCtaTitle')} description={heading('closingCtaDescription')} />
   </main>;
 }

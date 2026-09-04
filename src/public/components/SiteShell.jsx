@@ -2,6 +2,8 @@ import { useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import { getImage } from '../../utils/imageRegistry';
 import siteContent from '../../data/siteContent.json';
+
+const label = (key, fallback) => siteContent.labels?.[key] ?? fallback;
 import solutions from '../../data/solutions.json';
 import Icon from './Icons';
 
@@ -66,10 +68,10 @@ export function SiteHeader() {
       </button>
       <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`.trim()} aria-label="Main navigation">
         {siteConfig.navigation.map((item) => <NavigationItem key={item.label} item={item} onNavigate={() => setOpen(false)} />)}
-        <a className="btn btn-primary btn-sm mobile-quote" href={siteConfig.quotationPath}>Get a Quote</a>
+        <a className="btn btn-primary btn-sm mobile-quote" href={siteConfig.quotationPath}>{label('headerQuoteButton', 'Get a Quote')}</a>
       </nav>
       <div className="header-actions">
-        <a className="btn btn-primary btn-sm" href={siteConfig.quotationPath}>Get a Quote</a>
+        <a className="btn btn-primary btn-sm" href={siteConfig.quotationPath}>{label('headerQuoteButton', 'Get a Quote')}</a>
         <WhatsAppButton />
       </div>
     </div>
