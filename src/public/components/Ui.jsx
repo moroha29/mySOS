@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
+import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { getDisplayPrice, getQuoteHref } from '../../utils/catalogue';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
@@ -28,13 +29,13 @@ export function TextLink({ href, children, className = '' }) {
   return <a className={`text-link ${className}`.trim()} href={href}>{children} <Arrow /></a>;
 }
 
-export function SectionHeading({ eyebrow, title, description, align = 'center', action }) {
+export function SectionHeading({ eyebrow, title, description, align = 'center', action, eyebrowPath, titlePath, descriptionPath }) {
   // Without a title the eyebrow is the section heading, not a kicker above one.
   return <div className={`section-heading align-${align} ${title ? '' : 'eyebrow-title'}`.trim()}>
     <div>
-      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-      {title && <h2>{title}</h2>}
-      {description && <p>{description}</p>}
+      {eyebrow && <span className="eyebrow" data-cms-path={eyebrowPath && cms(eyebrowPath)}>{eyebrow}</span>}
+      {title && <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>}
+      {description && <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>}
     </div>
     {action}
   </div>;
@@ -42,9 +43,16 @@ export function SectionHeading({ eyebrow, title, description, align = 'center', 
 
 /* -------------------------------------------------------------------- media */
 
-export function Photo({ style, label, className = '', image, imageKey, wide = false, eager = false }) {
+// `imagePath` is where the picture lives in the draft, so the manager can offer
+// an upload when it is clicked. Without it a picture is only reachable from the
+// content panel.
+export function Photo({ style, label, className = '', image, imageKey, imagePath, wide = false, eager = false }) {
   const src = image || getImage(imageKey);
-  if (src) return <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}><img src={src} alt="" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined} /></div>;
+  if (src) {
+    return <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}>
+      <img src={src} alt="" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined} data-cms-path={imagePath && cms(imagePath)} />
+    </div>;
+  }
   const scene = parseSceneVisual(style);
   if (scene.kind === 'workshop') return <Workshop className={className} label={label} />;
   if (scene.kind === 'sketch') return <Sketch className={className} label={label} />;
@@ -70,12 +78,15 @@ export function ProductCard({ product }) {
 }
 
 export function CategoryCard({ category }) {
-  const src = getImage(`products/category-${category.id}`);
+  const src = picture(category.image, `products/category-${category.id}`);
   return <a className="category-card" href={`/mySOS/products/?category=${category.id}`}>
     {src
-      ? <div className="product-visual category-thumb has-photo"><img src={src} alt="" loading="lazy" /></div>
+      ? <div className="product-visual category-thumb has-photo"><img src={src} alt="" loading="lazy" data-cms-path={cms(categoryPath(category, 'image'))} /></div>
       : <Product type={category.visual} color={category.colour} mark="" className="category-thumb" />}
-    <span><strong>{category.name}</strong><small>{category.description}</small></span>
+    <span>
+      <strong data-cms-path={cms(categoryPath(category, 'name'))}>{category.name}</strong>
+      <small><span data-cms-path={cms(categoryPath(category, 'description'))}>{category.description}</span></small>
+    </span>
   </a>;
 }
 
@@ -83,13 +94,13 @@ export function StoryCard({ story, showBadge = true }) {
   const href = `/mySOS/success-stories/${story.slug}/`;
   return <article className="story-card">
     <a className="story-card-media" href={href}>
-      <Photo style={story.imageStyle} label={`${story.title} project`} image={story.image} imageKey={`stories/${story.slug}/cover`} />
+      <Photo style={story.imageStyle} label={`${story.title} project`} image={picture(story.image, `stories/${story.slug}/cover`)} imagePath={storyPath(story, 'image')} />
       {showBadge && <span className="badge">{story.category.replace('-', ' ')}</span>}
     </a>
     <div className="story-card-body">
-      <h3><a href={href}>{story.title}</a></h3>
-      <p>{story.summary}</p>
-      <TextLink href={href}>{label('viewStoryLink', 'View Story')}</TextLink>
+      <h3><a href={href} data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</a></h3>
+      <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
+      <TextLink href={href}><span data-cms-path={cms(labelPath('viewStoryLabel'))}>{label('viewStoryLabel', 'View Story')}</span></TextLink>
     </div>
   </article>;
 }
@@ -97,24 +108,34 @@ export function StoryCard({ story, showBadge = true }) {
 export function SolutionCard({ solution, active = false }) {
   const href = `/mySOS/solutions/?industry=${solution.id}`;
   return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()}>
-    <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} imageKey={`solutions/${solution.id}`} /></a>
+    <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} image={picture(solution.image, `solutions/${solution.id}`)} imagePath={solutionPath(solution, 'image')} /></a>
     <div>
-      <h3>{solution.name}</h3>
-      <p>{solution.description}</p>
-      <TextLink href={href}>{label('exploreSolutionsLink', 'Explore Solutions')}</TextLink>
+      <h3 data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name}</h3>
+      <p data-cms-path={cms(solutionPath(solution, 'description'))}>{solution.description}</p>
+      <TextLink href={href}><span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span></TextLink>
     </div>
   </article>;
 }
 
 /* ------------------------------------------------------------------ process */
 
-export function ProcessSteps({ items, variant = 'numbered' }) {
+/*
+ * `pathAt(index, key)` gives the manager the draft path behind a step's title
+ * or description, and may return nothing for a value that is not content: a
+ * story's process steps are stored as plain titles, and their captions are
+ * written here rather than edited.
+ */
+export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
   const steps = items.map((item) => (typeof item === 'string' ? { title: item } : item));
+  const path = (index, key) => {
+    const found = pathAt?.(index, key);
+    return found && cms(found);
+  };
   return <ol className={`process-steps process-${variant}`}>
     {steps.map((step, index) => <li key={step.title}>
       <span className="step-marker">{variant === 'icon' ? <Icon name={step.icon || 'consult'} size={22} /> : String(index + 1).padStart(2, '0')}</span>
-      <h3>{step.title}</h3>
-      {step.description && <p>{step.description}</p>}
+      <h3 data-cms-path={path(index, 'title')}>{step.title}</h3>
+      {step.description && <p data-cms-path={path(index, 'description')}>{step.description}</p>}
     </li>)}
   </ol>;
 }
@@ -128,7 +149,7 @@ export function ProcessSteps({ items, variant = 'numbered' }) {
  * data change rather than a rewrite. `googleMapsUri` drives the per-review
  * source link that Google's attribution policy requires.
  */
-export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our clients say'), action }) {
+export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our clients say'), eyebrowPath = contentPath('headings', 'reviewsHeading'), action }) {
   const { rating, count, googleMapsUri } = siteContent.reviewSummary ?? {};
   const reviews = siteContent.testimonials ?? [];
   const trackRef = useRef(null);
@@ -142,37 +163,54 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
   };
 
   return <section className="section reviews">
-    <SectionHeading eyebrow={eyebrow} />
+    <SectionHeading eyebrow={eyebrow} eyebrowPath={eyebrowPath} />
 
     <div className="review-summary">
       <Icon name="google" size={26} />
       {rating
         ? <>
-          <span className="rating-value">{rating}</span>
+          <span className="rating-value" data-cms-path={cms(contentPath('reviewSummary', 'rating'))}>{rating}</span>
           <span className="stars" aria-label={`${rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
-          {count && <small>Based on {count} reviews</small>}
+          {count && <small>
+            <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
+            {' '}<span data-cms-path={cms(contentPath('reviewSummary', 'count'))}>{count}</span>{' '}
+            <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
+          </small>}
         </>
-        : <small>Reviews from Google</small>}
-      {googleMapsUri && <a className="text-link" href={googleMapsUri} target="_blank" rel="noreferrer">{label('readReviewsOnGoogleLink', 'Read all reviews on Google')} <Arrow /></a>}
+        : <small><span data-cms-path={cms(labelPath('reviewsFallbackLabel'))}>{label('reviewsFallbackLabel', 'Reviews from Google')}</span></small>}
+      {googleMapsUri && <a
+        className="text-link"
+        href={googleMapsUri}
+        target="_blank"
+        rel="noreferrer"
+        data-cms-paths={cmsAll(labelPath('readReviewsOnGoogleLabel'), contentPath('reviewSummary', 'googleMapsUri'))}
+      >{label('readReviewsOnGoogleLabel', 'Read all reviews on Google')} <Arrow /></a>}
     </div>
 
     <div className="review-rail">
       <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={16} /></button>
       <div className="review-track" ref={trackRef}>
-        {reviews.map((review) => <blockquote className="review-card" key={review.name}>
+        {reviews.map((review, index) => <blockquote className="review-card" key={review.name}>
           <div className="review-head">
             <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={13} />)}</span>
-            {review.relativeTime && <small className="review-time">{review.relativeTime}</small>}
+            {review.relativeTime && <small className="review-time"><span data-cms-path={cms(contentPath('testimonials', index, 'relativeTime'))}>{review.relativeTime}</span></small>}
           </div>
-          <p>&ldquo;{review.quote}&rdquo;</p>
+          <p>&ldquo;<span data-cms-path={cms(contentPath('testimonials', index, 'quote'))}>{review.quote}</span>&rdquo;</p>
           <footer>
             <span className="avatar">{review.name.split(' ').map((part) => part[0]).join('')}</span>
             <span className="review-author">
-              <strong>{review.name}</strong>
-              <small>{review.role}</small>
+              <strong data-cms-path={cms(contentPath('testimonials', index, 'name'))}>{review.name}</strong>
+              <small><span data-cms-path={cms(contentPath('testimonials', index, 'role'))}>{review.role}</span></small>
             </span>
             {(review.googleMapsUri || googleMapsUri)
-              ? <a className="review-source" href={review.googleMapsUri || googleMapsUri} target="_blank" rel="noreferrer" aria-label={`See ${review.name}'s review on Google`}><Icon name="google" size={16} /></a>
+              ? <a
+                className="review-source"
+                href={review.googleMapsUri || googleMapsUri}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`See ${review.name}'s review on Google`}
+                data-cms-paths={cmsAll(review.googleMapsUri ? contentPath('testimonials', index, 'googleMapsUri') : contentPath('reviewSummary', 'googleMapsUri'))}
+              ><Icon name="google" size={16} /></a>
               : <Icon name="google" size={16} className="review-source is-static" />}
           </footer>
         </blockquote>)}
@@ -189,30 +227,49 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
 export function PageCTA({
   title = 'Need something similar?',
   description = "Let's create something amazing together.",
+  titlePath,
+  descriptionPath,
   primaryLabel = label('heroQuoteButton', 'Get a Quote'),
+  primaryPath = labelPath('heroQuoteButton'),
   primaryHref = QUOTE_HREF,
   showWhatsApp = true,
 }) {
-  const bandBg = getImage('scenes/band-cta');
+  const bandBg = picture(siteContent.scenes?.ctaBandImage, 'scenes/band-cta');
   return <section className="page-cta" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
     <div className="page-cta-inner">
-      <div><h2>{title}</h2><p>{description}</p></div>
+      <div>
+        <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
+        <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
+      </div>
       <div className="page-cta-actions">
-        <Button href={primaryHref}>{primaryLabel}</Button>
+        {/* The button's wording and where it sends people, together. */}
+        <Button href={primaryHref} data-cms-paths={cmsAll(configPath('quotationPath'))}>
+          <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
+        </Button>
         {showWhatsApp && <WhatsAppLink />}
       </div>
     </div>
   </section>;
 }
 
-export function WhatsAppLink({ label: text = label('whatsAppButton', 'WhatsApp Us') }) {
+/*
+ * The WhatsApp button is a composed destination: the link is built from the
+ * number and the greeting, so selecting it in the manager has to offer those
+ * two fields rather than a URL box that edits nothing.
+ */
+export const whatsAppDestinationPaths = cmsAll(
+  configPath('whatsapp', 'number'),
+  configPath('whatsapp', 'defaultMessage'),
+);
+
+export function WhatsAppLink({ label: text = label('whatsAppButton', 'WhatsApp Us'), textPath = labelPath('whatsAppButton') }) {
   const { whatsapp } = siteConfig;
   const href = whatsapp.enabled && whatsapp.number
     ? `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`
     : null;
-  const content = <><Icon name="whatsapp" size={18} /> {text}</>;
+  const content = <><Icon name="whatsapp" size={18} /> <span data-cms-path={textPath && cms(textPath)}>{text}</span></>;
   return href
-    ? <a className="btn btn-ghost" href={href} target="_blank" rel="noreferrer">{content}</a>
+    ? <a className="btn btn-ghost" href={href} target="_blank" rel="noreferrer" data-cms-paths={whatsAppDestinationPaths}>{content}</a>
     : <span className="btn btn-ghost is-disabled">{content}</span>;
 }
 

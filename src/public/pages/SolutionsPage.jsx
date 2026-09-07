@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
+import { cms, cmsAll, configPath, contentPath, headingPath, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
@@ -18,15 +20,18 @@ export default function SolutionsPage() {
     <section className="hero hero-compact">
       <div className="hero-inner">
         <div>
-          <h1>Solutions Designed<em>Around Your Needs</em></h1>
-          <p className="hero-lead">Every organisation is different. We provide curated solutions to help you achieve your goals.</p>
+          <h1>
+            <span data-cms-path={cms(pagePath('solutions', 'heroTitle'))}>{pageText('solutions', 'heroTitle', 'Solutions Designed')}</span>
+            <em><span data-cms-path={cms(pagePath('solutions', 'heroTitleAccent'))}>{pageText('solutions', 'heroTitleAccent', 'Around Your Needs')}</span></em>
+          </h1>
+          <p className="hero-lead" data-cms-path={cms(pagePath('solutions', 'heroLead'))}>{pageText('solutions', 'heroLead')}</p>
         </div>
-        <div className="hero-scene"><Photo style="hall" imageKey="scenes/solutions-hero" label="Teams we work with" wide eager /></div>
+        <div className="hero-scene"><Photo style="hall" image={picture(siteContent.scenes?.solutionsHeroImage, 'scenes/solutions-hero')} imagePath={scenePath('solutionsHeroImage')} label="Teams we work with" wide eager /></div>
       </div>
     </section>
 
     <section className="section section-tight">
-      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} />
+      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} eyebrowPath={headingPath('chooseIndustryHeading')} />
       <div className="browse-row">
         {solutions.map((solution) => <a
           key={solution.id}
@@ -35,7 +40,7 @@ export default function SolutionsPage() {
           aria-current={selected?.id === solution.id ? 'page' : undefined}
         >
           <Icon name={solution.imageStyle} size={26} />
-          <span className="browse-label">{solution.name.replace(' Organisations', '')}</span>
+          <span className="browse-label" data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
         </a>)}
       </div>
     </section>
@@ -47,29 +52,29 @@ export default function SolutionsPage() {
     </section>
 
     {selected && recommended.length > 0 && <section className="section">
-      <SectionHeading eyebrow={`Recommended for ${selected.name}`} align="left" />
+      <SectionHeading eyebrow={`${pageText('solutions', 'recommendedPrefix', 'Recommended for')} ${selected.name}`} align="left" />
       <div className="product-grid product-grid-3">{recommended.map((product) => <ProductCard key={product.id} product={product} />)}</div>
     </section>}
 
     <section className="section">
-      <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} />
+      <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} eyebrowPath={headingPath('popularSolutionsHeading')} />
       <div className="popular-grid">
-        {siteContent.popularSolutions.map((item) => <article key={item.name}>
+        {siteContent.popularSolutions.map((item, index) => <article key={item.name}>
           <Product type={item.visual} color={item.colour} mark="" />
-          <h3>{item.name}</h3>
+          <h3 data-cms-path={cms(contentPath('popularSolutions', index, 'name'))}>{item.name}</h3>
         </article>)}
       </div>
-      <div className="center-action"><Button href="/mySOS/products/" variant="outline">{label('viewAllSolutionsButton', 'View All Solutions')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+      <div className="center-action"><Button href="/mySOS/products/" variant="outline"><span data-cms-path={cms(labelPath('viewAllSolutionsButton'))}>{label('viewAllSolutionsButton', 'View All Solutions')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
     </section>
 
     <section className="promo-band">
       <div className="promo-copy">
-        <span className="eyebrow">Not sure where to start?</span>
-        <h2>Share your requirements and we&apos;ll recommend the best solutions for you.</h2>
-        <p>Tell us about your industry, timeline and budget. We will come back with a shortlist that fits.</p>
-        <Button href="/mySOS/quotation_engine/">{label('findMySolutionButton', 'Find My Solution')} <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <span className="eyebrow" data-cms-path={cms(pagePath('solutions', 'promoEyebrow'))}>{pageText('solutions', 'promoEyebrow')}</span>
+        <h2 data-cms-path={cms(pagePath('solutions', 'promoTitle'))}>{pageText('solutions', 'promoTitle')}</h2>
+        <p data-cms-path={cms(pagePath('solutions', 'promoDescription'))}>{pageText('solutions', 'promoDescription')}</p>
+        <Button href={siteConfig.quotationPath} data-cms-paths={cmsAll(configPath('quotationPath'))}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
-      <div className="promo-art" aria-hidden="true"><Photo style="office" imageKey="scenes/solutions-promo" /></div>
+      <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.solutionsPromoImage, 'scenes/solutions-promo')} imagePath={scenePath('solutionsPromoImage')} /></div>
     </section>
   </main>;
 }

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
+import { cms, contentPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { PageCTA, Photo, StoryCard } from '../components/Ui';
@@ -13,11 +14,14 @@ function QuotePanel() {
   const active = testimonials[index];
   return <section className="quote-panel">
     <div className="quote-panel-inner">
-      <Photo style="office" imageKey="scenes/testimonial" label="Client visiting the MySOS studio" />
+      <Photo style="office" image={picture(siteContent.scenes?.testimonialImage, 'scenes/testimonial')} imagePath={scenePath('testimonialImage')} label="Client visiting the MySOS studio" />
       <div>
-        <blockquote>&ldquo;{active.quote}&rdquo;</blockquote>
+        <blockquote>&ldquo;<span data-cms-path={cms(contentPath('testimonials', index, 'quote'))}>{active.quote}</span>&rdquo;</blockquote>
         <div className="quote-meta">
-          <span><strong>{active.name}</strong><small>{active.role}</small></span>
+          <span>
+            <strong data-cms-path={cms(contentPath('testimonials', index, 'name'))}>{active.name}</strong>
+            <small><span data-cms-path={cms(contentPath('testimonials', index, 'role'))}>{active.role}</span></small>
+          </span>
           <button className="carousel-btn" type="button" aria-label="Next testimonial" onClick={() => setIndex((index + 1) % testimonials.length)}><Icon name="chevronRight" size={16} /></button>
         </div>
       </div>
@@ -52,12 +56,21 @@ export default function StoriesPage() {
     <section className="hero hero-compact">
       <div className="hero-inner">
         <div>
-          <h1>Real Projects.<em>Real Results.</em></h1>
-          <p className="hero-lead">See how we&apos;ve helped organisations bring their ideas to life.</p>
+          <h1>
+            <span data-cms-path={cms(pagePath('stories', 'heroTitle'))}>{pageText('stories', 'heroTitle', 'Real Projects.')}</span>
+            <em><span data-cms-path={cms(pagePath('stories', 'heroTitleAccent'))}>{pageText('stories', 'heroTitleAccent', 'Real Results.')}</span></em>
+          </h1>
+          <p className="hero-lead" data-cms-path={cms(pagePath('stories', 'heroLead'))}>{pageText('stories', 'heroLead')}</p>
         </div>
         <div className="hero-collage" aria-hidden="true">
           {['field', 'hall', 'office', 'stage', 'outdoor'].map((kind, i) => (
-            <Photo key={kind} style={kind} imageKey={`scenes/stories-hero-${i + 1}`} eager />
+            <Photo
+              key={kind}
+              style={kind}
+              image={picture(siteContent.scenes?.storiesHeroImages?.[i], `scenes/stories-hero-${i + 1}`)}
+              imagePath={scenePath('storiesHeroImages', i)}
+              eager
+            />
           ))}
         </div>
       </div>
@@ -66,19 +79,20 @@ export default function StoriesPage() {
     <section className="section">
       <div className="story-controls">
         <div className="filter-row" role="group" aria-label="Filter success stories">
-          <button className={category === 'all' ? 'is-active' : ''} type="button" onClick={() => choose('all')}>All Projects</button>
+          <button className={category === 'all' ? 'is-active' : ''} type="button" onClick={() => choose('all')} data-cms-path={cms(pagePath('stories', 'allFilterLabel'))}>{pageText('stories', 'allFilterLabel', 'All Projects')}</button>
           {solutions.map((solution) => <button
             key={solution.id}
             className={category === solution.id ? 'is-active' : ''}
             type="button"
             onClick={() => choose(solution.id)}
+            data-cms-path={cms(solutionPath(solution, 'name'))}
           >{solution.name.replace(' Organisations', '')}</button>)}
         </div>
         <label className="sort-select">
-          <span className="sr-only">Sort stories</span>
+          <span className="sr-only" data-cms-path={cms(pagePath('stories', 'sortFieldLabel'))}>{pageText('stories', 'sortFieldLabel', 'Sort stories')}</span>
           <select value={sort} onChange={(event) => { setSort(event.target.value); setPage(1); }}>
-            <option value="latest">Latest First</option>
-            <option value="oldest">Oldest First</option>
+            <option value="latest">{pageText('stories', 'sortLatestLabel', 'Latest First')}</option>
+            <option value="oldest">{pageText('stories', 'sortOldestLabel', 'Oldest First')}</option>
           </select>
           <Icon name="chevronDown" size={14} />
         </label>
@@ -86,7 +100,10 @@ export default function StoriesPage() {
 
       {visible.length > 0
         ? <div className="story-grid">{visible.map((story) => <StoryCard key={story.slug} story={story} />)}</div>
-        : <div className="empty-state"><h3>No stories in this category yet.</h3><p>Add a matching entry to successStories.json to publish one.</p></div>}
+        : <div className="empty-state">
+          <h3 data-cms-path={cms(pagePath('stories', 'emptyTitle'))}>{pageText('stories', 'emptyTitle')}</h3>
+          <p data-cms-path={cms(pagePath('stories', 'emptyDescription'))}>{pageText('stories', 'emptyDescription')}</p>
+        </div>}
 
       {totalPages > 1 && <nav className="pagination" aria-label="Success story pages">
         {Array.from({ length: totalPages }, (_, i) => <button
@@ -96,12 +113,17 @@ export default function StoriesPage() {
           aria-current={current === i + 1 ? 'page' : undefined}
           onClick={() => setPage(i + 1)}
         >{i + 1}</button>)}
-        <button type="button" disabled={current === totalPages} onClick={() => setPage(current + 1)}>Next</button>
+        <button type="button" disabled={current === totalPages} onClick={() => setPage(current + 1)} data-cms-path={cms(pagePath('stories', 'nextPageLabel'))}>{pageText('stories', 'nextPageLabel', 'Next')}</button>
       </nav>}
     </section>
 
     <QuotePanel />
 
-    <PageCTA title="Have a project in mind?" description="Let's create something amazing together." />
+    <PageCTA
+      title={pageText('stories', 'ctaTitle', 'Have a project in mind?')}
+      titlePath={pagePath('stories', 'ctaTitle')}
+      description={pageText('stories', 'ctaDescription', "Let's create something amazing together.")}
+      descriptionPath={pagePath('stories', 'ctaDescription')}
+    />
   </main>;
 }

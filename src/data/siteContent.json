@@ -4,14 +4,18 @@
     "heroQuoteButton": "Get a Quote",
     "heroExploreButton": "Explore Products",
     "whatsAppButton": "WhatsApp Us",
-    "viewAllProductsLink": "View All Products",
+    "viewAllProductsLabel": "View All Products",
     "findMySolutionButton": "Find My Solution",
     "viewAllStoriesButton": "View All Success Stories",
     "viewAllReviewsButton": "View All Reviews",
     "viewAllSolutionsButton": "View All Solutions",
-    "readReviewsOnGoogleLink": "Read all reviews on Google",
-    "viewStoryLink": "View Story",
-    "exploreSolutionsLink": "Explore Solutions"
+    "readReviewsOnGoogleLabel": "Read all reviews on Google",
+    "viewStoryLabel": "View Story",
+    "exploreSolutionsLabel": "Explore Solutions",
+    "menuToggleLabel": "Menu",
+    "reviewsFallbackLabel": "Reviews from Google",
+    "reviewsCountPrefix": "Based on",
+    "reviewsCountSuffix": "reviews"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -34,6 +38,48 @@
     "faqHeading": "Frequently asked questions",
     "whyProcessHeading": "Our process"
   },
+  "footer": {
+    "productsHeading": "Products",
+    "solutionsHeading": "Solutions",
+    "resourcesHeading": "Resources",
+    "connectHeading": "Connect with us",
+    "resourceLinks": [
+      {
+        "label": "Printing Guides",
+        "href": "/mySOS/products/#faq"
+      },
+      {
+        "label": "Materials",
+        "href": "/mySOS/products/#printing"
+      },
+      {
+        "label": "Design Tips",
+        "href": "/mySOS/why-mysos/"
+      },
+      {
+        "label": "Buying Guides",
+        "href": "/mySOS/products/"
+      },
+      {
+        "label": "Case Studies",
+        "href": "/mySOS/success-stories/"
+      }
+    ],
+    "legalLinks": [
+      {
+        "label": "Privacy Policy",
+        "href": "/mySOS/"
+      },
+      {
+        "label": "Terms & Conditions",
+        "href": "/mySOS/"
+      },
+      {
+        "label": "Refund Policy",
+        "href": "/mySOS/"
+      }
+    ]
+  },
   "heroPromises": [
     "Small & Bulk Orders",
     "Product Recommendations",
@@ -42,84 +88,100 @@
   ],
   "trustedBy": [
     {
+      "image": "",
       "name": "Nanyang Technological University",
       "key": "ntu",
       "scale": 0.8
     },
     {
+      "image": "",
       "name": "National University of Singapore",
       "key": "nus",
       "scale": 0.91
     },
     {
+      "image": "",
       "name": "Singapore Management University",
       "key": "smu",
       "scale": 0.84
     },
     {
+      "image": "",
       "name": "Singapore University of Social Sciences",
       "key": "suss",
       "scale": 0.95
     },
     {
+      "image": "",
       "name": "Temasek Polytechnic",
       "key": "temasek",
       "scale": 0.71
     },
     {
+      "image": "",
       "name": "Singapore Institute of Technology",
       "key": "sit",
       "scale": 0.9
     },
     {
+      "image": "",
       "name": "Singapore Polytechnic",
       "key": "sp",
       "scale": 0.63
     },
     {
+      "image": "",
       "name": "Mediacorp",
       "key": "mediacorp",
-      "scale": 1.0
+      "scale": 1
     },
     {
+      "image": "",
       "name": "Tan Tock Seng Hospital",
       "key": "tan-tock-seng",
-      "scale": 1.0
+      "scale": 1
     },
     {
+      "image": "",
       "name": "St. Andrew's Autism Centre",
       "key": "st-andrews",
       "scale": 0.8
     },
     {
+      "image": "",
       "name": "Chung Cheng High School",
       "key": "chung-cheng",
-      "scale": 1.0
+      "scale": 1
     },
     {
+      "image": "",
       "name": "Regent Secondary School",
       "key": "regent",
       "scale": 0.91
     },
     {
+      "image": "",
       "name": "Amity University",
       "key": "amity",
       "scale": 0.73
     },
     {
+      "image": "",
       "name": "Stories Joo Chiat",
       "key": "stories",
       "scale": 0.87
     },
     {
+      "image": "",
       "name": "Healthcare Essentials",
       "key": "healthcare-essentials",
       "scale": 0.77
     },
     {
+      "image": "",
       "name": "SkilledMaid Services",
       "key": "skilledmaid",
-      "scale": 1.0
+      "scale": 1
     }
   ],
   "categories": [
@@ -129,7 +191,8 @@
       "icon": "shirt",
       "visual": "tee",
       "colour": "navy",
-      "description": "T-Shirts, polos, jerseys & more"
+      "description": "T-Shirts, polos, jerseys & more",
+      "image": ""
     },
     {
       "id": "bags",
@@ -137,7 +200,8 @@
       "icon": "bag",
       "visual": "tote",
       "colour": "sand",
-      "description": "Tote bags, backpacks & more"
+      "description": "Tote bags, backpacks & more",
+      "image": ""
     },
     {
       "id": "drinkware",
@@ -145,7 +209,8 @@
       "icon": "bottle",
       "visual": "bottle",
       "colour": "green",
-      "description": "Bottles, tumblers, mugs & more"
+      "description": "Bottles, tumblers, mugs & more",
+      "image": ""
     },
     {
       "id": "corporate-gifts",
@@ -153,7 +218,8 @@
       "icon": "gift",
       "visual": "gift-set",
       "colour": "navy",
-      "description": "Premium gifts for every occasion"
+      "description": "Premium gifts for every occasion",
+      "image": ""
     },
     {
       "id": "stationery",
@@ -161,7 +227,8 @@
       "icon": "notebook",
       "visual": "notebook",
       "colour": "navy",
-      "description": "Notebooks, pens, desks & more"
+      "description": "Notebooks, pens, desks & more",
+      "image": ""
     },
     {
       "id": "event-essentials",
@@ -169,7 +236,8 @@
       "icon": "lanyard",
       "visual": "lanyard",
       "colour": "blue",
-      "description": "Lanyards, badges, banners & more"
+      "description": "Lanyards, badges, banners & more",
+      "image": ""
     }
   ],
   "benefits": [
@@ -179,7 +247,8 @@
       "icon": "supplier",
       "description": "Source multiple products through one point of contact.",
       "longDescription": "Source multiple products through one reliable partner.",
-      "scene": "office"
+      "scene": "office",
+      "image": ""
     },
     {
       "title": "Better Value",
@@ -187,7 +256,8 @@
       "icon": "value",
       "description": "Quality recommendations without unnecessary premium pricing.",
       "longDescription": "We deliver quality that exceeds expectations without the hefty price tag.",
-      "scene": "studio"
+      "scene": "studio",
+      "image": ""
     },
     {
       "title": "Flexible Quantities",
@@ -195,7 +265,8 @@
       "icon": "flexible",
       "description": "From small projects to larger scale orders.",
       "longDescription": "Small or large, we cater to your needs.",
-      "scene": "hall"
+      "scene": "hall",
+      "image": ""
     },
     {
       "title": "Expert Guidance",
@@ -203,7 +274,8 @@
       "icon": "expert",
       "description": "We'll recommend the best materials, methods and finishes.",
       "longDescription": "We guide you to the right products, materials and methods.",
-      "scene": "outdoor"
+      "scene": "outdoor",
+      "image": ""
     },
     {
       "title": "Built Around You",
@@ -211,7 +283,8 @@
       "icon": "tailored",
       "description": "Solutions based on your requirements, timeline and budget.",
       "longDescription": "Solutions customised for your industry, goals and budget.",
-      "scene": "field"
+      "scene": "field",
+      "image": ""
     }
   ],
   "process": [
@@ -339,5 +412,147 @@
       "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted."
     }
   ],
-  "_reviewsNote": "HOW TO ADD REAL REVIEWS: replace every object in \"testimonials\" below. Required: name, quote, rating (1-5). Optional: role (shown under the name), relativeTime (e.g. \"2 months ago\"), googleMapsUri (per-review link; falls back to reviewSummary.googleMapsUri). Set reviewSummary.rating and .count to show the Google rating badge - leave both blank and the badge is hidden rather than showing an invented figure. THE THREE ENTRIES BELOW ARE PLACEHOLDERS AND MUST BE REPLACED."
+  "_reviewsNote": "HOW TO ADD REAL REVIEWS: replace every object in \"testimonials\" below. Required: name, quote, rating (1-5). Optional: role (shown under the name), relativeTime (e.g. \"2 months ago\"), googleMapsUri (per-review link; falls back to reviewSummary.googleMapsUri). Set reviewSummary.rating and .count to show the Google rating badge - leave both blank and the badge is hidden rather than showing an invented figure. THE THREE ENTRIES BELOW ARE PLACEHOLDERS AND MUST BE REPLACED.",
+  "brand": {
+    "wordmarkImage": "",
+    "wordmarkLightImage": ""
+  },
+  "scenes": {
+    "homeHeroImage": "",
+    "industryBandImage": "",
+    "ctaBandImage": "",
+    "productsHeroImage": "",
+    "productsPromoImage": "",
+    "solutionsHeroImage": "",
+    "solutionsPromoImage": "",
+    "whyHeroImage": "",
+    "testimonialImage": "",
+    "storiesHeroImages": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "pages": {
+    "products": {
+      "heroTitle": "Custom Merchandise,",
+      "heroTitleAccent": "Made Simple",
+      "heroLead": "Explore our wide range of products that can be customised for your organisation, event or business.",
+      "collectionSuffix": "collection",
+      "viewAllPrefix": "View All",
+      "printingGuideLabel": "Learn More About Printing Methods",
+      "promoEyebrow": "Need help deciding?",
+      "promoTitle": "We'll match you to the right product.",
+      "promoDescription": "Our experts can recommend the best products, materials and printing methods for your needs.",
+      "promoButtonLabel": "Get Recommendations",
+      "emptyTitle": "No products are published in this category yet.",
+      "emptyDescription": "Contact MySOS and we will help source what you need.",
+      "ctaTitle": "Ready to start your order?",
+      "ctaDescription": "Let's get in touch with us today."
+    },
+    "solutions": {
+      "heroTitle": "Solutions Designed",
+      "heroTitleAccent": "Around Your Needs",
+      "heroLead": "Every organisation is different. We provide curated solutions to help you achieve your goals.",
+      "recommendedPrefix": "Recommended for",
+      "promoEyebrow": "Not sure where to start?",
+      "promoTitle": "Share your requirements and we'll recommend the best solutions for you.",
+      "promoDescription": "Tell us about your industry, timeline and budget. We will come back with a shortlist that fits."
+    },
+    "stories": {
+      "heroTitle": "Real Projects.",
+      "heroTitleAccent": "Real Results.",
+      "heroLead": "See how we've helped organisations bring their ideas to life.",
+      "allFilterLabel": "All Projects",
+      "sortLatestLabel": "Latest First",
+      "sortOldestLabel": "Oldest First",
+      "sortFieldLabel": "Sort stories",
+      "nextPageLabel": "Next",
+      "emptyTitle": "No stories in this category yet.",
+      "emptyDescription": "Add a matching entry to successStories.json to publish one.",
+      "ctaTitle": "Have a project in mind?",
+      "ctaDescription": "Let's create something amazing together."
+    },
+    "why": {
+      "heroTitle": "Why MySOS",
+      "heroLead": "One Supplier. Endless Possibilities.",
+      "ctaTitle": "Bring your ideas to life with MySOS.",
+      "ctaDescription": "We're ready to help."
+    },
+    "story": {
+      "homeCrumbLabel": "Home",
+      "storiesCrumbLabel": "Success Stories",
+      "backLabel": "Back to all stories",
+      "galleryLabel": "View All Photos",
+      "tocLabel": "The Story",
+      "industryLabel": "Industry",
+      "productsLabel": "Products",
+      "quantityLabel": "Quantity",
+      "quantitySuffix": "pcs",
+      "yearLabel": "Year",
+      "challengeLabel": "The Challenge",
+      "solutionLabel": "Our Solution",
+      "processLabel": "The Process",
+      "outcomeLabel": "The Outcome",
+      "feedbackLabel": "Client Feedback",
+      "missingTitle": "Story not found",
+      "missingDescription": "This project may have moved or is not published yet.",
+      "missingButtonLabel": "View all success stories",
+      "ctaTitle": "Need something similar?",
+      "ctaDescription": "Let's create something amazing together.",
+      "processCaptions": {
+        "Consultation": "Understand needs & team identities",
+        "Consult": "Understand needs & team identities",
+        "Brief": "Understand needs & requirements",
+        "Planning": "Map out sizes, groups & timelines",
+        "Range Plan": "Agree the range and quantities",
+        "Design": "Custom designs for each team",
+        "Artwork": "Artwork prepared & print-ready",
+        "Selection": "Shortlist the right products",
+        "Sampling": "Physical sample for approval",
+        "Sample": "Physical sample for approval",
+        "Sizing": "Size sets confirmed per group",
+        "Production": "Quality production & strict QC",
+        "Produce": "Quality production & strict QC",
+        "Packing": "Sorted and labelled for handout",
+        "Delivery": "On-time delivery before the date",
+        "Deliver": "On-time delivery before the date"
+      },
+      "processCaptionFallbacks": [
+        "Understand your needs",
+        "Designs prepared for approval",
+        "Sample checked and signed off",
+        "Quality production & strict QC",
+        "On-time delivery"
+      ]
+    }
+  },
+  "apparelTabs": [
+    {
+      "id": "all",
+      "name": "All"
+    },
+    {
+      "id": "tshirts",
+      "name": "T-Shirts"
+    },
+    {
+      "id": "polos",
+      "name": "Polos"
+    },
+    {
+      "id": "jerseys",
+      "name": "Jerseys"
+    },
+    {
+      "id": "hoodies",
+      "name": "Hoodies"
+    },
+    {
+      "id": "jackets",
+      "name": "Jackets"
+    }
+  ]
 }
