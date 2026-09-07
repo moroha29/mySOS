@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, cmsAll, configPath, contentPath, headingPath, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
+import { cms, cmsAll, configPath, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
@@ -17,7 +17,7 @@ export default function SolutionsPage() {
   );
 
   return <main>
-    <section className="hero hero-compact">
+    <section {...heroBackground(siteContent.scenes?.solutionsHeroBackgroundImage, scenePath('solutionsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
           <h1>

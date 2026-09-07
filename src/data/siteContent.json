@@ -419,13 +419,17 @@
   },
   "scenes": {
     "homeHeroImage": "",
+    "homeHeroBackgroundImage": "",
     "industryBandImage": "",
     "ctaBandImage": "",
     "productsHeroImage": "",
+    "productsHeroBackgroundImage": "",
     "productsPromoImage": "",
     "solutionsHeroImage": "",
+    "solutionsHeroBackgroundImage": "",
     "solutionsPromoImage": "",
     "whyHeroImage": "",
+    "whyHeroBackgroundImage": "",
     "testimonialImage": "",
     "storiesHeroImages": [
       "",
@@ -433,7 +437,8 @@
       "",
       "",
       ""
-    ]
+    ],
+    "storiesHeroBackgroundImage": ""
   },
   "pages": {
     "products": {

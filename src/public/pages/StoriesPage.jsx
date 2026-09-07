@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, contentPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
+import { cms, contentPath, heroBackground, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { PageCTA, Photo, StoryCard } from '../components/Ui';
@@ -53,7 +53,7 @@ export default function StoriesPage() {
   const choose = (next) => { setCategory(next); setPage(1); };
 
   return <main>
-    <section className="hero hero-compact">
+    <section {...heroBackground(siteContent.scenes?.storiesHeroBackgroundImage, scenePath('storiesHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
           <h1>

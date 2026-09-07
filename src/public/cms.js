@@ -67,3 +67,25 @@ export const picture = (value, key) => (String(value ?? '').trim() || getImage(k
 
 /** Wording from content, with the shipped copy as the fallback. */
 export const pageText = (page, key, fallback = '') => siteContent.pages?.[page]?.[key] ?? fallback;
+
+/*
+ * A background picture for a hero panel.
+ *
+ * The hero is a blue gradient with the product illustrations drawn over it, so
+ * unlike every other picture on the site there is no <img> to hang a content
+ * path on — which is why it was the one thing on the page nobody could change.
+ * The path goes on the panel itself and the picture is painted behind it.
+ *
+ * With nothing set the panel keeps the gradient it has always had. With a
+ * picture set, .has-background lays a navy scrim over it: the headline and lead
+ * are white, and white on an arbitrary photo is not readable on its own.
+ */
+export const heroBackground = (value, path, base = 'hero') => {
+  const url = String(value ?? '').trim();
+  return {
+    className: url ? `${base} has-background` : base,
+    'data-cms-path': cms(path),
+    'data-cms-background': 'true',
+    ...(url ? { style: { backgroundImage: `url("${url.replaceAll('"', '%22')}")` } } : {}),
+  };
+};

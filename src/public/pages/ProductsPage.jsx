@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, cmsAll, configPath, contentPath, headingPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { categoryPath, cms, cmsAll, configPath, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
 import { getPublicProducts } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
@@ -27,7 +27,7 @@ export default function ProductsPage() {
   const heroShot = picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero');
 
   return <main>
-    <section className="hero hero-compact">
+    <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
           <h1>

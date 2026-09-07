@@ -147,6 +147,18 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .hero { position: relative; overflow: hidden; background: linear-gradient(112deg, var(--navy-deep) 0%, var(--navy) 44%, #1b4dad 100%); color: #fff; }
 .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(600px 400px at 80% 32%, rgba(47,208,127,.16), transparent 70%); pointer-events: none; }
+
+/* A hero with a background picture chosen in the manager. The inline
+   background-image replaces the gradient above, so the scrim carries the navy
+   and keeps the white headline readable over whatever photo is uploaded.
+
+   The opacities are the lightest that still clear WCAG AA, measured against a
+   white photo — the worst case for white text. Over the copy on the left they
+   give 8.9:1 and 5.6:1, both past the 4.5:1 body-text threshold; the thinner
+   right-hand end only ever sits behind the product art. Lighter than this and
+   the hero lead drops below 4.5:1. */
+.hero.has-background { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.hero.has-background::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(112deg, rgba(9,23,54,.78) 0%, rgba(14,38,92,.70) 44%, rgba(27,77,173,.60) 100%); pointer-events: none; }
 .hero-inner { max-width: var(--content); margin: 0 auto; padding: 56px 24px; display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); align-items: center; gap: 30px; position: relative; z-index: 2; }
 .hero h1 { font-size: 46px; font-weight: 900; letter-spacing: -.03em; }
 .hero h1 em { display: block; font-style: normal; color: var(--green-light); }

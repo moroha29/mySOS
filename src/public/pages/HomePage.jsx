@@ -1,6 +1,6 @@
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, cmsAll, configPath, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, cmsAll, configPath, contentPath, headingPath, heroBackground, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
@@ -52,7 +52,7 @@ export default function HomePage() {
   const heroShot = picture(siteContent.scenes?.homeHeroImage, 'scenes/home-hero');
   const bandBg = picture(siteContent.scenes?.industryBandImage, 'scenes/band-industry');
   return <main>
-    <section className="hero">
+    <section {...heroBackground(siteContent.scenes?.homeHeroBackgroundImage, scenePath('homeHeroBackgroundImage'), 'hero')}>
       <div className="hero-inner">
         <div>
           <h1>
