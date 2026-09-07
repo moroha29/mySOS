@@ -1,11 +1,11 @@
 import siteContent from '../../data/siteContent.json';
-import { cms, contentPath, headingPath, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProcessSteps, SectionHeading, Testimonials } from '../components/Ui';
 
 export default function WhyPage() {
   return <main>
-    <section className="hero hero-compact">
+    <section {...heroBackground(siteContent.scenes?.whyHeroBackgroundImage, scenePath('whyHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
           <h1 data-cms-path={cms(pagePath('why', 'heroTitle'))}>{pageText('why', 'heroTitle', 'Why MySOS')}</h1>
