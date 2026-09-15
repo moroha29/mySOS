@@ -34,7 +34,6 @@
     "chooseIndustryHeading": "Choose your industry",
     "popularSolutionsHeading": "Popular solutions",
     "browseCategoryHeading": "Browse by category",
-    "printingMethodsHeading": "Printing & customisation methods",
     "faqHeading": "Frequently asked questions",
     "whyProcessHeading": "Our process"
   },
@@ -379,40 +378,6 @@
       "answer": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
   ],
-  "reviewSummary": {
-    "rating": "",
-    "count": "",
-    "googleMapsUri": "https://www.google.com/search?q=mysourceofsolutions&ludocid=15290863019161496116#lrd=0x165bd792f59b5b9:0xd4340ee6c6472a34,1,,,,",
-    "googleListingUri": "https://www.google.com/maps?cid=15290863019161496116",
-    "cid": "15290863019161496116"
-  },
-  "testimonials": [
-    {
-      "name": "Rachel Ong",
-      "role": "Marketing Manager, NUS",
-      "rating": 5,
-      "relativeTime": "2 months ago",
-      "googleMapsUri": "",
-      "quote": "Professional, responsive and the quality of our products is excellent."
-    },
-    {
-      "name": "Benjamin Tan",
-      "role": "Events Lead, SIT",
-      "rating": 5,
-      "relativeTime": "3 months ago",
-      "googleMapsUri": "",
-      "quote": "Great experience from start to finish. They understood our needs perfectly and delivered on time."
-    },
-    {
-      "name": "Alicia Lim",
-      "role": "Student Council, SMU",
-      "rating": 5,
-      "relativeTime": "5 months ago",
-      "googleMapsUri": "",
-      "quote": "Highly recommended. The merchandise was exactly what everyone at our event wanted."
-    }
-  ],
-  "_reviewsNote": "HOW TO ADD REAL REVIEWS: replace every object in \"testimonials\" below. Required: name, quote, rating (1-5). Optional: role (shown under the name), relativeTime (e.g. \"2 months ago\"), googleMapsUri (per-review link; falls back to reviewSummary.googleMapsUri). Set reviewSummary.rating and .count to show the Google rating badge - leave both blank and the badge is hidden rather than showing an invented figure. THE THREE ENTRIES BELOW ARE PLACEHOLDERS AND MUST BE REPLACED.",
   "brand": {
     "wordmarkImage": "",
     "wordmarkLightImage": ""
@@ -430,7 +395,6 @@
     "solutionsPromoImage": "",
     "whyHeroImage": "",
     "whyHeroBackgroundImage": "",
-    "testimonialImage": "",
     "storiesHeroImages": [
       "",
       "",
@@ -447,7 +411,10 @@
       "heroLead": "Explore our wide range of products that can be customised for your organisation, event or business.",
       "collectionSuffix": "collection",
       "viewAllPrefix": "View All",
-      "printingGuideLabel": "Learn More About Printing Methods",
+      "showLessLabel": "Show Less",
+      "methodsEyebrow": "Our capabilities",
+      "methodsTitle": "How we bring your brand to life",
+      "methodsBestForLabel": "Best for",
       "promoEyebrow": "Need help deciding?",
       "promoTitle": "We'll match you to the right product.",
       "promoDescription": "Our experts can recommend the best products, materials and printing methods for your needs.",
@@ -471,14 +438,17 @@
       "heroTitleAccent": "Real Results.",
       "heroLead": "See how we've helped organisations bring their ideas to life.",
       "allFilterLabel": "All Projects",
-      "sortLatestLabel": "Latest First",
-      "sortOldestLabel": "Oldest First",
-      "sortFieldLabel": "Sort stories",
       "nextPageLabel": "Next",
       "emptyTitle": "No stories in this category yet.",
       "emptyDescription": "Add a matching entry to successStories.json to publish one.",
       "ctaTitle": "Have a project in mind?",
-      "ctaDescription": "Let's create something amazing together."
+      "ctaDescription": "Let's create something amazing together.",
+      "reviewsOnGoogleLabel": "on Google",
+      "reviewsViewAllLabel": "View all Google reviews",
+      "showingLabel": "Showing {start}–{end} of {total} projects",
+      "previousPageLabel": "Previous",
+      "readFullStoryLabel": "Read Full Story",
+      "selectProjectLabel": "Select a project"
     },
     "why": {
       "heroTitle": "Why MySOS",
@@ -559,5 +529,37 @@
       "id": "jackets",
       "name": "Jackets"
     }
-  ]
+  ],
+  "printingMethods": {
+    "silkscreen": {
+      "description": "Vibrant, durable prints for larger quantities.",
+      "bestFor": "Caps, t-shirts, corporate gifts",
+      "image": ""
+    },
+    "dtf": {
+      "description": "Full-colour prints with a soft, flexible finish.",
+      "bestFor": "Caps, t-shirts, polos",
+      "image": ""
+    },
+    "dtg": {
+      "description": "Detailed garment printing with rich gradients.",
+      "bestFor": "T-shirts, polos, jackets",
+      "image": ""
+    },
+    "embroidery": {
+      "description": "Premium and durable stitching for apparel and caps.",
+      "bestFor": "Caps, t-shirts, polos",
+      "image": ""
+    },
+    "sublimation": {
+      "description": "Vibrant edge-to-edge colour for custom sportswear.",
+      "bestFor": "Jerseys, event essentials",
+      "image": ""
+    },
+    "uv_printing": {
+      "description": "High-quality prints on acrylic and hard gifts.",
+      "bestFor": "Corporate gifts, stationery, event essentials",
+      "image": ""
+    }
+  }
 }

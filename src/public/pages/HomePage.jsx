@@ -85,6 +85,9 @@ export default function HomePage() {
       </div>
     </section>
 
+    {/* Reviews sit directly under the banner. */}
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+
     <TrustStrip />
 
     <section className="section">
@@ -136,8 +139,6 @@ export default function HomePage() {
       </div>
       <div className="center-action"><Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
     </section>
-
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <PageCTA
       title={heading('closingCtaTitle')}
