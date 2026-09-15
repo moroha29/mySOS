@@ -1,6 +1,8 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import googleReviews from '../../data/googleReviews.json';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
+import { formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { getDisplayPrice, getQuoteHref } from '../../utils/catalogue';
 import { firstImage, getImage } from '../../utils/imageRegistry';
@@ -143,15 +145,39 @@ export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
 /* --------------------------------------------------------- reviews slider */
 
 /*
- * Mirrors the review-slider widgets sold for Wix: a rating badge plus a
- * horizontally snapping track of review cards. Data is shaped like the Google
- * Places `reviews` payload, so swapping the static list for a live fetch is a
- * data change rather than a rewrite. `googleMapsUri` drives the per-review
- * source link that Google's attribution policy requires.
+ * Google reviews, for the slider and the stories page's quote panel.
+ *
+ * Reviews come only from the business's own Google Business Profile, refreshed
+ * daily into googleReviews.json by scripts/fetch-google-reviews.mjs (setup in
+ * docs/GOOGLE_REVIEWS.md). They are the reviewers' words, so nothing showing a
+ * review, the rating or the count carries a data-cms-path: the website manager
+ * cannot change them. With no stored reviews — before Google approves API
+ * access — a section shows a link to the reviews on Google instead. There is
+ * deliberately no hand-typed fallback.
+ *
+ * Google allows stored review data to be kept for 30 days. If the daily refresh
+ * ever stops, the stored copy is dropped once it is older than that. The check
+ * runs after hydration rather than during render, so the prerendered HTML and
+ * the first render in the browser always agree.
  */
+export function useGoogleReviews() {
+  const available = hasGoogleReviews(googleReviews);
+  const [expired, setExpired] = useState(false);
+  useEffect(() => {
+    if (available && !isFresh(googleReviews)) setExpired(true);
+  }, [available]);
+  return available && !expired ? googleReviews : null;
+}
+
+/** "Read all reviews on Google". The wording is site copy and stays editable; the address is not. */
+export function GoogleReviewsLink() {
+  return <a className="text-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
+    <span data-cms-path={cms(labelPath('readReviewsOnGoogleLabel'))}>{label('readReviewsOnGoogleLabel', 'Read all reviews on Google')}</span> <Arrow />
+  </a>;
+}
+
 export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our clients say'), eyebrowPath = contentPath('headings', 'reviewsHeading'), action }) {
-  const { rating, count, googleMapsUri } = siteContent.reviewSummary ?? {};
-  const reviews = siteContent.testimonials ?? [];
+  const data = useGoogleReviews();
   const trackRef = useRef(null);
 
   const scrollByCard = (direction) => {
@@ -167,56 +193,40 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
 
     <div className="review-summary">
       <Icon name="google" size={26} />
-      {rating
+      {data?.averageRating
         ? <>
-          <span className="rating-value" data-cms-path={cms(contentPath('reviewSummary', 'rating'))}>{rating}</span>
-          <span className="stars" aria-label={`${rating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
-          {count && <small>
+          <span className="rating-value">{data.averageRating}</span>
+          <span className="stars" aria-label={`${data.averageRating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
+          {data.totalReviewCount ? <small>
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
-            {' '}<span data-cms-path={cms(contentPath('reviewSummary', 'count'))}>{count}</span>{' '}
+            {' '}{data.totalReviewCount}{' '}
             <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
-          </small>}
+          </small> : null}
         </>
         : <small><span data-cms-path={cms(labelPath('reviewsFallbackLabel'))}>{label('reviewsFallbackLabel', 'Reviews from Google')}</span></small>}
-      {googleMapsUri && <a
-        className="text-link"
-        href={googleMapsUri}
-        target="_blank"
-        rel="noreferrer"
-        data-cms-paths={cmsAll(labelPath('readReviewsOnGoogleLabel'), contentPath('reviewSummary', 'googleMapsUri'))}
-      >{label('readReviewsOnGoogleLabel', 'Read all reviews on Google')} <Arrow /></a>}
+      <GoogleReviewsLink />
     </div>
 
-    <div className="review-rail">
+    {data && <div className="review-rail">
       <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={16} /></button>
       <div className="review-track" ref={trackRef}>
-        {reviews.map((review, index) => <blockquote className="review-card" key={review.name}>
+        {data.reviews.map((review) => <blockquote className="review-card" key={review.id}>
           <div className="review-head">
             <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={13} />)}</span>
-            {review.relativeTime && <small className="review-time"><span data-cms-path={cms(contentPath('testimonials', index, 'relativeTime'))}>{review.relativeTime}</span></small>}
+            <small className="review-time">{formatReviewDate(review.createTime)}</small>
           </div>
-          <p>&ldquo;<span data-cms-path={cms(contentPath('testimonials', index, 'quote'))}>{review.quote}</span>&rdquo;</p>
+          <p className="review-text">&ldquo;{review.text}&rdquo;</p>
           <footer>
-            <span className="avatar">{review.name.split(' ').map((part) => part[0]).join('')}</span>
-            <span className="review-author">
-              <strong data-cms-path={cms(contentPath('testimonials', index, 'name'))}>{review.name}</strong>
-              <small><span data-cms-path={cms(contentPath('testimonials', index, 'role'))}>{review.role}</span></small>
-            </span>
-            {(review.googleMapsUri || googleMapsUri)
-              ? <a
-                className="review-source"
-                href={review.googleMapsUri || googleMapsUri}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={`See ${review.name}'s review on Google`}
-                data-cms-paths={cmsAll(review.googleMapsUri ? contentPath('testimonials', index, 'googleMapsUri') : contentPath('reviewSummary', 'googleMapsUri'))}
-              ><Icon name="google" size={16} /></a>
-              : <Icon name="google" size={16} className="review-source is-static" />}
+            {review.photoUrl
+              ? <img className="avatar avatar-photo" src={review.photoUrl} alt="" width="34" height="34" loading="lazy" referrerPolicy="no-referrer" />
+              : <span className="avatar" aria-hidden="true">{initials(review.author)}</span>}
+            <span className="review-author"><strong>{review.author}</strong></span>
+            <a className="review-source" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" aria-label={`Read ${review.author}'s review on Google`}><Icon name="google" size={16} /></a>
           </footer>
         </blockquote>)}
       </div>
       <button className="carousel-btn" type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={16} /></button>
-    </div>
+    </div>}
 
     {action && <div className="center-action">{action}</div>}
   </section>;

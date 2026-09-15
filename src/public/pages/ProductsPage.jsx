@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { categoryPath, cms, cmsAll, configPath, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
@@ -10,12 +11,100 @@ import { Button, heading, PageCTA, Photo, ProductCard, SectionHeading, QUOTE_HRE
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
 
+/*
+ * Printing & customisation methods, laid out after the reference design: a
+ * vertical list of methods, the chosen method's details, and a photo.
+ *
+ * Which methods exist, and their names, come from printData.json — the pricing
+ * workbook's list, which the manager never edits. What is said about each one
+ * (description, "best for", photo) lives in siteContent.printingMethods, keyed by
+ * method id, so it can be edited. With no photo uploaded the drawn workshop
+ * scene stands in.
+ */
+function Capabilities({ methods }) {
+  const [activeId, setActiveId] = useState(methods[0]?.id);
+  const tabRefs = useRef({});
+  const active = methods.find((method) => method.id === activeId) ?? methods[0];
+  if (!active) return null;
+  const copy = siteContent.printingMethods?.[active.id] ?? {};
+
+  // Arrow keys move between methods, as in any tab list.
+  const moveFocus = (event, index) => {
+    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+    if (!step) return;
+    event.preventDefault();
+    const next = methods[(index + step + methods.length) % methods.length];
+    setActiveId(next.id);
+    tabRefs.current[next.id]?.focus();
+  };
+
+  return <section className="capabilities" id="printing">
+    <div className="capabilities-inner">
+      <span className="capabilities-eyebrow" data-cms-path={cms(pagePath('products', 'methodsEyebrow'))}>{pageText('products', 'methodsEyebrow', 'Our capabilities')}</span>
+      <h2 className="capabilities-title" data-cms-path={cms(pagePath('products', 'methodsTitle'))}>{pageText('products', 'methodsTitle', 'How we bring your brand to life')}</h2>
+
+      <div className="capabilities-body">
+        <div className="capabilities-tabs" role="tablist" aria-orientation="vertical" aria-label="Printing and customisation methods">
+          {methods.map((method, index) => <button
+            key={method.id}
+            ref={(node) => { tabRefs.current[method.id] = node; }}
+            id={`method-tab-${method.id}`}
+            type="button"
+            role="tab"
+            aria-selected={method.id === active.id}
+            aria-controls="method-panel"
+            tabIndex={method.id === active.id ? 0 : -1}
+            onClick={() => setActiveId(method.id)}
+            onKeyDown={(event) => moveFocus(event, index)}
+          >{method.name}</button>)}
+        </div>
+
+        <div className="capabilities-panel" id="method-panel" role="tabpanel" aria-labelledby={`method-tab-${active.id}`}>
+          <h3>{active.name}</h3>
+          <p data-cms-path={cms(contentPath('printingMethods', active.id, 'description'))}>{copy.description || active.public.description}</p>
+          {copy.bestFor && <div className="capabilities-best">
+            <small data-cms-path={cms(pagePath('products', 'methodsBestForLabel'))}>{pageText('products', 'methodsBestForLabel', 'Best for')}</small>
+            <span data-cms-path={cms(contentPath('printingMethods', active.id, 'bestFor'))}>{copy.bestFor}</span>
+          </div>}
+        </div>
+
+        <div className="capabilities-photo">
+          <Photo
+            style="workshop"
+            image={picture(copy.image, `methods/${active.id}`)}
+            imagePath={contentPath('printingMethods', active.id, 'image')}
+            label={`${active.name} printing`}
+          />
+        </div>
+      </div>
+    </div>
+  </section>;
+}
+
 export default function ProductsPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
   const requested = params.get('category') || 'apparel';
   const category = siteContent.categories.some((item) => item.id === requested) ? requested : 'apparel';
   const [subcategory, setSubcategory] = useState(params.get('subcategory') || 'all');
   const [showAll, setShowAll] = useState(false);
+  const collectionRef = useRef(null);
+
+  const toggleShowAll = (event) => {
+    event.preventDefault();
+    if (!showAll) {
+      setShowAll(true);
+      return;
+    }
+    // Collapsing removes every card after the first eight, so someone who
+    // scrolled down the full list would be dropped into the printing section.
+    // Take them back to the top of the collection instead. The shorter list is
+    // committed first so the jump is measured against the final layout, and it
+    // jumps rather than animates, so the page doesn't drift while cards vanish.
+    const section = collectionRef.current;
+    const scrolledPast = Boolean(section) && section.getBoundingClientRect().top < 0;
+    flushSync(() => setShowAll(false));
+    if (scrolledPast) section.scrollIntoView({ block: 'start', behavior: 'instant' });
+  };
 
   const products = useMemo(
     () => getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined }),
@@ -61,7 +150,7 @@ export default function ProductsPage() {
       </div>
     </section>
 
-    <section className="section">
+    <section className="section products-collection" ref={collectionRef}>
       <SectionHeading eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`} align="left" />
       {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
         {apparelTabs.map((tab) => <button
@@ -74,29 +163,23 @@ export default function ProductsPage() {
         >{tab.name}</button>)}
       </div>}
       {visible.length > 0
-        ? <div className="product-grid">{visible.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+        ? <div className="product-grid" id="product-collection-grid">{visible.map((product) => <ProductCard key={product.id} product={product} />)}</div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
           <p data-cms-path={cms(pagePath('products', 'emptyDescription'))}>{pageText('products', 'emptyDescription')}</p>
         </div>}
-      {products.length > 8 && !showAll && <div className="center-action">
-        <Button href="#" variant="outline" onClick={(event) => { event.preventDefault(); setShowAll(true); }}>
-          <span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={15} className="inline-arrow" />
+      {/* One button that expands and collapses. It used to hide itself once the
+          list was expanded, leaving no way back to the shorter list. */}
+      {products.length > 8 && <div className="center-action">
+        <Button href="#" variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
+          {showAll
+            ? <><span data-cms-path={cms(pagePath('products', 'showLessLabel'))}>{pageText('products', 'showLessLabel', 'Show Less')}</span> <Icon name="chevronDown" size={15} className="inline-arrow is-up" /></>
+            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={15} className="inline-arrow" /></>}
         </Button>
       </div>}
     </section>
 
-    <section className="section" id="printing">
-      <SectionHeading eyebrow={heading('printingMethodsHeading', 'Printing & customisation methods')} eyebrowPath={headingPath('printingMethodsHeading')} align="left" />
-      <div className="method-grid">
-        {methods.map((method) => <article key={method.id}>
-          <span className="benefit-icon"><Icon name={method.public.icon} size={22} /></span>
-          <h3>{method.name}</h3>
-          <p>{method.public.description}</p>
-        </article>)}
-      </div>
-      <div className="center-action"><a className="text-link" href="#faq"><span data-cms-path={cms(pagePath('products', 'printingGuideLabel'))}>{pageText('products', 'printingGuideLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></a></div>
-    </section>
+    <Capabilities methods={methods} />
 
     <section className="promo-band">
       <div className="promo-copy">

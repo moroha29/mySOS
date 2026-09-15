@@ -1,0 +1,64 @@
+name: Refresh Google reviews
+
+# Pulls the business's own reviews from the Google Business Profile API into
+# src/data/googleReviews.json, then redeploys the site when they changed.
+# Setup: docs/GOOGLE_REVIEWS.md.
+
+on:
+  schedule:
+    # Daily at 03:17 Singapore time (19:17 UTC). Off the hour on purpose:
+    # GitHub delays scheduled runs that start exactly on the hour.
+    - cron: '17 19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit the refreshed review file
+  actions: write # start the deploy workflow
+
+concurrency:
+  group: google-reviews
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # Exits cleanly without touching the file while the secrets are not set
+      # yet, so this workflow stays green until the owner's key is added.
+      - name: Fetch reviews
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+          GBP_LOCATION: ${{ vars.GBP_LOCATION }}
+        run: node scripts/fetch-google-reviews.mjs
+
+      - name: Commit if the reviews changed
+        id: commit
+        run: |
+          if git diff --quiet -- src/data/googleReviews.json; then
+            echo "Reviews unchanged."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/googleReviews.json
+          git commit -m "chore: refresh Google reviews"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A push made with GITHUB_TOKEN does not start other workflows, so the
+      # deploy's own "on: push" never fires for this commit. workflow_dispatch
+      # is the documented exception, so start the deploy explicitly.
+      - name: Deploy the refreshed reviews
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

@@ -1,59 +1,193 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, contentPath, heroBackground, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
+import { cms, headingPath, heroBackground, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
-import { PageCTA, Photo, StoryCard } from '../components/Ui';
+import { heading, PageCTA, Photo, useGoogleReviews } from '../components/Ui';
+import { formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
 
-const PAGE_SIZE = 8;
+// One large project and four smaller ones per page, as in the design.
+const PAGE_SIZE = 5;
 
-function QuotePanel() {
-  const [index, setIndex] = useState(0);
-  const testimonials = siteContent.testimonials;
-  const active = testimonials[index];
-  return <section className="quote-panel">
-    <div className="quote-panel-inner">
-      <Photo style="office" image={picture(siteContent.scenes?.testimonialImage, 'scenes/testimonial')} imagePath={scenePath('testimonialImage')} label="Client visiting the MySOS studio" />
-      <div>
-        <blockquote>&ldquo;<span data-cms-path={cms(contentPath('testimonials', index, 'quote'))}>{active.quote}</span>&rdquo;</blockquote>
-        <div className="quote-meta">
-          <span>
-            <strong data-cms-path={cms(contentPath('testimonials', index, 'name'))}>{active.name}</strong>
-            <small><span data-cms-path={cms(contentPath('testimonials', index, 'role'))}>{active.role}</span></small>
-          </span>
-          <button className="carousel-btn" type="button" aria-label="Next testimonial" onClick={() => setIndex((index + 1) % testimonials.length)}><Icon name="chevronRight" size={16} /></button>
-        </div>
-      </div>
+const storyHref = (story) => `/mySOS/success-stories/${story.slug}/`;
+const storyPicture = (story) => picture(story.image, `stories/${story.slug}/cover`);
+const categoryName = (id) => (solutions.find((solution) => solution.id === id)?.name ?? String(id).replace(/-/g, ' ')).replace(' Organisations', '');
+const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
+
+/*
+ * The reviews row under the banner: heading and Google rating, review cards,
+ * and a link to every review on Google.
+ *
+ * Like every review on the site it shows only the Business Profile's own
+ * reviews (see useGoogleReviews). Until those exist it shows the heading and
+ * the link, and no rating: the design's sample names and 4.9 are not real.
+ */
+function StoryReviews() {
+  const data = useGoogleReviews();
+  const reviews = data?.reviews ?? [];
+  const trackRef = useRef(null);
+
+  const scrollByCard = (direction) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const card = track.firstElementChild;
+    const step = card ? card.getBoundingClientRect().width + 22 : track.clientWidth;
+    track.scrollBy({ left: direction * step, behavior: 'smooth' });
+  };
+
+  return <section className={reviews.length ? 'stories-reviews' : 'stories-reviews is-empty'} aria-labelledby="stories-reviews-title">
+    <div className="stories-reviews-summary">
+      <h2 id="stories-reviews-title" data-cms-path={cms(headingPath('reviewsHeading'))}>{heading('reviewsHeading', 'What our clients say')}</h2>
+      {data?.averageRating ? <p className="stories-reviews-rating">
+        <span className="stories-reviews-score">{data.averageRating}</span>
+        <Icon name="star" size={36} className="stories-reviews-star" />
+        <span className="stories-reviews-google">
+          <Icon name="google" size={30} />
+          <span data-cms-path={cms(pagePath('stories', 'reviewsOnGoogleLabel'))}>{pageText('stories', 'reviewsOnGoogleLabel', 'on Google')}</span>
+        </span>
+      </p> : null}
     </div>
-    <div className="quote-dots">
-      {testimonials.map((item, i) => <button
-        key={item.name}
-        type="button"
-        className={i === index ? 'is-active' : ''}
-        aria-label={`Show testimonial ${i + 1}`}
-        aria-current={i === index}
-        onClick={() => setIndex(i)}
-      />)}
+
+    {reviews.length > 0 && <div className="stories-reviews-track" ref={trackRef}>
+      {reviews.map((review) => <blockquote className="stories-review" key={review.id}>
+        <div className="stories-review-head">
+          <Icon name="google" size={24} />
+          <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={18} />)}</span>
+        </div>
+        <p className="stories-review-text">&ldquo;{review.text}&rdquo;</p>
+        <footer>
+          {review.photoUrl
+            ? <img className="stories-review-avatar" src={review.photoUrl} alt="" width="44" height="44" loading="lazy" referrerPolicy="no-referrer" />
+            : <span className="stories-review-avatar is-initials" aria-hidden="true">{initials(review.author)}</span>}
+          <span>
+            <strong>{review.author}</strong>
+            <small>{formatReviewDate(review.createTime)}</small>
+          </span>
+        </footer>
+      </blockquote>)}
+    </div>}
+
+    <div className="stories-reviews-actions">
+      {/* Two cards fit side by side, so the arrows only appear when there are more. */}
+      {reviews.length > 2 && <div className="stories-reviews-arrows">
+        <button type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={18} /></button>
+        <button type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={18} /></button>
+      </div>}
+      <a className="stories-reviews-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
+        <span data-cms-path={cms(pagePath('stories', 'reviewsViewAllLabel'))}>{pageText('stories', 'reviewsViewAllLabel', 'View all Google reviews')}</span>
+        <Icon name="arrowRight" size={15} className="inline-arrow" />
+      </a>
     </div>
   </section>;
+}
+
+/* All Projects: one large project and four smaller ones, a page at a time. */
+function ProjectMosaic({ stories, page, pages, onPage }) {
+  const start = (page - 1) * PAGE_SIZE;
+  const shown = stories.slice(start, start + PAGE_SIZE);
+  return <div className="projects-panel">
+    <div className="projects-mosaic">
+      {shown.map((story, index) => <a key={story.slug} className={index === 0 ? 'project-tile is-large' : 'project-tile'} href={storyHref(story)}>
+        <Photo style={story.imageStyle} label={`${story.title} project`} image={storyPicture(story)} imagePath={storyPath(story, 'image')} wide={index === 0} />
+        <span className="project-tile-shade" aria-hidden="true" />
+        <span className="project-tile-body">
+          <span className="project-badge"><i aria-hidden="true" />{categoryName(story.category)}</span>
+          <strong data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</strong>
+        </span>
+        <span className="project-tile-arrow" aria-hidden="true"><Icon name="chevronRight" size={index === 0 ? 20 : 16} /></span>
+      </a>)}
+    </div>
+
+    <div className="projects-footer">
+      <p>{fill(pageText('stories', 'showingLabel', 'Showing {start}–{end} of {total} projects'), { start: start + 1, end: start + shown.length, total: stories.length })}</p>
+      {pages > 1
+        ? <div className="projects-dots">
+          {Array.from({ length: pages }, (_, i) => <button
+            key={i}
+            className={i + 1 === page ? 'is-active' : ''}
+            type="button"
+            aria-label={`Page ${i + 1}`}
+            aria-current={i + 1 === page ? 'page' : undefined}
+            onClick={() => onPage(i + 1)}
+          />)}
+        </div>
+        : <span />}
+      <div className="projects-pager">
+        <button className="projects-prev" type="button" disabled={page === 1} onClick={() => onPage(page - 1)}>
+          <span data-cms-path={cms(pagePath('stories', 'previousPageLabel'))}>{pageText('stories', 'previousPageLabel', 'Previous')}</span>
+        </button>
+        <button className="projects-next" type="button" disabled={page === pages} onClick={() => onPage(page + 1)}>
+          <span data-cms-path={cms(pagePath('stories', 'nextPageLabel'))}>{pageText('stories', 'nextPageLabel', 'Next')}</span>
+        </button>
+      </div>
+    </div>
+  </div>;
+}
+
+/*
+ * A category tab: one project featured with its facts, and every project in
+ * the category underneath to pick from.
+ */
+function CategoryShowcase({ stories }) {
+  const [index, setIndex] = useState(0);
+  const story = stories[Math.min(index, stories.length - 1)];
+  const go = (next) => setIndex((next + stories.length) % stories.length);
+  const highlights = story.highlights ?? [];
+
+  return <div className="projects-panel">
+    <article className="project-feature">
+      <a className="project-feature-media" href={storyHref(story)} tabIndex={-1} aria-hidden="true">
+        <Photo style={story.imageStyle} label={`${story.title} project`} image={storyPicture(story)} imagePath={storyPath(story, 'image')} wide />
+      </a>
+      <div className="project-feature-body">
+        <span className="project-feature-badge">{categoryName(story.category)}</span>
+        <h2 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h2>
+        <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
+        {highlights.length > 0 && <ul className="project-facts">
+          {highlights.map((fact, i) => <li key={`${fact.icon}-${i}`}>
+            <Icon name={fact.icon} size={24} />
+            <span data-cms-path={cms(storyPath(story, 'highlights', i, 'text'))}>{fact.text}</span>
+          </li>)}
+        </ul>}
+        <a className="project-feature-link" href={storyHref(story)}>
+          <span data-cms-path={cms(pagePath('stories', 'readFullStoryLabel'))}>{pageText('stories', 'readFullStoryLabel', 'Read Full Story')}</span>
+          <Icon name="arrowRight" size={17} className="inline-arrow" />
+        </a>
+      </div>
+    </article>
+
+    <nav className="project-picker" aria-label="Projects in this category">
+      <button className="project-picker-arrow" type="button" aria-label="Previous project" disabled={stories.length < 2} onClick={() => go(index - 1)}><Icon name="chevronLeft" size={18} /></button>
+      <ol className="project-picker-list">
+        {stories.map((item, i) => <li key={item.slug}>
+          <button className={i === index ? 'project-picker-item is-active' : 'project-picker-item'} type="button" aria-current={i === index ? 'true' : undefined} onClick={() => setIndex(i)}>
+            <span className="project-picker-thumb"><Photo style={item.imageStyle} label="" image={storyPicture(item)} /></span>
+            <span className="project-picker-name">
+              <small>{String(i + 1).padStart(2, '0')}</small>
+              <strong>{item.title}</strong>
+            </span>
+          </button>
+        </li>)}
+      </ol>
+      <span className="project-picker-hint" data-cms-path={cms(pagePath('stories', 'selectProjectLabel'))}>{pageText('stories', 'selectProjectLabel', 'Select a project')}</span>
+      <button className="project-picker-arrow" type="button" aria-label="Next project" disabled={stories.length < 2} onClick={() => go(index + 1)}><Icon name="chevronRight" size={18} /></button>
+    </nav>
+  </div>;
 }
 
 export default function StoriesPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
   const [category, setCategory] = useState(params.get('category') || 'all');
-  const [sort, setSort] = useState('latest');
   const [page, setPage] = useState(1);
 
-  const stories = useMemo(() => getStories({ category, sort }), [category, sort]);
-  const totalPages = Math.max(1, Math.ceil(stories.length / PAGE_SIZE));
-  const current = Math.min(page, totalPages);
-  const visible = stories.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
-
+  const stories = useMemo(() => getStories({ category }), [category]);
+  const pages = Math.max(1, Math.ceil(stories.length / PAGE_SIZE));
+  const current = Math.min(page, pages);
   const choose = (next) => { setCategory(next); setPage(1); };
 
   return <main>
-    <section {...heroBackground(siteContent.scenes?.storiesHeroBackgroundImage, scenePath('storiesHeroBackgroundImage'), 'hero hero-compact')}>
+    <section {...heroBackground(siteContent.scenes?.storiesHeroBackgroundImage, scenePath('storiesHeroBackgroundImage'), 'hero hero-compact hero-stories')}>
       <div className="hero-inner">
         <div>
           <h1>
@@ -76,48 +210,30 @@ export default function StoriesPage() {
       </div>
     </section>
 
-    <section className="section">
-      <div className="story-controls">
-        <div className="filter-row" role="group" aria-label="Filter success stories">
-          <button className={category === 'all' ? 'is-active' : ''} type="button" onClick={() => choose('all')} data-cms-path={cms(pagePath('stories', 'allFilterLabel'))}>{pageText('stories', 'allFilterLabel', 'All Projects')}</button>
-          {solutions.map((solution) => <button
-            key={solution.id}
-            className={category === solution.id ? 'is-active' : ''}
-            type="button"
-            onClick={() => choose(solution.id)}
-            data-cms-path={cms(solutionPath(solution, 'name'))}
-          >{solution.name.replace(' Organisations', '')}</button>)}
-        </div>
-        <label className="sort-select">
-          <span className="sr-only" data-cms-path={cms(pagePath('stories', 'sortFieldLabel'))}>{pageText('stories', 'sortFieldLabel', 'Sort stories')}</span>
-          <select value={sort} onChange={(event) => { setSort(event.target.value); setPage(1); }}>
-            <option value="latest">{pageText('stories', 'sortLatestLabel', 'Latest First')}</option>
-            <option value="oldest">{pageText('stories', 'sortOldestLabel', 'Oldest First')}</option>
-          </select>
-          <Icon name="chevronDown" size={14} />
-        </label>
+    <section className="section stories-section">
+      <StoryReviews />
+
+      <div className="filter-row" role="group" aria-label="Filter success stories">
+        <button className={category === 'all' ? 'is-active' : ''} type="button" aria-pressed={category === 'all'} onClick={() => choose('all')} data-cms-path={cms(pagePath('stories', 'allFilterLabel'))}>{pageText('stories', 'allFilterLabel', 'All Projects')}</button>
+        {solutions.map((solution) => <button
+          key={solution.id}
+          className={category === solution.id ? 'is-active' : ''}
+          type="button"
+          aria-pressed={category === solution.id}
+          onClick={() => choose(solution.id)}
+          data-cms-path={cms(solutionPath(solution, 'name'))}
+        >{solution.name.replace(' Organisations', '')}</button>)}
       </div>
 
-      {visible.length > 0
-        ? <div className="story-grid">{visible.map((story) => <StoryCard key={story.slug} story={story} />)}</div>
-        : <div className="empty-state">
+      {stories.length === 0
+        ? <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('stories', 'emptyTitle'))}>{pageText('stories', 'emptyTitle')}</h3>
           <p data-cms-path={cms(pagePath('stories', 'emptyDescription'))}>{pageText('stories', 'emptyDescription')}</p>
-        </div>}
-
-      {totalPages > 1 && <nav className="pagination" aria-label="Success story pages">
-        {Array.from({ length: totalPages }, (_, i) => <button
-          key={i}
-          type="button"
-          className={current === i + 1 ? 'is-active' : ''}
-          aria-current={current === i + 1 ? 'page' : undefined}
-          onClick={() => setPage(i + 1)}
-        >{i + 1}</button>)}
-        <button type="button" disabled={current === totalPages} onClick={() => setPage(current + 1)} data-cms-path={cms(pagePath('stories', 'nextPageLabel'))}>{pageText('stories', 'nextPageLabel', 'Next')}</button>
-      </nav>}
+        </div>
+        : category === 'all'
+          ? <ProjectMosaic stories={stories} page={current} pages={pages} onPage={setPage} />
+          : <CategoryShowcase key={category} stories={stories} />}
     </section>
-
-    <QuotePanel />
 
     <PageCTA
       title={pageText('stories', 'ctaTitle', 'Have a project in mind?')}

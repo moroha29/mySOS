@@ -32,6 +32,20 @@
       "Comfortable fit for training and matches",
       "Delivered on time before the new season"
     ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "320 jerseys"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      },
+      {
+        "icon": "delivery",
+        "text": "Delivered on time"
+      }
+    ],
     "testimonial": {
       "quote": "The jerseys look amazing and the quality is top-notch. MySOS made the whole process so easy from design to delivery.",
       "name": "Rachel Ong",
@@ -70,6 +84,20 @@
       "Clear size labelling",
       "On-time venue delivery"
     ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "640 tees"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      },
+      {
+        "icon": "delivery",
+        "text": "Delivered on time"
+      }
+    ],
     "testimonial": {
       "quote": "Everything arrived organised and ready to distribute.",
       "name": "Benjamin Tan",
@@ -106,6 +134,12 @@
       "480 student packs completed",
       "Simple programme sorting",
       "Smooth orientation-day handout"
+    ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "480 tees"
+      }
     ],
     "testimonial": {
       "quote": "The packs made the first day feel welcoming and organised.",
@@ -145,6 +179,16 @@
       "Comfortable active fit",
       "Strong visual identity"
     ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "180 pcs"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      }
+    ],
     "testimonial": {
       "quote": "The team looked united and stayed comfortable all weekend.",
       "name": "Camp Director",
@@ -181,6 +225,16 @@
       "Full squad outfitted",
       "Player names and numbers",
       "Match-ready delivery"
+    ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "65 jerseys"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      }
     ],
     "testimonial": {
       "quote": "The finished kit feels professional and completely ours.",
@@ -220,6 +274,16 @@
       "Crew and retail ranges",
       "Venue-ready packing"
     ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "750 pcs"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      }
+    ],
     "testimonial": {
       "quote": "The merchandise became part of the festival experience.",
       "name": "Festival Producer",
@@ -256,6 +320,16 @@
       "240 volunteer items",
       "Easy distribution",
       "Strong campaign visibility"
+    ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "240 tees"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      }
     ],
     "testimonial": {
       "quote": "The shirts helped everyone feel part of one team.",
@@ -294,6 +368,20 @@
       "Premium presentation",
       "Delivered before launch day"
     ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "120 shirts"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      },
+      {
+        "icon": "delivery",
+        "text": "Delivered on time"
+      }
+    ],
     "testimonial": {
       "quote": "The gifts felt considered and elevated the launch.",
       "name": "Brand Manager",
@@ -330,6 +418,16 @@
       "210 participant shirts",
       "Volunteer colour variant",
       "Sorted by group"
+    ],
+    "highlights": [
+      {
+        "icon": "shirt",
+        "text": "210 tees"
+      },
+      {
+        "icon": "palette",
+        "text": "Design support"
+      }
     ],
     "testimonial": {
       "quote": "The shirts brought the whole camp identity together.",

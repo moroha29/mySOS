@@ -1,0 +1,8 @@
+{
+  "_note": "Written by scripts/fetch-google-reviews.mjs from the Google Business Profile API. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content.",
+  "source": "google-business-profile",
+  "fetchedAt": null,
+  "averageRating": null,
+  "totalReviewCount": null,
+  "reviews": []
+}
