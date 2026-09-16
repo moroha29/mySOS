@@ -6,6 +6,8 @@ import printData from '../src/data/printData.json';
 import siteContent from '../src/data/siteContent.json';
 import HomePage from '../src/public/pages/HomePage';
 import ProductsPage from '../src/public/pages/ProductsPage';
+import StoriesPage from '../src/public/pages/StoriesPage';
+import WhyPage from '../src/public/pages/WhyPage';
 
 const originalLocation = globalThis.location;
 afterEach(() => {
@@ -20,8 +22,8 @@ const render = (Page, pathname) => {
 
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
-describe('home page order', () => {
-  it('puts the Google reviews directly under the banner', () => {
+describe('page order: reviews sit directly under the banner', () => {
+  it('home: above the client logos, below the banner', () => {
     const markup = render(HomePage, '/mySOS/');
     const banner = markup.indexOf('Custom Merchandise,');
     const reviews = markup.indexOf('class="section reviews"');
@@ -30,6 +32,28 @@ describe('home page order', () => {
     expect(reviews).toBeGreaterThan(banner);
     expect(reviews).toBeLessThan(logos);
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
+  });
+
+  it('why mysos: above the reasons, not at the foot of the page', () => {
+    const markup = render(WhyPage, '/mySOS/why-mysos/');
+    const banner = markup.indexOf('Why MySOS');
+    const reviews = markup.indexOf('class="section reviews"');
+    const reasons = markup.indexOf('class="why-list"');
+    const closingCta = markup.indexOf('class="page-cta');
+    expect(reviews).toBeGreaterThan(banner);
+    expect(reviews).toBeLessThan(reasons);
+    if (closingCta > -1) expect(reviews).toBeLessThan(closingCta);
+    expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
+  });
+
+  it('success stories: the reviews row opens the page', () => {
+    const markup = render(StoriesPage, '/mySOS/success-stories/');
+    const reviews = markup.indexOf('class="stories-reviews');
+    const pills = markup.indexOf('class="filter-row"');
+    const panel = markup.indexOf('class="projects-panel"');
+    expect(reviews).toBeGreaterThan(-1);
+    expect(reviews).toBeLessThan(pills);
+    expect(pills).toBeLessThan(panel);
   });
 });
 

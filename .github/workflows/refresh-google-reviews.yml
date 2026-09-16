@@ -1,7 +1,8 @@
 name: Refresh Google reviews
 
-# Pulls the business's own reviews from the Google Business Profile API into
-# src/data/googleReviews.json, then redeploys the site when they changed.
+# Pulls the business's own reviews into src/data/googleReviews.json, then
+# redeploys the site when they changed. Reviews come from the Google Business
+# Profile API, or from the Places API when that has none to give.
 # Setup: docs/GOOGLE_REVIEWS.md.
 
 on:
@@ -30,12 +31,16 @@ jobs:
 
       # Exits cleanly without touching the file while the secrets are not set
       # yet, so this workflow stays green until the owner's key is added.
+      # Either source may be configured on its own: Places is used when the
+      # Business Profile has no reviews to give.
       - name: Fetch reviews
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           GBP_LOCATION: ${{ vars.GBP_LOCATION }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          GOOGLE_PLACE_ID: ${{ vars.GOOGLE_PLACE_ID }}
         run: node scripts/fetch-google-reviews.mjs
 
       - name: Commit if the reviews changed

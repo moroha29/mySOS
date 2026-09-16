@@ -15,6 +15,9 @@ export default function WhyPage() {
       </div>
     </section>
 
+    {/* Reviews sit directly under the banner, as on the home page. */}
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+
     <section className="section">
       <div className="why-list">
         {siteContent.benefits.map((benefit, index) => <article className="why-row" key={benefit.title}>
@@ -39,8 +42,6 @@ export default function WhyPage() {
       <SectionHeading eyebrow={heading('whyProcessHeading', 'Our process')} eyebrowPath={headingPath('whyProcessHeading')} />
       <ProcessSteps items={siteContent.process} pathAt={(index, key) => contentPath('process', index, key)} />
     </section>
-
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <PageCTA
       title={pageText('why', 'ctaTitle', 'Bring your ideas to life with MySOS.')}

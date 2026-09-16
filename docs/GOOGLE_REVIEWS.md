@@ -1,20 +1,32 @@
 # Google reviews on the website
 
 The "What our clients say" section shows MySOS's real Google reviews. Once a day,
-a GitHub Action asks Google for them through the official **Google Business
-Profile API**, saves them to `src/data/googleReviews.json`, and redeploys the site
-if anything changed.
+a GitHub Action asks Google for them, saves them to
+`src/data/googleReviews.json`, and redeploys the site if anything changed.
 
-Nothing is scraped. The owner of the Business Profile gives permission once, and
-Google hands over the business's own reviews.
+Nothing is scraped. There are two official ways in, and the refresh uses whichever
+is working:
 
-Until the steps below are done, the site shows no reviews: the reviews section and
+| | **A. Business Profile API** | **B. Places API** |
+|---|---|---|
+| Reviews | all of them, up to 30 shown | the 5 Google shows on the listing |
+| Rating and count | the listing's own | the listing's own |
+| Needs | the owner to sign in once, and Google to approve API access | an API key, nothing to approve |
+| Profile must be verified | yes | no |
+| Cost | free | free in practice: one call a day, against 1,000 free a month |
+
+**A is preferred and B is the fallback.** Each day the refresh asks the Business
+Profile first; if that returns no reviews — access not approved yet, the profile
+not verified, or the call failed — it falls back to the five from Places for that
+day. Set up either one on its own, or both.
+
+Until one of them is set up, the site shows no reviews: the reviews section and
 the stories page show only a link to MySOS's reviews on Google. That is deliberate.
 There are no hand-typed reviews to fall back on, so nothing can show a made-up review.
 
 ---
 
-## What the owner needs to do (about 20 minutes, plus Google's approval wait)
+## A. Business Profile API — what the owner needs to do (about 20 minutes, plus Google's approval wait)
 
 Do every step signed in to **the Google account that owns the MySOS Business
 Profile**.
@@ -134,12 +146,53 @@ every day at 3:17am Singapore time.
 
 ---
 
+## B. Places API — the fallback (about 10 minutes, no approval)
+
+This shows the same five reviews Google shows on the listing. It needs no
+verification and no application, so it is the way to have reviews on the site
+while step 4 above is waiting on Google — or instead of it.
+
+### 1. Enable the API and create a key
+
+1. In the same Cloud project, open **APIs & Services → Library**, search for
+   **Places API (New)** and enable it.
+2. Go to **APIs & Services → Credentials → Create credentials → API key**.
+3. Open the new key and, under *API restrictions*, choose **Restrict key** and tick
+   **Places API (New)**. Leave *Application restrictions* as **None**: the key is
+   used by GitHub Actions, which has no fixed IP address.
+4. Billing must be enabled on the project. The refresh makes one call a day, about
+   30 a month, and Google's monthly free allowance is 1,000 — so it stays free.
+   Setting a budget alert at, say, $5 is still worth doing.
+
+### 2. Find the place id
+
+Open <https://developers.google.com/maps/documentation/places/web-service/place-id>,
+search for **My Source of Solutions**, and copy the id. It looks like
+`ChIJ...`.
+
+### 3. Add them to GitHub
+
+**Settings → Secrets and variables → Actions**:
+
+| Tab | Name | Value |
+|---|---|---|
+| Secrets | `GOOGLE_PLACES_API_KEY` | the API key from step 1 |
+| Variables | `GOOGLE_PLACE_ID` | the place id from step 2 |
+
+Then **Actions → Refresh Google reviews → Run workflow**, same as step 9 above.
+
+---
+
 ## How it behaves
 
-- **What is shown.** The newest reviews that have written text, up to 30, exactly
-  as the reviewer wrote them, plus Google's own average rating and review count.
-  Star-only reviews count toward the rating but have nothing to read, so they
-  don't get a card. Reviews are never filtered by rating.
+- **What is shown.** The newest reviews that have written text, up to 30 from the
+  Business Profile or 5 from Places, exactly as the reviewer wrote them, plus
+  Google's own average rating and review count. Star-only reviews count toward the
+  rating but have nothing to read, so they don't get a card. Reviews are never
+  filtered by rating.
+- **Which source was used.** The `source` field in `src/data/googleReviews.json`
+  says `google-business-profile` or `google-places`, and each run prints what it
+  got from each and which one it saved. Nothing on the page changes between them.
 - **Attribution.** Each card shows the reviewer's name and Google profile photo
   and links to the listing on Google.
 - **Google's 30-day rule.** Google only allows review data to be kept for 30 days.
@@ -164,3 +217,5 @@ Open the failed run under **Actions** and read the last lines.
 | `not approved yet` / quota errors | Google hasn't approved step 4. Wait for the email. |
 | `invalid_grant` | The key stopped working: revoked, left unused for 6 months, or issued while the app was in Testing. Repeat step 7 and update `GOOGLE_REFRESH_TOKEN`. |
 | `several locations` | Add the `GBP_LOCATION` variable (step 8). |
+| `Places API refused the request` | Check `GOOGLE_PLACE_ID`, that the key allows the Places API (New), and that billing is on. |
+| `Neither source returned reviews` | Both configured sources failed; the two lines above it say why. The stored reviews were left alone. |
