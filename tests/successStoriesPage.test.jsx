@@ -98,6 +98,15 @@ describe('page wording and styling', () => {
     expect(siteContent.scenes).not.toHaveProperty('testimonialImage');
   });
 
+  it('the category panel keeps the proportions of the design', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // Measured off the design at 1586px: a 693px photo, a 506px column beside
+    // it, and the three facts on one line.
+    expect(css).toMatch(/\.project-feature \{[^}]*grid-template-columns: minmax\(0, 1\.37fr\) minmax\(0, 1fr\);/);
+    expect(css).toMatch(/\.project-feature-media \.scene \{ height: 272px;/);
+    expect(css).toMatch(/\.project-facts li \{[^}]*white-space: nowrap;/);
+  });
+
   it('tiles are black and white until pointed at, only on devices with a pointer', () => {
     const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
     expect(css).toMatch(/@media \(hover: hover\) \{\s*\.project-tile \.scene img, \.project-tile \.scene svg \{ filter: grayscale\(1\); \}/);
