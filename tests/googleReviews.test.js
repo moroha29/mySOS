@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import siteContent from '../src/data/siteContent.json';
 import {
+  buildPlacesPayload,
   buildReviewsPayload,
   formatReviewDate,
   GOOGLE_REVIEWS_URL,
@@ -10,8 +11,11 @@ import {
   initials,
   isFresh,
   MAX_DISPLAYED_REVIEWS,
+  MAX_PLACES_REVIEWS,
   MAX_STORED_AGE_DAYS,
+  normalizePlacesReview,
   normalizeReview,
+  preferReviews,
   sameReviews,
   shouldWriteReviews,
   starsFromEnum,
@@ -74,6 +78,76 @@ describe('what the site stores', () => {
     expect(payload.averageRating).toBe(4.9);
     expect(payload.totalReviewCount).toBe(57);
     expect(buildReviewsPayload({}, 'now')).toMatchObject({ averageRating: null, totalReviewCount: null, reviews: [] });
+  });
+});
+
+// The shape places.get returns.
+const placeReview = (id, overrides = {}) => ({
+  name: `places/p/reviews/${id}`,
+  rating: 5,
+  text: { text: `Review ${id}`, languageCode: 'en' },
+  authorAttribution: { displayName: `Reviewer ${id}`, photoUri: `https://lh3.googleusercontent.com/${id}`, uri: 'https://maps.google.com/' },
+  publishTime: '2026-01-01T00:00:00Z',
+  ...overrides,
+});
+
+describe('the Places API fallback', () => {
+  it('stores a Places review in the same shape as a Business Profile one', () => {
+    const review = normalizePlacesReview(placeReview('a'));
+    expect(review).toEqual({
+      id: 'places/p/reviews/a',
+      author: 'Reviewer a',
+      photoUrl: 'https://lh3.googleusercontent.com/a',
+      rating: 5,
+      text: 'Review a',
+      createTime: '2026-01-01T00:00:00Z',
+    });
+    expect(Object.keys(review)).toEqual(Object.keys(normalizeReview(apiReview('a'))));
+  });
+
+  it("shows what the reviewer wrote, not Google's translation of it", () => {
+    const review = normalizePlacesReview(placeReview('t', { text: { text: 'Very good' }, originalText: { text: 'Sangat bagus' } }));
+    expect(review.text).toBe('Sangat bagus');
+  });
+
+  it('credits a reviewer Google gives no name for', () => {
+    const review = normalizePlacesReview(placeReview('n', { authorAttribution: { photoUri: 'https://x/y' } }));
+    expect(review.author).toBe('A Google user');
+    expect(review.photoUrl).toBe('');
+  });
+
+  it("uses the listing's rating and count, and marks where the reviews came from", () => {
+    const payload = buildPlacesPayload({
+      reviews: [placeReview('new', { publishTime: '2026-06-01T00:00:00Z' }), placeReview('old'), placeReview('empty', { text: { text: '' }, originalText: { text: '' } })],
+      rating: 4.8667,
+      userRatingCount: 57,
+    }, 'now');
+    expect(payload.source).toBe('google-places');
+    expect(payload.averageRating).toBe(4.9);
+    expect(payload.totalReviewCount).toBe(57);
+    expect(payload.reviews.map((review) => review.id)).toEqual(['places/p/reviews/new', 'places/p/reviews/old']);
+    // Google never returns more than five, so the 30 cap never bites here.
+    expect(MAX_PLACES_REVIEWS).toBeLessThan(MAX_DISPLAYED_REVIEWS);
+  });
+});
+
+describe('choosing between the two sources', () => {
+  const profile = buildReviewsPayload({ reviews: [apiReview('p')], averageRating: 5, totalReviewCount: 9 }, 'now');
+  const empty = buildReviewsPayload({ reviews: [], averageRating: 5, totalReviewCount: 9 }, 'now');
+  const places = buildPlacesPayload({ reviews: [placeReview('x')], rating: 5, userRatingCount: 9 }, 'now');
+
+  it('keeps the Business Profile when it has reviews', () => {
+    expect(preferReviews(profile, places).source).toBe('google-business-profile');
+  });
+
+  it('falls back to Places when the Business Profile is empty or failed', () => {
+    expect(preferReviews(empty, places).source).toBe('google-places');
+    expect(preferReviews(undefined, places).source).toBe('google-places');
+  });
+
+  it('keeps refreshing the rating when neither source has reviews to show', () => {
+    expect(preferReviews(empty, undefined)).toBe(empty);
+    expect(preferReviews(undefined, undefined)).toBe(null);
   });
 });
 
@@ -149,6 +223,14 @@ describe('the daily refresh', () => {
     expect(readFileSync(DATA_FILE, 'utf8')).toBe(before);
   });
 
+  it('says which source it skipped, and needs both halves of the Places key', () => {
+    // A key without the place id cannot call anything, so nothing is fetched.
+    const result = run('scripts/fetch-google-reviews.mjs', { GOOGLE_PLACES_API_KEY: 'key', GOOGLE_PLACE_ID: '' });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('Business Profile not used: no Business Profile secrets');
+    expect(result.stdout).toContain('Places not used: no Places key or place id');
+  });
+
   it('the owner sign-in script explains what it needs before starting', () => {
     const result = run('scripts/google-reviews-authorize.mjs');
     expect(result.status).toBe(1);
@@ -159,9 +241,10 @@ describe('the daily refresh', () => {
     const workflow = readFileSync(new URL('../.github/workflows/refresh-google-reviews.yml', import.meta.url), 'utf8');
     expect(workflow).toMatch(/cron: '17 19 \* \* \*'/);
     expect(workflow).toContain('workflow_dispatch:');
-    for (const secret of ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REFRESH_TOKEN']) {
+    for (const secret of ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'GOOGLE_REFRESH_TOKEN', 'GOOGLE_PLACES_API_KEY']) {
       expect(workflow).toContain(`secrets.${secret}`);
     }
+    expect(workflow).toContain('vars.GOOGLE_PLACE_ID');
     expect(workflow).toContain('git add src/data/googleReviews.json');
     // A push made with GITHUB_TOKEN never starts the deploy's on: push, so the
     // deploy has to be dispatched explicitly, which needs actions: write.

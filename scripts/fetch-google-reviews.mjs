@@ -2,27 +2,36 @@
 /*
  * Daily refresh of the site's Google reviews.
  *
- * Reads the business's own reviews from the Google Business Profile API and
- * writes them to src/data/googleReviews.json. Run by
+ * Reads the business's own reviews and writes them to
+ * src/data/googleReviews.json. Run by
  * .github/workflows/refresh-google-reviews.yml; setup in docs/GOOGLE_REVIEWS.md.
  *
- *   GOOGLE_CLIENT_ID       OAuth client ID
- *   GOOGLE_CLIENT_SECRET   OAuth client secret
- *   GOOGLE_REFRESH_TOKEN   from the owner's one-time sign-in
- *   GBP_LOCATION           optional, "accounts/{a}/locations/{l}"; only needed
- *                          when the owner's account manages several locations
+ * Two sources, either or both configured. The Business Profile API is used
+ * when it returns reviews; otherwise the Places API's five stand in.
+ *
+ *   Business Profile (all reviews, needs Google's approval)
+ *     GOOGLE_CLIENT_ID       OAuth client ID
+ *     GOOGLE_CLIENT_SECRET   OAuth client secret
+ *     GOOGLE_REFRESH_TOKEN   from the owner's one-time sign-in
+ *     GBP_LOCATION           optional, "accounts/{a}/locations/{l}"; only
+ *                            needed when the account manages several locations
+ *
+ *   Places fallback (five reviews, an API key is all it takes)
+ *     GOOGLE_PLACES_API_KEY  key with the Places API (New) enabled
+ *     GOOGLE_PLACE_ID        the listing's place id, "ChIJ…"
  *
  *   --dry-run              fetch and report, but do not write the file
  *
- * Without the credentials it does nothing and exits cleanly, so the workflow
+ * With neither configured it does nothing and exits cleanly, so the workflow
  * stays green until the owner's key has been added.
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildReviewsPayload, GOOGLE_REVIEWS_NOTE, shouldWriteReviews } from '../src/utils/googleReviews.js';
+import { buildPlacesPayload, buildReviewsPayload, GOOGLE_REVIEWS_NOTE, hasGoogleReviews, preferReviews, shouldWriteReviews } from '../src/utils/googleReviews.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const count = (number, noun) => `${number} ${noun}${number === 1 ? '' : 's'}`;
 const DATA_FILE = path.join(root, 'src/data/googleReviews.json');
 const MAX_PAGES = 40; // 50 reviews a page
 
@@ -108,6 +117,64 @@ async function fetchReviews(token, location) {
   return { reviews, averageRating, totalReviewCount };
 }
 
+/*
+ * The Places API (New) returns the five reviews Google shows on the listing.
+ * The field mask is required: without it the call is rejected, and asking for
+ * only these four fields keeps the call on the cheaper SKU.
+ */
+async function fetchPlace(key, placeId) {
+  const url = new URL(`https://places.googleapis.com/v1/places/${encodeURIComponent(placeId)}`);
+  url.searchParams.set('languageCode', 'en');
+  const response = await fetch(url, {
+    headers: {
+      'X-Goog-Api-Key': key,
+      'X-Goog-FieldMask': 'displayName,rating,userRatingCount,reviews',
+    },
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const detail = body?.error?.message || `HTTP ${response.status}`;
+    throw new Error(`Places API refused the request: ${detail}. Check GOOGLE_PLACE_ID and that the key has the Places API (New) enabled — see docs/GOOGLE_REVIEWS.md.`);
+  }
+  return body;
+}
+
+/*
+ * Reports rather than throws: a failure here must not fail the run when the
+ * other source worked, and must not fail the workflow when neither did more
+ * than it did yesterday.
+ */
+async function tryBusinessProfile(now) {
+  const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim() ?? '';
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN?.trim();
+  if (!clientId || !refreshToken) return { skipped: 'no Business Profile secrets' };
+  try {
+    const token = await accessToken({ clientId, clientSecret, refreshToken });
+    const location = await resolveLocation(token, process.env.GBP_LOCATION?.trim());
+    const fetched = await fetchReviews(token, location);
+    const payload = buildReviewsPayload(fetched, now);
+    console.log(`Business Profile ${location}: ${count(fetched.reviews.length, 'review')}, ${payload.reviews.length} with written text; rating ${payload.averageRating ?? '—'} from ${payload.totalReviewCount ?? '—'}.`);
+    return { payload };
+  } catch (error) {
+    return { error };
+  }
+}
+
+async function tryPlaces(now) {
+  const key = process.env.GOOGLE_PLACES_API_KEY?.trim();
+  const placeId = process.env.GOOGLE_PLACE_ID?.trim();
+  if (!key || !placeId) return { skipped: 'no Places key or place id' };
+  try {
+    const place = await fetchPlace(key, placeId);
+    const payload = buildPlacesPayload(place, now);
+    console.log(`Places ${place.displayName?.text ?? placeId}: ${count(place.reviews?.length ?? 0, 'review')}, ${payload.reviews.length} with written text; rating ${payload.averageRating ?? '—'} from ${payload.totalReviewCount ?? '—'}.`);
+    return { payload };
+  } catch (error) {
+    return { error };
+  }
+}
+
 async function readExisting() {
   try {
     return JSON.parse(await readFile(DATA_FILE, 'utf8'));
@@ -117,20 +184,27 @@ async function readExisting() {
 }
 
 async function main() {
-  const clientId = process.env.GOOGLE_CLIENT_ID?.trim();
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim() ?? '';
-  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN?.trim();
-  if (!clientId || !refreshToken) {
-    console.log('skipped: Google review secrets are not set (see docs/GOOGLE_REVIEWS.md). The review file was left as it is.');
+  const now = new Date().toISOString();
+  const profile = await tryBusinessProfile(now);
+
+  // The fallback only runs when the Business Profile gave nothing to show, so
+  // a working profile costs no Places calls.
+  const needsFallback = !hasGoogleReviews(profile.payload);
+  const places = needsFallback ? await tryPlaces(now) : { skipped: 'Business Profile returned reviews' };
+
+  for (const [name, result] of [['Business Profile', profile], ['Places', places]]) {
+    if (result.error) console.warn(`${name} unavailable: ${result.error.message}`);
+    else if (result.skipped) console.log(`${name} not used: ${result.skipped}.`);
+  }
+
+  const payload = preferReviews(profile.payload, places.payload);
+  if (!payload) {
+    if (profile.error || places.error) throw new Error('Neither source returned reviews. The review file was left as it is.');
+    console.log('skipped: no Google review credentials are set (see docs/GOOGLE_REVIEWS.md). The review file was left as it is.');
     return;
   }
 
-  const token = await accessToken({ clientId, clientSecret, refreshToken });
-  const location = await resolveLocation(token, process.env.GBP_LOCATION?.trim());
-  const fetched = await fetchReviews(token, location);
-  const payload = buildReviewsPayload(fetched, new Date().toISOString());
-
-  console.log(`${location}: fetched ${fetched.reviews.length} reviews; ${payload.reviews.length} with written text will be shown; Google rating ${payload.averageRating ?? '—'} from ${payload.totalReviewCount ?? '—'} reviews.`);
+  console.log(`Saving ${count(payload.reviews.length, 'review')} from ${payload.source}.`);
   if (process.argv.includes('--dry-run')) return;
 
   if (!shouldWriteReviews(await readExisting(), payload)) {
