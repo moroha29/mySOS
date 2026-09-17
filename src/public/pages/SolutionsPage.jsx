@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
-import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, cmsAll, configPath, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
+import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, heading, label, Photo, ProductCard, SectionHeading, SolutionCard } from '../components/Ui';
+import { Button, enquiryProps, heading, label, Photo, ProductCard, quoteDestinationPaths, SectionHeading, SolutionCard } from '../components/Ui';
 
 export default function SolutionsPage() {
   const industryId = new URLSearchParams(globalThis.location?.search ?? '').get('industry');
@@ -72,7 +71,7 @@ export default function SolutionsPage() {
         <span className="eyebrow" data-cms-path={cms(pagePath('solutions', 'promoEyebrow'))}>{pageText('solutions', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('solutions', 'promoTitle'))}>{pageText('solutions', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('solutions', 'promoDescription'))}>{pageText('solutions', 'promoDescription')}</p>
-        <Button href={siteConfig.quotationPath} data-cms-paths={cmsAll(configPath('quotationPath'))}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.solutionsPromoImage, 'scenes/solutions-promo')} imagePath={scenePath('solutionsPromoImage')} /></div>
     </section>
