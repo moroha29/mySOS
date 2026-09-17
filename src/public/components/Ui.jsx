@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import googleReviews from '../../data/googleReviews.json';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
-import { formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
+import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { enquiryLinkProps, getDisplayPrice, getEnquiryHref } from '../../utils/catalogue';
 import { firstImage, getImage } from '../../utils/imageRegistry';
@@ -207,8 +207,8 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
       <Icon name="google" size={26} />
       {data?.averageRating
         ? <>
-          <span className="rating-value">{data.averageRating}</span>
-          <span className="stars" aria-label={`${data.averageRating} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
+          <span className="rating-value">{formatRating(data.averageRating)}</span>
+          <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
           {data.totalReviewCount ? <small>
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
             {' '}{data.totalReviewCount}{' '}

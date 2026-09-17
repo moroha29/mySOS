@@ -5,7 +5,7 @@ import { cms, headingPath, heroBackground, pagePath, pageText, picture, scenePat
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { heading, PageCTA, Photo, useGoogleReviews } from '../components/Ui';
-import { formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
+import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
 
 // One large project and four smaller ones per page, as in the design.
 const PAGE_SIZE = 5;
@@ -88,7 +88,7 @@ function StoryReviews() {
       <h2 id="stories-reviews-title" data-cms-path={cms(headingPath('reviewsHeading'))}>{heading('reviewsHeading', 'What our clients say')}</h2>
       {data?.averageRating
         ? <p className="stories-reviews-rating">
-          <span className="stories-reviews-score">{data.averageRating}</span>
+          <span className="stories-reviews-score">{formatRating(data.averageRating)}</span>
           <Icon name="star" size={36} className="stories-reviews-star" />
           <span className="stories-reviews-google">
             <Icon name="google" size={30} />
