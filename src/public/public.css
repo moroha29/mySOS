@@ -1049,7 +1049,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .request-field { display: grid; gap: 6px; align-content: start; }
 .request-field-label { font-size: 15px; font-weight: 600; color: var(--ink); }
 .request-choices { display: flex; flex-wrap: wrap; gap: 8px; }
-.request-choices button { min-width: 70px; display: grid; justify-items: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 15px; color: var(--ink); cursor: pointer; }
+.request-choices button { flex: 1 1 auto; min-width: 0; display: grid; justify-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 15px; color: var(--ink); cursor: pointer; }
 .request-choices button small { font-size: 12px; opacity: .85; }
 .request-choices button.is-chosen { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
 .request-field select, .request-field input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 15px; }

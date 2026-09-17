@@ -46,11 +46,24 @@ function heroPictures(solution) {
   }).map((src, index) => ({ src, index }));
 }
 
-function useCasePicture(solution, useCase) {
-  const product = useCase.items.map((item) => productFor(item.productId)).find(Boolean);
-  return picture(useCase.image, `solutions/${solution.id}/${useCase.id}`)
-    || (product && firstImage(`products/${product.public.slug}`))
-    || firstImage(`solutions/${solution.id}`);
+/*
+ * Each card's picture: the one chosen for it, else a photo of one of its
+ * products that no earlier card is already showing, else the solution's own.
+ */
+function useCasePictures(solution) {
+  const used = new Set();
+  return solution.useCases.map((useCase) => {
+    const chosen = picture(useCase.image, `solutions/${solution.id}/${useCase.id}`);
+    if (chosen) { used.add(chosen); return chosen; }
+    const photos = useCase.items
+      .map((item) => productFor(item.productId))
+      .filter(Boolean)
+      .map((product) => firstImage(`products/${product.public.slug}`))
+      .filter(Boolean);
+    const photo = photos.find((src) => !used.has(src)) ?? photos[0] ?? firstImage(`solutions/${solution.id}`);
+    if (photo) used.add(photo);
+    return photo;
+  });
 }
 
 function Hero({ solution, solutionIndex }) {
@@ -107,6 +120,7 @@ function UseCasePicker({ solution, activeId, onChoose }) {
     };
   }, [showAll]);
 
+  const pictures = useMemo(() => useCasePictures(solution), [solution]);
   const move = (direction) => trackRef.current?.scrollBy({ left: direction * trackRef.current.clientWidth * 0.8, behavior: 'smooth' });
   const toPage = (page) => trackRef.current?.scrollTo({ left: page * trackRef.current.clientWidth, behavior: 'smooth' });
 
@@ -124,7 +138,7 @@ function UseCasePicker({ solution, activeId, onChoose }) {
           const active = useCase.id === activeId;
           return <li key={useCase.id}>
             <button type="button" className={active ? 'use-case-card is-active' : 'use-case-card'} aria-pressed={active} onClick={() => onChoose(useCase.id)}>
-              <span className="use-case-photo"><Photo style={solution.imageStyle} image={useCasePicture(solution, useCase)} imagePath={[...solutionPath(solution, 'useCases', index), 'image']} /></span>
+              <span className="use-case-photo"><Photo style={solution.imageStyle} image={pictures[index]} imagePath={[...solutionPath(solution, 'useCases', index), 'image']} /></span>
               {active && <span className="use-case-selected"><Icon name="check" size={14} /><span data-cms-path={wordPath('selectedLabel')}>{word('selectedLabel', 'Selected')}</span></span>}
               <span className="use-case-name">
                 <Icon name={useCase.icon} size={30} />
@@ -148,11 +162,12 @@ function UseCasePicker({ solution, activeId, onChoose }) {
   </section>;
 }
 
-function Stepper({ value, onChange, label }) {
+// `onStep` adds to the latest quantity, so quick clicks each count.
+function Stepper({ value, onSet, onStep, label }) {
   return <span className="qty-stepper">
-    <button type="button" aria-label={`Fewer ${label}`} onClick={() => onChange(value - 1)} disabled={value <= 1}><Icon name="minus" size={16} /></button>
-    <input type="number" inputMode="numeric" min="1" value={value} aria-label={`Quantity of ${label}`} onChange={(event) => onChange(event.target.value)} />
-    <button type="button" aria-label={`More ${label}`} onClick={() => onChange(value + 1)}><Icon name="plus" size={16} /></button>
+    <button type="button" aria-label={`Fewer ${label}`} onClick={() => onStep(-1)} disabled={value <= 1}><Icon name="minus" size={16} /></button>
+    <input type="number" inputMode="numeric" min="1" value={value} aria-label={`Quantity of ${label}`} onChange={(event) => onSet(event.target.value)} />
+    <button type="button" aria-label={`More ${label}`} onClick={() => onStep(1)}><Icon name="plus" size={16} /></button>
   </span>;
 }
 
@@ -228,7 +243,12 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
         {line.note && <small className={/^Printing:/i.test(line.note) ? 'request-note is-highlight' : 'request-note'}>{line.note}</small>}
         {line.files.length > 0 && <small className="request-files">{line.files.join(', ')}</small>}
       </span>
-      <Stepper value={line.quantity} label={line.name} onChange={(value) => onChange({ quantity: clampQuantity(value) })} />
+      <Stepper
+        value={line.quantity}
+        label={line.name}
+        onSet={(value) => onChange({ quantity: clampQuantity(value) })}
+        onStep={(by) => onChange((current) => ({ quantity: clampQuantity(current.quantity + by) }))}
+      />
       <span className="request-row-actions">
         <button type="button" className="request-details-toggle" aria-expanded={open} aria-controls={`request-details-${index}`} onClick={onToggle}>
           <span data-cms-path={wordPath(open ? 'hideDetailsButton' : 'addDetailsButton')}>{open ? word('hideDetailsButton', 'Hide Details') : word('addDetailsButton', 'Add Details')}</span>
@@ -259,7 +279,10 @@ function RequestBuilder({ solution, useCase }) {
     setSent(null);
   }, [useCase]);
 
-  const update = (key, change) => setLines((current) => current.map((line) => (line.key === key ? { ...line, ...change } : line)));
+  // `change` is the fields to set, or a function of the row as it is now.
+  const update = (key, change) => setLines((current) => current.map((line) => (
+    line.key === key ? { ...line, ...(typeof change === 'function' ? change(line) : change) } : line
+  )));
   const toggle = (line) => {
     if (openKey === line.key) { setOpenKey(null); return; }
     // Opening a product's details selects its recommended choices, as the design shows.

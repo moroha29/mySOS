@@ -72,18 +72,32 @@ stays unlinked from the public site. Tests enforce this
       (`siteContent.pages.solutionPage`). Seeded by a one-off script; Churches
       wording is the design's, the other five follow its pattern. Every
       product id is checked against the catalogue.
-- [ ] Route `/solutions/<id>/` + prerender + old `?industry=` links
-- [ ] Hero (breadcrumb, eyebrow, title, lead, WhatsApp button, collage)
-- [ ] Use-case carousel (selected state, arrows, dots)
-- [ ] Request builder: rows, steppers, apply-to-all, remove, details panels,
-      add-more, custom product, files
-- [ ] Summary panel: list, needed-by, notes, Send via WhatsApp (+ file sharing)
-- [ ] Overview `/solutions/` cards link to the new pages
-- [ ] Responsive (phone: summary below the builder), reduced motion, keyboard
-- [ ] Tests: routes, no prices, no engine links, message content, editability
-- [ ] Manager: `npm test` against this content; labels for new fields
-- [ ] Visual check against the mockup at 1440 and 390
+- [x] Route `/solutions/<id>/` + prerender (20 routes now) + old `?industry=`
+      links forward to the new pages
+- [x] Hero (breadcrumb, eyebrow, title, lead, WhatsApp button, collage).
+      Collage falls back to the solution photo, its stories' covers, then its
+      products' photos until banner pictures are chosen in the manager.
+- [x] Use-case carousel (selected state, arrows, dots, "View all" expands to a
+      grid). Card photos avoid repeating one another.
+- [x] Request builder: rows, steppers (quick clicks add up), apply-to-all,
+      remove, details panels (recommended choices preselected), add-more,
+      custom product, files
+- [x] Summary panel: list with chosen details, needed-by, notes, Send via
+      WhatsApp (+ file sharing where the device supports it)
+- [x] Overview `/solutions/`, header, footer and home link to the new pages
+- [x] Responsive (phone: summary below the builder, no sideways scroll),
+      reduced motion, keyboard (all controls are buttons/inputs with labels)
+- [x] Tests: `tests/solutionPages.test.jsx` — routes, content integrity, no
+      prices, no engine links, message content, editability, file honesty
+- [x] Manager: `npm test` passes against this content
+- [ ] Manager: friendly labels for the new fields (and, later, a product
+      picker instead of typing catalogue ids)
+- [x] Visual check at 1440 and 390 (headless Chrome, real clicks)
 - [ ] Owner review on localhost → PR → deploy
+
+### Ideas not yet done
+- A sticky "Send request" bar on phones, since the summary sits at the bottom.
+- "Discuss on WhatsApp" in the site header, as in the mockup (site-wide change).
 
 ## Log
 
@@ -93,6 +107,13 @@ stays unlinked from the public site. Tests enforce this
   custom line (no catalogue product). Subcategories without their own detail
   fields (gift sets, mats, medals, name tents, notebooks, pens, stickers,
   towels) use `requestOptions.default` (colour only) plus notes and upload.
+- 2026-09-18 — Page, builder, summary, styles and tests in (commit on this
+  branch). Flow checked in headless Chrome with real clicks: details panel
+  preselects 20mm / Double-sided for the lanyard; apply-to-all, add bottle,
+  add custom product, remove cap, needed-by and notes all end up in the
+  WhatsApp message. Fixed on the way: quick "+" clicks losing a step, each
+  item's recommendation missing from the message, 30 February being accepted
+  as a date, repeated card photos, lanyard width choices wrapping.
 
 ## How to resume
 

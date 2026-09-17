@@ -66,8 +66,11 @@ export function recommendedDetails(fields) {
 const neededByFormat = new Intl.DateTimeFormat('en-SG', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 
 export function formatNeededBy(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value))) return '';
   const time = Date.parse(`${value}T00:00:00Z`);
-  return /^\d{4}-\d{2}-\d{2}$/.test(String(value)) && Number.isFinite(time) ? neededByFormat.format(time) : '';
+  // JavaScript rolls 30 February into March; only a real calendar date counts.
+  if (!Number.isFinite(time) || new Date(time).toISOString().slice(0, 10) !== value) return '';
+  return neededByFormat.format(time);
 }
 
 /*
@@ -85,7 +88,9 @@ export function buildRequestMessage({ solutionName = '', useCaseName = '', lines
     const chosen = Object.entries(line.details ?? {})
       .filter(([, value]) => String(value ?? '').trim())
       .map(([id, value]) => `${labels[id] ?? id}: ${String(value).trim()}`);
+    // What MySOS recommended for the row, unless the customer chose details instead.
     if (chosen.length) out.push(`   ${chosen.join(' · ')}`);
+    else if (String(line.note ?? '').trim()) out.push(`   ${line.note.trim()}`);
     if (String(line.detailNotes ?? '').trim()) out.push(`   Notes: ${line.detailNotes.trim()}`);
     if (line.files?.length) out.push(`   Reference: ${line.files.join(', ')}`);
   });

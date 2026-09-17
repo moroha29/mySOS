@@ -5,6 +5,7 @@ import PublicApp from '../src/public/PublicApp';
 import QuotationApp from '../src/App';
 import siteConfig from '../src/data/siteConfig.json';
 import successStories from '../src/data/successStories.json';
+import solutions from '../src/data/solutions.json';
 
 const originalLocation = globalThis.location;
 
@@ -78,6 +79,7 @@ describe('the quotation engine is not reachable from the public site', () => {
   const pages = [
     '/mySOS/', '/mySOS/products/', '/mySOS/solutions/', '/mySOS/why-mysos/', '/mySOS/success-stories/',
     ...successStories.map((story) => `/mySOS/success-stories/${story.slug}/`),
+    ...solutions.map((solution) => `/mySOS/solutions/${solution.id}/`),
   ];
 
   it.each(pages)('%s has no link to it, whatever the category', (pathname) => {
