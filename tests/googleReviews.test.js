@@ -240,11 +240,25 @@ describe('the daily refresh', () => {
   it('with only an API key, finds MySOS’s own listing and reads its reviews', () => {
     const result = stubbed({ STUB_PLACES: 'own' });
     expect(result.status, result.stderr).toBe(0);
-    expect(result.stdout).toContain('STUB search My Source of Solutions Singapore');
+    expect(result.stdout).toContain('STUB search mysourceofsolutions (with service-area businesses)');
     // The look-alike listed first is passed over for the one with MySOS's cid.
     expect(result.stdout).toContain('Place id ChIJ-mysos — save it as the GOOGLE_PLACE_ID variable');
     expect(result.stdout).toContain('STUB details ChIJ-mysos');
     expect(result.stdout).toContain('Saving 1 review from google-places.');
+  });
+
+  it('includes businesses that hide their address, which search leaves out by default', () => {
+    const result = stubbed({ STUB_PLACES: 'sab' });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('Place id ChIJ-mysos');
+  });
+
+  it('tries the other names the listing might be under', () => {
+    const result = stubbed({ STUB_PLACES: 'later' });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('STUB search mysourceofsolutions');
+    expect(result.stdout).toContain('Found the listing (searching "My Source of Solutions Singapore")');
+    expect(result.stdout).toContain('STUB details ChIJ-mysos');
   });
 
   it('never reads reviews from a listing that is not MySOS’s', () => {
