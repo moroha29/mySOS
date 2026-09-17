@@ -223,12 +223,43 @@ describe('the daily refresh', () => {
     expect(readFileSync(DATA_FILE, 'utf8')).toBe(before);
   });
 
-  it('says which source it skipped, and needs both halves of the Places key', () => {
-    // A key without the place id cannot call anything, so nothing is fetched.
-    const result = run('scripts/fetch-google-reviews.mjs', { GOOGLE_PLACES_API_KEY: 'key', GOOGLE_PLACE_ID: '' });
+  it('says which source it skipped', () => {
+    const result = run('scripts/fetch-google-reviews.mjs', { GOOGLE_PLACES_API_KEY: '', GOOGLE_PLACE_ID: '' });
     expect(result.status, result.stderr).toBe(0);
     expect(result.stdout).toContain('Business Profile not used: no Business Profile secrets');
-    expect(result.stdout).toContain('Places not used: no Places key or place id');
+    expect(result.stdout).toContain('Places not used: no Places key');
+  });
+
+  // The key alone is enough: the script finds MySOS's own listing by search.
+  const stubbed = (env) => spawnSync(process.execPath, ['--import', './tests/fixtures/stubGooglePlaces.mjs', 'scripts/fetch-google-reviews.mjs', '--dry-run'], {
+    cwd: new URL('..', import.meta.url),
+    encoding: 'utf8',
+    env: { ...process.env, GOOGLE_CLIENT_ID: '', GOOGLE_CLIENT_SECRET: '', GOOGLE_REFRESH_TOKEN: '', GOOGLE_PLACE_ID: '', GOOGLE_PLACES_API_KEY: 'test-key', ...env },
+  });
+
+  it('with only an API key, finds MySOS’s own listing and reads its reviews', () => {
+    const result = stubbed({ STUB_PLACES: 'own' });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).toContain('STUB search My Source of Solutions Singapore');
+    // The look-alike listed first is passed over for the one with MySOS's cid.
+    expect(result.stdout).toContain('Place id ChIJ-mysos — save it as the GOOGLE_PLACE_ID variable');
+    expect(result.stdout).toContain('STUB details ChIJ-mysos');
+    expect(result.stdout).toContain('Saving 1 review from google-places.');
+  });
+
+  it('never reads reviews from a listing that is not MySOS’s', () => {
+    const result = stubbed({ STUB_PLACES: 'lookalike' });
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Could not find MySOS's own Google listing");
+    expect(result.stderr).toContain('Source Solutions Pte Ltd');
+    expect(result.stdout).not.toContain('STUB details');
+  });
+
+  it('a saved place id skips the search', () => {
+    const result = stubbed({ STUB_PLACES: 'own', GOOGLE_PLACE_ID: 'ChIJ-saved' });
+    expect(result.status, result.stderr).toBe(0);
+    expect(result.stdout).not.toContain('STUB search');
+    expect(result.stdout).toContain('STUB details ChIJ-saved');
   });
 
   it('the owner sign-in script explains what it needs before starting', () => {
@@ -250,5 +281,16 @@ describe('the daily refresh', () => {
     // deploy has to be dispatched explicitly, which needs actions: write.
     expect(workflow).toContain('gh workflow run deploy.yml');
     expect(workflow).toMatch(/actions: write/);
+  });
+});
+
+describe("finding MySOS's own listing", () => {
+  it("matches on the listing's Maps number, not its name", async () => {
+    const { findOwnListing, GOOGLE_LISTING_CID } = await import('../src/utils/googleReviews');
+    expect(GOOGLE_REVIEWS_URL).toContain(`ludocid=${GOOGLE_LISTING_CID}`);
+    const own = { id: 'a', displayName: { text: 'Anything' }, googleMapsUri: `https://maps.google.com/?cid=${GOOGLE_LISTING_CID}` };
+    expect(findOwnListing([{ id: 'b', displayName: { text: 'My Source of Solutions' }, googleMapsUri: 'https://maps.google.com/?cid=1' }, own])).toBe(own);
+    expect(findOwnListing([{ id: 'c', googleMapsUri: 'not a url' }, {}])).toBe(null);
+    expect(findOwnListing()).toBe(null);
   });
 });

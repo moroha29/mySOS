@@ -18,7 +18,9 @@
  *
  *   Places fallback (five reviews, an API key is all it takes)
  *     GOOGLE_PLACES_API_KEY  key with the Places API (New) enabled
- *     GOOGLE_PLACE_ID        the listing's place id, "ChIJ…"
+ *     GOOGLE_PLACE_ID        optional: the listing's place id, "ChIJ…". Without
+ *                            it the script finds MySOS's own listing by search
+ *                            and prints the id to save.
  *
  *   --dry-run              fetch and report, but do not write the file
  *
@@ -28,7 +30,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPlacesPayload, buildReviewsPayload, GOOGLE_REVIEWS_NOTE, hasGoogleReviews, preferReviews, shouldWriteReviews } from '../src/utils/googleReviews.js';
+import { buildPlacesPayload, buildReviewsPayload, findOwnListing, GOOGLE_LISTING_CID, GOOGLE_LISTING_SEARCH, GOOGLE_REVIEWS_NOTE, hasGoogleReviews, preferReviews, shouldWriteReviews } from '../src/utils/googleReviews.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const count = (number, noun) => `${number} ${noun}${number === 1 ? '' : 's'}`;
@@ -161,11 +163,39 @@ async function tryBusinessProfile(now) {
   }
 }
 
+/*
+ * Finds MySOS's place id from the API key alone: a text search for the
+ * business, keeping only the result whose Maps link is MySOS's own listing.
+ * Saving the id as GOOGLE_PLACE_ID skips this call.
+ */
+async function lookUpPlaceId(key) {
+  const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': key,
+      'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.googleMapsUri',
+    },
+    body: JSON.stringify({ textQuery: process.env.GOOGLE_PLACE_SEARCH?.trim() || GOOGLE_LISTING_SEARCH, regionCode: 'SG' }),
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(`Places API refused the search: ${body?.error?.message || `HTTP ${response.status}`}. Check that the key has the Places API (New) enabled and billing is on — see docs/GOOGLE_REVIEWS.md.`);
+  }
+  const own = findOwnListing(body.places);
+  if (!own) {
+    const seen = (body.places ?? []).map((place) => `  ${place.displayName?.text} — ${place.formattedAddress} (${place.id})`).join('\n') || '  (no results)';
+    throw new Error(`Could not find MySOS's own Google listing (cid ${GOOGLE_LISTING_CID}) in the search results. It may not be public on Google Maps yet. Results were:\n${seen}\nIf one of these is MySOS, save its id as the GOOGLE_PLACE_ID variable.`);
+  }
+  console.log(`Found the listing: ${own.displayName?.text}, ${own.formattedAddress}. Place id ${own.id} — save it as the GOOGLE_PLACE_ID variable to skip this lookup.`);
+  return own.id;
+}
+
 async function tryPlaces(now) {
   const key = process.env.GOOGLE_PLACES_API_KEY?.trim();
-  const placeId = process.env.GOOGLE_PLACE_ID?.trim();
-  if (!key || !placeId) return { skipped: 'no Places key or place id' };
+  if (!key) return { skipped: 'no Places key' };
   try {
+    const placeId = process.env.GOOGLE_PLACE_ID?.trim() || await lookUpPlaceId(key);
     const place = await fetchPlace(key, placeId);
     const payload = buildPlacesPayload(place, now);
     console.log(`Places ${place.displayName?.text ?? placeId}: ${count(place.reviews?.length ?? 0, 'review')}, ${payload.reviews.length} with written text; rating ${payload.averageRating ?? '—'} from ${payload.totalReviewCount ?? '—'}.`);
