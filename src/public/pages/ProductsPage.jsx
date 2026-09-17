@@ -145,7 +145,8 @@ export default function ProductsPage() {
           aria-current={item.id === category ? 'page' : undefined}
         >
           <Icon name={item.icon} size={26} />
-          <span className="browse-label"><span data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</span><Icon name="chevronDown" size={12} /></span>
+          {/* A plain link to the category, so no dropdown arrow. */}
+          <span className="browse-label"><span data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</span></span>
         </a>)}
       </div>
     </section>
