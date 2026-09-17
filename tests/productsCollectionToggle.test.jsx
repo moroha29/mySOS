@@ -45,3 +45,23 @@ describe('the product collection View All / Show Less toggle', () => {
     expect(siteContent.pages.products.showLessLabel).toBe('Show Less');
   });
 });
+
+describe('category tabs', () => {
+  it('are plain links, with no dropdown arrow beside the name', async () => {
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    const { default: ProductsPage } = await import('../src/public/pages/ProductsPage');
+    const React = (await import('react')).default;
+    const saved = globalThis.location;
+    globalThis.location = { pathname: '/mySOS/products/', search: '' };
+    try {
+      const html = renderToStaticMarkup(React.createElement(ProductsPage));
+      const row = html.match(/<div class="browse-row">.*?<\/div>/s)?.[0] ?? '';
+      expect(row).toContain('class="browse-label"');
+      // The chevron glyph's path, which the tabs used to carry.
+      expect(row).not.toContain('m6.5 9.5 5.5 5.5 5.5-5.5');
+    } finally {
+      if (saved === undefined) delete globalThis.location;
+      else globalThis.location = saved;
+    }
+  });
+});
