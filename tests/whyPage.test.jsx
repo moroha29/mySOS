@@ -197,7 +197,7 @@ describe('scrolling, small screens and motion', () => {
   });
 
   it('keeps still for readers who ask for less motion', () => {
-    const reduced = css.slice(css.lastIndexOf('@media (prefers-reduced-motion: reduce) {'));
+    const reduced = css.slice(css.indexOf('@media (prefers-reduced-motion: reduce) {', css.indexOf('Why MySOS')));
     expect(reduced).toMatch(/\.reason-card, [^}]*\.journey-card[^}]*\{ transition: none; \}/);
     expect(reduced).toMatch(/\.scroll-hint \.icon:last-child \{ animation: none; \}/);
   });

@@ -120,7 +120,7 @@ export function StoryCard({ story, showBadge = true }) {
 }
 
 export function SolutionCard({ solution, active = false }) {
-  const href = `/mySOS/solutions/?industry=${solution.id}`;
+  const href = `/mySOS/solutions/${solution.id}/`;
   return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()}>
     <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} image={picture(solution.image, `solutions/${solution.id}`)} imagePath={solutionPath(solution, 'image')} /></a>
     <div>

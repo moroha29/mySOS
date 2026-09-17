@@ -5,6 +5,8 @@ import SolutionsPage from './pages/SolutionsPage';
 import WhyPage from './pages/WhyPage';
 import StoriesPage from './pages/StoriesPage';
 import StoryDetailPage from './pages/StoryDetailPage';
+import SolutionDetailPage from './pages/SolutionDetailPage';
+import solutions from '../data/solutions.json';
 
 export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/mySOS/') {
   const normalized = pathname.replace(/^\/mySOS\/?/, '/').replace(/\/+$/, '') || '/';
@@ -13,6 +15,8 @@ export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '
   if (normalized === '/solutions') return { page: 'solutions' };
   if (normalized === '/why-mysos') return { page: 'why' };
   if (normalized === '/success-stories') return { page: 'stories' };
+  const solutionMatch = normalized.match(/^\/solutions\/([^/]+)$/);
+  if (solutionMatch && solutions.some((item) => item.id === solutionMatch[1])) return { page: 'solution', id: solutionMatch[1] };
   const storyMatch = normalized.match(/^\/success-stories\/([^/]+)$/);
   if (storyMatch) return { page: 'story', slug: storyMatch[1] };
   return { page: 'not-found' };
@@ -30,6 +34,7 @@ export default function PublicApp() {
         : route.page === 'why' ? <WhyPage />
           : route.page === 'stories' ? <StoriesPage />
             : route.page === 'story' ? <StoryDetailPage slug={route.slug} />
+            : route.page === 'solution' ? <SolutionDetailPage solutionId={route.id} />
               : <NotFound />;
   return <SiteShell>{content}</SiteShell>;
 }
