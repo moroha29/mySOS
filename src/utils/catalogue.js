@@ -28,16 +28,23 @@ export function getDisplayPrice(product) {
  * are never sent there, and the public site does not carry its address.
  */
 export function getEnquiryHref(productId) {
-  const { whatsapp = {}, email } = siteConfig;
+  const { whatsapp = {} } = siteConfig;
   const product = productId ? productData.catalogue.find((item) => item.id === productId) : null;
   const name = product?.public?.name;
-  if (whatsapp.enabled && whatsapp.number) {
-    const message = name
-      ? String(whatsapp.productQuoteMessage || 'Hi MySOS, I would like to get a quote for {product}.').replace('{product}', name)
-      : whatsapp.quoteMessage || whatsapp.defaultMessage || '';
-    return `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`;
-  }
-  if (email) return `mailto:${email}?subject=${encodeURIComponent(name ? `Quote request: ${name}` : 'Quote request')}`;
+  const message = name
+    ? String(whatsapp.productQuoteMessage || 'Hi MySOS, I would like to get a quote for {product}.').replace('{product}', name)
+    : whatsapp.quoteMessage || whatsapp.defaultMessage || '';
+  return messageHref(message, name ? `Quote request: ${name}` : 'Quote request');
+}
+
+/**
+ * A chat with MySOS that opens with `message`: WhatsApp when it is switched on,
+ * otherwise an email with `subject`. Null when neither is set up.
+ */
+export function messageHref(message, subject = 'Enquiry') {
+  const { whatsapp = {}, email } = siteConfig;
+  if (whatsapp.enabled && whatsapp.number) return `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`;
+  if (email) return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
   return null;
 }
 

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath } from '../cms';
@@ -14,6 +14,10 @@ export default function SolutionsPage() {
     () => selected?.recommendedProducts.map(getPublicProduct).filter(Boolean) ?? [],
     [selected],
   );
+  // Each solution has its own page now; links in the old ?industry= form go there.
+  useEffect(() => {
+    if (selected) globalThis.location?.replace?.(`/mySOS/solutions/${selected.id}/`);
+  }, [selected]);
 
   return <main>
     <section {...heroBackground(siteContent.scenes?.solutionsHeroBackgroundImage, scenePath('solutionsHeroBackgroundImage'), 'hero hero-compact')}>
@@ -35,7 +39,7 @@ export default function SolutionsPage() {
         {solutions.map((solution) => <a
           key={solution.id}
           className={selected?.id === solution.id ? 'is-active' : ''}
-          href={`/mySOS/solutions/?industry=${solution.id}`}
+          href={`/mySOS/solutions/${solution.id}/`}
           aria-current={selected?.id === solution.id ? 'page' : undefined}
         >
           <Icon name={solution.imageStyle} size={26} />

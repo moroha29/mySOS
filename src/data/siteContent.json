@@ -641,6 +641,45 @@
         "Quality production & strict QC",
         "On-time delivery"
       ]
+    },
+    "solutionPage": {
+      "breadcrumbHome": "Home",
+      "breadcrumbSolutions": "Solutions",
+      "discussButton": "Discuss on WhatsApp",
+      "exploreLead": "Discover solutions for different needs. Click the cards to explore each area.",
+      "selectedLabel": "Selected",
+      "viewAllLabel": "View all solutions",
+      "packageTitle": "Your Recommended Team Package",
+      "packageLead": "Start with our recommendation, then adjust the items and quantities to suit your team.",
+      "includedTitle": "Included Products",
+      "sameQuantityLabel": "Same quantity for every item?",
+      "applyAllButton": "Apply to All",
+      "applyAllHint": "You can still adjust each item individually.",
+      "addDetailsButton": "Add Details",
+      "hideDetailsButton": "Hide Details",
+      "uploadReferenceLabel": "Upload Reference",
+      "uploadArtworkButton": "Add artwork",
+      "notesLabel": "Notes (Optional)",
+      "notesPlaceholder": "Any other requirements?",
+      "skipDetailsHint": "Skip this section and we'll confirm the details with you on WhatsApp.",
+      "addMoreTitle": "Add More Products",
+      "customTitle": "Looking for something else?",
+      "customLead": "Describe any product you need and we'll help source it.",
+      "customPlaceholder": "e.g. Custom umbrella, towel or welcome gift",
+      "customButton": "Add Custom Product",
+      "filesTitle": "General Event Files",
+      "filesLead": "Upload logos or artwork that apply to the whole request.",
+      "filesDropLabel": "Drag and drop files here or Browse Files",
+      "filesHint": "PNG, JPG or PDF · up to 10MB each",
+      "summaryTitle": "Your Request",
+      "summaryCountLabel": "{count} products selected",
+      "neededByLabel": "Needed By",
+      "additionalNotesLabel": "Additional Notes",
+      "additionalNotesPlaceholder": "Colours, printing or other requirements",
+      "sendButton": "Send Request via WhatsApp",
+      "sendHint": "We'll open WhatsApp with your selected products, quantities and notes already included.",
+      "sendFilesHint": "WhatsApp links cannot carry files: after the chat opens, attach {files} there.",
+      "emptyRequest": "Add at least one product to send a request."
     }
   },
   "apparelTabs": [
@@ -722,5 +761,457 @@
       "title": "Support Beyond Delivery",
       "description": "We remain available for replacements, follow-ups and your next project."
     }
-  ]
+  ],
+  "requestOptions": {
+    "tshirts": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Let MySOS recommend",
+          "Silkscreen",
+          "DTF",
+          "Embroidery"
+        ],
+        "recommended": "Let MySOS recommend"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Back",
+          "Front & back",
+          "Sleeve"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 10 S, 20 M, 20 L"
+      }
+    ],
+    "polos": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Let MySOS recommend",
+          "Silkscreen",
+          "DTF",
+          "Embroidery"
+        ],
+        "recommended": "Let MySOS recommend"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Back",
+          "Front & back",
+          "Sleeve"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 10 S, 20 M, 20 L"
+      }
+    ],
+    "singlets": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Let MySOS recommend",
+          "Silkscreen",
+          "DTF",
+          "Embroidery"
+        ],
+        "recommended": "Let MySOS recommend"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Back",
+          "Front & back",
+          "Sleeve"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 10 S, 20 M, 20 L"
+      }
+    ],
+    "hoodies": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Let MySOS recommend",
+          "Silkscreen",
+          "DTF",
+          "Embroidery"
+        ],
+        "recommended": "Let MySOS recommend"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Back",
+          "Front & back",
+          "Sleeve"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 10 S, 20 M, 20 L"
+      }
+    ],
+    "jackets": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Let MySOS recommend",
+          "Silkscreen",
+          "DTF",
+          "Embroidery"
+        ],
+        "recommended": "Let MySOS recommend"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Back",
+          "Front & back",
+          "Sleeve"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 10 S, 20 M, 20 L"
+      }
+    ],
+    "jerseys": [
+      {
+        "id": "names",
+        "label": "Names and numbers",
+        "type": "choice",
+        "options": [
+          "Yes",
+          "No"
+        ],
+        "recommended": "Yes"
+      },
+      {
+        "id": "colour",
+        "label": "Main colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      },
+      {
+        "id": "sizes",
+        "label": "Sizes",
+        "type": "text",
+        "placeholder": "e.g. 5 S, 10 M, 5 L"
+      }
+    ],
+    "caps": [
+      {
+        "id": "decoration",
+        "label": "Decoration",
+        "type": "choice",
+        "options": [
+          "Embroidery",
+          "Print",
+          "Patch"
+        ],
+        "recommended": "Embroidery"
+      },
+      {
+        "id": "placement",
+        "label": "Placement",
+        "type": "choice",
+        "options": [
+          "Front",
+          "Side",
+          "Back"
+        ],
+        "recommended": "Front"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "lanyards": [
+      {
+        "id": "width",
+        "label": "Width",
+        "type": "choice",
+        "options": [
+          "15mm",
+          "20mm",
+          "25mm"
+        ],
+        "recommended": "20mm"
+      },
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "Single-sided",
+          "Double-sided"
+        ],
+        "recommended": "Double-sided"
+      },
+      {
+        "id": "attachment",
+        "label": "Attachment",
+        "type": "select",
+        "options": [
+          "Safety buckle",
+          "Metal hook",
+          "Lobster clip",
+          "Badge reel"
+        ]
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "totes": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "One side",
+          "Both sides"
+        ],
+        "recommended": "One side"
+      },
+      {
+        "id": "colour",
+        "label": "Bag colour",
+        "type": "select",
+        "options": [
+          "Natural",
+          "Black",
+          "Navy",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "drawstring": [
+      {
+        "id": "printing",
+        "label": "Printing",
+        "type": "choice",
+        "options": [
+          "One side",
+          "Both sides"
+        ],
+        "recommended": "One side"
+      },
+      {
+        "id": "colour",
+        "label": "Bag colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "bottles": [
+      {
+        "id": "decoration",
+        "label": "Decoration",
+        "type": "choice",
+        "options": [
+          "Print",
+          "Laser engraving"
+        ],
+        "recommended": "Print"
+      },
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "default": [
+      {
+        "id": "colour",
+        "label": "Colour",
+        "type": "select",
+        "options": [
+          "Navy",
+          "Black",
+          "White",
+          "Grey",
+          "Red",
+          "Blue",
+          "Green",
+          "Other (tell us in the notes)"
+        ]
+      }
+    ]
+  }
 }

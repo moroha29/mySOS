@@ -29,10 +29,12 @@ const dist = path.join(root, 'dist');
 const BASE = '/mySOS';
 
 const stories = JSON.parse(await readFile(path.join(root, 'src/data/successStories.json'), 'utf8'));
+const solutions = JSON.parse(await readFile(path.join(root, 'src/data/solutions.json'), 'utf8'));
 const routes = [
   '/',
   '/products/',
   '/solutions/',
+  ...solutions.map((solution) => `/solutions/${solution.id}/`),
   '/why-mysos/',
   '/success-stories/',
   ...stories.map((story) => `/success-stories/${story.slug}/`),

@@ -107,7 +107,7 @@ export default function HomePage() {
           descriptionPath={headingPath('industryDescription')}
         />
         <div className="industry-nav">
-          {solutions.map((solution) => <a key={solution.id} href={`/mySOS/solutions/?industry=${solution.id}`}>
+          {solutions.map((solution) => <a key={solution.id} href={`/mySOS/solutions/${solution.id}/`}>
             <Icon name={solution.imageStyle} size={26} />
             <span data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
           </a>)}
