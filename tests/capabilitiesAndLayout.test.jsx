@@ -34,15 +34,14 @@ describe('page order: reviews sit directly under the banner', () => {
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 
-  it('why mysos: above the reasons, not at the foot of the page', () => {
+  it('why mysos: directly under the banner, above the reasons', () => {
     const markup = render(WhyPage, '/mySOS/why-mysos/');
-    const banner = markup.indexOf('Why MySOS');
+    const banner = markup.indexOf('class="hero hero-compact"');
     const reviews = markup.indexOf('class="section reviews"');
-    const reasons = markup.indexOf('class="why-list"');
-    const closingCta = markup.indexOf('class="page-cta');
+    const reasons = markup.indexOf('class="why-choose"');
+    expect(banner).toBeGreaterThan(-1);
     expect(reviews).toBeGreaterThan(banner);
     expect(reviews).toBeLessThan(reasons);
-    if (closingCta > -1) expect(reviews).toBeLessThan(closingCta);
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 

@@ -238,12 +238,14 @@
   "benefits": [
     {
       "title": "One Supplier",
-      "shortTitle": "One Supplier. Endless Possibilities.",
+      "shortTitle": "One Supplier, Endless Possibilities.",
       "icon": "supplier",
       "description": "Source multiple products through one point of contact.",
       "longDescription": "Source multiple products through one reliable partner.",
       "scene": "office",
-      "image": ""
+      "image": "",
+      "stackLabel": "One Supplier",
+      "cardIcon": "sample"
     },
     {
       "title": "Better Value",
@@ -252,7 +254,9 @@
       "description": "Quality recommendations without unnecessary premium pricing.",
       "longDescription": "We deliver quality that exceeds expectations without the hefty price tag.",
       "scene": "studio",
-      "image": ""
+      "image": "",
+      "stackLabel": "Premium Quality",
+      "cardIcon": "award"
     },
     {
       "title": "Flexible Quantities",
@@ -261,7 +265,9 @@
       "description": "From small projects to larger scale orders.",
       "longDescription": "Small or large, we cater to your needs.",
       "scene": "hall",
-      "image": ""
+      "image": "",
+      "stackLabel": "Flexible Quantities",
+      "cardIcon": "flexible"
     },
     {
       "title": "Expert Guidance",
@@ -270,7 +276,9 @@
       "description": "We'll recommend the best materials, methods and finishes.",
       "longDescription": "We guide you to the right products, materials and methods.",
       "scene": "outdoor",
-      "image": ""
+      "image": "",
+      "stackLabel": "Expert Recommendations",
+      "cardIcon": "expert"
     },
     {
       "title": "Built Around You",
@@ -279,39 +287,161 @@
       "description": "Solutions based on your requirements, timeline and budget.",
       "longDescription": "Solutions customised for your industry, goals and budget.",
       "scene": "field",
-      "image": ""
+      "image": "",
+      "stackLabel": "Tailored to Your Needs",
+      "cardIcon": "design"
     }
   ],
   "process": [
     {
       "title": "Enquire",
       "icon": "consult",
-      "description": "Tell us what you need."
+      "description": "Tell us what you need.",
+      "headline": "Tell Us What You Need",
+      "detail": "Share your idea, quantities, timeline and budget, and we take it from there.",
+      "image": "",
+      "points": [
+        {
+          "icon": "consult",
+          "label": "Brief",
+          "text": "Your idea and quantities."
+        },
+        {
+          "icon": "calendar",
+          "label": "Timeline",
+          "text": "When you need it by."
+        },
+        {
+          "icon": "tag",
+          "label": "Budget",
+          "text": "What you would like to spend."
+        }
+      ]
     },
     {
       "title": "Recommend",
       "icon": "expert",
-      "description": "We recommend the best solutions."
+      "description": "We recommend the best solutions.",
+      "headline": "Expert Recommendations",
+      "detail": "We suggest the right products, materials and printing methods for your goals.",
+      "image": "",
+      "points": [
+        {
+          "icon": "shirt",
+          "label": "Products",
+          "text": "Options that suit your use."
+        },
+        {
+          "icon": "layers",
+          "label": "Materials",
+          "text": "Fabrics and finishes."
+        },
+        {
+          "icon": "palette",
+          "label": "Methods",
+          "text": "The right print or embroidery."
+        }
+      ]
     },
     {
       "title": "Quote",
       "icon": "clipboard",
-      "description": "You receive a clear quotation."
+      "description": "You receive a clear quotation.",
+      "headline": "A Clear, Detailed Quote",
+      "detail": "We break down the product, customisation and delivery so you know exactly what you are paying for.",
+      "image": "",
+      "points": [
+        {
+          "icon": "sample",
+          "label": "Product",
+          "text": "Clear product specifications."
+        },
+        {
+          "icon": "tag",
+          "label": "Pricing",
+          "text": "A transparent quote."
+        },
+        {
+          "icon": "delivery",
+          "label": "Delivery",
+          "text": "Timelines and shipping options."
+        }
+      ]
     },
     {
       "title": "Sample",
       "icon": "sample",
-      "description": "We provide a sample for your approval."
+      "description": "We provide a sample for your approval.",
+      "headline": "Approve Your Sample",
+      "detail": "Check the quality, fit, materials and branding before full production.",
+      "image": "",
+      "points": [
+        {
+          "icon": "shirt",
+          "label": "Sample",
+          "text": "Check quality, fit and branding."
+        },
+        {
+          "icon": "search",
+          "label": "Adjust",
+          "text": "Request changes if needed."
+        },
+        {
+          "icon": "checkCircle",
+          "label": "Finalise",
+          "text": "Approve for full production."
+        }
+      ]
     },
     {
       "title": "Produce",
       "icon": "production",
-      "description": "We produce with quality and care."
+      "description": "We produce with quality and care.",
+      "headline": "Production & Quality Check",
+      "detail": "We manage production and run quality checks to ensure everything meets your standards.",
+      "image": "",
+      "points": [
+        {
+          "icon": "production",
+          "label": "Produce",
+          "text": "Oversee manufacturing."
+        },
+        {
+          "icon": "search",
+          "label": "Quality",
+          "text": "In-line and final checks."
+        },
+        {
+          "icon": "sample",
+          "label": "Pack",
+          "text": "Prepared for safe delivery."
+        }
+      ]
     },
     {
       "title": "Deliver",
       "icon": "delivery",
-      "description": "We deliver on time, every time."
+      "description": "We deliver on time, every time.",
+      "headline": "Delivered On Time",
+      "detail": "We deliver your order on schedule, and stay on hand after it arrives.",
+      "image": "",
+      "points": [
+        {
+          "icon": "calendar",
+          "label": "Schedule",
+          "text": "Planned around your date."
+        },
+        {
+          "icon": "delivery",
+          "label": "Deliver",
+          "text": "Handed over on time."
+        },
+        {
+          "icon": "support",
+          "label": "Follow-up",
+          "text": "Help after delivery."
+        }
+      ]
     }
   ],
   "popularSolutions": [
@@ -444,13 +574,26 @@
       "showingLabel": "Showing {start}–{end} of {total} projects",
       "previousPageLabel": "Previous",
       "readFullStoryLabel": "Read Full Story",
-      "selectProjectLabel": "Select a project"
+      "selectProjectLabel": "Select a project",
+      "reviewsPendingLabel": "Reviews on Google",
+      "reviewsInviteText": "Worked with MySOS? Share your experience on Google and help other organisations choose with confidence.",
+      "reviewsInviteLabel": "Write a review",
+      "reviewsReadText": "See what schools, businesses and communities say about working with MySOS.",
+      "reviewsReadLabel": "Read reviews on Google",
+      "reviewsSourceLabel": "Google reviews"
     },
     "why": {
       "heroTitle": "Why MySOS",
       "heroLead": "One Supplier. Endless Possibilities.",
       "ctaTitle": "Bring your ideas to life with MySOS.",
-      "ctaDescription": "We're ready to help."
+      "ctaDescription": "We're ready to help.",
+      "benefitsEyebrow": "Why choose MySOS",
+      "benefitsTitle": "Everything You Need, Without the Sourcing Headache.",
+      "benefitsLead": "From one item to an entire event collection, we coordinate the factories, quality checks and delivery—so you only deal with one reliable team.",
+      "processLead": "Follow your order from first enquiry to final delivery.",
+      "loyaltyEyebrow": "Built for the long term",
+      "loyaltyTitle": "Why Clients Come Back",
+      "loyaltyLead": "One reliable team, from your first idea to every order that follows."
     },
     "story": {
       "homeCrumbLabel": "Home",
@@ -557,5 +700,27 @@
       "bestFor": "Corporate gifts, stationery, event essentials",
       "image": ""
     }
-  }
+  },
+  "loyalty": [
+    {
+      "icon": "value",
+      "title": "Reliable From Start to Finish",
+      "description": "Clear communication, careful coordination and dependable delivery."
+    },
+    {
+      "icon": "award",
+      "title": "Consistent Quality Across Products",
+      "description": "Every item receives the same level of attention and quality control."
+    },
+    {
+      "icon": "contact",
+      "title": "One Contact for Everything",
+      "description": "Manage apparel, merchandise, printing and delivery through one dedicated team."
+    },
+    {
+      "icon": "support",
+      "title": "Support Beyond Delivery",
+      "description": "We remain available for replacements, follow-ups and your next project."
+    }
+  ]
 }

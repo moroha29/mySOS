@@ -45,16 +45,48 @@ describe('before Google approves API access', () => {
     expect(markup).not.toContain('rating-value');
   });
 
-  it('the stories reviews row shows the heading and a Google link, nothing else', () => {
+  it('the stories reviews row keeps the design: heading, Google mark, two cards, arrows and the link', () => {
     useReviewsFile(EMPTY);
     const markup = render(<StoriesPage />);
-    expect(markup).toContain('class="stories-reviews is-empty"');
-    expect(markup).toContain(`href="${googleLink}"`);
+    expect(markup).toContain('class="stories-reviews"');
+    expect(markup).toContain('What our clients say');
+    expect(markup).toContain('class="stories-reviews-rating is-pending"');
+    expect(markup).toContain('Reviews on Google');
+    expect(markup.match(/class="stories-review is-invite"/g)).toHaveLength(2);
+    // Nothing to scroll between yet, so both arrows are there but off.
+    expect(markup).toMatch(/aria-label="Previous reviews" disabled=""/);
+    expect(markup).toMatch(/aria-label="Next reviews" disabled=""/);
     expect(markup).toContain('View all Google reviews');
-    expect(markup).not.toContain('class="stories-review"');
-    expect(markup).not.toContain('stories-reviews-rating');
-    expect(markup).not.toContain('stories-reviews-arrows');
     expect(markup).not.toMatch(/\bundefined\b/);
+  });
+
+  it('the stories cards stand in for reviews without pretending to be any', () => {
+    useReviewsFile(EMPTY);
+    const markup = render(<StoriesPage />);
+    const cards = markup.match(/<div class="stories-review is-invite">.*?<\/footer><\/div>/gs);
+    expect(cards).toHaveLength(2);
+    for (const card of cards) {
+      // No rating, no reviewer, no quote: a muted, unlabelled row of stars.
+      expect(card).toContain('class="stars is-muted" aria-hidden="true"');
+      expect(card).not.toMatch(/out of 5|&ldquo;|“|stories-review-avatar is-initials/);
+      expect(card).toContain(`href="${googleLink}"`);
+    }
+    expect(markup).toContain('Write a review');
+    expect(markup).toContain('Read reviews on Google');
+    // The design's sample reviewers and rating never appear in the row.
+    const row = markup.match(/<section class="stories-reviews".*?<\/section>/s)[0];
+    // Visible text only: icon path data is full of numbers like 4.9.
+    const rowText = row.replace(/<[^>]+>/g, ' ');
+    expect(rowText).not.toMatch(/Rachel Ong|Daniel Tan|\b4\.9\b/);
+    expect(row).not.toContain('stories-reviews-score');
+  });
+
+  it('the stories invitation wording is editable', () => {
+    useReviewsFile(EMPTY);
+    const markup = render(<StoriesPage />);
+    for (const key of ['reviewsPendingLabel', 'reviewsInviteText', 'reviewsInviteLabel', 'reviewsReadText', 'reviewsReadLabel', 'reviewsSourceLabel']) {
+      expect(markup, key).toContain(`&quot;stories&quot;,&quot;${key}&quot;`);
+    }
   });
 });
 
@@ -93,8 +125,9 @@ describe('with reviews from Google', () => {
     expect(markup).toContain('class="stories-reviews-score">4.8<');
     expect(markup).toContain('on Google');
     expect(markup.match(/class="stories-review"/g)).toHaveLength(2);
-    // Two cards fit side by side, so the arrows only appear when there are more.
-    expect(markup).not.toContain('stories-reviews-arrows');
+    expect(markup).not.toContain('is-invite');
+    // Two cards fit side by side, so there is nothing to move to yet.
+    expect(markup).toMatch(/aria-label="Next reviews" disabled=""/);
   });
 });
 

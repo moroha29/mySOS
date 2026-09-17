@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { cms, headingPath, heroBackground, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
@@ -16,17 +16,64 @@ const categoryName = (id) => (solutions.find((solution) => solution.id === id)?.
 const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
 
 /*
- * The reviews row under the banner: heading and Google rating, review cards,
- * and a link to every review on Google.
+ * The reviews row under the banner, as the design draws it: heading and Google
+ * rating, two review cards side by side, arrows, and a link to every review on
+ * Google.
  *
- * Like every review on the site it shows only the Business Profile's own
- * reviews (see useGoogleReviews). Until those exist it shows the heading and
- * the link, and no rating: the design's sample names and 4.9 are not real.
+ * It keeps that shape whether or not there are reviews to show. The cards only
+ * ever hold the business's real Google reviews (see useGoogleReviews); until
+ * there are some, the same two cards invite visitors to write one and to read
+ * them on Google. The design's sample names and 4.9 are not real, so no
+ * rating is shown until Google provides one.
  */
+function ReviewStars({ count = 5, muted = false }) {
+  return <span className={muted ? 'stars is-muted' : 'stars'} aria-hidden={muted || undefined} aria-label={muted ? undefined : `${count} out of 5 stars`}>
+    {Array.from({ length: count }, (_, i) => <Icon key={i} name="star" size={18} />)}
+  </span>;
+}
+
+function ReviewInvite({ textKey, text, labelKey, label }) {
+  return <div className="stories-review is-invite">
+    <div className="stories-review-head">
+      <Icon name="google" size={24} />
+      <ReviewStars muted />
+    </div>
+    <p className="stories-review-text" data-cms-path={cms(pagePath('stories', textKey))}>{pageText('stories', textKey, text)}</p>
+    <footer>
+      <span className="stories-review-avatar is-google" aria-hidden="true"><Icon name="google" size={22} /></span>
+      <span>
+        <a className="stories-review-invite-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
+          <strong data-cms-path={cms(pagePath('stories', labelKey))}>{pageText('stories', labelKey, label)}</strong>
+          <Icon name="arrowRight" size={14} />
+        </a>
+        <small data-cms-path={cms(pagePath('stories', 'reviewsSourceLabel'))}>{pageText('stories', 'reviewsSourceLabel', 'Google reviews')}</small>
+      </span>
+    </footer>
+  </div>;
+}
+
 function StoryReviews() {
   const data = useGoogleReviews();
   const reviews = data?.reviews ?? [];
   const trackRef = useRef(null);
+  // Which ways the cards can still move; two cards fit, so arrows start off.
+  const [canMove, setCanMove] = useState({ back: false, on: reviews.length > 2 });
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return undefined;
+    const measure = () => setCanMove({
+      back: track.scrollLeft > 2,
+      on: track.scrollLeft + track.clientWidth < track.scrollWidth - 2,
+    });
+    measure();
+    track.addEventListener('scroll', measure, { passive: true });
+    window.addEventListener('resize', measure);
+    return () => {
+      track.removeEventListener('scroll', measure);
+      window.removeEventListener('resize', measure);
+    };
+  }, [reviews.length]);
 
   const scrollByCard = (direction) => {
     const track = trackRef.current;
@@ -36,44 +83,65 @@ function StoryReviews() {
     track.scrollBy({ left: direction * step, behavior: 'smooth' });
   };
 
-  return <section className={reviews.length ? 'stories-reviews' : 'stories-reviews is-empty'} aria-labelledby="stories-reviews-title">
+  return <section className="stories-reviews" aria-labelledby="stories-reviews-title">
     <div className="stories-reviews-summary">
       <h2 id="stories-reviews-title" data-cms-path={cms(headingPath('reviewsHeading'))}>{heading('reviewsHeading', 'What our clients say')}</h2>
-      {data?.averageRating ? <p className="stories-reviews-rating">
-        <span className="stories-reviews-score">{data.averageRating}</span>
-        <Icon name="star" size={36} className="stories-reviews-star" />
-        <span className="stories-reviews-google">
-          <Icon name="google" size={30} />
-          <span data-cms-path={cms(pagePath('stories', 'reviewsOnGoogleLabel'))}>{pageText('stories', 'reviewsOnGoogleLabel', 'on Google')}</span>
-        </span>
-      </p> : null}
+      {data?.averageRating
+        ? <p className="stories-reviews-rating">
+          <span className="stories-reviews-score">{data.averageRating}</span>
+          <Icon name="star" size={36} className="stories-reviews-star" />
+          <span className="stories-reviews-google">
+            <Icon name="google" size={30} />
+            <span data-cms-path={cms(pagePath('stories', 'reviewsOnGoogleLabel'))}>{pageText('stories', 'reviewsOnGoogleLabel', 'on Google')}</span>
+          </span>
+        </p>
+        : <p className="stories-reviews-rating is-pending">
+          <span className="stories-reviews-google">
+            <Icon name="google" size={30} />
+            <span data-cms-path={cms(pagePath('stories', 'reviewsPendingLabel'))}>{pageText('stories', 'reviewsPendingLabel', 'Reviews on Google')}</span>
+          </span>
+        </p>}
     </div>
 
-    {reviews.length > 0 && <div className="stories-reviews-track" ref={trackRef}>
-      {reviews.map((review) => <blockquote className="stories-review" key={review.id}>
-        <div className="stories-review-head">
-          <Icon name="google" size={24} />
-          <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={18} />)}</span>
-        </div>
-        <p className="stories-review-text">&ldquo;{review.text}&rdquo;</p>
-        <footer>
-          {review.photoUrl
-            ? <img className="stories-review-avatar" src={review.photoUrl} alt="" width="44" height="44" loading="lazy" referrerPolicy="no-referrer" />
-            : <span className="stories-review-avatar is-initials" aria-hidden="true">{initials(review.author)}</span>}
-          <span>
-            <strong>{review.author}</strong>
-            <small>{formatReviewDate(review.createTime)}</small>
-          </span>
-        </footer>
-      </blockquote>)}
-    </div>}
+    <div className="stories-reviews-track" ref={trackRef}>
+      {reviews.length > 0
+        ? reviews.map((review) => <blockquote className="stories-review" key={review.id}>
+          <div className="stories-review-head">
+            <Icon name="google" size={24} />
+            <ReviewStars count={review.rating} />
+          </div>
+          <p className="stories-review-text">&ldquo;{review.text}&rdquo;</p>
+          <footer>
+            {review.photoUrl
+              ? <img className="stories-review-avatar" src={review.photoUrl} alt="" width="44" height="44" loading="lazy" referrerPolicy="no-referrer" />
+              : <span className="stories-review-avatar is-initials" aria-hidden="true">{initials(review.author)}</span>}
+            <span>
+              <strong>{review.author}</strong>
+              <small>{formatReviewDate(review.createTime)}</small>
+            </span>
+          </footer>
+        </blockquote>)
+        : <>
+          <ReviewInvite
+            textKey="reviewsInviteText"
+            text="Worked with MySOS? Share your experience on Google and help other organisations choose with confidence."
+            labelKey="reviewsInviteLabel"
+            label="Write a review"
+          />
+          <ReviewInvite
+            textKey="reviewsReadText"
+            text="See what schools, businesses and communities say about working with MySOS."
+            labelKey="reviewsReadLabel"
+            label="Read reviews on Google"
+          />
+        </>}
+    </div>
 
     <div className="stories-reviews-actions">
-      {/* Two cards fit side by side, so the arrows only appear when there are more. */}
-      {reviews.length > 2 && <div className="stories-reviews-arrows">
-        <button type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={18} /></button>
-        <button type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={18} /></button>
-      </div>}
+      <div className="stories-reviews-arrows">
+        <button type="button" aria-label="Previous reviews" disabled={!canMove.back} onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={18} /></button>
+        <button type="button" aria-label="Next reviews" disabled={!canMove.on} onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={18} /></button>
+      </div>
       <a className="stories-reviews-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
         <span data-cms-path={cms(pagePath('stories', 'reviewsViewAllLabel'))}>{pageText('stories', 'reviewsViewAllLabel', 'View all Google reviews')}</span>
         <Icon name="arrowRight" size={15} className="inline-arrow" />
