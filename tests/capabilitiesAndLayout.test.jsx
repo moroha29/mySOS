@@ -22,7 +22,7 @@ const render = (Page, pathname) => {
 
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
-describe('page order: where the reviews sit', () => {
+describe('page order: reviews sit directly under the banner', () => {
   it('home: above the client logos, below the banner', () => {
     const markup = render(HomePage, '/mySOS/');
     const banner = markup.indexOf('Custom Merchandise,');
@@ -34,14 +34,14 @@ describe('page order: where the reviews sit', () => {
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 
-  it('why mysos: after why clients come back, just before the closing band, as its design has it', () => {
+  it('why mysos: directly under the banner, above the reasons', () => {
     const markup = render(WhyPage, '/mySOS/why-mysos/');
-    const loyalty = markup.indexOf('class="section why-loyalty"');
+    const banner = markup.indexOf('class="hero hero-compact"');
     const reviews = markup.indexOf('class="section reviews"');
-    const closingCta = markup.indexOf('class="page-cta');
-    expect(loyalty).toBeGreaterThan(-1);
-    expect(reviews).toBeGreaterThan(loyalty);
-    expect(reviews).toBeLessThan(closingCta);
+    const reasons = markup.indexOf('class="why-choose"');
+    expect(banner).toBeGreaterThan(-1);
+    expect(reviews).toBeGreaterThan(banner);
+    expect(reviews).toBeLessThan(reasons);
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 

@@ -22,9 +22,9 @@ const pageSource = readFileSync(new URL('../src/public/pages/WhyPage.jsx', impor
 const cmsPath = (...path) => `data-cms-path="${JSON.stringify(['homepage', ...path]).replace(/"/g, '&quot;')}"`;
 
 describe('Why MySOS follows its design, top to bottom', () => {
-  it('banner, why choose, our process, why clients come back, reviews, closing band', () => {
+  it('banner, reviews, why choose, our process, why clients come back, closing band', () => {
     const html = render();
-    const order = ['class="hero hero-compact"', 'class="why-choose"', 'class="why-process"', 'class="section why-loyalty"', 'class="section reviews"', 'class="page-cta'];
+    const order = ['class="hero hero-compact"', 'class="section reviews"', 'class="why-choose"', 'class="why-process"', 'class="section why-loyalty"', 'class="page-cta'];
     const positions = order.map((marker) => html.indexOf(marker));
     expect(positions.every((at) => at > -1), JSON.stringify(positions)).toBe(true);
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);

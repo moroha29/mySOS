@@ -228,12 +228,12 @@ export default function WhyPage() {
       </div>
     </section>
 
+    {/* Reviews sit directly under the banner, as on the other pages. */}
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+
     <ReasonStack />
     <ProcessJourney />
     <ClientLoyalty />
-
-    {/* The design closes on what clients say, after the reasons to come back. */}
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <PageCTA
       title={pageText('why', 'ctaTitle', 'Bring your ideas to life with MySOS.')}
