@@ -1,8 +1,49 @@
 {
-  "_note": "Written by scripts/fetch-google-reviews.mjs from the Google Business Profile API. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content.",
-  "source": "google-business-profile",
-  "fetchedAt": null,
-  "averageRating": null,
-  "totalReviewCount": null,
-  "reviews": []
+  "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
+  "source": "google-places",
+  "fetchedAt": "2026-09-17T15:06:00.139Z",
+  "averageRating": 5,
+  "totalReviewCount": 87,
+  "reviews": [
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2kxRFdIRnlVWE0yWW5OWlNWOVJhMGR5ZWsxSGMwRRAB",
+      "author": "Heng Seng “Hengs” Cheah",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjXfn8ufUjcMQ5GD1bFvGsVqhM_3aVASa03SNv3mBjGCnB8izl0a4g=s128-c0x00000000-cc-rp-mo-ba5",
+      "rating": 5,
+      "text": "The team's super prompt and supportive in a last minute shirt printing request turnaround with both the design and delivery. Quality of the shirt is amazing, and not to mention its easy to deal with the team.\n\nSuper grateful and ordering a next batch of shirts as we speak!",
+      "createTime": "2026-08-07T09:11:46.976804406Z"
+    },
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twaldHSklVMmhGVkU5UE1tRmtla05TWjBoamJGRRAB",
+      "author": "Tien Dat Nguyen",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjX8E3hFLN_4dehTVqlWGmEWR0V_SKDJmvryAtbeiB4zM_UEYlyz=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "Wonderful experience, Owen has been very communicative, responsive and helpful and delivery was way ahead of schedule even though we ordered the shirts last minute in a tight deadline. Shirt quality is excellent and turned out exactly as we hoped for. Price is also very reasonable and much better compared to other supplier. We will definitely work with mysourceofsolutions again in the future. Thank you so much Owen and team!",
+      "createTime": "2026-07-15T04:50:22.648804349Z"
+    },
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twUVRWbE1hM04yT0Y5SmIybHZabE4xVlZaWlJrRRAB",
+      "author": "Meher Bijlani",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocIqkbM62ntG3DpCvbEFbgucKqclQe18RRSccaooTEnAg1a9DA=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "we were able to get customised shirts within 10 days!! and they are good qualityyy.",
+      "createTime": "2026-06-08T04:26:07.757187928Z"
+    },
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT214VWRYRTFibmhXZFdNeVZXaEhhbnBaTFhaVVdtYxAB",
+      "author": "Hiya",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKdgsPk4BsQBvbRQTxaCts4EX473Ws0IOQyw3N6pgmBRCuC0g=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "Absolutely loved the customized shirts! The printing quality was excellent, with sharp details and vibrant colors that came out exactly as expected. The design was really well thought out and looked super cool on everyone.",
+      "createTime": "2026-06-08T04:25:43.941514618Z"
+    },
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT25KQlJXRldXV2xRZDJaaVUxbG9WelpCYVZwUlEyYxAB",
+      "author": "jing rong",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjWgwYuYzWXYX5kGLnmtXJ4LrXsT92eaZDcTg2nD0i44c7CwKeFr=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "great service and fast delivery, mentioned that i needed shirts last minute and owen managed to prepare all my shirts by the deadline. super friendly and accommodating despite hard requests",
+      "createTime": "2026-06-02T17:01:04.536359688Z"
+    }
+  ]
 }
