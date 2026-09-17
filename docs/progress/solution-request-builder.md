@@ -90,8 +90,9 @@ stays unlinked from the public site. Tests enforce this
 - [x] Tests: `tests/solutionPages.test.jsx` — routes, content integrity, no
       prices, no engine links, message content, editability, file honesty
 - [x] Manager: `npm test` passes against this content
-- [ ] Manager: friendly labels for the new fields (and, later, a product
-      picker instead of typing catalogue ids)
+- [x] Manager: friendly labels for the new fields (website-manager#23,
+      merged; the running portal shows them after its next rebuild).
+      Later: a product picker instead of typing catalogue ids.
 - [x] Visual check at 1440 and 390 (headless Chrome, real clicks)
 - [ ] Owner review on localhost → PR → deploy
 
@@ -114,6 +115,8 @@ stays unlinked from the public site. Tests enforce this
   WhatsApp message. Fixed on the way: quick "+" clicks losing a step, each
   item's recommendation missing from the message, 30 February being accepted
   as a date, repeated card photos, lanyard width choices wrapping.
+- 2026-09-18 — Waiting on the owner's review at
+  http://localhost:5173/mySOS/solutions/churches/ before the PR.
 
 ## How to resume
 
