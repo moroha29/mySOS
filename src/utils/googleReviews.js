@@ -27,6 +27,25 @@ export const GOOGLE_REVIEWS_NOTE = "Written by scripts/fetch-google-reviews.mjs 
  */
 export const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?q=mysourceofsolutions&ludocid=15290863019161496116#lrd=0x165bd792f59b5b9:0xd4340ee6c6472a34,1,,,,';
 
+/*
+ * The listing's own number on Google Maps (the ludocid above). A place search
+ * can return look-alikes, so the Places lookup keeps only the result whose
+ * Maps link carries this number.
+ */
+export const GOOGLE_LISTING_CID = '15290863019161496116';
+export const GOOGLE_LISTING_SEARCH = 'My Source of Solutions Singapore';
+
+/** Picks MySOS's own listing out of a Places text search, or null. */
+export function findOwnListing(places = [], cid = GOOGLE_LISTING_CID) {
+  return places.find((place) => {
+    try {
+      return new URL(place?.googleMapsUri ?? '').searchParams.get('cid') === cid;
+    } catch {
+      return false;
+    }
+  }) ?? null;
+}
+
 /** How many reviews the slider carries. The rest stay one click away on Google. */
 export const MAX_DISPLAYED_REVIEWS = 30;
 

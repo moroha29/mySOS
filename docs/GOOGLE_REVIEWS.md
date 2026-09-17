@@ -164,20 +164,22 @@ while step 4 above is waiting on Google — or instead of it.
    30 a month, and Google's monthly free allowance is 1,000 — so it stays free.
    Setting a budget alert at, say, $5 is still worth doing.
 
-### 2. Find the place id
+### 2. Add the key to GitHub
 
-Open <https://developers.google.com/maps/documentation/places/web-service/place-id>,
-search for **My Source of Solutions**, and copy the id. It looks like
-`ChIJ...`.
+**Settings → Secrets and variables → Actions → Secrets → New repository secret**:
 
-### 3. Add them to GitHub
+| Name | Value |
+|---|---|
+| `GOOGLE_PLACES_API_KEY` | the API key from step 1 |
 
-**Settings → Secrets and variables → Actions**:
+That is all the refresh needs. It searches Google for **My Source of Solutions**
+and uses only the result whose Maps link is MySOS's own listing (the same
+listing the site's "Read reviews on Google" links open), so a similarly named
+business is never picked up. The run prints the listing it found and its place
+id.
 
-| Tab | Name | Value |
-|---|---|---|
-| Secrets | `GOOGLE_PLACES_API_KEY` | the API key from step 1 |
-| Variables | `GOOGLE_PLACE_ID` | the place id from step 2 |
+**Optional:** to skip that search on every run, save the printed id on the
+**Variables** tab as `GOOGLE_PLACE_ID` (it looks like `ChIJ...`).
 
 Then **Actions → Refresh Google reviews → Run workflow**, same as step 9 above.
 
