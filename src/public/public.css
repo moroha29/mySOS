@@ -843,9 +843,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .stories-reviews-arrows button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--navy); box-shadow: var(--shadow-sm); cursor: pointer; }
 .stories-reviews-link { display: inline-flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 700; color: var(--navy); white-space: nowrap; }
 /* No reviews yet: just the heading and the link, without a divider beside empty space. */
-.stories-reviews.is-empty { grid-template-columns: minmax(0, 1fr) auto; }
-.stories-reviews.is-empty .stories-reviews-summary { min-height: 0; padding-right: 0; border-right: 0; }
-.stories-reviews.is-empty .stories-reviews-actions { grid-column: 2; }
+/* No rating yet: the Google mark and its label take the rating's place. */
+.stories-reviews-rating.is-pending .stories-reviews-google { margin-left: 0; font-size: 19px; color: var(--navy); }
+/* Until Google has reviews to show, the same cards invite visitors to leave one. */
+.stories-review.is-invite { display: flex; flex-direction: column; }
+.stories-review.is-invite .stories-review-text { flex: 1; }
+.stars.is-muted { color: #d5dbe5; }
+.stories-review-avatar.is-google { display: grid; place-items: center; border: 1px solid var(--line); background: #fff; }
+.stories-review-invite-link { display: inline-flex; align-items: center; gap: 6px; color: var(--navy); }
+.stories-review-invite-link:hover strong { text-decoration: underline; }
+.stories-reviews-arrows button:disabled { opacity: .45; cursor: default; }
 
 /* Category pills */
 .stories-section .filter-row { gap: 12px; margin-bottom: 22px; }

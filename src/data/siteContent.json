@@ -574,7 +574,13 @@
       "showingLabel": "Showing {start}–{end} of {total} projects",
       "previousPageLabel": "Previous",
       "readFullStoryLabel": "Read Full Story",
-      "selectProjectLabel": "Select a project"
+      "selectProjectLabel": "Select a project",
+      "reviewsPendingLabel": "Reviews on Google",
+      "reviewsInviteText": "Worked with MySOS? Share your experience on Google and help other organisations choose with confidence.",
+      "reviewsInviteLabel": "Write a review",
+      "reviewsReadText": "See what schools, businesses and communities say about working with MySOS.",
+      "reviewsReadLabel": "Read reviews on Google",
+      "reviewsSourceLabel": "Google reviews"
     },
     "why": {
       "heroTitle": "Why MySOS",
