@@ -970,10 +970,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* banner */
 .solution-hero { background: linear-gradient(180deg, #eaf1fb, #f7faff); overflow: hidden; }
 .solution-hero-inner { position: relative; max-width: 1440px; margin: 0 auto; min-height: 560px; display: grid; grid-template-columns: minmax(0, 470px) minmax(0, 1fr); align-items: center; gap: 28px; padding: 22px 0 22px 64px; }
-.breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 30px; font-size: 14.5px; color: var(--muted); }
-.breadcrumb a { color: var(--navy-soft); }
-.breadcrumb a:hover { text-decoration: underline; }
-.breadcrumb [aria-current] { color: var(--navy); font-weight: 600; }
+/* Scoped to the banner: the story pages have a breadcrumb of their own. */
+.solution-hero .breadcrumb { max-width: none; padding: 0; display: flex; align-items: center; gap: 8px; margin: 0 0 30px; font-size: 14.5px; color: var(--muted); }
+.solution-hero .breadcrumb a { color: var(--navy-soft); }
+.solution-hero .breadcrumb a:hover { text-decoration: underline; }
+.solution-hero .breadcrumb [aria-current] { color: var(--navy); font-weight: 600; }
 .solution-hero-copy .eyebrow { color: var(--navy); font-size: 14.5px; }
 .solution-hero-copy h1 { margin-top: 6px; font-size: 52px; font-weight: 900; line-height: 1.06; letter-spacing: -.03em; color: var(--navy); }
 .solution-hero-lead { margin-top: 18px; font-size: 20px; line-height: 1.45; color: #45526b; }
@@ -1135,4 +1136,58 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .use-case-card, .request-details-toggle { transition: none; }
+}
+
+/* ---------------------------------------------------------- small screens
+   From an audit of every page at 360, 390, 768 and 1024px wide: nothing
+   scrolled sideways, but some tap targets were tiny and some columns were too
+   narrow to read. Placed last so it wins over the section rules above. */
+
+/* Tap targets: a larger touch area without moving anything on screen. */
+.text-link, .stories-reviews-link { padding-block: 8px; margin-block: -8px; }
+.back-link { padding-block: 8px; margin-top: -8px; margin-bottom: 12px; }
+.breadcrumb a { padding-block: 10px; margin-block: -10px; }
+.review-source { width: 36px; height: 36px; margin: -10px; }
+.projects-dots button, .use-case-dots button { position: relative; }
+.projects-dots button::before, .use-case-dots button::before { content: ""; position: absolute; inset: -14px; }
+.footer-socials a, .footer-socials span { width: 36px; height: 36px; }
+.tab-list button { flex: none; min-width: 44px; padding-top: 10px; white-space: nowrap; }
+.story-card-body h3 a, .footer-legal a { display: inline-block; padding-block: 7px; margin-block: -7px; }
+.solution-hero .breadcrumb a:first-child { padding-inline: 10px; margin-inline: -10px; }
+
+/* Phones, and touch screens of any width such as a tablet held sideways. */
+@media (max-width: 860px), (pointer: coarse) {
+  .footer-grid a { padding: 9px 0; }
+}
+
+@media (max-width: 720px) {
+  /* Stories reviews row: heading and rating, then the cards, then arrows and link. */
+  .stories-reviews { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .stories-reviews-summary h2 { white-space: normal; font-size: 24px; }
+  .stories-reviews-rating { flex-wrap: wrap; row-gap: 4px; }
+  .stories-reviews-track { grid-column: 1; grid-row: 2; }
+  .stories-reviews-actions { grid-column: 1; grid-row: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+
+  /* The apparel filter scrolls sideways instead of squeezing its labels. */
+  .tab-list { justify-content: flex-start; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+  .tab-list::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 620px) {
+  /* One review a screen, with the next peeking in; swiping replaces the arrows. */
+  .review-card { flex-basis: 86%; }
+  .review-rail .carousel-btn { display: none; }
+
+  /* The story facts sit two by two rather than wrapping into each other. */
+  .story-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 16px; }
+  .story-meta div { align-items: flex-start; }
+}
+
+@media (max-width: 480px) {
+  /* Two columns of ~150px broke sentences every word or two. */
+  .story-grid, .story-grid-3, .solution-grid { grid-template-columns: minmax(0, 1fr); }
+  .benefit-grid { grid-template-columns: minmax(0, 1fr); }
+  .benefit-grid article { display: grid; grid-template-columns: 46px minmax(0, 1fr); column-gap: 14px; align-items: start; padding: 18px 16px; text-align: left; }
+  .benefit-grid .benefit-icon { grid-row: span 2; margin: 0; }
+  .benefit-grid p { margin-top: 4px; }
 }
