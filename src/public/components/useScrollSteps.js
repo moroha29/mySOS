@@ -1,66 +1,113 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 /*
- * A section that stays on screen and moves through `count` steps as the page
- * scrolls, as the Why MySOS design has it.
+ * Steps that follow a scroll area of their own, as the Why MySOS design has it.
  *
- * The track is tall and the pin inside it is position: sticky, so scrolling
- * the track is what moves between steps. Where the pin is not sticky — narrow
- * or very short screens, where the CSS simply lists every step — nothing is
- * tracked and the first step stays marked.
+ * The page itself is never held or scrolled. `axis: 'y'` is a box that scrolls
+ * up and down inside itself, one step every `step` pixels (CSS snaps it); once
+ * it reaches the end, the wheel carries on scrolling the page as usual.
+ * `axis: 'x'` is a row that scrolls sideways, and the step is whichever
+ * [data-step] item sits nearest the middle.
+ *
+ * Where the box has nothing to scroll (on phones every reason is simply
+ * listed), nothing is tracked and the first step stays marked.
  */
-export default function useScrollSteps(count) {
-  const trackRef = useRef(null);
-  const pinRef = useRef(null);
+const SETTLE_DELAY = 160;
+const NUDGE = 40;
+
+const itemsOf = (scroller) => [...scroller.querySelectorAll('[data-step]')];
+const centreOf = (scroller, item) => item.offsetLeft + item.offsetWidth / 2 - scroller.clientWidth / 2;
+const smoothly = () => (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+
+function nearestItem(scroller) {
+  let nearest = 0;
+  let distance = Infinity;
+  itemsOf(scroller).forEach((item, index) => {
+    const away = Math.abs(centreOf(scroller, item) - scroller.scrollLeft);
+    if (away < distance) { distance = away; nearest = index; }
+  });
+  return nearest;
+}
+
+export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
+  const scrollerRef = useRef(null);
+  const settledRef = useRef(0);
   const [active, setActive] = useState(0);
+  const clamp = useCallback((index) => Math.min(count - 1, Math.max(0, index)), [count]);
 
-  const pinned = () => {
-    const pin = pinRef.current;
-    return Boolean(pin && trackRef.current && getComputedStyle(pin).position === 'sticky');
-  };
-
-  // How far the track has scrolled past its pinned start, from 0 to 1.
-  const geometry = () => {
-    const track = trackRef.current;
-    const pin = pinRef.current;
-    const top = parseFloat(getComputedStyle(pin).top) || 0;
-    const rect = track.getBoundingClientRect();
-    const travel = rect.height - pin.offsetHeight;
-    return { top, rect, travel };
-  };
+  const scrollRowTo = useCallback((index) => {
+    const scroller = scrollerRef.current;
+    const item = scroller && itemsOf(scroller)[index];
+    settledRef.current = index;
+    if (item) scroller.scrollTo({ left: centreOf(scroller, item), behavior: smoothly() });
+  }, []);
 
   useEffect(() => {
-    if (count < 2) return undefined;
+    const scroller = scrollerRef.current;
+    if (!scroller || count < 2) return undefined;
     let frame = 0;
+    let settleTimer = 0;
+    // Touch screens snap natively (CSS); a mouse or trackpad is settled here.
+    const touch = window.matchMedia?.('(pointer: coarse)').matches;
+
     const measure = () => {
       frame = 0;
-      if (!pinned()) return;
-      const { top, rect, travel } = geometry();
-      if (travel <= 0) return;
-      const progress = Math.min(1, Math.max(0, (top - rect.top) / travel));
-      setActive(Math.min(count - 1, Math.floor(progress * count)));
+      if (axis === 'y') {
+        if (scroller.scrollHeight <= scroller.clientHeight + 1) return;
+        setActive(clamp(Math.round(scroller.scrollTop / step)));
+        return;
+      }
+      setActive(nearestItem(scroller));
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+
+    /*
+     * When sideways scrolling pauses, finish on a whole card: the nearest one
+     * if the scroll already reached it, otherwise the next card in the
+     * direction moved. A short wheel or trackpad nudge therefore moves one
+     * card on, instead of being pulled back to where it started.
+     */
+    const settle = () => {
+      const items = itemsOf(scroller);
+      const from = items[settledRef.current];
+      if (!from) return;
+      const moved = scroller.scrollLeft - centreOf(scroller, from);
+      const nearest = nearestItem(scroller);
+      let target = settledRef.current;
+      if (nearest !== settledRef.current) target = nearest;
+      else if (Math.abs(moved) >= NUDGE) target = clamp(settledRef.current + Math.sign(moved));
+      if (target === settledRef.current && Math.abs(moved) < 2) return;
+      setActive(target);
+      scrollRowTo(target);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+      if (axis === 'x' && !touch) {
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(settle, SETTLE_DELAY);
+      }
+    };
+
     measure();
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
+    scroller.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
       if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      clearTimeout(settleTimer);
+      scroller.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
-  }, [count]);
+  }, [axis, clamp, count, scrollRowTo, step]);
 
-  // Choosing a step scrolls to it, so the page and the marked step never disagree.
+  // Choosing a step scrolls the box to it, so the box and the marked step agree.
   const goTo = useCallback((index) => {
-    const step = Math.min(count - 1, Math.max(0, index));
-    if (!pinned()) { setActive(step); return; }
-    const { top, rect, travel } = geometry();
-    const target = window.scrollY + rect.top - top + ((step + 0.5) / count) * travel;
-    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: target, behavior: still ? 'auto' : 'smooth' });
-    setActive(step);
-  }, [count]);
+    const target = clamp(index);
+    setActive(target);
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    if (axis === 'x') { scrollRowTo(target); return; }
+    if (scroller.scrollHeight > scroller.clientHeight + 1) scroller.scrollTo({ top: target * step, behavior: smoothly() });
+  }, [axis, clamp, scrollRowTo, step]);
 
-  return { trackRef, pinRef, active, goTo };
+  return { scrollerRef, active, goTo };
 }

@@ -86,12 +86,21 @@ describe('our process: the tracker and its cards', () => {
     expect(html).toMatch(/<strong>01<\/strong> \/ 06/);
   });
 
-  it('puts the current step in front with its neighbours either side', () => {
-    const offsets = [...render().matchAll(/class="journey-card" data-offset="(-?\d)"/g)].map((match) => Number(match[1]));
-    expect(offsets).toEqual([0, 1, 2, 2, 2, 2]);
+  it('puts the current step in front with one neighbour either side', () => {
+    const cards = [...render().matchAll(/class="journey-card" data-step="(\d)" data-offset="(-?\d)"/g)];
+    expect(cards.map((match) => Number(match[1]))).toEqual([0, 1, 2, 3, 4, 5]);
+    expect(cards.map((match) => Number(match[2]))).toEqual([0, 1, 2, 2, 2, 2]);
     // The design: the earlier card tucks behind, the next starts just past the current one.
-    expect(css).toMatch(/\.journey-card\[data-offset="-1"\] \{ transform: translateX\(calc\(-50% - 450px\)\) scale\(\.84\); \}/);
-    expect(css).toMatch(/\.journey-card\[data-offset="1"\] \{ transform: translateX\(calc\(-50% \+ 631px\)\) scale\(\.84\); \}/);
+    expect(css).toMatch(/\.journey-card\[data-offset="-1"\] \.journey-card-face \{ transform: translateX\(230px\) scale\(\.84\); \}/);
+    expect(css).toMatch(/\.journey-card\[data-offset="-2"\] \.journey-card-face, \.journey-card\[data-offset="2"\] \.journey-card-face \{ opacity: 0; \}/);
+    // Neighbours are solid, with faded content, so nothing shows through.
+    expect(css).toMatch(/\.journey-card-face > \* \{ opacity: \.5;/);
+  });
+
+  it('offers arrows either side of the counter, the first one off at the start', () => {
+    const html = render();
+    expect(html).toMatch(/<button type="button" aria-label="Previous step" disabled="">/);
+    expect(html).toMatch(/<button type="button" aria-label="Next step">/);
   });
 
   it('every step has a headline, a line of detail and three points, all editable', () => {
@@ -146,11 +155,45 @@ describe('why clients come back', () => {
 });
 
 describe('scrolling, small screens and motion', () => {
-  it('holds each section on screen only where there is room for it', () => {
-    expect(css).toMatch(/\.scroll-pin \{ position: sticky; top: 72px; height: calc\(100vh - 72px\);/);
-    const fallback = css.slice(css.indexOf('@media (max-width: 1080px), (max-height: 680px) {'));
-    expect(fallback).toMatch(/\.scroll-track \{ height: auto; \}/);
-    expect(fallback).toMatch(/\.scroll-pin \{ position: static;/);
+  const whyStart = css.indexOf('Why MySOS');
+  const whyCss = css.slice(whyStart, css.indexOf('@media (prefers-reduced-motion: reduce) {', whyStart));
+
+  it('never holds the page: no section is pinned to the screen', () => {
+    // The first version pinned both sections and made the page thousands of
+    // pixels taller, with a screen of empty space above and below each.
+    expect(css).not.toMatch(/scroll-pin|scroll-track/);
+    expect(whyCss).not.toMatch(/top: 72px/);
+    expect(whyCss).not.toMatch(/100vh/);
+  });
+
+  it('the reasons scroll inside their own box, one card per step', () => {
+    const html = render();
+    expect(html).toMatch(/<div class="reason-scroller" role="region" aria-label="[^"]+" tabindex="0" style="--steps:5;--step:150px">/);
+    expect([...html.matchAll(/class="reason-snap" style="top:(\d+)px"/g)].map((match) => Number(match[1]))).toEqual([0, 150, 300, 450, 600]);
+    expect(whyCss).toMatch(/\.reason-scroller \{ height: 560px; overflow-y: auto; overscroll-behavior-y: auto; scroll-snap-type: y mandatory;/);
+    expect(whyCss).toMatch(/\.reason-stack \{ position: sticky; top: 0;/);
+    // Phones list every reason instead.
+    const listed = whyCss.slice(whyCss.indexOf('@media (max-width: 1080px) {'));
+    expect(listed).toMatch(/\.reason-scroller \{ height: auto; overflow: visible;/);
+  });
+
+  it('the process scrolls sideways and lets up-and-down scrolling reach the page', () => {
+    const html = render();
+    expect(html).toMatch(/<div class="journey-cards" role="region" aria-label="[^"]+" tabindex="0">/);
+    expect(whyCss).toMatch(/\.journey-cards \{[^}]*overflow-x: auto; overscroll-behavior-x: contain;/);
+    expect(whyCss).not.toMatch(/overflow-y: (auto|scroll)[^}]*\}\s*\.journey-cards/);
+    // A finger swipe snaps natively; CSS snapping on a mouse pulled short scrolls back.
+    expect(whyCss).toMatch(/@media \(pointer: coarse\) \{ \.journey-cards \{ scroll-snap-type: x mandatory; \} \}/);
+    const baseRow = whyCss.match(/^\.journey-cards \{\r?\n[^}]*\}/m)[0];
+    expect(baseRow).not.toMatch(/scroll-snap-type/);
+  });
+
+  it('the card the row lines up on is never scaled, only its face', () => {
+    // Chrome snaps to transformed boxes and re-snaps after every change, which
+    // cancelled every scroll while the card itself was scaled.
+    const card = whyCss.match(/\.journey-card \{[^}]*\}/)[0];
+    expect(card).not.toMatch(/transform|opacity/);
+    expect(render()).toMatch(/<article class="journey-card"[^>]*><div class="journey-card-face">/);
   });
 
   it('keeps still for readers who ask for less motion', () => {
@@ -159,9 +202,17 @@ describe('scrolling, small screens and motion', () => {
     expect(reduced).toMatch(/\.scroll-hint \.icon:last-child \{ animation: none; \}/);
   });
 
-  it('choosing a step scrolls the page to it, so the two never disagree', () => {
+  it('choosing a step scrolls its own box to it, never the page', () => {
     const hook = readFileSync(new URL('../src/public/components/useScrollSteps.js', import.meta.url), 'utf8');
-    expect(hook).toMatch(/getComputedStyle\(pin\)\.position === 'sticky'/);
-    expect(hook).toMatch(/window\.scrollTo\(\{ top: target, behavior: still \? 'auto' : 'smooth' \}\)/);
+    expect(hook).not.toMatch(/window\.scroll(To|By)\(/);
+    expect(hook).toMatch(/scroller\.scrollTo\(\{ left: centreOf\(scroller, item\), behavior: smoothly\(\) \}\)/);
+    expect(hook).toMatch(/scroller\.scrollTo\(\{ top: target \* step, behavior: smoothly\(\) \}\)/);
+  });
+
+  it('a short sideways nudge moves one card on instead of springing back', () => {
+    const hook = readFileSync(new URL('../src/public/components/useScrollSteps.js', import.meta.url), 'utf8');
+    expect(hook).toMatch(/else if \(Math\.abs\(moved\) >= NUDGE\) target = clamp\(settledRef\.current \+ Math\.sign\(moved\)\);/);
+    // Touch screens snap natively, so they are left alone.
+    expect(hook).toMatch(/if \(axis === 'x' && !touch\)/);
   });
 });
