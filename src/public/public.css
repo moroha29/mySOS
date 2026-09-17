@@ -503,13 +503,145 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .popular-grid .product-visual { height: 92px; border-radius: 8px; background: var(--soft); }
 .popular-grid h3 { margin-top: 10px; font-size: 15px; font-weight: 700; }
 
-.why-list { display: grid; gap: 0; }
-.why-row { display: grid; grid-template-columns: 52px 1fr 250px; align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
-.why-row:last-child { border-bottom: 0; }
-.why-row .benefit-icon { margin: 0; }
-.why-row h3 { font-size: 18px; font-weight: 800; }
-.why-row p { margin-top: 7px; font-size: 15.5px; line-height: 1.65; color: var(--muted); }
-.why-row .scene { height: 84px; }
+/* ------------------------------------------------------------ Why MySOS
+   Measured off the design at 1440px. The reasons and the process each stay
+   on screen while the page scrolls through their steps (useScrollSteps). */
+
+.why-page .section-heading:not(.eyebrow-title) .eyebrow { color: var(--green); font-size: 14px; }
+.why-page .section-heading h2 { color: var(--navy); }
+
+.scroll-track { position: relative; height: calc(100vh - 72px + var(--steps) * 45vh); }
+.scroll-pin { position: sticky; top: 72px; height: calc(100vh - 72px); display: flex; flex-direction: column; justify-content: center; padding: 26px 24px; overflow: hidden; }
+.scroll-pin .section-heading { margin-bottom: 26px; }
+.scroll-hint { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; color: var(--muted-light); }
+.scroll-hint .icon:last-child { animation: scroll-nudge 1.8s ease-in-out infinite; }
+@keyframes scroll-nudge { 50% { transform: translateY(3px); } }
+.step-count { font-size: 19px; font-weight: 700; color: var(--muted-light); white-space: nowrap; }
+.step-count strong { color: var(--green); }
+
+/* why choose: the reasons stack */
+.why-choose { background: linear-gradient(180deg, #fff, #f6f8fc); }
+.reason-stage { width: min(100%, 1260px); margin: 0 auto; display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 24px; align-items: end; }
+.step-rail { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-bottom: 20px; }
+.step-dots { position: relative; display: flex; flex-direction: column; gap: 26px; }
+.step-dots::before { content: ""; position: absolute; top: 8px; bottom: 8px; left: 50%; width: 2px; transform: translateX(-50%); background: var(--line); }
+.step-dots button { position: relative; display: block; width: 12px; height: 12px; margin: 0 auto; padding: 0; border: 0; border-radius: 50%; background: #b8c2d3; cursor: pointer; transition: transform .25s, background-color .25s; }
+.step-dots button.is-active { background: var(--green); transform: scale(1.5); box-shadow: 0 0 0 4px rgba(0, 166, 81, .15); }
+
+.reason-stack { position: relative; height: 510px; }
+.reason-card {
+  position: absolute; left: 0; bottom: 0; width: calc(100% - 168px); height: 345px;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: center; padding: 20px 22px 20px 42px;
+  border: 1px solid var(--line-soft); border-radius: var(--radius); background: #fff; box-shadow: 0 18px 40px rgba(13, 42, 107, .12);
+  transform-origin: right top; transition: transform .5s cubic-bezier(.2, .7, .2, 1), opacity .4s;
+}
+.reason-card[data-state="current"] { z-index: 10; }
+.reason-card[data-state="next"] {
+  z-index: calc(10 - var(--depth));
+  transform: translate(calc(var(--depth) * 42px), calc(var(--depth) * -36px)) scale(calc(1 - var(--depth) * .039));
+}
+.reason-card[data-state="past"] { z-index: 11; opacity: 0; transform: translate(-40px, 60px); pointer-events: none; }
+.reason-card-tab { position: absolute; top: 0; left: 30px; right: 30px; height: 36px; display: flex; align-items: center; gap: 14px; color: var(--navy); opacity: 0; transition: opacity .3s; }
+.reason-card-tab span { font-size: 15px; font-weight: 600; color: var(--muted); }
+.reason-card-tab strong { font-size: 15.5px; font-weight: 700; }
+.reason-card[data-state="next"] .reason-card-tab { opacity: 1; }
+.reason-card[data-state="next"] .reason-card-copy { opacity: 0; }
+.reason-card-copy { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 22px; align-items: start; transition: opacity .3s; }
+.reason-card-icon { color: var(--navy); }
+.reason-card-number { display: block; font-size: 38px; font-weight: 800; line-height: 1; color: var(--green); }
+.reason-card h3 { margin-top: 12px; font-size: 24px; font-weight: 800; line-height: 1.22; color: var(--navy); }
+.reason-card-copy p { margin-top: 12px; font-size: 17px; line-height: 1.6; color: var(--muted); }
+.reason-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
+
+/* our process: the tracker and its cards */
+.why-process { background: #eef3fa; }
+.journey-steps { position: relative; width: min(100%, 1420px); margin: 0 auto 26px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.journey-steps::before, .journey-steps::after { content: ""; position: absolute; top: 20px; left: calc(100% / 12); height: 3px; border-radius: 3px; }
+.journey-steps::before { right: calc(100% / 12); background: #c3cbd8; }
+.journey-steps::after { width: calc((100% - 100% / 6) * var(--reached)); background: linear-gradient(90deg, var(--green) 70%, rgba(0, 166, 81, .25)); transition: width .5s cubic-bezier(.2, .7, .2, 1); }
+.journey-steps li { position: relative; z-index: 1; }
+/* The dot just short of the current step, showing the order on its way there. */
+.journey-steps .journey-pulse { position: absolute; z-index: 2; top: 13px; left: calc(100% / 12 + (100% - 100% / 6) * var(--pulse)); width: 17px; height: 17px; margin-left: -8.5px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 5px rgba(0, 166, 81, .14); transition: left .5s cubic-bezier(.2, .7, .2, 1); }
+.journey-steps button { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0; border: 0; background: none; cursor: pointer; }
+.journey-node { width: 40px; height: 40px; display: grid; place-items: center; margin-bottom: 8px; border-radius: 50%; background: #c3cbd8; color: #fff; transition: background-color .3s, box-shadow .3s; }
+.journey-steps .is-done .journey-node { background: var(--green); }
+.journey-steps .is-current .journey-node { background: #fff; box-shadow: inset 0 0 0 3px var(--green), 0 0 0 5px rgba(0, 166, 81, .14); }
+.journey-steps .is-current .journey-node::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--green); }
+.journey-number { font-size: 14px; font-weight: 700; color: var(--navy); }
+.journey-label { font-size: 16px; font-weight: 700; color: var(--navy); }
+
+.journey-cards { position: relative; height: 350px; }
+.journey-card {
+  position: absolute; top: 0; left: 50%; width: min(683px, 100%); height: 347px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 283px; gap: 14px; padding: 10px 10px 10px 30px;
+  border-radius: var(--radius); background: #fff; box-shadow: 0 20px 44px rgba(13, 42, 107, .14);
+  transform: translateX(-50%); transition: transform .5s cubic-bezier(.2, .7, .2, 1), opacity .4s;
+}
+.journey-card[data-offset="0"] { z-index: 3; }
+.journey-card[data-offset="-1"], .journey-card[data-offset="1"] { z-index: 2; opacity: .55; box-shadow: var(--shadow-sm); }
+.journey-card[data-offset="-1"] { transform: translateX(calc(-50% - 450px)) scale(.84); }
+/* As in the design: the earlier step tucks behind the current card, the next one starts just past it. */
+.journey-card[data-offset="1"] { transform: translateX(calc(-50% + 631px)) scale(.84); }
+.journey-card[data-offset="-2"], .journey-card[data-offset="2"] { z-index: 1; opacity: 0; pointer-events: none; }
+.journey-card[data-offset="-2"] { transform: translateX(calc(-50% - 900px)) scale(.7); }
+.journey-card[data-offset="2"] { transform: translateX(calc(-50% + 1180px)) scale(.7); }
+.journey-card-copy { display: flex; flex-direction: column; padding: 14px 0 6px; min-width: 0; }
+.journey-card-number { font-size: 50px; font-weight: 800; line-height: 1; color: var(--green); }
+.journey-card[data-offset="-1"] .journey-card-number, .journey-card[data-offset="1"] .journey-card-number { color: #8fcfae; }
+.journey-card h3 { margin-top: 12px; font-size: 25px; font-weight: 800; color: var(--navy); }
+.journey-card-copy > p { margin-top: 8px; font-size: 17px; line-height: 1.5; color: var(--muted); }
+.journey-points { margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.journey-points li { padding: 10px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.journey-point-head { display: flex; align-items: center; gap: 6px; color: var(--navy); }
+.journey-point-head strong { font-size: 15px; font-weight: 700; }
+.journey-points small { display: block; margin-top: 5px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
+.journey-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
+.journey-foot { position: relative; width: min(683px, 100%); margin: 16px auto 0; display: flex; justify-content: center; }
+.journey-count { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+
+/* why clients come back */
+.why-loyalty { padding-bottom: 10px; }
+.loyalty-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.loyalty-card { padding: 24px 22px 26px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; box-shadow: var(--shadow-sm); color: var(--navy); }
+.loyalty-card h3 { margin-top: 18px; font-size: 17px; font-weight: 800; color: var(--navy); }
+.loyalty-card p { margin-top: 8px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+
+/* Where there is no room to hold a section on screen — phones, tablets and
+   short laptop windows — every step is simply listed. */
+@media (max-width: 1080px), (max-height: 680px) {
+  .scroll-track { height: auto; }
+  .scroll-pin { position: static; height: auto; padding: 44px 18px; overflow: visible; }
+  .step-rail, .reason-card-tab, .scroll-hint, .journey-count { display: none; }
+  .reason-stage { grid-template-columns: minmax(0, 1fr); }
+  .reason-stack { height: auto; display: grid; gap: 16px; }
+  .reason-card, .reason-card[data-state] { position: relative; width: 100%; height: auto; transform: none; opacity: 1; pointer-events: auto; z-index: auto; }
+  .reason-card[data-state] .reason-card-copy { opacity: 1; }
+  .reason-card-photo.scene { height: 240px; }
+  .journey-steps::after, .journey-steps .journey-pulse { display: none; }
+  /* Every step is listed here, so none is marked as the current one. */
+  .why-process .journey-steps li .journey-node { background: var(--green); box-shadow: none; }
+  .why-process .journey-steps li .journey-node::after { display: none; }
+  .journey-cards { height: auto; display: grid; gap: 16px; }
+  .journey-card, .journey-card[data-offset] { position: relative; left: auto; width: 100%; height: auto; transform: none; opacity: 1; pointer-events: auto; box-shadow: var(--shadow-sm); }
+  .journey-card[data-offset] .journey-card-number { color: var(--green); }
+  .journey-card-photo.scene { min-height: 220px; }
+  .loyalty-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .reason-card { grid-template-columns: minmax(0, 1fr); padding: 20px; }
+  .reason-card-copy { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; }
+  .reason-card-icon { width: 44px; height: 44px; }
+  /* Six labels do not fit across a phone: two rows of three. */
+  .journey-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; }
+  .journey-steps::before { display: none; }
+  .journey-card { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+  .journey-points { grid-template-columns: minmax(0, 1fr); }
+  .loyalty-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reason-card, .reason-card-tab, .reason-card-copy, .journey-card, .journey-steps::after, .step-dots button, .journey-node { transition: none; }
+  .scroll-hint .icon:last-child { animation: none; }
+}
 
 .review-summary { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; margin-bottom: 26px; }
 .review-summary .rating-value { font-size: 22px; font-weight: 800; color: var(--ink); }
@@ -634,8 +766,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .promo-art .scene { inset: 0 14px 14px; }
   .gallery-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .narrative-block, .feedback-block { grid-template-columns: 1fr; }
-  .why-row { grid-template-columns: 46px 1fr; }
-  .why-row .scene { display: none; }
   .review-card { flex-basis: calc((100% - 18px) / 2); }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
 }

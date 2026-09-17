@@ -118,12 +118,23 @@ The other eight can stay on `cover` alone.
 120px tall. These are third-party marks; only use ones MySOS is actually permitted
 to display.
 
-### `src/assets/images/benefits/` — Why-page row photos (5 files)
+### `src/assets/images/benefits/` — Why-page reason cards (5 files)
 
 Named after the benefit icon: `supplier` · `value` · `flexible` · `expert` · `tailored`
 
-3:1 wide crops, 1200×400. They render as small 250×84 strips, so pick images that
-read at a glance.
+Shown as the photo on each "Why choose MySOS" card, about 500×310 on desktop and
+full width on phones. Supply at least 1000×620 (roughly 16:10) and keep the subject
+central: the card crops to fill.
+
+### `src/assets/images/process/` — Why-page process photos (optional, 6 files)
+
+Named after the step icon: `consult` · `expert` · `clipboard` · `sample` · `production` · `delivery`
+(Enquire · Recommend · Quote · Sample · Produce · Deliver)
+
+Each step card shows a portrait-ish photo, about 283×327. Supply at least 600×700.
+None is shipped yet, so each step borrows a related MySOS photo (see
+`PROCESS_PHOTOS` in `src/public/pages/WhyPage.jsx`) until one is added here or
+chosen in the website manager.
 
 ---
 
@@ -158,7 +169,7 @@ A further 55 images were harvested from `/tshirt`, `/caps`, `/totebags`,
 | Group | Files | Notes |
 |---|---|---|
 | `solutions/` | 6 | All six industry cards now carry real photography. |
-| `benefits/` | 5 | All five Why-page rows. |
+| `benefits/` | 5 | All five Why-page reason cards. |
 | `products/` | +15 | Caps, totes, drawstring, jackets, singlets, notebook, gift set, stickers, lanyards — **including drinkware**, which the homepage alone did not cover. |
 | `scenes/band-industry`, `scenes/band-cta` | 2 | Photography washed behind the two navy bands at 16% with `mix-blend-mode: luminosity`. |
 
