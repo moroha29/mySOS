@@ -826,6 +826,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .stories-reviews-rating { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
 .stories-reviews-score { font-size: 42px; font-weight: 800; line-height: 1; color: var(--ink); }
 .stories-reviews-star { color: #f5a623; }
+.stories-reviews-count { margin-top: 8px; font-size: 16px; color: var(--muted); }
+.stories-reviews-count strong { font-weight: 700; color: var(--navy); }
 .stories-reviews-google { display: inline-flex; align-items: center; gap: 8px; margin-left: 20px; font-size: 18px; font-weight: 600; color: var(--muted); }
 .stories-reviews-track { grid-column: 2; display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 2px; }
 .stories-reviews-track::-webkit-scrollbar { display: none; }

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, headingPath, heroBackground, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
+import { cms, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
-import { heading, PageCTA, Photo, useGoogleReviews } from '../components/Ui';
+import { heading, label, PageCTA, Photo, useGoogleReviews } from '../components/Ui';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
 
 // One large project and four smaller ones per page, as in the design.
@@ -101,6 +101,12 @@ function StoryReviews() {
             <span data-cms-path={cms(pagePath('stories', 'reviewsPendingLabel'))}>{pageText('stories', 'reviewsPendingLabel', 'Reviews on Google')}</span>
           </span>
         </p>}
+      {/* Google's own count, worded as on the home page's review row. */}
+      {data?.averageRating && data.totalReviewCount ? <p className="stories-reviews-count">
+        <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
+        {' '}<strong>{data.totalReviewCount}</strong>{' '}
+        <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
+      </p> : null}
     </div>
 
     <div className="stories-reviews-track" ref={trackRef}>

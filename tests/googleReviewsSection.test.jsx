@@ -79,6 +79,7 @@ describe('before Google approves API access', () => {
     const rowText = row.replace(/<[^>]+>/g, ' ');
     expect(rowText).not.toMatch(/Rachel Ong|Daniel Tan|\b4\.9\b/);
     expect(row).not.toContain('stories-reviews-score');
+    expect(row).not.toContain('stories-reviews-count');
   });
 
   it('the stories invitation wording is editable', () => {
@@ -123,6 +124,9 @@ describe('with reviews from Google', () => {
     expect(markup).toContain('Great shirts, fast turnaround.');
     expect(markup).toContain('Jamie Tan');
     expect(markup).toContain('class="stories-reviews-score">4.8<');
+    // Google's own count sits under the rating.
+    const count = markup.match(/<p class="stories-reviews-count">.*?<\/p>/s)?.[0] ?? '';
+    expect(count.replace(/<[^>]+>/g, '')).toBe('Based on 123 reviews');
     expect(markup).toContain('on Google');
     expect(markup.match(/class="stories-review"/g)).toHaveLength(2);
     expect(markup).not.toContain('is-invite');
