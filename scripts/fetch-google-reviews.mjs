@@ -30,7 +30,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildPlacesPayload, buildReviewsPayload, findOwnListing, GOOGLE_LISTING_CID, GOOGLE_LISTING_SEARCH, GOOGLE_REVIEWS_NOTE, hasGoogleReviews, preferReviews, shouldWriteReviews } from '../src/utils/googleReviews.js';
+import { buildPlacesPayload, buildReviewsPayload, findOwnListing, GOOGLE_LISTING_CID, GOOGLE_LISTING_SEARCHES, GOOGLE_REVIEWS_NOTE, hasGoogleReviews, preferReviews, shouldWriteReviews } from '../src/utils/googleReviews.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const count = (number, noun) => `${number} ${noun}${number === 1 ? '' : 's'}`;
@@ -168,7 +168,7 @@ async function tryBusinessProfile(now) {
  * business, keeping only the result whose Maps link is MySOS's own listing.
  * Saving the id as GOOGLE_PLACE_ID skips this call.
  */
-async function lookUpPlaceId(key) {
+async function searchPlaces(key, textQuery) {
   const response = await fetch('https://places.googleapis.com/v1/places:searchText', {
     method: 'POST',
     headers: {
@@ -176,19 +176,32 @@ async function lookUpPlaceId(key) {
       'X-Goog-Api-Key': key,
       'X-Goog-FieldMask': 'places.id,places.displayName,places.formattedAddress,places.googleMapsUri',
     },
-    body: JSON.stringify({ textQuery: process.env.GOOGLE_PLACE_SEARCH?.trim() || GOOGLE_LISTING_SEARCH, regionCode: 'SG' }),
+    // A business that serves customers at their address and hides its own is
+    // left out of text search unless this is asked for.
+    body: JSON.stringify({ textQuery, regionCode: 'SG', includePureServiceAreaBusinesses: true, pageSize: 20 }),
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
     throw new Error(`Places API refused the search: ${body?.error?.message || `HTTP ${response.status}`}. Check that the key has the Places API (New) enabled and billing is on — see docs/GOOGLE_REVIEWS.md.`);
   }
-  const own = findOwnListing(body.places);
-  if (!own) {
-    const seen = (body.places ?? []).map((place) => `  ${place.displayName?.text} — ${place.formattedAddress} (${place.id})`).join('\n') || '  (no results)';
-    throw new Error(`Could not find MySOS's own Google listing (cid ${GOOGLE_LISTING_CID}) in the search results. It may not be public on Google Maps yet. Results were:\n${seen}\nIf one of these is MySOS, save its id as the GOOGLE_PLACE_ID variable.`);
+  return body.places ?? [];
+}
+
+async function lookUpPlaceId(key) {
+  const configured = process.env.GOOGLE_PLACE_SEARCH?.trim();
+  const queries = configured ? [configured] : GOOGLE_LISTING_SEARCHES;
+  const seen = new Map();
+  for (const query of queries) {
+    const places = await searchPlaces(key, query);
+    const own = findOwnListing(places);
+    if (own) {
+      console.log(`Found the listing (searching "${query}"): ${own.displayName?.text}, ${own.formattedAddress ?? 'no public address'}. Place id ${own.id} — save it as the GOOGLE_PLACE_ID variable to skip this lookup.`);
+      return own.id;
+    }
+    for (const place of places) seen.set(place.id, place);
   }
-  console.log(`Found the listing: ${own.displayName?.text}, ${own.formattedAddress}. Place id ${own.id} — save it as the GOOGLE_PLACE_ID variable to skip this lookup.`);
-  return own.id;
+  const list = [...seen.values()].map((place) => `  ${place.displayName?.text} — ${place.formattedAddress ?? 'no public address'} (${place.id})`).join('\n') || '  (no results)';
+  throw new Error(`Could not find MySOS's own Google listing (cid ${GOOGLE_LISTING_CID}) searching ${queries.map((query) => `"${query}"`).join(', ')}. It may not be public on Google Maps yet. Results were:\n${list}\nIf one of these is MySOS, save its id as the GOOGLE_PLACE_ID variable.`);
 }
 
 async function tryPlaces(now) {

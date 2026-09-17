@@ -33,7 +33,9 @@ export const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?q=mysourceofsol
  * Maps link carries this number.
  */
 export const GOOGLE_LISTING_CID = '15290863019161496116';
-export const GOOGLE_LISTING_SEARCH = 'My Source of Solutions Singapore';
+// Names the listing might be found under, tried in turn. The site's own Google
+// link searches for the one-word name.
+export const GOOGLE_LISTING_SEARCHES = ['mysourceofsolutions', 'My Source of Solutions Singapore', 'My Source of Solutions', 'MySOS custom merchandise Singapore'];
 
 /** Picks MySOS's own listing out of a Places text search, or null. */
 export function findOwnListing(places = [], cid = GOOGLE_LISTING_CID) {
