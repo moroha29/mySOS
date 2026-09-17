@@ -1,10 +1,10 @@
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, cmsAll, configPath, contentPath, headingPath, heroBackground, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, contentPath, headingPath, heroBackground, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, CategoryCard, heading, label, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink, QUOTE_HREF } from '../components/Ui';
+import { Button, CategoryCard, enquiryProps, heading, label, PageCTA, ProcessSteps, quoteDestinationPaths, SectionHeading, StoryCard, Testimonials, TextLink } from '../components/Ui';
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
 const CARD_WIDTH = 186;   // keep in sync with .trust-logo width in public.css
@@ -61,7 +61,7 @@ export default function HomePage() {
           </h1>
           <p className="hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
           <div className="hero-actions">
-            <Button href={QUOTE_HREF} data-cms-paths={cmsAll(configPath('quotationPath'))}><span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span></Button>
+            <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span></Button>
             <Button href="/mySOS/products/" variant="ghost"><span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
           </div>
           <ul className="hero-promises">

@@ -2,11 +2,11 @@ import { useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, cmsAll, configPath, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
 import { getPublicProducts } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, heading, PageCTA, Photo, ProductCard, SectionHeading, QUOTE_HREF } from '../components/Ui';
+import { Button, enquiryProps, heading, PageCTA, Photo, ProductCard, quoteDestinationPaths, SectionHeading } from '../components/Ui';
 
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
@@ -186,7 +186,7 @@ export default function ProductsPage() {
         <span className="eyebrow" data-cms-path={cms(pagePath('products', 'promoEyebrow'))}>{pageText('products', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('products', 'promoTitle'))}>{pageText('products', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('products', 'promoDescription'))}>{pageText('products', 'promoDescription')}</p>
-        <Button href={QUOTE_HREF} data-cms-paths={cmsAll(configPath('quotationPath'))}><span data-cms-path={cms(pagePath('products', 'promoButtonLabel'))}>{pageText('products', 'promoButtonLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(pagePath('products', 'promoButtonLabel'))}>{pageText('products', 'promoButtonLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.productsPromoImage, 'scenes/products-promo')} imagePath={scenePath('productsPromoImage')} /></div>
     </section>

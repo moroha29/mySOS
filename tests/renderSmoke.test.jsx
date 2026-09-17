@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import PublicApp from '../src/public/PublicApp';
 import QuotationApp from '../src/App';
+import siteConfig from '../src/data/siteConfig.json';
+import successStories from '../src/data/successStories.json';
 
 const originalLocation = globalThis.location;
 
@@ -28,7 +30,9 @@ describe('production route rendering', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     const markup = renderAt(pathname);
     expect(markup).toContain(expected);
-    expect(markup).toContain('/mySOS/quotation_engine/');
+    // The quotation engine is for MySOS's agents: no public page links to it.
+    expect(markup).not.toMatch(/quotation_engine/);
+    expect(markup).toContain(`https://wa.me/${siteConfig.whatsapp.number}`);
     // Case-sensitive and word-bounded on purpose: a loose /NaN/i also matches
     // real copy such as "Nanyang Technological University" in logo alt text.
     expect(markup).not.toMatch(/\bundefined\b|\bNaN\b|\[object Object\]|Contact details can be set/);
@@ -38,12 +42,13 @@ describe('production route rendering', () => {
 
   it('renders data-driven product and solution filters', () => {
     const apparel = renderAt('/mySOS/products/');
-    expect(apparel).toContain('product=premium-cotton-tee');
+    // Each product card asks for a quote on WhatsApp, naming the product.
+    expect(apparel).toContain('quote%20for%20Premium%20Cotton%20Tee');
     expect(renderAt('/mySOS/products/', '?category=bags')).toContain('Canvas Tote Bag');
     const schools = renderAt('/mySOS/solutions/', '?industry=schools');
     expect(schools).toContain('Recommended for Schools');
     expect(schools).toContain('Sublimation Jersey');
-    expect(schools).toContain('product=sublimation-jersey');
+    expect(schools).toContain('quote%20for%20Sublimation%20Jersey');
     const stories = renderAt('/mySOS/success-stories/');
     expect(stories).toContain('/mySOS/success-stories/ntu-cca-jerseys-2024/');
     expect(renderAt('/mySOS/success-stories/ntu-cca-jerseys-2024/')).toContain('Need something similar?');
@@ -66,6 +71,33 @@ describe('production route rendering', () => {
     const rootRelative = hrefs.filter((href) => href.startsWith('/'));
     expect(rootRelative.length).toBeGreaterThan(10);
     expect(rootRelative.every((href) => href.startsWith('/mySOS/'))).toBe(true);
+  });
+});
+
+describe('the quotation engine is not reachable from the public site', () => {
+  const pages = [
+    '/mySOS/', '/mySOS/products/', '/mySOS/solutions/', '/mySOS/why-mysos/', '/mySOS/success-stories/',
+    ...successStories.map((story) => `/mySOS/success-stories/${story.slug}/`),
+  ];
+
+  it.each(pages)('%s has no link to it, whatever the category', (pathname) => {
+    const views = [renderAt(pathname)];
+    if (pathname === '/mySOS/products/' || pathname === '/mySOS/solutions/') {
+      for (const search of ['?category=apparel', '?category=bags', '?category=drinkware', '?category=corporate-gifts', '?category=stationery', '?category=event-essentials', '?industry=schools', '?industry=businesses']) {
+        views.push(renderAt(pathname, search));
+      }
+    }
+    for (const markup of views) {
+      expect(markup).not.toMatch(/quotation_engine|quotation-engine/i);
+      const hrefs = [...markup.matchAll(/<a [^>]*href="([^"]+)"/g)].map((match) => match[1]);
+      expect(hrefs.some((href) => /quot/i.test(href) && !href.startsWith('https://wa.me/'))).toBe(false);
+    }
+  });
+
+  it('keeps the engine page out of search results', async () => {
+    const { readFileSync } = await import('node:fs');
+    const html = readFileSync(new URL('../quotation_engine/index.html', import.meta.url), 'utf8');
+    expect(html).toContain('<meta name="robots" content="noindex, nofollow" />');
   });
 });
 
