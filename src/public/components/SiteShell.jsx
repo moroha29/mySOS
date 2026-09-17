@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
+import { enquiryLinkProps, getEnquiryHref } from '../../utils/catalogue';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, solutionPath } from '../cms';
 import Icon from './Icons';
 
@@ -93,8 +94,11 @@ function NavigationItem({ item, index, onNavigate }) {
   </div>;
 }
 
-// The quote button carries its wording and where it sends people.
-const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'), configPath('quotationPath'));
+// The quote button carries its wording and where it sends people: a WhatsApp
+// chat, never the agents' quotation engine.
+const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'), configPath('whatsapp', 'number'), configPath('whatsapp', 'quoteMessage'));
+const quoteHref = getEnquiryHref();
+const quoteLink = { href: quoteHref, ...enquiryLinkProps(quoteHref) };
 
 // Several fields hold "/mySOS/" — the site's base path and the placeholder
 // legal links — so the manager cannot tell them apart from the URL alone.
@@ -111,10 +115,10 @@ export function SiteHeader() {
       </button>
       <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`.trim()} aria-label="Main navigation">
         {siteConfig.navigation.map((item, index) => <NavigationItem key={item.label} item={item} index={index} onNavigate={() => setOpen(false)} />)}
-        <a className="btn btn-primary btn-sm mobile-quote" href={siteConfig.quotationPath} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <a className="btn btn-primary btn-sm mobile-quote" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
       </nav>
       <div className="header-actions">
-        <a className="btn btn-primary btn-sm" href={siteConfig.quotationPath} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <a className="btn btn-primary btn-sm" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
         <WhatsAppButton />
       </div>
     </div>

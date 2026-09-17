@@ -2,13 +2,14 @@
   "companyName": "MySOS",
   "tagline": "You're One Step Away From Your Solution!",
   "basePath": "/mySOS/",
-  "quotationPath": "/mySOS/quotation_engine/",
   "email": "mysourceofsolutions@gmail.com",
   "whatsapp": {
     "enabled": true,
     "number": "6588547109",
     "displayNumber": "+65 8854 7109",
-    "defaultMessage": "Hi MySOS, I would like to enquire about custom merchandise."
+    "defaultMessage": "Hi MySOS, I would like to enquire about custom merchandise.",
+    "quoteMessage": "Hi MySOS, I would like to get a quote for custom merchandise.",
+    "productQuoteMessage": "Hi MySOS, I would like to get a quote for {product}."
   },
   "socialLinks": {
     "facebook": "",

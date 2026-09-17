@@ -19,11 +19,30 @@ export function getDisplayPrice(product) {
   return `${display.prefix ? `${display.prefix} ` : ''}$${Number(display.amount).toFixed(2)}`;
 }
 
-export function getQuoteHref(productId) {
+/*
+ * Where "Get a Quote" and every product card send a visitor: a WhatsApp chat
+ * with MySOS, naming the product when there is one, or an email when WhatsApp
+ * is switched off.
+ *
+ * The quotation engine is MySOS's own pricing tool for its agents. Visitors
+ * are never sent there, and the public site does not carry its address.
+ */
+export function getEnquiryHref(productId) {
+  const { whatsapp = {}, email } = siteConfig;
   const product = productId ? productData.catalogue.find((item) => item.id === productId) : null;
-  const query = product?.quotation.enabled ? `?product=${encodeURIComponent(product.public.slug)}` : '';
-  return `${siteConfig.quotationPath}${query}`;
+  const name = product?.public?.name;
+  if (whatsapp.enabled && whatsapp.number) {
+    const message = name
+      ? String(whatsapp.productQuoteMessage || 'Hi MySOS, I would like to get a quote for {product}.').replace('{product}', name)
+      : whatsapp.quoteMessage || whatsapp.defaultMessage || '';
+    return `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(message)}`;
+  }
+  if (email) return `mailto:${email}?subject=${encodeURIComponent(name ? `Quote request: ${name}` : 'Quote request')}`;
+  return null;
 }
+
+/** Link attributes for an enquiry: a WhatsApp chat opens in a new tab. */
+export const enquiryLinkProps = (href) => (/^https?:/.test(href || '') ? { target: '_blank', rel: 'noreferrer' } : {});
 
 export function getQuotationPreset(productId) {
   const product = productData.catalogue.find((item) => (item.id === productId || item.public.slug === productId) && item.quotation.enabled);

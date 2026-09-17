@@ -5,7 +5,8 @@ import solutions from '../src/data/solutions.json';
 import successStories from '../src/data/successStories.json';
 import { calculateProductCost, getProduct } from '../src/engines/productEngine';
 import { createInitialValue } from '../src/App';
-import { getDisplayPrice, getPublicProducts, getQuoteHref, getQuotationPreset, getStories, getStoryBySlug } from '../src/utils/catalogue';
+import siteConfig from '../src/data/siteConfig.json';
+import { enquiryLinkProps, getDisplayPrice, getEnquiryHref, getPublicProducts, getQuotationPreset, getStories, getStoryBySlug } from '../src/utils/catalogue';
 import { resolvePublicRoute } from '../src/public/PublicApp';
 
 describe('shared catalogue', () => {
@@ -70,12 +71,26 @@ describe('shared catalogue', () => {
 });
 
 describe('public and quotation integration', () => {
-  it('builds the quotation link and preset from catalogue data', () => {
-    expect(getQuoteHref('premium_cotton_tee')).toBe('/mySOS/quotation_engine/?product=premium-cotton-tee');
+  it("the agents' quotation engine still preselects a product from its own link", () => {
     expect(getQuotationPreset('premium_cotton_tee')).toMatchObject({ productId: 'tee', productOptions: { garment: 'premium_cotton_tee' } });
     expect(createInitialValue('?product=premium-cotton-tee').items[0]).toMatchObject({ productId: 'tee', productOptions: { garment: 'premium_cotton_tee' } });
     expect(createInitialValue('?product=does-not-exist').items[0]).toMatchObject({ productId: '', productOptions: {} });
-    expect(getQuoteHref('canvas_tote_bag')).toBe('/mySOS/quotation_engine/');
+  });
+
+  it('asking for a quote on the public site opens WhatsApp, never the quotation engine', () => {
+    const general = new URL(getEnquiryHref());
+    expect(general.origin + general.pathname).toBe(`https://wa.me/${siteConfig.whatsapp.number}`);
+    expect(general.searchParams.get('text')).toBe(siteConfig.whatsapp.quoteMessage);
+    // A product card names the product it was chosen from, for every product.
+    const tee = new URL(getEnquiryHref('premium_cotton_tee'));
+    expect(tee.searchParams.get('text')).toBe('Hi MySOS, I would like to get a quote for Premium Cotton Tee.');
+    expect(new URL(getEnquiryHref('canvas_tote_bag')).searchParams.get('text')).toMatch(/quote for .*Tote/i);
+    expect(enquiryLinkProps(getEnquiryHref())).toEqual({ target: '_blank', rel: 'noreferrer' });
+  });
+
+  it("the public site data does not carry the engine's address", () => {
+    expect(siteConfig).not.toHaveProperty('quotationPath');
+    expect(JSON.stringify(siteConfig)).not.toMatch(/quotation_engine/);
   });
 
   it('resolves static public routes and story slugs', () => {
