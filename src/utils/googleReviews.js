@@ -154,6 +154,9 @@ export function isFresh(data, now = Date.now()) {
   return Number.isFinite(fetched) && now - fetched <= MAX_STORED_AGE_DAYS * DAY_MS;
 }
 
+/** A rating as the design prints it: always one decimal, "5.0", "4.9". */
+export const formatRating = (value) => (Number.isFinite(Number(value)) && Number(value) > 0 ? Number(value).toFixed(1) : '');
+
 export const hasGoogleReviews = (data) => Array.isArray(data?.reviews) && data.reviews.length > 0;
 
 /*

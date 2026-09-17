@@ -308,3 +308,10 @@ describe("finding MySOS's own listing", () => {
     expect(findOwnListing()).toBe(null);
   });
 });
+
+describe('printing the rating', () => {
+  it('always shows one decimal, as the design does', async () => {
+    const { formatRating } = await import('../src/utils/googleReviews');
+    expect([formatRating(5), formatRating(4.9), formatRating(4.86), formatRating('4'), formatRating(null), formatRating(0)]).toEqual(['5.0', '4.9', '4.9', '4.0', '', '']);
+  });
+});
