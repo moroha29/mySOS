@@ -9,7 +9,146 @@
       "premium_cotton_tee",
       "polo_cotton_pique"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "School solutions",
+      "title": "Everything Your School Needs, All in One Place",
+      "lead": "From orientation packs and CCA jerseys to graduation gifts, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore School Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "orientation",
+    "useCases": [
+      {
+        "id": "orientation",
+        "name": "Orientation & Welcome Packs",
+        "icon": "bag",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Orientation T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 50
+          },
+          {
+            "productId": "drawstring_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 50
+          },
+          {
+            "productId": "event_lanyard",
+            "name": "",
+            "note": "Recommended: 20mm, double-sided",
+            "quantity": 50
+          },
+          {
+            "productId": "die_cut_sticker",
+            "name": "",
+            "note": "Recommended: School logo sticker",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "hardcover_notebook",
+          "tattoo_sticker"
+        ]
+      },
+      {
+        "id": "cca",
+        "name": "CCA & Sports Teams",
+        "icon": "sports",
+        "image": "",
+        "items": [
+          {
+            "productId": "jersey-sublimation",
+            "name": "",
+            "note": "Recommended: Full-colour sublimation with names and numbers",
+            "quantity": 30
+          },
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Training T-shirt",
+            "note": "Recommended: Training tee with team crest",
+            "quantity": 30
+          },
+          {
+            "productId": "custom_towel",
+            "name": "",
+            "note": "Recommended: Embroidered crest",
+            "quantity": 30
+          }
+        ],
+        "suggestions": [
+          "windbreaker_jacket",
+          "bucket_hat",
+          "drawstring_bag"
+        ]
+      },
+      {
+        "id": "class-wear",
+        "name": "Class & Cohort Wear",
+        "icon": "shirt",
+        "image": "",
+        "items": [
+          {
+            "productId": "cotton_round_neck_tee",
+            "name": "Class T-shirt",
+            "note": "Printing: Front design with class names on the back",
+            "quantity": 40
+          },
+          {
+            "productId": "pullover_hoodie",
+            "name": "Cohort Hoodie",
+            "note": "Recommended: Embroidered chest logo",
+            "quantity": 40
+          }
+        ],
+        "suggestions": [
+          "long_sleeve_tee",
+          "dad_cap",
+          "canvas_tote_bag"
+        ]
+      },
+      {
+        "id": "graduation",
+        "name": "Graduation & Appreciation Gifts",
+        "icon": "school",
+        "image": "",
+        "items": [
+          {
+            "productId": "hardcover_notebook",
+            "name": "",
+            "note": "Recommended: Debossed school crest",
+            "quantity": 100
+          },
+          {
+            "productId": "insulated_bottle",
+            "name": "",
+            "note": "Recommended: Laser-engraved name",
+            "quantity": 100
+          },
+          {
+            "productId": "custom_medal",
+            "name": "",
+            "note": "Recommended: Custom insert with the year",
+            "quantity": 100
+          }
+        ],
+        "suggestions": [
+          "executive_gift_set",
+          "canvas_tote_bag",
+          "stationery_set"
+        ]
+      }
+    ]
   },
   {
     "id": "businesses",
@@ -21,7 +160,152 @@
       "premium_cotton_tee",
       "custom_cutsew"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "Business solutions",
+      "title": "Everything Your Business Needs, All in One Place",
+      "lead": "From staff uniforms and onboarding kits to client gifts and company events, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore Business Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "uniforms",
+    "useCases": [
+      {
+        "id": "uniforms",
+        "name": "Staff Uniforms",
+        "icon": "shirt",
+        "image": "",
+        "items": [
+          {
+            "productId": "polo_premium_cvc",
+            "name": "Staff Polo",
+            "note": "Recommended: Embroidered chest logo",
+            "quantity": 30
+          },
+          {
+            "productId": "windbreaker_jacket",
+            "name": "",
+            "note": "Recommended: Embroidered logo",
+            "quantity": 30
+          },
+          {
+            "productId": "dad_cap",
+            "name": "Cap",
+            "note": "Recommended: Front embroidery",
+            "quantity": 30
+          }
+        ],
+        "suggestions": [
+          "dri_fit_round_neck",
+          "event_lanyard",
+          "canvas_tote_bag"
+        ]
+      },
+      {
+        "id": "onboarding",
+        "name": "Onboarding Kits",
+        "icon": "business",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Welcome T-shirt",
+            "note": "Printing: Logo on the chest",
+            "quantity": 20
+          },
+          {
+            "productId": "insulated_bottle",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 20
+          },
+          {
+            "productId": "hardcover_notebook",
+            "name": "",
+            "note": "Recommended: Debossed logo",
+            "quantity": 20
+          },
+          {
+            "productId": "canvas_tote_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 20
+          }
+        ],
+        "suggestions": [
+          "stationery_set",
+          "event_lanyard",
+          "pullover_hoodie"
+        ]
+      },
+      {
+        "id": "client-gifts",
+        "name": "Client & Corporate Gifts",
+        "icon": "gift",
+        "image": "",
+        "items": [
+          {
+            "productId": "executive_gift_set",
+            "name": "",
+            "note": "Recommended: Branded box with your logo",
+            "quantity": 50
+          },
+          {
+            "productId": "insulated_bottle",
+            "name": "",
+            "note": "Recommended: Laser-engraved logo",
+            "quantity": 50
+          },
+          {
+            "productId": "hardcover_notebook",
+            "name": "",
+            "note": "Recommended: Debossed logo",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "picnic_mat",
+          "stationery_set",
+          "canvas_tote_bag"
+        ]
+      },
+      {
+        "id": "family-day",
+        "name": "Company Events & Family Days",
+        "icon": "sun",
+        "image": "",
+        "items": [
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Event T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          },
+          {
+            "productId": "bucket_hat",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 100
+          },
+          {
+            "productId": "picnic_mat",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "drawstring_bag",
+          "tattoo_sticker",
+          "insulated_bottle"
+        ]
+      }
+    ]
   },
   {
     "id": "events",
@@ -33,7 +317,152 @@
       "snapback",
       "dri_fit_round_neck"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "Event solutions",
+      "title": "Everything Your Event Needs, All in One Place",
+      "lead": "From crew shirts and lanyards to participant packs and finisher medals, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore Event Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "crew",
+    "useCases": [
+      {
+        "id": "crew",
+        "name": "Event Crew & Volunteers",
+        "icon": "contact",
+        "image": "",
+        "items": [
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Crew T-shirt",
+            "note": "Printing: \"CREW\" on the back",
+            "quantity": 50
+          },
+          {
+            "productId": "event_lanyard",
+            "name": "Lanyard",
+            "note": "Recommended: 20mm, double-sided",
+            "quantity": 50
+          },
+          {
+            "productId": "trucker_mesh",
+            "name": "Cap",
+            "note": "Recommended: Front print",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "windbreaker_jacket",
+          "name_tent",
+          "drawstring_bag"
+        ]
+      },
+      {
+        "id": "participants",
+        "name": "Participant Packs",
+        "icon": "bag",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Event T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 200
+          },
+          {
+            "productId": "drawstring_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 200
+          },
+          {
+            "productId": "tattoo_sticker",
+            "name": "",
+            "note": "Recommended: Event logo",
+            "quantity": 200
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "die_cut_sticker",
+          "custom_towel"
+        ]
+      },
+      {
+        "id": "races",
+        "name": "Runs & Races",
+        "icon": "award",
+        "image": "",
+        "items": [
+          {
+            "productId": "custom_singlet",
+            "name": "Race Singlet",
+            "note": "Recommended: Sublimated race design",
+            "quantity": 300
+          },
+          {
+            "productId": "custom_medal",
+            "name": "Finisher Medal",
+            "note": "Recommended: Custom shape with ribbon",
+            "quantity": 300
+          },
+          {
+            "productId": "custom_towel",
+            "name": "",
+            "note": "Recommended: Printed race logo",
+            "quantity": 300
+          }
+        ],
+        "suggestions": [
+          "drawstring_bag",
+          "bucket_hat",
+          "insulated_bottle"
+        ]
+      },
+      {
+        "id": "conferences",
+        "name": "Conferences & Launches",
+        "icon": "events",
+        "image": "",
+        "items": [
+          {
+            "productId": "event_lanyard",
+            "name": "Lanyard",
+            "note": "Recommended: 20mm, double-sided",
+            "quantity": 200
+          },
+          {
+            "productId": "name_tent",
+            "name": "",
+            "note": "Recommended: Printed names",
+            "quantity": 200
+          },
+          {
+            "productId": "stationery_set",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 200
+          },
+          {
+            "productId": "canvas_tote_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 200
+          }
+        ],
+        "suggestions": [
+          "hardcover_notebook",
+          "polo_premium_cvc",
+          "executive_gift_set"
+        ]
+      }
+    ]
   },
   {
     "id": "churches",
@@ -45,7 +474,158 @@
       "polo_dri_fit",
       "snapback"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "Church solutions",
+      "title": "Everything Your Church Needs, All in One Place",
+      "lead": "From camps and events to volunteer apparel and welcome gifts, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore Church Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "ministry",
+    "useCases": [
+      {
+        "id": "camps",
+        "name": "Camps & Retreats",
+        "icon": "tent",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Camp T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 50
+          },
+          {
+            "productId": "drawstring_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 50
+          },
+          {
+            "productId": "custom_towel",
+            "name": "",
+            "note": "Recommended: Printed camp logo",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "bucket_hat",
+          "tattoo_sticker"
+        ]
+      },
+      {
+        "id": "anniversaries",
+        "name": "Events & Anniversaries",
+        "icon": "events",
+        "image": "",
+        "items": [
+          {
+            "productId": "cotton_round_neck_tee",
+            "name": "Anniversary T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          },
+          {
+            "productId": "canvas_tote_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 100
+          },
+          {
+            "productId": "hardcover_notebook",
+            "name": "",
+            "note": "Recommended: Debossed logo",
+            "quantity": 100
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "die_cut_sticker",
+          "executive_gift_set"
+        ]
+      },
+      {
+        "id": "ministry",
+        "name": "Ministry & Volunteer Apparel",
+        "icon": "community",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Ministry T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 50
+          },
+          {
+            "productId": "polo_cotton_pique",
+            "name": "Embroidered Polo",
+            "note": "Recommended: Embroidered chest logo",
+            "quantity": 50
+          },
+          {
+            "productId": "event_lanyard",
+            "name": "Lanyard",
+            "note": "Recommended: 20mm, double-sided",
+            "quantity": 50
+          },
+          {
+            "productId": "",
+            "name": "Name Badge",
+            "note": "Recommended: Printed name insert",
+            "quantity": 50
+          },
+          {
+            "productId": "dad_cap",
+            "name": "Cap",
+            "note": "Recommended: Front embroidery",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "canvas_tote_bag",
+          "dri_fit_round_neck"
+        ]
+      },
+      {
+        "id": "welcome",
+        "name": "Welcome & Appreciation Gifts",
+        "icon": "gift",
+        "image": "",
+        "items": [
+          {
+            "productId": "canvas_tote_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 100
+          },
+          {
+            "productId": "insulated_bottle",
+            "name": "",
+            "note": "Recommended: Printed verse or logo",
+            "quantity": 100
+          },
+          {
+            "productId": "hardcover_notebook",
+            "name": "",
+            "note": "Recommended: Debossed logo",
+            "quantity": 100
+          }
+        ],
+        "suggestions": [
+          "stationery_set",
+          "executive_gift_set",
+          "die_cut_sticker"
+        ]
+      }
+    ]
   },
   {
     "id": "sports-teams",
@@ -57,7 +637,146 @@
       "dri_fit_round_neck",
       "snapback"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "Sports team solutions",
+      "title": "Everything Your Team Needs, All in One Place",
+      "lead": "From match jerseys and training kit to supporter merchandise and awards, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore Sports Team Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "match-kits",
+    "useCases": [
+      {
+        "id": "match-kits",
+        "name": "Match Kits",
+        "icon": "sports",
+        "image": "",
+        "items": [
+          {
+            "productId": "jersey-sublimation",
+            "name": "Match Jersey",
+            "note": "Recommended: Full-colour sublimation with names and numbers",
+            "quantity": 20
+          },
+          {
+            "productId": "custom_cutsew",
+            "name": "",
+            "note": "Recommended: Made to pattern, such as shorts or warm-up tops",
+            "quantity": 20
+          },
+          {
+            "productId": "custom_towel",
+            "name": "",
+            "note": "Recommended: Embroidered crest",
+            "quantity": 20
+          }
+        ],
+        "suggestions": [
+          "windbreaker_jacket",
+          "drawstring_bag",
+          "insulated_bottle"
+        ]
+      },
+      {
+        "id": "training",
+        "name": "Training Wear",
+        "icon": "shirt",
+        "image": "",
+        "items": [
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Training T-shirt",
+            "note": "Recommended: Team crest on the chest",
+            "quantity": 20
+          },
+          {
+            "productId": "custom_singlet",
+            "name": "Training Singlet",
+            "note": "Recommended: Sublimated team design",
+            "quantity": 20
+          },
+          {
+            "productId": "trucker_mesh",
+            "name": "Cap",
+            "note": "Recommended: Front print",
+            "quantity": 20
+          }
+        ],
+        "suggestions": [
+          "pullover_hoodie",
+          "custom_towel",
+          "insulated_bottle"
+        ]
+      },
+      {
+        "id": "supporters",
+        "name": "Supporter Merchandise",
+        "icon": "community",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Supporter T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          },
+          {
+            "productId": "snapback",
+            "name": "",
+            "note": "Recommended: Front embroidery",
+            "quantity": 100
+          },
+          {
+            "productId": "tattoo_sticker",
+            "name": "",
+            "note": "Recommended: Team logo",
+            "quantity": 200
+          }
+        ],
+        "suggestions": [
+          "die_cut_sticker",
+          "canvas_tote_bag",
+          "bucket_hat"
+        ]
+      },
+      {
+        "id": "awards",
+        "name": "Tournaments & Awards",
+        "icon": "award",
+        "image": "",
+        "items": [
+          {
+            "productId": "custom_medal",
+            "name": "",
+            "note": "Recommended: Custom shape with ribbon",
+            "quantity": 100
+          },
+          {
+            "productId": "custom_towel",
+            "name": "",
+            "note": "Recommended: Printed tournament logo",
+            "quantity": 100
+          },
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Tournament T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          }
+        ],
+        "suggestions": [
+          "event_lanyard",
+          "drawstring_bag",
+          "picnic_mat"
+        ]
+      }
+    ]
   },
   {
     "id": "community",
@@ -69,6 +788,145 @@
       "cotton_round_neck_tee",
       "polo_cotton_pique"
     ],
-    "image": ""
+    "image": "",
+    "page": {
+      "eyebrow": "Community solutions",
+      "title": "Everything Your Community Needs, All in One Place",
+      "lead": "From volunteer drives and charity runs to interest groups and neighbourhood events, we help coordinate everything through one trusted supplier.",
+      "exploreTitle": "Explore Community Solutions",
+      "heroImages": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    "defaultUseCase": "volunteers",
+    "useCases": [
+      {
+        "id": "volunteers",
+        "name": "Volunteer Drives",
+        "icon": "contact",
+        "image": "",
+        "items": [
+          {
+            "productId": "premium_cotton_tee",
+            "name": "Volunteer T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 50
+          },
+          {
+            "productId": "event_lanyard",
+            "name": "Lanyard",
+            "note": "Recommended: 20mm, double-sided",
+            "quantity": 50
+          },
+          {
+            "productId": "bucket_hat",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 50
+          }
+        ],
+        "suggestions": [
+          "drawstring_bag",
+          "insulated_bottle",
+          "name_tent"
+        ]
+      },
+      {
+        "id": "charity",
+        "name": "Charity & Fundraising",
+        "icon": "gift",
+        "image": "",
+        "items": [
+          {
+            "productId": "cotton_round_neck_tee",
+            "name": "Charity T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          },
+          {
+            "productId": "canvas_tote_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 100
+          },
+          {
+            "productId": "die_cut_sticker",
+            "name": "",
+            "note": "Recommended: Campaign logo",
+            "quantity": 200
+          }
+        ],
+        "suggestions": [
+          "insulated_bottle",
+          "tattoo_sticker",
+          "hardcover_notebook"
+        ]
+      },
+      {
+        "id": "groups",
+        "name": "Interest Groups & Clubs",
+        "icon": "community",
+        "image": "",
+        "items": [
+          {
+            "productId": "pullover_hoodie",
+            "name": "Club Hoodie",
+            "note": "Recommended: Embroidered chest logo",
+            "quantity": 30
+          },
+          {
+            "productId": "polo_dri_fit",
+            "name": "Club Polo",
+            "note": "Recommended: Embroidered chest logo",
+            "quantity": 30
+          },
+          {
+            "productId": "dad_cap",
+            "name": "Cap",
+            "note": "Recommended: Front embroidery",
+            "quantity": 30
+          }
+        ],
+        "suggestions": [
+          "windbreaker_jacket",
+          "insulated_bottle",
+          "die_cut_sticker"
+        ]
+      },
+      {
+        "id": "neighbourhood",
+        "name": "Neighbourhood Events",
+        "icon": "sun",
+        "image": "",
+        "items": [
+          {
+            "productId": "dri_fit_round_neck",
+            "name": "Event T-shirt",
+            "note": "Printing: Let MySOS recommend based on your artwork",
+            "quantity": 100
+          },
+          {
+            "productId": "picnic_mat",
+            "name": "",
+            "note": "Recommended: Printed logo",
+            "quantity": 50
+          },
+          {
+            "productId": "drawstring_bag",
+            "name": "",
+            "note": "Recommended: One-side print",
+            "quantity": 100
+          }
+        ],
+        "suggestions": [
+          "bucket_hat",
+          "tattoo_sticker",
+          "custom_towel"
+        ]
+      }
+    ]
   }
 ]

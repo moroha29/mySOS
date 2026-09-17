@@ -67,8 +67,11 @@ stays unlinked from the public site. Tests enforce this
 ## Checklist
 
 - [x] Branch, saved mockup, this file
-- [ ] Data model: `page`, `useCases`, `items`, `suggestions` for all six
+- [x] Data model: `page`, `useCases`, `items`, `suggestions` for all six
       solutions; `siteContent.requestOptions`; wording keys
+      (`siteContent.pages.solutionPage`). Seeded by a one-off script; Churches
+      wording is the design's, the other five follow its pattern. Every
+      product id is checked against the catalogue.
 - [ ] Route `/solutions/<id>/` + prerender + old `?industry=` links
 - [ ] Hero (breadcrumb, eyebrow, title, lead, WhatsApp button, collage)
 - [ ] Use-case carousel (selected state, arrows, dots)
@@ -85,6 +88,11 @@ stays unlinked from the public site. Tests enforce this
 ## Log
 
 - 2026-09-17 — Started. Mockup saved; plan and decisions written.
+- 2026-09-17 — Data model in. Each solution has 4 use cases; Churches defaults
+  to "Ministry & Volunteer Apparel" as in the design. The "Name Badge" is a
+  custom line (no catalogue product). Subcategories without their own detail
+  fields (gift sets, mats, medals, name tents, notebooks, pens, stickers,
+  towels) use `requestOptions.default` (colour only) plus notes and upload.
 
 ## How to resume
 
