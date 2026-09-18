@@ -1,3 +1,4 @@
+import { isDemo } from '../demoMode';
 import ExcelJS from 'exceljs';
 
 const BRAND = '123B35';
@@ -36,7 +37,7 @@ function styleHeader(row) {
 }
 
 export function createQuotationFilename(customerName, orderDate) {
-  return `mySOS_Quotation_${safeFilePart(customerName)}_${orderDate}.xlsx`;
+  return `${isDemo ? 'DEMO_NOT_A_QUOTE' : 'mySOS_Quotation'}_${safeFilePart(customerName)}_${orderDate}.xlsx`;
 }
 
 export function generateQuotationWorkbook(quote) {
@@ -58,7 +59,7 @@ export function generateQuotationWorkbook(quote) {
 
   sheet.mergeCells('A1:E1');
   const title = sheet.getCell('A1');
-  title.value = 'mySOS  |  QUOTATION';
+  title.value = isDemo ? 'DEMO ONLY | NOT A REAL QUOTE' : 'mySOS  |  QUOTATION';
   title.font = { bold: true, size: 22, color: { argb: 'FFFFFF' } };
   title.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: BRAND } };
   title.alignment = { vertical: 'middle', horizontal: 'left' };

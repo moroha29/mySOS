@@ -118,3 +118,6 @@ textarea { resize: vertical; }
 footer { padding: 28px 24px; border-top: 1px solid var(--line); color: var(--muted); text-align: center; font-size: 14px; }
 @media (max-width: 980px) { .workspace { grid-template-columns: 1fr; } .preview-card { position: static; order: 2; } }
 @media (max-width: 680px) { main { padding: 24px 14px 48px; } .page-heading { padding-bottom: 10px; } .step-nav { margin-top: 12px; } .form-section, .preview-card { border-radius: 16px; } .form-section { padding: 20px 16px; } .order-item { padding: 16px 12px; } .form-grid, .print-grid, .addon-grid { grid-template-columns: 1fr; } .size-grid { grid-template-columns: repeat(4, 1fr); } .addon-card { min-height: 70px; } .check-row { gap: 12px; flex-direction: column; } .pricing-editor-heading { align-items: flex-start; flex-direction: column; } .price-metrics { grid-template-columns: 1fr; } .price-override-row { grid-template-columns: 1fr; } }
+.demo-notice { margin: 0 0 1.5rem; padding: 1rem 1.25rem; background: #fff5d8; border: 1px solid #e1c37c; border-radius: 12px; color: #594515; }
+.demo-notice strong { font-size: 1.1rem; }
+.demo-notice p { margin: .5rem 0 0; line-height: 1.6; }

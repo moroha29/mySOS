@@ -155,3 +155,24 @@ The public website displays only `public.displayPricing`. It never renders quota
 Push to `main` or manually run the GitHub Actions workflow. It uses Node.js 22, runs `npm ci`, `npm test`, and `npm run build`, then uploads `dist/` as the GitHub Pages artifact.
 
 In the repository settings, configure Pages to use **GitHub Actions**. The expected deployment URL is `https://moroha29.github.io/mySOS/`.
+
+## Public quotation demo
+
+`/mySOS/mock_quotation_engine/` is a public demonstration using synthetic pricing.
+The real engine remains at `/mySOS/quotation_engine/`. Both compile the same
+`src/App.jsx`, form components, calculation engines and Excel generator.
+
+`npm run build` builds the production site, prerenders its marketing pages, then
+builds the demo in Vite `mock` mode. The demo has its own `mock-assets/` bundles.
+`scripts/mockQuotationData.mjs` substitutes data before compilation; it never
+imports production pricing into the demo's browser code. Synthetic values depend
+on field paths, not on real values. The build fails if a new data source has no
+mock provider or a production data module enters a demo chunk.
+
+Logic and form changes therefore update both versions on the next deployment.
+Pricing edits affect the real engine only; demo pricing remains fictional. Demo
+exports are marked `DEMO ONLY | NOT A REAL QUOTE` and use a `DEMO_NOT_A_QUOTE`
+filename. To preview both built versions, run `npm run build` then `npm run preview`.
+
+**Access:** the original quotation URL is still public on GitHub Pages. A mock
+route and noindex metadata do not provide authentication for the real route.

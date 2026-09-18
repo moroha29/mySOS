@@ -1,3 +1,6 @@
+import { printData } from './engines/printEngine';
+import { isDemo } from './demoMode';
+import { productData } from './engines/productEngine';
 import { useMemo, useState } from 'react';
 import QuotationForm from './components/QuotationForm';
 import QuotationPreview from './components/QuotationPreview';
@@ -7,11 +10,12 @@ import { getQuotationPreset } from './utils/catalogue';
 const today = new Date().toLocaleDateString('en-CA');
 export function createInitialValue(search = globalThis.location?.search ?? '') {
   const selectedProduct = new URLSearchParams(search).get('product');
-  const preset = getQuotationPreset(selectedProduct) ?? { productId: '', productOptions: {}, prints: [{ method: 'none' }, { method: 'none' }] };
+  const preset = getQuotationPreset(selectedProduct ?? (isDemo ? productData.catalogue.find((item) => item.quotation.enabled && item.quotation.productId === 'tee')?.id : undefined)) ?? { productId: '', productOptions: {}, prints: [{ method: 'none' }, { method: 'none' }] };
+  if (isDemo && !selectedProduct) preset.prints = [{ method: 'dtf', option: printData.dtf.options[0].id }, { method: 'none' }];
   return {
-    customerName: '', customerType: '', orderDate: today, orderReference: '',
+    customerName: isDemo ? 'Sample Studio' : '', customerType: isDemo ? 'Corporate' : '', orderDate: today, orderReference: isDemo ? 'DEMO-001' : '',
     items: [{ id: 'item-1', quantity: '50', ...preset, sizes: {} }],
-    addons: {}, shippingMethod: '', shippingCost: '0', notes: '',
+    addons: {}, shippingMethod: '', shippingCost: '0', notes: isDemo ? 'DEMONSTRATION ONLY — fictional prices, not a real quotation.' : '',
   };
 }
 
@@ -35,10 +39,11 @@ export default function App() {
 
   return <>
     <main>
-      <header className="page-heading"><a className="quote-brand" href="/mySOS/" aria-label="Back to MySOS website">MySOS</a><h1>Agent quotation</h1></header>
+      <header className="page-heading"><a className="quote-brand" href="/mySOS/" aria-label="Back to MySOS website">MySOS</a><h1>{isDemo ? 'Quotation demo' : 'Agent quotation'}</h1></header>
+      {isDemo && <section className="demo-notice" aria-label="Demo information"><strong>Try the quotation engine</strong><p>All products, costs, prices, and margins in this demo are fictional. Explore the form and download a sample Excel quote. Nothing is submitted or ordered.</p></section>}
       <nav className="step-nav" aria-label="Quotation sections"><a href="#customer">01 Customer</a><a href="#products">02 Order items</a><a href="#addons">03 Add-ons</a><a href="#shipping">04 Finish</a><a href="#preview">05 Preview</a></nav>
       <div className="workspace"><QuotationForm value={form} onChange={setForm} errors={shownErrors} quote={quote} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
     </main>
-    <footer>mySOS quotation engine · Pricing logic sourced from the approved workbook</footer>
+    <footer>{isDemo ? 'Public demo · Fictional pricing · Not a valid quotation' : 'mySOS quotation engine · Pricing logic sourced from the approved workbook'}</footer>
   </>;
 }

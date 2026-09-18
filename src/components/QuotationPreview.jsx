@@ -1,9 +1,10 @@
+import { isDemo } from '../demoMode';
 const money = new Intl.NumberFormat('en-SG', { style: 'currency', currency: 'SGD' });
 
 export default function QuotationPreview({ quote, errors, onDownload, downloading }) {
   const valid = Object.keys(errors).length === 0;
   return <aside className="preview-card" id="preview">
-    <div className="preview-kicker">Live quotation</div>
+    <div className="preview-kicker">{isDemo ? 'Demo quotation · Fictional prices' : 'Live quotation'}</div>
     <h2>{quote.input.customerName || 'Customer quotation'}</h2>
     <p className="reference">{quote.input.orderReference || 'Order reference'}</p>
     <div className="preview-group order-preview">
