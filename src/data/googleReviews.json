@@ -1,7 +1,7 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-09-17T15:06:00.139Z",
+  "fetchedAt": "2026-09-18T21:41:25.490Z",
   "averageRating": 5,
   "totalReviewCount": 87,
   "reviews": [
@@ -14,12 +14,12 @@
       "createTime": "2026-08-07T09:11:46.976804406Z"
     },
     {
-      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twaldHSklVMmhGVkU5UE1tRmtla05TWjBoamJGRRAB",
-      "author": "Tien Dat Nguyen",
-      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjX8E3hFLN_4dehTVqlWGmEWR0V_SKDJmvryAtbeiB4zM_UEYlyz=s128-c0x00000000-cc-rp-mo",
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT21GNGF5MXpNRXgwTkU1RFFXdHdjMjV2VFVaRWVtYxAB",
+      "author": "Calista Tan",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjURzXZrZSIwijY2GuVpBwTu5NldpzhE7N2QPWOMcl_pFjHPrkuX=s128-c0x00000000-cc-rp-mo",
       "rating": 5,
-      "text": "Wonderful experience, Owen has been very communicative, responsive and helpful and delivery was way ahead of schedule even though we ordered the shirts last minute in a tight deadline. Shirt quality is excellent and turned out exactly as we hoped for. Price is also very reasonable and much better compared to other supplier. We will definitely work with mysourceofsolutions again in the future. Thank you so much Owen and team!",
-      "createTime": "2026-07-15T04:50:22.648804349Z"
+      "text": "Responses are fast and prices r good!!",
+      "createTime": "2026-07-27T03:30:54.016631727Z"
     },
     {
       "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twUVRWbE1hM04yT0Y5SmIybHZabE4xVlZaWlJrRRAB",
