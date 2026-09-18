@@ -85,14 +85,15 @@ function ReasonStack() {
               const depth = index - active;
               const state = depth < 0 ? 'past' : depth === 0 ? 'current' : 'next';
               const icon = reason.cardIcon || reason.icon;
+              const iconPath = contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon');
               return <li className="reason-card" key={reason.icon} data-state={state} style={{ '--depth': Math.min(depth, 5) }}>
                 <p className="reason-card-tab" aria-hidden="true">
-                  <Icon name={icon} size={22} />
+                  <Icon name={icon} size={22} cmsPath={iconPath} />
                   <span>{two(index + 1)}</span>
                   <strong data-cms-path={cms(contentPath('benefits', index, 'stackLabel'))}>{reason.stackLabel || reason.title}</strong>
                 </p>
                 <div className="reason-card-copy">
-                  <Icon name={icon} size={58} className="reason-card-icon" />
+                  <Icon name={icon} size={58} className="reason-card-icon" cmsPath={iconPath} />
                   <div>
                     <span className="reason-card-number">{two(index + 1)}</span>
                     <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle}</h3>
@@ -163,7 +164,7 @@ function ProcessJourney() {
               {step.points?.length > 0 && <ul className="journey-points">
                 {step.points.map((point, pointIndex) => <li key={`${point.icon}-${pointIndex}`}>
                   <span className="journey-point-head">
-                    <Icon name={point.icon} size={20} />
+                    <Icon name={point.icon} size={20} cmsPath={contentPath('process', index, 'points', pointIndex, 'icon')} />
                     <strong data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'label'))}>{point.label}</strong>
                   </span>
                   <small data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'text'))}>{point.text}</small>
@@ -208,7 +209,7 @@ function ClientLoyalty() {
     />
     <ul className="loyalty-grid">
       {promises.map((promise, index) => <li className="loyalty-card" key={promise.title}>
-        <Icon name={promise.icon} size={42} />
+        <Icon name={promise.icon} size={42} cmsPath={contentPath('loyalty', index, 'icon')} />
         <h3 data-cms-path={cms(contentPath('loyalty', index, 'title'))}>{promise.title}</h3>
         <p data-cms-path={cms(contentPath('loyalty', index, 'description'))}>{promise.description}</p>
       </li>)}

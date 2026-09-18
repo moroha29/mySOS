@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import SiteShell from './components/SiteShell';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
@@ -7,6 +8,7 @@ import StoriesPage from './pages/StoriesPage';
 import StoryDetailPage from './pages/StoryDetailPage';
 import SolutionDetailPage from './pages/SolutionDetailPage';
 import solutions from '../data/solutions.json';
+import { watchTextStyles } from './textStyles';
 
 export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/mySOS/') {
   const normalized = pathname.replace(/^\/mySOS\/?/, '/').replace(/\/+$/, '') || '/';
@@ -27,6 +29,8 @@ function NotFound() {
 }
 
 export default function PublicApp() {
+  // Sizes, fonts and colours chosen in the website manager.
+  useEffect(() => watchTextStyles(), []);
   const route = resolvePublicRoute();
   const content = route.page === 'home' ? <HomePage />
     : route.page === 'products' ? <ProductsPage />

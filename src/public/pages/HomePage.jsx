@@ -108,7 +108,7 @@ export default function HomePage() {
         />
         <div className="industry-nav">
           {solutions.map((solution) => <a key={solution.id} href={`/mySOS/solutions/${solution.id}/`}>
-            <Icon name={solution.imageStyle} size={26} />
+            <Icon name={solution.icon || solution.imageStyle} size={26} cmsPath={solutionPath(solution, 'icon')} />
             <span data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
           </a>)}
         </div>
@@ -120,7 +120,7 @@ export default function HomePage() {
       <SectionHeading eyebrow={heading('benefitsHeading', 'Why choose MySOS?')} eyebrowPath={headingPath('benefitsHeading')} />
       <div className="benefit-grid">
         {siteContent.benefits.map((benefit, index) => <article key={benefit.title}>
-          <span className="benefit-icon"><Icon name={benefit.icon} size={22} /></span>
+          <span className="benefit-icon"><Icon name={benefit.icon} size={22} cmsPath={contentPath('benefits', index, 'icon')} /></span>
           <h3 data-cms-path={cms(contentPath('benefits', index, 'title'))}>{benefit.title}</h3>
           <p data-cms-path={cms(contentPath('benefits', index, 'description'))}>{benefit.description}</p>
         </article>)}

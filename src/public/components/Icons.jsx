@@ -73,15 +73,39 @@ const paths = {
   quote: <path fill="currentColor" d="M9.6 5.6 6.4 11.2v7.2h6.4v-7.2H9.6l2.4-5.6zm8 0-3.2 5.6v7.2h6.4v-7.2h-3.2l2.4-5.6z" />,
 };
 
-export default function Icon({ name, size = 22, className = '', title }) {
+/*
+ * A picture uploaded through the website manager in place of a drawn icon. The
+ * manager stores it the way it stores every picture, as a path such as
+ * "/mySOS/assets/uploads/award-3f9c2a11.png".
+ */
+export const isIconPicture = (name) => /^(?:\/|https?:\/\/|data:image\/)/i.test(String(name ?? ''))
+  || /\.(?:png|jpe?g|webp|gif|avif)$/i.test(String(name ?? ''));
+
+/*
+ * An icon, drawn from the set above or an uploaded picture.
+ *
+ * `cmsPath` is the content path of the field holding the icon's name. The
+ * website manager marks the icon with it so that clicking the icon in its
+ * preview opens the icon picker; data-cms-icon tells it the value is an icon,
+ * not words to write into the element. (JSON.stringify is cms() from ../cms,
+ * inlined: this file is also loaded on its own to build iconLibrary.json.)
+ */
+export default function Icon({ name, size = 22, className = '', title, cmsPath }) {
+  const marks = cmsPath ? { 'data-cms-path': JSON.stringify(cmsPath), 'data-cms-icon': 'true' } : {};
+  if (isIconPicture(name)) {
+    return <img className={`icon icon-picture ${className}`.trim()} src={name} width={size} height={size} alt={title || ''} loading="lazy" decoding="async" {...marks} />;
+  }
   const glyph = paths[name];
   if (!glyph) return null;
   return (
-    <svg className={`icon ${className}`.trim()} width={size} height={size} viewBox="0 0 24 24" role={title ? 'img' : 'presentation'} aria-hidden={title ? undefined : 'true'} aria-label={title} focusable="false">
+    <svg className={`icon ${className}`.trim()} width={size} height={size} viewBox="0 0 24 24" role={title ? 'img' : 'presentation'} aria-hidden={title ? undefined : 'true'} aria-label={title} focusable="false" {...marks}>
       {title && <title>{title}</title>}
       {glyph}
     </svg>
   );
 }
 
-export const hasIcon = (name) => Boolean(paths[name]);
+export const hasIcon = (name) => Boolean(paths[name]) || isIconPicture(name);
+
+/** The drawn icons by name, for building iconLibrary.json. */
+export const iconGlyphs = paths;
