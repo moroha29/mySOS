@@ -38,7 +38,7 @@ describe('option resolution stays tied to the pricing data', () => {
     ['productData.jersey.fabrics', productData.jersey.fabrics.length],
     ['productData.jersey.collars', productData.jersey.collars.length],
     ['productData.jersey.sleeves', productData.jersey.sleeves.length],
-    ['printData.methods', printData.methods.length],
+    ['printData.methods', printData.methods.filter((method) => method.quotationEnabled !== false).length],
     ['printData.dtf.options', printData.dtf.options.length],
     ['printData.sublimation.options', printData.sublimation.options.length],
     ['printData.embroidery.stitchTiers', printData.embroidery.stitchTiers.length],

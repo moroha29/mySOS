@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
   const mock = mode === 'mock';
   return {
     base: '/mySOS/',
+    preview: { allowedHosts: ['host.docker.internal'] },
     plugins: [react(), ...(mock ? [mockDataPlugin(import.meta.dirname)] : [])],
     define: { 'import.meta.env.VITE_QUOTATION_DEMO': JSON.stringify(mock ? 'true' : 'false') },
     build: {

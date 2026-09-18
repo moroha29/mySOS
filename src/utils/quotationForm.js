@@ -23,7 +23,7 @@ import productData from '../data/productData.json';
 import printData from '../data/printData.json';
 import addonData from '../data/addonData.json';
 
-export const FIELD_TYPES = ['text', 'textarea', 'number', 'currency', 'date', 'select', 'toggle', 'sizeGrid', 'addonList'];
+export const FIELD_TYPES = ['text', 'textarea', 'number', 'currency', 'date', 'select', 'multiselect', 'toggle', 'sizeGrid', 'addonList'];
 export const PRICE_RULES = ['none', 'perPiece', 'flat', 'multiplier'];
 
 const asOption = (item) => ({ id: item.id, name: item.name ?? item.public?.name ?? item.id });
@@ -43,7 +43,8 @@ export function resolveOptions(field, context = {}) {
     case 'productData.jersey.sleeves':
       return productData.jersey.sleeves.map(asOption);
     case 'printData.methods':
-      return printData.methods.map(asOption);
+      // A method the workbook does not price yet (UV printing) is not offered.
+      return printData.methods.filter((method) => method.quotationEnabled !== false).map(asOption);
     case 'printData.dtf.options':
       return printData.dtf.options.map(asOption);
     case 'printData.sublimation.options':

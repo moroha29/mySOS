@@ -1,10 +1,11 @@
 import { printData } from './engines/printEngine';
 import { isDemo } from './demoMode';
 import { productData } from './engines/productEngine';
-import { useMemo, useState } from 'react';
-import QuotationForm from './components/QuotationForm';
+import { useEffect, useMemo, useState } from 'react';
+import QuotationForm from './components/SchemaQuotationForm';
+import formSchema from './data/quotationForm.json';
 import QuotationPreview from './components/QuotationPreview';
-import { calculateQuotation, validateQuotation } from './engines/quotationEngine';
+import { calculateSchemaQuotation, validateSchemaQuotation } from './utils/schemaQuotation';
 import { getQuotationPreset } from './utils/catalogue';
 
 const today = new Date().toLocaleDateString('en-CA');
@@ -20,12 +21,19 @@ export function createInitialValue(search = globalThis.location?.search ?? '') {
 }
 
 export default function App() {
+  const [schema, setSchema] = useState(() => globalThis.__quotationDraft || formSchema);
+  useEffect(() => {
+    const change = event => { if (Array.isArray(event.detail?.sections)) setSchema(event.detail); };
+    window.addEventListener('quotation-draft', change);
+    if (window.__quotationDraft) setSchema(window.__quotationDraft);
+    return () => window.removeEventListener('quotation-draft', change);
+  }, []);
   const [form, setForm] = useState(createInitialValue);
   const [attempted, setAttempted] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const allErrors = useMemo(() => validateQuotation(form), [form]);
+  const allErrors = useMemo(() => validateSchemaQuotation(form, schema), [form, schema]);
   const shownErrors = attempted ? allErrors : {};
-  const quote = useMemo(() => calculateQuotation(form), [form]);
+  const quote = useMemo(() => calculateSchemaQuotation(form, schema), [form, schema]);
 
   const handleDownload = async () => {
     setAttempted(true);
@@ -41,8 +49,8 @@ export default function App() {
     <main>
       <header className="page-heading"><a className="quote-brand" href="/mySOS/" aria-label="Back to MySOS website">MySOS</a><h1>{isDemo ? 'Quotation demo' : 'Agent quotation'}</h1></header>
       {isDemo && <section className="demo-notice" aria-label="Demo information"><strong>Try the quotation engine</strong><p>All products, costs, prices, and margins in this demo are fictional. Explore the form and download a sample Excel quote. Nothing is submitted or ordered.</p></section>}
-      <nav className="step-nav" aria-label="Quotation sections"><a href="#customer">01 Customer</a><a href="#products">02 Order items</a><a href="#addons">03 Add-ons</a><a href="#shipping">04 Finish</a><a href="#preview">05 Preview</a></nav>
-      <div className="workspace"><QuotationForm value={form} onChange={setForm} errors={shownErrors} quote={quote} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
+      <nav className="step-nav" aria-label="Quotation sections">{schema.sections.filter(section => section.visible !== false && !section.showWhen).map(section => <a key={section.id} href={`#${section.id}-0`}>{section.title}</a>)}<a href="#preview">Quotation total</a></nav>
+      <div className="workspace"><QuotationForm schema={schema} value={form} onChange={setForm} errors={shownErrors} quote={quote} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>
     </main>
     <footer>{isDemo ? 'Public demo · Fictional pricing · Not a valid quotation' : 'mySOS quotation engine · Pricing logic sourced from the approved workbook'}</footer>
   </>;
