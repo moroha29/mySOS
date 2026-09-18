@@ -220,7 +220,7 @@ function CategoryShowcase({ stories }) {
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
         {highlights.length > 0 && <ul className="project-facts">
           {highlights.map((fact, i) => <li key={`${fact.icon}-${i}`}>
-            <Icon name={fact.icon} size={22} />
+            <Icon name={fact.icon} size={22} cmsPath={storyPath(story, 'highlights', i, 'icon')} />
             <span data-cms-path={cms(storyPath(story, 'highlights', i, 'text'))}>{fact.text}</span>
           </li>)}
         </ul>}

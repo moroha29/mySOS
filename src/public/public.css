@@ -40,6 +40,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 :focus-visible { outline: 3px solid #ffbf47; outline-offset: 2px; border-radius: 4px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .icon { flex: none; }
+/* A picture uploaded in place of a drawn icon: fitted inside the icon's square, never stretched or cropped. */
+.icon-picture { object-fit: contain; }
 
 .site-app { width: min(100%, 1512px); margin: 0 auto; min-height: 100vh; background: var(--surface); box-shadow: 0 0 48px rgba(9, 28, 72, .08); overflow-x: clip; position: relative; }
 

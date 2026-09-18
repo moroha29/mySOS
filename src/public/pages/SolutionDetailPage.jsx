@@ -141,7 +141,7 @@ function UseCasePicker({ solution, activeId, onChoose }) {
               <span className="use-case-photo"><Photo style={solution.imageStyle} image={pictures[index]} imagePath={[...solutionPath(solution, 'useCases', index), 'image']} /></span>
               {active && <span className="use-case-selected"><Icon name="check" size={14} /><span data-cms-path={wordPath('selectedLabel')}>{word('selectedLabel', 'Selected')}</span></span>}
               <span className="use-case-name">
-                <Icon name={useCase.icon} size={30} />
+                <Icon name={useCase.icon} size={30} cmsPath={[...solutionPath(solution, 'useCases', index), 'icon']} />
                 <span data-cms-path={cms([...solutionPath(solution, 'useCases', index), 'name'])}>{useCase.name}</span>
               </span>
             </button>

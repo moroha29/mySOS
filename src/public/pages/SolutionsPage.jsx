@@ -42,7 +42,7 @@ export default function SolutionsPage() {
           href={`/mySOS/solutions/${solution.id}/`}
           aria-current={selected?.id === solution.id ? 'page' : undefined}
         >
-          <Icon name={solution.imageStyle} size={26} />
+          <Icon name={solution.icon || solution.imageStyle} size={26} cmsPath={solutionPath(solution, 'icon')} />
           <span className="browse-label" data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
         </a>)}
       </div>
