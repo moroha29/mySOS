@@ -41,6 +41,15 @@ describe('production route rendering', () => {
     consoleError.mockRestore();
   });
 
+  it('shows Products in the header as a plain link, not a dropdown', () => {
+    const header = renderAt('/mySOS/').match(/<header[\s\S]*?<\/header>/)[0];
+    const products = header.match(/<a class="nav-link" href="\/mySOS\/products\/"[^>]*>([\s\S]*?)<\/a>/);
+    expect(products[1]).toBe('Products');
+    expect(header).not.toMatch(/nav-dropdown">(?:(?!<\/div>)[\s\S])*\?category=/);
+    // Solutions still opens its list of industries.
+    expect(header).toContain('href="/mySOS/solutions/schools/"');
+  });
+
   it('renders data-driven product and solution filters', () => {
     const apparel = renderAt('/mySOS/products/');
     // Each product card asks for a quote on WhatsApp, naming the product.
