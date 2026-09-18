@@ -65,20 +65,39 @@ export function generateQuotationWorkbook(quote) {
   title.alignment = { vertical: 'middle', horizontal: 'left' };
   sheet.getRow(1).height = 42;
   sheet.mergeCells('A2:E2');
-  sheet.getCell('A2').value = `Quotation reference: ${quote.input.orderReference}`;
+  // Only when the form asks for a reference; a hidden question leaves it out.
+  const reference = quote.form ? quote.form.customer.find((entry) => entry.key === 'customer.reference')?.value : quote.input.orderReference;
+  sheet.getCell('A2').value = reference ? `Quotation reference: ${reference}` : '';
   sheet.getCell('A2').font = { italic: true, color: { argb: '5D716D' } };
   sheet.getRow(2).height = 22;
 
   sheet.mergeCells('A4:E4');
   sheet.getCell('A4').value = 'CUSTOMER INFORMATION';
   styleSection(sheet.getRow(4));
-  sheet.addRow(['Customer name', quote.input.customerName, '', 'Order date', excelDate(quote.input.orderDate)]);
-  sheet.addRow(['Customer type', quote.input.customerType, '', 'Reference', quote.input.orderReference]);
-  sheet.getCell('E5').numFmt = 'dd mmm yyyy';
+  // The customer questions as the form asks them (its own names, only the ones
+  // it shows), two to a row; a quote made without a form keeps the four fixed.
+  const customer = quote.form?.customer ?? [
+    { key: 'customer.name', label: 'Customer name', value: quote.input.customerName },
+    { key: 'customer.orderDate', type: 'date', label: 'Order date', value: quote.input.orderDate },
+    { key: 'customer.type', label: 'Customer type', value: quote.input.customerType },
+    { key: 'customer.reference', label: 'Reference', value: quote.input.orderReference },
+  ];
+  for (let index = 0; index < customer.length; index += 2) {
+    const pair = [customer[index], customer[index + 1]].map((entry) => entry && {
+      label: entry.label,
+      value: entry.type === 'date' && entry.value ? excelDate(entry.value) : entry.value ?? '',
+      date: entry.type === 'date' && Boolean(entry.value),
+    });
+    const row = sheet.addRow([pair[0].label, pair[0].value, '', pair[1]?.label ?? '', pair[1]?.value ?? '']);
+    row.height = 22;
+    if (pair[0].date) row.getCell(2).numFmt = 'dd mmm yyyy';
+    if (pair[1]?.date) row.getCell(5).numFmt = 'dd mmm yyyy';
+  }
 
-  sheet.mergeCells('A8:E8');
-  sheet.getCell('A8').value = 'QUOTATION DETAILS';
-  styleSection(sheet.getRow(8));
+  const detailsStart = sheet.rowCount + 2;
+  sheet.mergeCells(`A${detailsStart}:E${detailsStart}`);
+  sheet.getCell(`A${detailsStart}`).value = 'QUOTATION DETAILS';
+  styleSection(sheet.getRow(detailsStart));
   const headerRow = sheet.addRow(['Product / charge', 'Description', 'Quantity', 'Unit price', 'Subtotal']);
   styleHeader(headerRow);
   const itemRows = [];
@@ -102,6 +121,25 @@ export function generateQuotationWorkbook(quote) {
     row.getCell(4).numFmt = currencyFormat;
     row.getCell(5).numFmt = currencyFormat;
   });
+
+  // Answers to the questions added in the form, each under its step and question.
+  const answers = quote.form?.answers ?? [];
+  if (answers.length) {
+    const answersStart = sheet.rowCount + 2;
+    sheet.mergeCells(`A${answersStart}:E${answersStart}`);
+    sheet.getCell(`A${answersStart}`).value = 'ADDITIONAL DETAILS';
+    styleSection(sheet.getRow(answersStart));
+    const answersHeader = sheet.addRow(['Step', 'Question', 'Answer', '', '']);
+    sheet.mergeCells(`C${answersHeader.number}:E${answersHeader.number}`);
+    styleHeader(answersHeader);
+    answers.forEach((entry) => {
+      const row = sheet.addRow([entry.item ? `${entry.step} (item ${entry.item})` : entry.step, entry.label, entry.value, '', '']);
+      sheet.mergeCells(`C${row.number}:E${row.number}`);
+      row.height = String(entry.value).length > 60 ? 36 : 23;
+      row.eachCell((cell) => { cell.border = { bottom: { style: 'thin', color: { argb: BORDER } } }; cell.alignment = { vertical: 'middle', wrapText: true }; });
+      row.getCell(3).alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
+    });
+  }
 
   const summaryStart = sheet.rowCount + 2;
   sheet.mergeCells(`A${summaryStart}:E${summaryStart}`);
@@ -132,8 +170,6 @@ export function generateQuotationWorkbook(quote) {
 
   sheet.getColumn(4).alignment = { horizontal: 'right' };
   sheet.getColumn(5).alignment = { horizontal: 'right' };
-  sheet.getRow(5).height = 22;
-  sheet.getRow(6).height = 22;
   sheet.headerFooter.oddFooter = '&LmySOS&CPage &P of &N&RGenerated quotation';
   sheet.autoFilter = { from: `A${headerRow.number}`, to: `E${headerRow.number}` };
   sheet.views = [{ showGridLines: false, state: 'frozen', ySplit: 1 }];
