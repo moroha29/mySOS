@@ -58,10 +58,9 @@ const legalLinks = footer.legalLinks ?? [];
 
 // `path` is the draft location of a dropdown entry's wording, where that
 // wording is content. The Resources list is written here, so it has none.
+// Products is a plain link: the category tabs on the page already do the
+// choosing, so a menu of the same names added nothing.
 function dropdownFor(label) {
-  if (label === 'Products') {
-    return siteContent.categories.map((item) => ({ label: item.name, href: `/mySOS/products/?category=${item.id}`, path: categoryPath(item, 'name') }));
-  }
   if (label === 'Solutions') {
     return solutions.map((item) => ({ label: item.name, href: `/mySOS/solutions/${item.id}/`, path: solutionPath(item, 'name') }));
   }
