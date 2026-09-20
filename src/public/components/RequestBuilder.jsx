@@ -220,8 +220,14 @@ export default function RequestBuilder({
   )));
   const toggle = (line, { focusPrinting: wantPrinting = false } = {}) => {
     if (openKey === line.key && !wantPrinting) { setOpenKey(null); return; }
-    // Opening a product's details selects its recommended choices, as the design shows.
-    if (!Object.keys(line.details).length) update(line.key, { details: recommendedDetails(detailFieldsFor(line.productId)) });
+    // Opening a product's details selects its recommended choices, as the design
+    // shows — except the printing question when that is what was asked, which
+    // stays open for the customer to answer.
+    if (!Object.keys(line.details).length) {
+      const details = recommendedDetails(detailFieldsFor(line.productId));
+      if (wantPrinting) delete details[printingFieldFor(line.productId)?.id];
+      update(line.key, { details });
+    }
     setOpenKey(line.key);
     if (wantPrinting) setFocusPrinting(true);
   };

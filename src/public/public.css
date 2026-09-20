@@ -1211,7 +1211,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .footer-socials a, .footer-socials span { width: 36px; height: 36px; }
 .tab-list button { flex: none; min-width: 44px; padding-top: 10px; white-space: nowrap; }
 .story-card-body h3 a, .footer-legal a { display: inline-block; padding-block: 7px; margin-block: -7px; }
-.solution-hero .breadcrumb a:first-child { padding-inline: 10px; margin-inline: -10px; }
+.solution-hero .breadcrumb a:first-child, .request-page .hero .breadcrumb a:first-child { padding-inline: 10px; margin-inline: -10px; }
+/* The request builder's own small controls, reachable with a thumb. */
+.request-printing-ask { min-height: 34px; }
+.request-details-toggle, .use-case-all { min-height: 34px; padding-block: 8px; }
 
 /* Phones, and touch screens of any width such as a tablet held sideways. */
 @media (max-width: 860px), (pointer: coarse) {

@@ -216,6 +216,13 @@ describe('files are never claimed as sent', () => {
   // The builder is shared with the blank "Get a Quote" page.
   const source = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
 
+  it('leaves the printing question open when that is what the row asked about', () => {
+    // Opening details normally fills in MySOS's recommendations. Answering the
+    // printing prompt that way would answer the question for the customer.
+    expect(source).toMatch(/if \(wantPrinting\) delete details\[printingFieldFor\(line\.productId\)\?\.id\];/);
+    expect(source).toMatch(/document\.getElementById\(`printing-\$\{index\}`\)\?\.focus\(\)/);
+  });
+
   it('shares files through the device when it can, and otherwise says to attach them', () => {
     expect(source).toMatch(/navigator\.canShare\?\.\(\{ files: attached, text: message \}\)/);
     expect(source).toMatch(/await navigator\.share\(\{ files: attached, text: message \}\);\s*setSent\('shared'\)/);
