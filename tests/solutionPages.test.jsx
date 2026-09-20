@@ -8,7 +8,7 @@ import solutions from '../src/data/solutions.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import {
   buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, needsPrintingChoice,
-  OTHER_PRINTING, packageLines, printingFieldFor, recommendedDetails, searchProducts, suggestionsFor,
+  OTHER_PRINTING, packageLines, printingFieldFor, productFor, recommendedDetails, searchProducts, suggestionsFor,
 } from '../src/utils/solutionRequest';
 
 const originalLocation = globalThis.location;
@@ -192,17 +192,19 @@ describe('the request message', () => {
     expect(medal[0].options).toContain('Let MySOS recommend');
   });
 
-  it('always offers "Other", whatever printing methods are listed', () => {
-    // Every printing list ends with it, including ones the manager wrote.
-    for (const id of ['premium_cotton_tee', 'custom_medal', 'event_lanyard']) {
-      const field = printingFieldFor(id);
-      expect(field.options.at(-1), id).toBe(OTHER_PRINTING);
-      expect(field.options.filter((option) => option === OTHER_PRINTING), id).toHaveLength(1);
+  it('offers "Other" only where MySOS has not said how this is printed', () => {
+    // A custom item, or a product whose kind carries no printing list.
+    expect(printingFieldFor('custom_medal').options.at(-1)).toBe(OTHER_PRINTING);
+    expect(printingFieldFor('').options.at(-1)).toBe(OTHER_PRINTING);
+    // The lists written in the manager are deliberate and are left alone.
+    for (const id of ['premium_cotton_tee', 'event_lanyard']) {
+      expect(printingFieldFor(id).options, id).not.toContain(OTHER_PRINTING);
+      expect(printingFieldFor(id).options, id).toEqual(siteContent.requestOptions[productFor(id).public.subcategory].find((field) => field.id === 'printing').options);
     }
     // Choosing it counts as an answer, and reaches MySOS in the message.
-    const line = { ...makeLine({ productId: 'premium_cotton_tee' }), details: { printing: OTHER_PRINTING } };
+    const line = { ...makeLine({ productId: 'custom_medal' }), details: { printing: OTHER_PRINTING } };
     expect(needsPrintingChoice(line)).toBe(false);
-    expect(buildRequestMessage({ lines: [line] })).toContain(`Printing: ${OTHER_PRINTING}`);
+    expect(buildRequestMessage({ lines: [line] })).toContain(`Printing method: ${OTHER_PRINTING}`);
   });
 
   it('asks how each product should be printed, unless MySOS already said', () => {
