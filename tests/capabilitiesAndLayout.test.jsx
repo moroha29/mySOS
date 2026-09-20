@@ -23,14 +23,14 @@ const render = (Page, pathname) => {
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
-  it('home: above the client logos, below the banner', () => {
+  it('home: under the client logos, which sit right below the banner', () => {
     const markup = render(HomePage, '/mySOS/');
     const banner = markup.indexOf('Custom Merchandise,');
     const reviews = markup.indexOf('class="section reviews"');
     const logos = markup.indexOf('class="trust-strip"');
     expect(banner).toBeGreaterThan(-1);
-    expect(reviews).toBeGreaterThan(banner);
-    expect(reviews).toBeLessThan(logos);
+    expect(logos).toBeGreaterThan(banner);
+    expect(reviews).toBeGreaterThan(logos);
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 
@@ -109,5 +109,116 @@ describe('printing methods: "Our capabilities"', () => {
     const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
     expect(source).toMatch(/\{ ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 \}\[event\.key\]/);
     expect(source).toContain('tabRefs.current[next.id]?.focus();');
+  });
+});
+
+describe('the home banner and the grids under it', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
+
+  it('runs a slideshow behind the banner, starting on a picture the server drew', () => {
+    const markup = render(HomePage, '/mySOS/');
+    const slides = [...markup.matchAll(/class="hero-slide( is-active)?"/g)];
+    expect(slides.length).toBeGreaterThan(1);
+    expect(slides.filter(([, active]) => active)).toHaveLength(1);
+    // The scrim goes over it, as with any banner picture, so white text reads.
+    expect(markup).toMatch(/class="hero hero-home has-background"/);
+    expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
+    expect(home).toMatch(/prefers-reduced-motion: reduce/);
+    expect(css).toMatch(/\.hero-slide \{[^}]*opacity: 0; transition: opacity/);
+    expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 640px;/);
+  });
+
+  it('leaves the photograph to carry the banner, with no drawn products on it', () => {
+    // The tote, jerseys and bottle were drawn over what is now a photograph.
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).not.toContain('class="hero-art"');
+    expect(markup).not.toMatch(/class="[^"]*ha-[1-5]/);
+    expect(markup).toContain('hero-inner hero-inner-wide');
+    // A picture uploaded in the manager still shows beside the words.
+    expect(readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8'))
+      .toMatch(/\{heroShot && <div className="hero-art"/);
+  });
+
+  it('lets the manager choose the slideshow pictures', () => {
+    expect(siteContent.scenes.homeHeroSlides).toBeInstanceOf(Array);
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
+  });
+
+  it('measures the logo marquee against the width the stylesheet uses', () => {
+    // The track slides exactly -50%, so a card width that disagrees with the
+    // CSS makes the marquee drift or race.
+    const width = Number(css.match(/\.trust-logo \{[^}]*width: (\d+)px/)[1]);
+    expect(Number(home.match(/const CARD_WIDTH = (\d+);/)[1])).toBe(width);
+  });
+
+  it('gives "What can we make for you?" three across, two on a phone', () => {
+    expect(css).toMatch(/\.category-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+    const phone = css.slice(css.indexOf('@media (max-width: 620px)'));
+    expect(phone).toMatch(/\.category-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  });
+});
+
+describe('the type scale: titles carry the page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const sizeOf = (pattern) => Number(css.match(pattern)[1]);
+
+  it('sets titles above the text around them', () => {
+    expect(sizeOf(/\.hero h1 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(50);
+    expect(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(34);
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(16);
+    expect(sizeOf(/\.section-heading p \{[^}]*font-size: ([\d.]+)px/))
+      .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
+  });
+
+  it('never drops text below 12.5px, however small the scale gets', () => {
+    const sizes = [...css.matchAll(/font-size: ([\d.]+)px/g)].map(([, size]) => Number(size));
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(12.5);
+  });
+
+  it('runs the page wider than it used to, halving the side margins', () => {
+    expect(sizeOf(/--content: (\d+)px;/)).toBe(1340);
+    expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBe(1700);
+  });
+});
+
+describe('the bar at the top of every page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('is one height, and everything that has to clear it follows', () => {
+    // The height was written out in five places; a taller bar left the mobile
+    // menu overlapping it and anchors landing underneath it.
+    expect(css).toMatch(/--header-h: 88px;/);
+    expect(css).toMatch(/\.site-header \{[^}]*height: var\(--header-h\)/);
+    expect(css).not.toMatch(/top: 72px|scroll-(margin|padding)-top: 72px/);
+    for (const rule of [/\.primary-nav \{[\s\S]{0,200}?top: var\(--header-h\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: var\(--header-h\)/]) {
+      expect(css).toMatch(rule);
+    }
+  });
+
+  it('carries bigger wording and controls than the text under it', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.nav-link \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(17);
+    expect(size(/\.wordmark \{ height: (\d+)px/)).toBeGreaterThanOrEqual(44);
+    // Header buttons match the WhatsApp circle beside them.
+    expect(size(/\.site-header \.btn-sm \{ height: (\d+)px/)).toBe(size(/\.wa-circle \{ width: (\d+)px/));
+  });
+});
+
+describe('how a product should be printed', () => {
+  const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
+
+  it('is a dropdown, whatever the field is set up as', () => {
+    // There are more printing methods than fit a row of buttons, and the list
+    // differs per product kind.
+    expect(builder).toMatch(/\{isPrinting && <select/);
+    expect(builder).toMatch(/className="request-printing-select"/);
+    expect(builder).toMatch(/<option value="">\{word\('printingPlaceholder'/);
+    expect(builder).toMatch(/field\.recommended === option \? `\$\{option\} \(recommended\)` : option/);
+    // The other kinds of field are left to the row of buttons as before.
+    for (const kind of ['choice', 'select', 'text']) {
+      expect(builder).toContain(`{!isPrinting && field.type === '${kind}'`);
+    }
   });
 });

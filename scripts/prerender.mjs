@@ -33,6 +33,7 @@ const solutions = JSON.parse(await readFile(path.join(root, 'src/data/solutions.
 const routes = [
   '/',
   '/products/',
+  '/request/',
   '/solutions/',
   ...solutions.map((solution) => `/solutions/${solution.id}/`),
   '/why-mysos/',

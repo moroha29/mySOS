@@ -202,9 +202,13 @@ describe('no hand-typed reviews', () => {
     }
   });
 
-  it('links to the MySOS listing on Google from code, not content', () => {
-    expect(GOOGLE_REVIEWS_URL).toMatch(/^https:\/\/www\.google\.com\/search\?/);
-    expect(GOOGLE_REVIEWS_URL).toContain('ludocid=15290863019161496116');
+  it("links to the reviews on the MySOS Maps listing, from code rather than content", () => {
+    // A Google Search link landed on the search page. This is the listing
+    // itself, and !9m1!1b1 is what opens its reviews.
+    expect(GOOGLE_REVIEWS_URL).toMatch(/^https:\/\/www\.google\.com\/maps\/place\/mysourceofsolutions\//);
+    expect(GOOGLE_REVIEWS_URL).toContain('!9m1!1b1');
+    // Maps' own session parameters go stale, so they are left off.
+    expect(GOOGLE_REVIEWS_URL).not.toMatch(/[?&](entry|g_ep)=/);
   });
 });
 
@@ -301,7 +305,9 @@ describe('the daily refresh', () => {
 describe("finding MySOS's own listing", () => {
   it("matches on the listing's Maps number, not its name", async () => {
     const { findOwnListing, GOOGLE_LISTING_CID } = await import('../src/utils/googleReviews');
-    expect(GOOGLE_REVIEWS_URL).toContain(`ludocid=${GOOGLE_LISTING_CID}`);
+    // The Maps link carries the same listing number, written in hex.
+    const hex = GOOGLE_REVIEWS_URL.match(/!1s0x[0-9a-f]+:0x([0-9a-f]+)!/)[1];
+    expect(BigInt(`0x${hex}`).toString()).toBe(GOOGLE_LISTING_CID);
     const own = { id: 'a', displayName: { text: 'Anything' }, googleMapsUri: `https://maps.google.com/?cid=${GOOGLE_LISTING_CID}` };
     expect(findOwnListing([{ id: 'b', displayName: { text: 'My Source of Solutions' }, googleMapsUri: 'https://maps.google.com/?cid=1' }, own])).toBe(own);
     expect(findOwnListing([{ id: 'c', googleMapsUri: 'not a url' }, {}])).toBe(null);

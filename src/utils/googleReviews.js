@@ -21,11 +21,16 @@
 export const GOOGLE_REVIEWS_NOTE = "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.";
 
 /*
- * Where "Read all reviews on Google" goes: MySOS's listing reviews on Google
- * Search. It lives in code rather than content, so the website manager cannot
- * point it anywhere else.
+ * Where "Read all reviews on Google" goes: the reviews list on MySOS's own
+ * Google Maps listing. The `!9m1!1b1` at the end of the data segment is what
+ * opens the reviews rather than the listing's overview — a Google Search link
+ * used to land on the search page instead. The session parameters Maps adds to
+ * a copied address (entry, g_ep) are left off: they go stale.
+ *
+ * It lives in code rather than content, so the website manager cannot point it
+ * anywhere else.
  */
-export const GOOGLE_REVIEWS_URL = 'https://www.google.com/search?q=mysourceofsolutions&ludocid=15290863019161496116#lrd=0x165bd792f59b5b9:0xd4340ee6c6472a34,1,,,,';
+export const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/place/mysourceofsolutions/@1.3139987,103.7616789,64653m/data=!3m1!1e3!4m8!3m7!1s0x165bd792f59b5b9:0xd4340ee6c6472a34!8m2!3d1.314!4d103.84425!9m1!1b1!16s%2Fg%2F11ypm9yvk4';
 
 /*
  * The listing's own number on Google Maps (the ludocid above). A place search

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
@@ -6,7 +6,7 @@ import { categoryPath, cms, contentPath, headingPath, heroBackground, pagePath, 
 import { getPublicProducts } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, enquiryProps, heading, PageCTA, Photo, ProductCard, quoteDestinationPaths, SectionHeading } from '../components/Ui';
+import { Button, enquiryProps, heading, PageCTA, Photo, ProductCard, SectionHeading } from '../components/Ui';
 
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
@@ -81,13 +81,35 @@ function Capabilities({ methods }) {
   </section>;
 }
 
+const knownCategory = (id) => (siteContent.categories.some((item) => item.id === id) ? id : 'apparel');
+
 export default function ProductsPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
-  const requested = params.get('category') || 'apparel';
-  const category = siteContent.categories.some((item) => item.id === requested) ? requested : 'apparel';
+  const [category, setCategory] = useState(() => knownCategory(params.get('category') || 'apparel'));
   const [subcategory, setSubcategory] = useState(params.get('subcategory') || 'all');
   const [showAll, setShowAll] = useState(false);
   const collectionRef = useRef(null);
+
+  /*
+   * Categories are swapped in place. They used to be plain links, so choosing
+   * one reloaded the page and dropped the reader back at the top of the banner,
+   * away from the products they were looking at. The address still changes, so
+   * the link can be copied, opened in a new tab and stepped back through.
+   */
+  const chooseCategory = (event, id) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+    setCategory(id);
+    setSubcategory('all');
+    setShowAll(false);
+    globalThis.history?.pushState?.({ category: id }, '', `?category=${id}`);
+  };
+
+  useEffect(() => {
+    const onPop = () => setCategory(knownCategory(new URLSearchParams(globalThis.location?.search ?? '').get('category') || 'apparel'));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const toggleShowAll = (event) => {
     event.preventDefault();
@@ -143,6 +165,7 @@ export default function ProductsPage() {
           className={item.id === category ? 'is-active' : ''}
           href={`?category=${item.id}`}
           aria-current={item.id === category ? 'page' : undefined}
+          onClick={(event) => chooseCategory(event, item.id)}
         >
           <Icon name={item.icon} size={26} cmsPath={categoryPath(item, 'icon')} />
           {/* A plain link to the category, so no dropdown arrow. */}
@@ -187,7 +210,7 @@ export default function ProductsPage() {
         <span className="eyebrow" data-cms-path={cms(pagePath('products', 'promoEyebrow'))}>{pageText('products', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('products', 'promoTitle'))}>{pageText('products', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('products', 'promoDescription'))}>{pageText('products', 'promoDescription')}</p>
-        <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(pagePath('products', 'promoButtonLabel'))}>{pageText('products', 'promoButtonLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <Button {...enquiryProps}><span data-cms-path={cms(pagePath('products', 'promoButtonLabel'))}>{pageText('products', 'promoButtonLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.productsPromoImage, 'scenes/products-promo')} imagePath={scenePath('productsPromoImage')} /></div>
     </section>

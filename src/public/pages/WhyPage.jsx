@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import siteContent from '../../data/siteContent.json';
 import { getImage } from '../../utils/imageRegistry';
 import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
@@ -137,8 +138,7 @@ function ProcessJourney() {
       </div>
     </div>
 
-    <ol className="journey-steps" style={{ '--reached': active / last, '--pulse': (active - 0.35) / last }}>
-      {active > 0 && <li className="journey-pulse" aria-hidden="true" />}
+    <ol className="journey-steps" style={{ '--reached': active / last }}>
       {steps.map((step, index) => <li key={step.title} className={index < active ? 'is-done' : index === active ? 'is-current' : ''}>
         <button type="button" aria-current={index === active ? 'step' : undefined} onClick={() => goTo(index)}>
           <span className="journey-node" aria-hidden="true">{index < active && <Icon name="check" size={17} />}</span>
@@ -218,6 +218,13 @@ function ClientLoyalty() {
 }
 
 export default function WhyPage() {
+  // The page's own gentle snapping, set on the document because that is what
+  // scrolls. It is taken off again when the reader leaves the page.
+  useEffect(() => {
+    document.documentElement.dataset.scrollSnap = 'why';
+    return () => { delete document.documentElement.dataset.scrollSnap; };
+  }, []);
+
   return <main className="why-page">
     <section {...heroBackground(siteContent.scenes?.whyHeroBackgroundImage, scenePath('whyHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">

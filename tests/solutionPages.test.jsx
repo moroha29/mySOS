@@ -7,8 +7,8 @@ import siteContent from '../src/data/siteContent.json';
 import solutions from '../src/data/solutions.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import {
-  buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, packageLines,
-  recommendedDetails, suggestionsFor,
+  buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, needsPrintingChoice,
+  OTHER_PRINTING, packageLines, printingFieldFor, productFor, recommendedDetails, searchProducts, suggestionsFor,
 } from '../src/utils/solutionRequest';
 
 const originalLocation = globalThis.location;
@@ -184,12 +184,59 @@ describe('the request message', () => {
 
   it('opening details selects the recommended choices only', () => {
     expect(recommendedDetails(detailFieldsFor('event_lanyard'))).toEqual({ width: '20mm', printing: 'Double-sided' });
-    expect(detailFieldsFor('custom_medal')).toEqual(siteContent.requestOptions.default);
+    // A product whose kind has no printing question of its own is still asked
+    // one, so nothing is sent to MySOS without saying how it should be printed.
+    const medal = detailFieldsFor('custom_medal');
+    expect(medal.slice(1)).toEqual(siteContent.requestOptions.default);
+    expect(medal[0].id).toBe('printing');
+    expect(medal[0].options).toContain('Let MySOS recommend');
+  });
+
+  it('offers "Other" only where MySOS has not said how this is printed', () => {
+    // A custom item, or a product whose kind carries no printing list.
+    expect(printingFieldFor('custom_medal').options.at(-1)).toBe(OTHER_PRINTING);
+    expect(printingFieldFor('').options.at(-1)).toBe(OTHER_PRINTING);
+    // The lists written in the manager are deliberate and are left alone.
+    for (const id of ['premium_cotton_tee', 'event_lanyard']) {
+      expect(printingFieldFor(id).options, id).not.toContain(OTHER_PRINTING);
+      expect(printingFieldFor(id).options, id).toEqual(siteContent.requestOptions[productFor(id).public.subcategory].find((field) => field.id === 'printing').options);
+    }
+    // Choosing it counts as an answer, and reaches MySOS in the message.
+    const line = { ...makeLine({ productId: 'custom_medal' }), details: { printing: OTHER_PRINTING } };
+    expect(needsPrintingChoice(line)).toBe(false);
+    expect(buildRequestMessage({ lines: [line] })).toContain(`Printing method: ${OTHER_PRINTING}`);
+  });
+
+  it('asks how each product should be printed, unless MySOS already said', () => {
+    const line = makeLine({ productId: 'custom_medal' });
+    expect(needsPrintingChoice(line)).toBe(true);
+    expect(needsPrintingChoice({ ...line, details: { printing: 'Silkscreen' } })).toBe(false);
+    // The recommended package says it on the row itself; no need to ask again.
+    expect(needsPrintingChoice({ ...line, note: 'Printing: Let MySOS recommend based on your artwork' })).toBe(false);
+    expect(printingFieldFor('premium_cotton_tee').id).toBe('printing');
+  });
+
+  it('searches the whole catalogue, not just what was recommended', () => {
+    expect(searchProducts('tote').map((product) => product.id)).toContain('canvas_tote_bag');
+    // Words may come in any order, and a category name finds its products.
+    expect(searchProducts('bag tote').map((product) => product.id)).toContain('canvas_tote_bag');
+    expect(searchProducts('drinkware').length).toBeGreaterThan(0);
+    expect(searchProducts('tote', { exclude: ['canvas_tote_bag'] }).map((product) => product.id)).not.toContain('canvas_tote_bag');
+    expect(searchProducts('   ')).toEqual([]);
+    expect(searchProducts('nothing at all like this')).toEqual([]);
   });
 });
 
 describe('files are never claimed as sent', () => {
-  const source = readFileSync(new URL('../src/public/pages/SolutionDetailPage.jsx', import.meta.url), 'utf8');
+  // The builder is shared with the blank "Get a Quote" page.
+  const source = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
+
+  it('leaves the printing question open when that is what the row asked about', () => {
+    // Opening details normally fills in MySOS's recommendations. Answering the
+    // printing prompt that way would answer the question for the customer.
+    expect(source).toMatch(/if \(wantPrinting\) delete details\[printingFieldFor\(line\.productId\)\?\.id\];/);
+    expect(source).toMatch(/document\.getElementById\(`printing-\$\{index\}`\)\?\.focus\(\)/);
+  });
 
   it('shares files through the device when it can, and otherwise says to attach them', () => {
     expect(source).toMatch(/navigator\.canShare\?\.\(\{ files: attached, text: message \}\)/);

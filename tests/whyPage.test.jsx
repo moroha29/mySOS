@@ -162,8 +162,26 @@ describe('scrolling, small screens and motion', () => {
     // The first version pinned both sections and made the page thousands of
     // pixels taller, with a screen of empty space above and below each.
     expect(css).not.toMatch(/scroll-pin|scroll-track/);
-    expect(whyCss).not.toMatch(/top: 72px/);
+    expect(whyCss).not.toMatch(/position: (sticky|fixed);\s*top: 72px/);
     expect(whyCss).not.toMatch(/100vh/);
+  });
+
+  it('settles on a section when a scroll ends near one, without holding it', () => {
+    // "proximity" lets a reader scroll straight past; "mandatory" would not.
+    expect(whyCss).toMatch(/html\[data-scroll-snap="why"\] \{ scroll-snap-type: y proximity;/);
+    expect(whyCss).toMatch(/\.why-choose, html\[data-scroll-snap="why"\] \.why-process \{ scroll-snap-align: start; \}/);
+    // A finger already has its own snapping, and it is off for reduced motion.
+    expect(whyCss).toMatch(/@media \(prefers-reduced-motion: reduce\), \(pointer: coarse\) \{\s*html\[data-scroll-snap="why"\] \{ scroll-snap-type: none; \}/);
+    const page = readFileSync(new URL('../src/public/pages/WhyPage.jsx', import.meta.url), 'utf8');
+    expect(page).toMatch(/document\.documentElement\.dataset\.scrollSnap = 'why'/);
+    expect(page).toMatch(/delete document\.documentElement\.dataset\.scrollSnap/);
+  });
+
+  it('the tracker fills a line rather than moving a dot along it', () => {
+    // The dot sat just short of the current step and read as a stray mark.
+    expect(css).not.toMatch(/journey-pulse/);
+    expect(readFileSync(new URL('../src/public/pages/WhyPage.jsx', import.meta.url), 'utf8')).not.toMatch(/--pulse/);
+    expect(whyCss).toMatch(/\.journey-steps::after \{ width: calc\(\(100% - 100% \/ 6\) \* var\(--reached\)\);[^}]*transition: width \.7s/);
   });
 
   it('the reasons scroll inside their own box, one card per step', () => {
