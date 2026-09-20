@@ -1,13 +1,50 @@
+import { useEffect, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { cms, contentPath, headingPath, heroBackground, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { firstImage } from '../../utils/imageRegistry';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, CategoryCard, enquiryProps, heading, label, PageCTA, ProcessSteps, quoteDestinationPaths, SectionHeading, StoryCard, Testimonials, TextLink } from '../components/Ui';
+import { Button, CategoryCard, enquiryProps, heading, label, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink } from '../components/Ui';
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
-const CARD_WIDTH = 186;   // keep in sync with .trust-logo width in public.css
+const CARD_WIDTH = 232;   // keep in sync with .trust-logo width in public.css
+const SLIDE_SECONDS = 6;
+
+/*
+ * The banner's slideshow.
+ *
+ * Pictures come from scenes.homeHeroSlides, so the manager chooses them. Until
+ * any are set it runs MySOS's own photographs of the work. The first picture is
+ * in the prerendered HTML, so the banner is never blank before the page wakes
+ * up, and a reader who asked for less motion keeps that one picture.
+ */
+const SLIDE_FALLBACKS = ['scenes/solutions-hero', 'solutions/events', 'solutions/schools', 'scenes/why-hero', 'solutions/businesses'];
+
+function heroSlides() {
+  const chosen = (siteContent.scenes?.homeHeroSlides ?? []).map((value) => String(value ?? '').trim()).filter(Boolean);
+  if (chosen.length) return chosen;
+  return SLIDE_FALLBACKS.map((key) => firstImage(key)).filter(Boolean);
+}
+
+function HeroSlideshow({ slides }) {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    if (slides.length < 2 || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const timer = setInterval(() => setShown((current) => (current + 1) % slides.length), SLIDE_SECONDS * 1000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
+  return <div className="hero-slides" aria-hidden="true">
+    {slides.map((src, index) => <div
+      key={src}
+      className={index === shown ? 'hero-slide is-active' : 'hero-slide'}
+      style={{ backgroundImage: `url("${src.replaceAll('"', '%22')}")` }}
+      data-cms-path={cms(scenePath('homeHeroSlides', index))}
+    />)}
+  </div>;
+}
 
 function LogoCard({ logo, index, duplicate = false }) {
   const src = picture(logo.image, `logos/${logo.key}`);
@@ -51,8 +88,13 @@ export default function HomePage() {
   const featuredStories = getStories().filter((story) => story.featured).slice(0, 4);
   const heroShot = picture(siteContent.scenes?.homeHeroImage, 'scenes/home-hero');
   const bandBg = picture(siteContent.scenes?.industryBandImage, 'scenes/band-industry');
+  const slides = heroSlides();
+  // A single background picture still wins, if one is set.
+  const banner = heroBackground(siteContent.scenes?.homeHeroBackgroundImage, scenePath('homeHeroBackgroundImage'), 'hero hero-home');
+  const slideshow = slides.length > 0 && !banner.style;
   return <main>
-    <section {...heroBackground(siteContent.scenes?.homeHeroBackgroundImage, scenePath('homeHeroBackgroundImage'), 'hero')}>
+    <section {...banner} className={slideshow ? `${banner.className} has-background` : banner.className}>
+      {slideshow && <HeroSlideshow slides={slides} />}
       <div className="hero-inner">
         <div>
           <h1>
@@ -61,7 +103,7 @@ export default function HomePage() {
           </h1>
           <p className="hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
           <div className="hero-actions">
-            <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span></Button>
+            <Button {...enquiryProps}><span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span></Button>
             <Button href="/mySOS/products/" variant="ghost"><span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
           </div>
           <ul className="hero-promises">
@@ -85,10 +127,10 @@ export default function HomePage() {
       </div>
     </section>
 
-    {/* Reviews sit directly under the banner. */}
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
-
+    {/* The organisations MySOS works for come first, then the reviews. */}
     <TrustStrip />
+
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
 
     <section className="section">
       <SectionHeading eyebrow={heading('categoriesHeading', 'What can we make for you?')} eyebrowPath={headingPath('categoriesHeading')} />

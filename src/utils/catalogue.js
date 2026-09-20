@@ -20,12 +20,18 @@ export function getDisplayPrice(product) {
 }
 
 /*
- * Where "Get a Quote" and every product card send a visitor: a WhatsApp chat
- * with MySOS, naming the product when there is one, or an email when WhatsApp
- * is switched off.
- *
- * The quotation engine is MySOS's own pricing tool for its agents. Visitors
- * are never sent there, and the public site does not carry its address.
+ * Where "Get a Quote" and every product card send a visitor: the site's own
+ * request page, where they say what they want and send it to MySOS. The
+ * quotation engine is MySOS's pricing tool for its agents; visitors never go
+ * there, and the public site does not carry its address.
+ */
+export const REQUEST_PATH = '/mySOS/request/';
+export const requestPathFor = (productId) => (productId ? `${REQUEST_PATH}?product=${encodeURIComponent(productId)}` : REQUEST_PATH);
+
+/*
+ * A chat that opens with a quote message, naming the product when there is
+ * one, or an email when WhatsApp is switched off. Used where a visitor asks to
+ * talk to MySOS rather than to build a request.
  */
 export function getEnquiryHref(productId) {
   const { whatsapp = {} } = siteConfig;

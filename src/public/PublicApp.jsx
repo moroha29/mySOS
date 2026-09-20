@@ -7,6 +7,7 @@ import WhyPage from './pages/WhyPage';
 import StoriesPage from './pages/StoriesPage';
 import StoryDetailPage from './pages/StoryDetailPage';
 import SolutionDetailPage from './pages/SolutionDetailPage';
+import RequestPage from './pages/RequestPage';
 import solutions from '../data/solutions.json';
 import { watchTextStyles } from './textStyles';
 
@@ -14,6 +15,7 @@ export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '
   const normalized = pathname.replace(/^\/mySOS\/?/, '/').replace(/\/+$/, '') || '/';
   if (normalized === '/') return { page: 'home' };
   if (normalized === '/products') return { page: 'products' };
+  if (normalized === '/request') return { page: 'request' };
   if (normalized === '/solutions') return { page: 'solutions' };
   if (normalized === '/why-mysos') return { page: 'why' };
   if (normalized === '/success-stories') return { page: 'stories' };
@@ -33,6 +35,7 @@ export default function PublicApp() {
   useEffect(() => watchTextStyles(), []);
   const route = resolvePublicRoute();
   const content = route.page === 'home' ? <HomePage />
+    : route.page === 'request' ? <RequestPage />
     : route.page === 'products' ? <ProductsPage />
       : route.page === 'solutions' ? <SolutionsPage />
         : route.page === 'why' ? <WhyPage />

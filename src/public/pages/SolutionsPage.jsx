@@ -5,7 +5,7 @@ import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pag
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, enquiryProps, heading, label, Photo, ProductCard, quoteDestinationPaths, SectionHeading, SolutionCard } from '../components/Ui';
+import { Button, enquiryProps, heading, label, Photo, ProductCard, SectionHeading, SolutionCard } from '../components/Ui';
 
 export default function SolutionsPage() {
   const industryId = new URLSearchParams(globalThis.location?.search ?? '').get('industry');
@@ -75,7 +75,7 @@ export default function SolutionsPage() {
         <span className="eyebrow" data-cms-path={cms(pagePath('solutions', 'promoEyebrow'))}>{pageText('solutions', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('solutions', 'promoTitle'))}>{pageText('solutions', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('solutions', 'promoDescription'))}>{pageText('solutions', 'promoDescription')}</p>
-        <Button {...enquiryProps} data-cms-paths={quoteDestinationPaths}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <Button {...enquiryProps}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.solutionsPromoImage, 'scenes/solutions-promo')} imagePath={scenePath('solutionsPromoImage')} /></div>
     </section>

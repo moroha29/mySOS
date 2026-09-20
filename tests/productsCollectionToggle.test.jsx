@@ -65,3 +65,26 @@ describe('category tabs', () => {
     }
   });
 });
+
+describe('choosing a category', () => {
+  it('swaps the products in place instead of reloading the page', () => {
+    // Categories were plain links, so choosing one reloaded the page and put
+    // the reader back at the top of the banner, away from the products.
+    expect(source).toMatch(/const chooseCategory = \(event, id\) => \{/);
+    expect(source).toMatch(/event\.preventDefault\(\);\s*setCategory\(id\);/);
+    expect(source).toMatch(/globalThis\.history\?\.pushState\?\.\(\{ category: id \}, '', `\?category=\$\{id\}`\)/);
+    expect(source).toMatch(/onClick=\{\(event\) => chooseCategory\(event, item\.id\)\}/);
+    // Nothing scrolls the page: the reader stays where they were.
+    expect(source.slice(source.indexOf('const chooseCategory'), source.indexOf('const toggleShowAll'))).not.toMatch(/scrollIntoView|scrollTo/);
+  });
+
+  it('still has a real address, so it opens in a new tab and steps back', () => {
+    globalThis.location = { pathname: '/mySOS/products/', search: '?category=bags' };
+    const markup = renderToStaticMarkup(<ProductsPage />);
+    expect(markup).toContain('href="?category=drinkware"');
+    expect(markup).toContain('Canvas Tote Bag');
+    // A modified click is left to the browser.
+    expect(source).toMatch(/if \(event\.metaKey \|\| event\.ctrlKey \|\| event\.shiftKey \|\| event\.button !== 0\) return;/);
+    expect(source).toMatch(/window\.addEventListener\('popstate', onPop\)/);
+  });
+});

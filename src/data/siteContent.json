@@ -511,6 +511,13 @@
   "scenes": {
     "homeHeroImage": "",
     "homeHeroBackgroundImage": "",
+    "homeHeroSlides": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
     "industryBandImage": "",
     "ctaBandImage": "",
     "productsHeroImage": "",
@@ -528,7 +535,9 @@
       "",
       ""
     ],
-    "storiesHeroBackgroundImage": ""
+    "storiesHeroBackgroundImage": "",
+    "requestHeroBackgroundImage": "",
+    "requestHeroImage": ""
   },
   "pages": {
     "products": {
@@ -549,6 +558,14 @@
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today."
+    },
+    "request": {
+      "breadcrumb": "Get a Quote",
+      "heroTitle": "Tell Us What You Need",
+      "heroLead": "Build your request, add your artwork and send it over. We will come back with options and pricing.",
+      "builderTitle": "Build Your Request",
+      "builderLead": "Search for what you need, set the quantities and tell us how it should be printed.",
+      "includedTitle": "Your Products"
     },
     "solutions": {
       "heroTitle": "Solutions Designed",
@@ -679,7 +696,13 @@
       "sendButton": "Send Request via WhatsApp",
       "sendHint": "We'll open WhatsApp with your selected products, quantities and notes already included.",
       "sendFilesHint": "WhatsApp links cannot carry files: after the chat opens, attach {files} there.",
-      "emptyRequest": "Add at least one product to send a request."
+      "emptyRequest": "Add at least one product to send a request.",
+      "searchTitle": "Search all products",
+      "searchPlaceholder": "Search for a product, e.g. tote bag",
+      "searchEmpty": "Nothing matched. Add it as a custom product below and we will source it.",
+      "printingPrompt": "Choose a printing method",
+      "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
+      "showFewerLabel": "Show fewer"
     }
   },
   "apparelTabs": [

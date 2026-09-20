@@ -23,6 +23,7 @@ describe('production route rendering', () => {
   it.each([
     ['/mySOS/', 'Custom Merchandise'],
     ['/mySOS/products/', 'Apparel collection'],
+    ['/mySOS/request/', 'Build Your Request'],
     ['/mySOS/solutions/', 'Solutions Designed'],
     ['/mySOS/why-mysos/', 'Why MySOS'],
     ['/mySOS/success-stories/', 'Success Stories'],
@@ -43,16 +44,40 @@ describe('production route rendering', () => {
 
   it('renders data-driven product and solution filters', () => {
     const apparel = renderAt('/mySOS/products/');
-    // Each product card asks for a quote on WhatsApp, naming the product.
-    expect(apparel).toContain('quote%20for%20Premium%20Cotton%20Tee');
+    // A product card starts a request with that product already in it.
+    expect(apparel).toContain('href="/mySOS/request/?product=premium_cotton_tee"');
     expect(renderAt('/mySOS/products/', '?category=bags')).toContain('Canvas Tote Bag');
     const schools = renderAt('/mySOS/solutions/', '?industry=schools');
     expect(schools).toContain('Recommended for Schools');
     expect(schools).toContain('Sublimation Jersey');
-    expect(schools).toContain('quote%20for%20Sublimation%20Jersey');
+    expect(schools).toContain('href="/mySOS/request/?product=jersey-sublimation"');
     const stories = renderAt('/mySOS/success-stories/');
     expect(stories).toContain('/mySOS/success-stories/ntu-cca-jerseys-2024/');
     expect(renderAt('/mySOS/success-stories/ntu-cca-jerseys-2024/')).toContain('Need something similar?');
+  });
+
+  it('sends every "Get a Quote" to the request page, not straight into a chat', () => {
+    // The customer builds what they want first; WhatsApp carries the finished
+    // request. The agents' quotation engine is a different thing entirely.
+    for (const pathname of ['/mySOS/', '/mySOS/products/', '/mySOS/solutions/']) {
+      const markup = renderAt(pathname);
+      const quoteButtons = [...markup.matchAll(/<a class="btn[^"]*" href="([^"]+)"[^>]*>(?:(?!<\/a>)[\s\S])*?Get a Quote/g)];
+      expect(quoteButtons.length, pathname).toBeGreaterThan(0);
+      for (const [, href] of quoteButtons) expect(href, pathname).toBe('/mySOS/request/');
+    }
+  });
+
+  it('opens the request page empty, or on the product the visitor came from', () => {
+    const blank = renderAt('/mySOS/request/');
+    expect(blank).toContain('Search all products');
+    expect(blank).toContain('0 products selected');
+    const withProduct = renderAt('/mySOS/request/', '?product=canvas_tote_bag');
+    expect(withProduct).toContain('Canvas Tote Bag');
+    expect(withProduct).toContain('1 products selected');
+    // An address that names nothing real simply starts empty.
+    expect(renderAt('/mySOS/request/', '?product=not_a_product')).toContain('0 products selected');
+    // No prices anywhere: this is a request, not a quotation.
+    expect(withProduct).not.toMatch(/\$\d/);
   });
 
   it('renders the WhatsApp number and accessible navigation controls', () => {
@@ -77,7 +102,7 @@ describe('production route rendering', () => {
 
 describe('the quotation engine is not reachable from the public site', () => {
   const pages = [
-    '/mySOS/', '/mySOS/products/', '/mySOS/solutions/', '/mySOS/why-mysos/', '/mySOS/success-stories/',
+    '/mySOS/', '/mySOS/products/', '/mySOS/request/', '/mySOS/solutions/', '/mySOS/why-mysos/', '/mySOS/success-stories/',
     ...successStories.map((story) => `/mySOS/success-stories/${story.slug}/`),
     ...solutions.map((solution) => `/mySOS/solutions/${solution.id}/`),
   ];

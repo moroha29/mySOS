@@ -23,14 +23,14 @@ const render = (Page, pathname) => {
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
-  it('home: above the client logos, below the banner', () => {
+  it('home: under the client logos, which sit right below the banner', () => {
     const markup = render(HomePage, '/mySOS/');
     const banner = markup.indexOf('Custom Merchandise,');
     const reviews = markup.indexOf('class="section reviews"');
     const logos = markup.indexOf('class="trust-strip"');
     expect(banner).toBeGreaterThan(-1);
-    expect(reviews).toBeGreaterThan(banner);
-    expect(reviews).toBeLessThan(logos);
+    expect(logos).toBeGreaterThan(banner);
+    expect(reviews).toBeGreaterThan(logos);
     expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 
@@ -109,5 +109,65 @@ describe('printing methods: "Our capabilities"', () => {
     const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
     expect(source).toMatch(/\{ ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 \}\[event\.key\]/);
     expect(source).toContain('tabRefs.current[next.id]?.focus();');
+  });
+});
+
+describe('the home banner and the grids under it', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
+
+  it('runs a slideshow behind the banner, starting on a picture the server drew', () => {
+    const markup = render(HomePage, '/mySOS/');
+    const slides = [...markup.matchAll(/class="hero-slide( is-active)?"/g)];
+    expect(slides.length).toBeGreaterThan(1);
+    expect(slides.filter(([, active]) => active)).toHaveLength(1);
+    // The scrim goes over it, as with any banner picture, so white text reads.
+    expect(markup).toMatch(/class="hero hero-home has-background"/);
+    expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
+    expect(home).toMatch(/prefers-reduced-motion: reduce/);
+    expect(css).toMatch(/\.hero-slide \{[^}]*opacity: 0; transition: opacity/);
+    expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 560px;/);
+  });
+
+  it('lets the manager choose the slideshow pictures', () => {
+    expect(siteContent.scenes.homeHeroSlides).toBeInstanceOf(Array);
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
+  });
+
+  it('measures the logo marquee against the width the stylesheet uses', () => {
+    // The track slides exactly -50%, so a card width that disagrees with the
+    // CSS makes the marquee drift or race.
+    const width = Number(css.match(/\.trust-logo \{[^}]*width: (\d+)px/)[1]);
+    expect(Number(home.match(/const CARD_WIDTH = (\d+);/)[1])).toBe(width);
+  });
+
+  it('gives "What can we make for you?" three across, two on a phone', () => {
+    expect(css).toMatch(/\.category-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+    const phone = css.slice(css.indexOf('@media (max-width: 620px)'));
+    expect(phone).toMatch(/\.category-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  });
+});
+
+describe('the type scale: titles carry the page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const sizeOf = (pattern) => Number(css.match(pattern)[1]);
+
+  it('sets titles above the text around them', () => {
+    expect(sizeOf(/\.hero h1 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(50);
+    expect(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(34);
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(16);
+    expect(sizeOf(/\.section-heading p \{[^}]*font-size: ([\d.]+)px/))
+      .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
+  });
+
+  it('never drops text below 12.5px, however small the scale gets', () => {
+    const sizes = [...css.matchAll(/font-size: ([\d.]+)px/g)].map(([, size]) => Number(size));
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(12.5);
+  });
+
+  it('runs the page wider than it used to, halving the side margins', () => {
+    expect(sizeOf(/--content: (\d+)px;/)).toBe(1340);
+    expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBe(1700);
   });
 });

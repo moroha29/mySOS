@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { enquiryLinkProps, getEnquiryHref } from '../../utils/catalogue';
+import { REQUEST_PATH } from '../../utils/catalogue';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, solutionPath } from '../cms';
 import Icon from './Icons';
 
@@ -94,11 +94,10 @@ function NavigationItem({ item, index, onNavigate }) {
   </div>;
 }
 
-// The quote button carries its wording and where it sends people: a WhatsApp
-// chat, never the agents' quotation engine.
-const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'), configPath('whatsapp', 'number'), configPath('whatsapp', 'quoteMessage'));
-const quoteHref = getEnquiryHref();
-const quoteLink = { href: quoteHref, ...enquiryLinkProps(quoteHref) };
+// "Get a Quote" opens the site's own request page, where a customer says what
+// they need. Never the agents' quotation engine.
+const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'));
+const quoteLink = { href: REQUEST_PATH };
 
 // Several fields hold "/mySOS/" — the site's base path and the placeholder
 // legal links — so the manager cannot tell them apart from the URL alone.

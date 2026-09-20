@@ -4,21 +4,18 @@ import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
-import { enquiryLinkProps, getDisplayPrice, getEnquiryHref } from '../../utils/catalogue';
+import { enquiryLinkProps, getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
 import Icon from './Icons';
 import { Product, Scene, Sketch, Workshop } from './Visuals';
 
-// "Get a Quote" opens a WhatsApp chat with MySOS; see getEnquiryHref.
-export const ENQUIRY_HREF = getEnquiryHref();
-export const enquiryProps = { href: ENQUIRY_HREF, ...enquiryLinkProps(ENQUIRY_HREF) };
-
-// Selecting a quote button in the manager offers the number and the message it sends.
-export const quoteDestinationPaths = cmsAll(
-  configPath('whatsapp', 'number'),
-  configPath('whatsapp', 'quoteMessage'),
-);
+/*
+ * "Get a Quote" opens the site's own request page, where the customer builds
+ * what they want and sends it to MySOS. It used to jump straight into a
+ * WhatsApp chat with one fixed sentence.
+ */
+export const enquiryProps = { href: REQUEST_PATH };
 
 // On-screen wording lives in siteContent so it can be edited in the admin
 // portal. The fallback keeps a page rendering if a label is ever removed.
@@ -78,17 +75,14 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
 
 /* -------------------------------------------------------------------- cards */
 
+// A product card starts a request with that product already in it.
 export function ProductCard({ product }) {
   const price = getDisplayPrice(product);
-  const href = getEnquiryHref(product.id);
-  const content = <>
+  return <a className="product-card" href={requestPathFor(product.id)} aria-label={`Ask MySOS for a quote on ${product.public.name}`}>
     <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
     <h3>{product.public.name}</h3>
     {price && <p className="price">{price}</p>}
-  </>;
-  return href
-    ? <a className="product-card" href={href} {...enquiryLinkProps(href)} aria-label={`Ask MySOS for a quote on ${product.public.name}`} data-cms-paths={cmsAll(configPath('whatsapp', 'number'), configPath('whatsapp', 'productQuoteMessage'))}>{content}</a>
-    : <div className="product-card">{content}</div>;
+  </a>;
 }
 
 export function CategoryCard({ category }) {
@@ -253,7 +247,7 @@ export function PageCTA({
   descriptionPath,
   primaryLabel = label('heroQuoteButton', 'Get a Quote'),
   primaryPath = labelPath('heroQuoteButton'),
-  primaryHref = ENQUIRY_HREF,
+  primaryHref = REQUEST_PATH,
   showWhatsApp = true,
 }) {
   const bandBg = picture(siteContent.scenes?.ctaBandImage, 'scenes/band-cta');
@@ -265,7 +259,7 @@ export function PageCTA({
       </div>
       <div className="page-cta-actions">
         {/* The button's wording and where it sends people, together. */}
-        <Button href={primaryHref} {...enquiryLinkProps(primaryHref)} data-cms-paths={quoteDestinationPaths}>
+        <Button href={primaryHref} {...enquiryLinkProps(primaryHref)}>
           <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
         </Button>
         {showWhatsApp && <WhatsAppLink />}

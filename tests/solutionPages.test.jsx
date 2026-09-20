@@ -7,8 +7,8 @@ import siteContent from '../src/data/siteContent.json';
 import solutions from '../src/data/solutions.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import {
-  buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, packageLines,
-  recommendedDetails, suggestionsFor,
+  buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, needsPrintingChoice,
+  packageLines, printingFieldFor, recommendedDetails, searchProducts, suggestionsFor,
 } from '../src/utils/solutionRequest';
 
 const originalLocation = globalThis.location;
@@ -184,12 +184,37 @@ describe('the request message', () => {
 
   it('opening details selects the recommended choices only', () => {
     expect(recommendedDetails(detailFieldsFor('event_lanyard'))).toEqual({ width: '20mm', printing: 'Double-sided' });
-    expect(detailFieldsFor('custom_medal')).toEqual(siteContent.requestOptions.default);
+    // A product whose kind has no printing question of its own is still asked
+    // one, so nothing is sent to MySOS without saying how it should be printed.
+    const medal = detailFieldsFor('custom_medal');
+    expect(medal.slice(1)).toEqual(siteContent.requestOptions.default);
+    expect(medal[0].id).toBe('printing');
+    expect(medal[0].options).toContain('Let MySOS recommend');
+  });
+
+  it('asks how each product should be printed, unless MySOS already said', () => {
+    const line = makeLine({ productId: 'custom_medal' });
+    expect(needsPrintingChoice(line)).toBe(true);
+    expect(needsPrintingChoice({ ...line, details: { printing: 'Silkscreen' } })).toBe(false);
+    // The recommended package says it on the row itself; no need to ask again.
+    expect(needsPrintingChoice({ ...line, note: 'Printing: Let MySOS recommend based on your artwork' })).toBe(false);
+    expect(printingFieldFor('premium_cotton_tee').id).toBe('printing');
+  });
+
+  it('searches the whole catalogue, not just what was recommended', () => {
+    expect(searchProducts('tote').map((product) => product.id)).toContain('canvas_tote_bag');
+    // Words may come in any order, and a category name finds its products.
+    expect(searchProducts('bag tote').map((product) => product.id)).toContain('canvas_tote_bag');
+    expect(searchProducts('drinkware').length).toBeGreaterThan(0);
+    expect(searchProducts('tote', { exclude: ['canvas_tote_bag'] }).map((product) => product.id)).not.toContain('canvas_tote_bag');
+    expect(searchProducts('   ')).toEqual([]);
+    expect(searchProducts('nothing at all like this')).toEqual([]);
   });
 });
 
 describe('files are never claimed as sent', () => {
-  const source = readFileSync(new URL('../src/public/pages/SolutionDetailPage.jsx', import.meta.url), 'utf8');
+  // The builder is shared with the blank "Get a Quote" page.
+  const source = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
 
   it('shares files through the device when it can, and otherwise says to attach them', () => {
     expect(source).toMatch(/navigator\.canShare\?\.\(\{ files: attached, text: message \}\)/);
