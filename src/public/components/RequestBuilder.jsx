@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import { enquiryLinkProps } from '../../utils/catalogue';
 import {
-  allFileNames, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice,
+  allFileNames, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
   packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, searchProducts, suggestionsFor,
 } from '../../utils/solutionRequest';
 import { cms, pagePath } from '../cms';
@@ -80,6 +80,10 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
               {field.recommended === option ? `${option} (recommended)` : option}
             </option>)}
           </select>}
+          {/* Picking "Other" only makes sense with a word about what they want. */}
+          {isPrinting && line.details[field.id] === OTHER_PRINTING && <small className="request-field-hint">
+            <span data-cms-path={wordPath('printingOtherHint')}>{word('printingOtherHint', 'Describe the printing you have in mind in the notes below.')}</span>
+          </small>}
           {!isPrinting && field.type === 'choice' && <div className="request-choices" role="radiogroup" aria-labelledby={`field-${index}-${field.id}`}>
             {field.options.map((option) => <button
               key={option}

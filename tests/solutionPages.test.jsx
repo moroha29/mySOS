@@ -8,7 +8,7 @@ import solutions from '../src/data/solutions.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import {
   buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, needsPrintingChoice,
-  packageLines, printingFieldFor, recommendedDetails, searchProducts, suggestionsFor,
+  OTHER_PRINTING, packageLines, printingFieldFor, recommendedDetails, searchProducts, suggestionsFor,
 } from '../src/utils/solutionRequest';
 
 const originalLocation = globalThis.location;
@@ -190,6 +190,19 @@ describe('the request message', () => {
     expect(medal.slice(1)).toEqual(siteContent.requestOptions.default);
     expect(medal[0].id).toBe('printing');
     expect(medal[0].options).toContain('Let MySOS recommend');
+  });
+
+  it('always offers "Other", whatever printing methods are listed', () => {
+    // Every printing list ends with it, including ones the manager wrote.
+    for (const id of ['premium_cotton_tee', 'custom_medal', 'event_lanyard']) {
+      const field = printingFieldFor(id);
+      expect(field.options.at(-1), id).toBe(OTHER_PRINTING);
+      expect(field.options.filter((option) => option === OTHER_PRINTING), id).toHaveLength(1);
+    }
+    // Choosing it counts as an answer, and reaches MySOS in the message.
+    const line = { ...makeLine({ productId: 'premium_cotton_tee' }), details: { printing: OTHER_PRINTING } };
+    expect(needsPrintingChoice(line)).toBe(false);
+    expect(buildRequestMessage({ lines: [line] })).toContain(`Printing: ${OTHER_PRINTING}`);
   });
 
   it('asks how each product should be printed, unless MySOS already said', () => {

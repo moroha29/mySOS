@@ -1120,6 +1120,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .request-printing-ask { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border: 1px solid #f0c98a; border-radius: 20px; background: #fff7e6; font-size: 13.5px; font-weight: 600; color: #7a4b00; cursor: pointer; }
 .request-printing-ask:hover { border-color: #d9a441; }
 .request-field.is-asking { padding: 10px; margin: -10px; border-radius: 10px; background: #fff7e6; }
+.request-field-hint { display: block; margin-top: 6px; font-size: 13px; line-height: 1.45; color: #7a4b00; }
 .request-printing-select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 14px; }
 .request-field.is-asking .request-printing-select { border-color: #d9a441; }
 .request-printing-note { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #fff7e6; font-size: 13.5px; line-height: 1.5; color: #7a4b00; }

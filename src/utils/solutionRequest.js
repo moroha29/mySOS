@@ -90,6 +90,8 @@ export function searchProducts(query, { exclude = [] } = {}) {
  */
 export const PRINTING_FIELD_IDS = ['printing', 'decoration'];
 export const LET_MYSOS_CHOOSE = 'Let MySOS recommend';
+/* Nothing MySOS lists has to fit: a customer can always describe their own. */
+export const OTHER_PRINTING = 'Other (tell us in the notes)';
 
 const printingFallback = {
   id: 'printing',
@@ -98,12 +100,17 @@ const printingFallback = {
   options: [LET_MYSOS_CHOOSE, ...printData.methods.filter((method) => method.public?.visible).map((method) => method.name)],
 };
 
-/** The detail fields a product offers, by its catalogue subcategory. */
+const withOther = (options = []) => (options.includes(OTHER_PRINTING) ? options : [...options, OTHER_PRINTING]);
+
+/*
+ * The detail fields a product offers, by its catalogue subcategory. Whatever
+ * printing methods the manager lists, "Other" is always on the end.
+ */
 export function detailFieldsFor(productId, options = siteContent.requestOptions ?? {}) {
   const subcategory = productFor(productId)?.public?.subcategory;
   const fields = options[subcategory] ?? options.default ?? [];
-  if (fields.some((field) => PRINTING_FIELD_IDS.includes(field.id))) return fields;
-  return [printingFallback, ...fields];
+  const listed = fields.some((field) => PRINTING_FIELD_IDS.includes(field.id)) ? fields : [printingFallback, ...fields];
+  return listed.map((field) => (PRINTING_FIELD_IDS.includes(field.id) ? { ...field, options: withOther(field.options) } : field));
 }
 
 /** The printing field on a row, or null where the product has none. */

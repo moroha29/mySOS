@@ -703,7 +703,8 @@
       "printingPrompt": "Choose a printing method",
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
       "showFewerLabel": "Show fewer",
-      "printingPlaceholder": "Choose a printing method…"
+      "printingPlaceholder": "Choose a printing method…",
+      "printingOtherHint": "Describe the printing you have in mind in the notes below."
     }
   },
   "apparelTabs": [
