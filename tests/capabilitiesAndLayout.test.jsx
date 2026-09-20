@@ -129,6 +129,17 @@ describe('the home banner and the grids under it', () => {
     expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 560px;/);
   });
 
+  it('leaves the photograph to carry the banner, with no drawn products on it', () => {
+    // The tote, jerseys and bottle were drawn over what is now a photograph.
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).not.toContain('class="hero-art"');
+    expect(markup).not.toMatch(/class="[^"]*ha-[1-5]/);
+    expect(markup).toContain('hero-inner hero-inner-wide');
+    // A picture uploaded in the manager still shows beside the words.
+    expect(readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8'))
+      .toMatch(/\{heroShot && <div className="hero-art"/);
+  });
+
   it('lets the manager choose the slideshow pictures', () => {
     expect(siteContent.scenes.homeHeroSlides).toBeInstanceOf(Array);
     const markup = render(HomePage, '/mySOS/');

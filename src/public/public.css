@@ -188,6 +188,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-promises { margin-top: 30px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 20px; max-width: 540px; }
 .hero-promises li { display: flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; color: #dbe5f7; }
 .hero-promises .icon { color: var(--green-light); }
+/* With no product art beside it, the banner's words take the left half and
+   the photograph behind carries the rest. */
+.hero-inner-wide { grid-template-columns: minmax(0, 1fr); }
+.hero-inner-wide > div { max-width: 620px; }
+
 /* The home banner is the first thing on the site, so it is the tallest. */
 .hero-home .hero-inner { min-height: 560px; padding: 74px 24px; }
 .hero-home .hero-art { height: 400px; }

@@ -5,7 +5,6 @@ import { cms, contentPath, headingPath, heroBackground, labelPath, picture, scen
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
-import { Product } from '../components/Visuals';
 import { Button, CategoryCard, enquiryProps, heading, label, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink } from '../components/Ui';
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
@@ -95,7 +94,7 @@ export default function HomePage() {
   return <main>
     <section {...banner} className={slideshow ? `${banner.className} has-background` : banner.className}>
       {slideshow && <HeroSlideshow slides={slides} />}
-      <div className="hero-inner">
+      <div className={heroShot ? 'hero-inner' : 'hero-inner hero-inner-wide'}>
         <div>
           <h1>
             <span data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>
@@ -113,17 +112,12 @@ export default function HomePage() {
             </li>)}
           </ul>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          {heroShot
-            ? <img className="hero-shot" src={heroShot} alt="" data-cms-path={cms(scenePath('homeHeroImage'))} />
-            : <>
-          <Product type="tote" color="sand" className="ha-3" />
-          <Product type="jersey" color="green" className="ha-1" />
-          <Product type="polo" color="navy" className="ha-2" />
-          <Product type="bottle" color="teal" className="ha-4" />
-          <Product type="lanyard" color="blue" className="ha-5" />
-            </>}
-        </div>
+        {/* The drawn bag, shirts and bottle are gone: the banner is a
+            photograph now, and they were sitting on top of it. A picture
+            uploaded in the manager still shows here. */}
+        {heroShot && <div className="hero-art" aria-hidden="true">
+          <img className="hero-shot" src={heroShot} alt="" data-cms-path={cms(scenePath('homeHeroImage'))} />
+        </div>}
       </div>
     </section>
 
