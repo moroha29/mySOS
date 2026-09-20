@@ -702,7 +702,8 @@
       "searchEmpty": "Nothing matched. Add it as a custom product below and we will source it.",
       "printingPrompt": "Choose a printing method",
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
-      "showFewerLabel": "Show fewer"
+      "showFewerLabel": "Show fewer",
+      "printingPlaceholder": "Choose a printing method…"
     }
   },
   "apparelTabs": [

@@ -38,7 +38,7 @@ describe('the product collection View All / Show Less toggle', () => {
     // The shorter list is on screen before the jump, so it lands on the final layout.
     expect(source).toMatch(/flushSync\(\(\) => setShowAll\(false\)\);\s*if \(scrolledPast\) section\.scrollIntoView\(\{ block: 'start', behavior: 'instant' \}\);/);
     const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
-    expect(css).toMatch(/\.products-collection \{ scroll-margin-top: 96px; \}/);
+    expect(css).toMatch(/\.products-collection \{ scroll-margin-top: calc\(var\(--header-h\) \+ 24px\); \}/);
   });
 
   it('the Show Less wording is editable content', () => {

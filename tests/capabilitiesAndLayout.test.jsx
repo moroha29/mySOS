@@ -126,7 +126,7 @@ describe('the home banner and the grids under it', () => {
     expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
     expect(home).toMatch(/prefers-reduced-motion: reduce/);
     expect(css).toMatch(/\.hero-slide \{[^}]*opacity: 0; transition: opacity/);
-    expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 560px;/);
+    expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 640px;/);
   });
 
   it('leaves the photograph to carry the banner, with no drawn products on it', () => {
@@ -180,5 +180,45 @@ describe('the type scale: titles carry the page', () => {
   it('runs the page wider than it used to, halving the side margins', () => {
     expect(sizeOf(/--content: (\d+)px;/)).toBe(1340);
     expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBe(1700);
+  });
+});
+
+describe('the bar at the top of every page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('is one height, and everything that has to clear it follows', () => {
+    // The height was written out in five places; a taller bar left the mobile
+    // menu overlapping it and anchors landing underneath it.
+    expect(css).toMatch(/--header-h: 88px;/);
+    expect(css).toMatch(/\.site-header \{[^}]*height: var\(--header-h\)/);
+    expect(css).not.toMatch(/top: 72px|scroll-(margin|padding)-top: 72px/);
+    for (const rule of [/\.primary-nav \{[\s\S]{0,200}?top: var\(--header-h\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: var\(--header-h\)/]) {
+      expect(css).toMatch(rule);
+    }
+  });
+
+  it('carries bigger wording and controls than the text under it', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.nav-link \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(17);
+    expect(size(/\.wordmark \{ height: (\d+)px/)).toBeGreaterThanOrEqual(44);
+    // Header buttons match the WhatsApp circle beside them.
+    expect(size(/\.site-header \.btn-sm \{ height: (\d+)px/)).toBe(size(/\.wa-circle \{ width: (\d+)px/));
+  });
+});
+
+describe('how a product should be printed', () => {
+  const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
+
+  it('is a dropdown, whatever the field is set up as', () => {
+    // There are more printing methods than fit a row of buttons, and the list
+    // differs per product kind.
+    expect(builder).toMatch(/\{isPrinting && <select/);
+    expect(builder).toMatch(/className="request-printing-select"/);
+    expect(builder).toMatch(/<option value="">\{word\('printingPlaceholder'/);
+    expect(builder).toMatch(/field\.recommended === option \? `\$\{option\} \(recommended\)` : option/);
+    // The other kinds of field are left to the row of buttons as before.
+    for (const kind of ['choice', 'select', 'text']) {
+      expect(builder).toContain(`{!isPrinting && field.type === '${kind}'`);
+    }
   });
 });

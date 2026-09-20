@@ -62,15 +62,29 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
     <p className="request-details-title">Customise {line.name} <span>(Optional)</span></p>
     <div className="request-details-grid">
       {fields.map((field) => {
-        const asking = field.id === printing?.id && needsPrintingChoice(line);
+        const isPrinting = field.id === printing?.id;
+        const asking = isPrinting && needsPrintingChoice(line);
         return <div className={asking ? 'request-field is-asking' : 'request-field'} key={field.id}>
           <span className="request-field-label" id={`field-${index}-${field.id}`}>{field.label}</span>
-          {field.type === 'choice' && <div className="request-choices" role="radiogroup" aria-labelledby={`field-${index}-${field.id}`}>
+          {/* Printing is a list to pick from, however it is set up: there are
+              more methods than fit a row of buttons. */}
+          {isPrinting && <select
+            className="request-printing-select"
+            id={`printing-${index}`}
+            aria-labelledby={`field-${index}-${field.id}`}
+            value={line.details[field.id] ?? ''}
+            onChange={(event) => set(field.id, event.target.value)}
+          >
+            <option value="">{word('printingPlaceholder', 'Choose a printing method…')}</option>
+            {field.options.map((option) => <option key={option} value={option}>
+              {field.recommended === option ? `${option} (recommended)` : option}
+            </option>)}
+          </select>}
+          {!isPrinting && field.type === 'choice' && <div className="request-choices" role="radiogroup" aria-labelledby={`field-${index}-${field.id}`}>
             {field.options.map((option) => <button
               key={option}
               type="button"
               role="radio"
-              id={asking && option === field.options[0] ? `printing-${index}` : undefined}
               aria-checked={line.details[field.id] === option}
               className={line.details[field.id] === option ? 'is-chosen' : ''}
               onClick={() => set(field.id, option)}
@@ -79,11 +93,11 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
               {field.recommended === option && <small>Recommended</small>}
             </button>)}
           </div>}
-          {field.type === 'select' && <select aria-labelledby={`field-${index}-${field.id}`} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)}>
+          {!isPrinting && field.type === 'select' && <select aria-labelledby={`field-${index}-${field.id}`} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)}>
             <option value="">Choose…</option>
             {field.options.map((option) => <option key={option} value={option}>{option}</option>)}
           </select>}
-          {field.type === 'text' && <input type="text" aria-labelledby={`field-${index}-${field.id}`} placeholder={field.placeholder ?? ''} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)} />}
+          {!isPrinting && field.type === 'text' && <input type="text" aria-labelledby={`field-${index}-${field.id}`} placeholder={field.placeholder ?? ''} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)} />}
         </div>;
       })}
       <div className="request-field">

@@ -24,6 +24,8 @@
   /* Content runs wider than the old 1180px: the side margins were half again
      as wide as the design, which left every page looking narrow. */
   --content: 1340px;
+  /* The bar at the top of every page, and anything that has to clear it. */
+  --header-h: 88px;
 
   font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-synthesis: none;
@@ -97,8 +99,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* "Show Less": the chevron points up, and nudges up rather than sideways on hover. */
 .inline-arrow.is-up { transform: rotate(180deg); }
 .btn:hover .inline-arrow.is-up { transform: rotate(180deg) translateY(2px); }
-/* Collapsing the product list scrolls back here; clear the 72px sticky header. */
-.products-collection { scroll-margin-top: 96px; }
+/* Collapsing the product list scrolls back here; clear the sticky header. */
+.products-collection { scroll-margin-top: calc(var(--header-h) + 24px); }
 
 .center-action { margin-top: 30px; display: flex; justify-content: center; }
 .badge {
@@ -116,37 +118,39 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ================================================================ 3. header */
 
-.site-header { position: sticky; top: 0; z-index: 60; height: 72px; background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
-.site-header-inner { max-width: var(--content); height: 100%; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 28px; }
+.site-header { position: sticky; top: 0; z-index: 60; height: var(--header-h); background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
+.site-header-inner { max-width: var(--content); height: 100%; margin: 0 auto; padding: 0 28px; display: flex; align-items: center; gap: 34px; }
 /* Never shrinks: as a flex child it used to give way to the menu links and
    disappear entirely (0px wide at 861px). */
 .site-logo { display: inline-flex; align-items: center; flex: none; }
-.wordmark { height: 34px; width: auto; display: block; }
+.wordmark { height: 44px; width: auto; display: block; }
 .footer-brand .wordmark { height: 32px; }
 /* lettered fallback, used only when no wordmark file is present */
-.site-logo-text { font-size: 28px; font-weight: 900; letter-spacing: -.05em; color: var(--navy); }
+.site-logo-text { font-size: 32px; font-weight: 900; letter-spacing: -.05em; color: var(--navy); }
 .site-logo-text span { color: var(--navy-soft); }
 .footer-brand .site-logo-text { color: #fff; }
 .footer-brand .site-logo-text span { color: var(--green-light); }
-.primary-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 26px; }
-.nav-link { display: inline-flex; align-items: center; gap: 3px; font-size: 14.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.primary-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: 32px; }
+.nav-link { display: inline-flex; align-items: center; gap: 4px; font-size: 17px; font-weight: 700; color: var(--ink); white-space: nowrap; }
 .nav-link:hover { color: var(--green); }
-.nav-group { position: relative; padding: 25px 0; }
+.nav-group { position: relative; padding: 32px 0; }
 .nav-chevron { opacity: .7; }
 .nav-dropdown {
-  position: absolute; top: 60px; left: -14px; min-width: 232px; padding: 8px;
+  position: absolute; top: 74px; left: -14px; min-width: 232px; padding: 8px;
   display: grid; gap: 1px; visibility: hidden; opacity: 0; transform: translateY(-6px);
   border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: var(--shadow);
   transition: opacity .15s, transform .15s, visibility .15s;
 }
 .nav-group:hover .nav-dropdown, .nav-group:focus-within .nav-dropdown { visibility: visible; opacity: 1; transform: none; }
-.nav-dropdown a { padding: 9px 11px; border-radius: 6px; font-size: 14.5px; font-weight: 600; color: var(--muted); }
+.nav-dropdown a { padding: 10px 12px; border-radius: 6px; font-size: 15.5px; font-weight: 600; color: var(--muted); }
 .nav-dropdown a:hover { background: var(--soft); color: var(--navy); }
-.header-actions { display: flex; align-items: center; gap: 10px; }
-.wa-circle { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--green); color: #fff; }
+.header-actions { display: flex; align-items: center; gap: 12px; }
+/* The header's own buttons grow with the bar. */
+.site-header .btn-sm { height: 44px; padding: 0 22px; font-size: 16px; }
+.wa-circle { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--green); color: #fff; }
 .wa-circle:hover { background: var(--green-dark); }
 .wa-circle.is-disabled { background: #b9c3d2; }
-.menu-toggle { display: none; width: 38px; height: 34px; padding: 8px 7px; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); border-radius: 7px; background: #fff; cursor: pointer; }
+.menu-toggle { display: none; width: 44px; height: 38px; padding: 8px 7px; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); border-radius: 7px; background: #fff; cursor: pointer; }
 .menu-toggle span { height: 2px; background: var(--navy); border-radius: 2px; }
 .mobile-quote { display: none; }
 
@@ -181,7 +185,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
 
 .hero-inner { max-width: var(--content); margin: 0 auto; padding: 56px 24px; display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); align-items: center; gap: 30px; position: relative; z-index: 2; }
-.hero h1 { font-size: 53.5px; font-weight: 900; letter-spacing: -.03em; }
+.hero h1 { font-size: 58px; font-weight: 900; letter-spacing: -.03em; }
 .hero h1 em { display: block; font-style: normal; color: var(--green-light); }
 .hero-lead { margin-top: 16px; max-width: 440px; font-size: 16px; line-height: 1.68; color: #ccd8f0; }
 .hero-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; }
@@ -194,7 +198,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-inner-wide > div { max-width: 620px; }
 
 /* The home banner is the first thing on the site, so it is the tallest. */
-.hero-home .hero-inner { min-height: 560px; padding: 74px 24px; }
+.hero-home .hero-inner { min-height: 640px; padding: 96px 24px; }
 .hero-home .hero-art { height: 400px; }
 .hero-compact .hero-inner { padding: 44px 24px; }
 .hero-compact h1 { font-size: 43px; }
@@ -379,7 +383,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.3px);
   background-size: 22px 22px;
   color: #ecebe6;
-  scroll-margin-top: 72px;
+  scroll-margin-top: var(--header-h);
 }
 /* Wider than the site's usual content column, as in the reference: at the
    standard width the middle column shrank to 330px and the copy wrapped early. */
@@ -688,7 +692,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
  * it half off the screen. "proximity", not "mandatory" — the page is never
  * held against someone who keeps scrolling.
  */
-html[data-scroll-snap="why"] { scroll-snap-type: y proximity; scroll-padding-top: 72px; }
+html[data-scroll-snap="why"] { scroll-snap-type: y proximity; scroll-padding-top: var(--header-h); }
 html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-process { scroll-snap-align: start; }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
   html[data-scroll-snap="why"] { scroll-snap-type: none; }
@@ -783,7 +787,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .header-actions { margin-left: auto; }
   .menu-toggle { display: flex; order: 3; }
   .primary-nav {
-    position: absolute; top: 72px; left: 0; right: 0; padding: 14px 24px 20px;
+    position: absolute; top: var(--header-h); left: 0; right: 0; padding: 14px 24px 20px;
     flex-direction: column; align-items: stretch; gap: 4px;
     background: #fff; border-bottom: 1px solid var(--line); box-shadow: var(--shadow); display: none;
   }
@@ -1116,6 +1120,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .request-printing-ask { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border: 1px solid #f0c98a; border-radius: 20px; background: #fff7e6; font-size: 13.5px; font-weight: 600; color: #7a4b00; cursor: pointer; }
 .request-printing-ask:hover { border-color: #d9a441; }
 .request-field.is-asking { padding: 10px; margin: -10px; border-radius: 10px; background: #fff7e6; }
+.request-printing-select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 14px; }
+.request-field.is-asking .request-printing-select { border-color: #d9a441; }
 .request-printing-note { display: flex; align-items: flex-start; gap: 8px; margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #fff7e6; font-size: 13.5px; line-height: 1.5; color: #7a4b00; }
 .request-printing-note .icon { flex: none; margin-top: 1px; }
 
