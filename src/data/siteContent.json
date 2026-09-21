@@ -19,7 +19,7 @@
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
-    "heroTitleAccent": "Made Simple.",
+    "heroTitleAccent": "Made Simple (QA).",
     "heroLead": "We source, customise and deliver premium merchandise for your organisation, event or business.",
     "categoriesHeading": "What can we make for you?",
     "industryHeading": "Don't know what you need?",
@@ -1236,6 +1236,17 @@
           "Green",
           "Other (tell us in the notes)"
         ]
+      }
+    ]
+  },
+  "appearance": {
+    "overrides": [
+      {
+        "page": "homepage",
+        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"heroTitleAccent\"]']",
+        "route": "/mySOS/",
+        "label": "Hero Title Accent",
+        "fontScale": 1.2
       }
     ]
   }
