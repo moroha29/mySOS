@@ -44,7 +44,8 @@ describe('the site applies them', () => {
   });
 
   it('only the choices the manager offers', () => {
-    expect(module).toMatch(/const FONT_SCALES = new Set\(\[0\.9, 1\.1, 1\.25, 1\.5\]\);/);
+    // Any size the manager's slider offers, and nothing wild.
+    expect(module).toMatch(/const FONT_SCALES = \{ has: \(value\) => Number\.isFinite\(value\) && value >= 0\.5 && value <= 3 && value !== 1 \};/);
     expect(module).toMatch(/const COLOUR = \/\^#\[0-9a-f\]\{6\}\$\/i;/);
   });
 
