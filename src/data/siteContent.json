@@ -237,6 +237,7 @@
   ],
   "benefits": [
     {
+      "key": "supplier",
       "title": "One Supplier",
       "shortTitle": "One Supplier, Endless Possibilities.",
       "icon": "supplier",
@@ -248,6 +249,7 @@
       "cardIcon": "sample"
     },
     {
+      "key": "value",
       "title": "Better Value",
       "shortTitle": "Premium Quality Without Premium Pricing.",
       "icon": "value",
@@ -259,6 +261,7 @@
       "cardIcon": "award"
     },
     {
+      "key": "flexible",
       "title": "Flexible Quantities",
       "shortTitle": "Flexible Order Quantities.",
       "icon": "flexible",
@@ -270,6 +273,7 @@
       "cardIcon": "flexible"
     },
     {
+      "key": "expert",
       "title": "Expert Guidance",
       "shortTitle": "Expert Recommendations.",
       "icon": "expert",
@@ -281,6 +285,7 @@
       "cardIcon": "expert"
     },
     {
+      "key": "tailored",
       "title": "Built Around You",
       "shortTitle": "Tailored To Your Needs.",
       "icon": "tailored",

@@ -1,4 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+// The workbook's own prices: the live lists are edited from the website
+// manager, and these tests check the engine's sums against known answers.
+vi.mock('../src/data/productData.json', async () => ({ default: (await import('./fixtures/workbook/productData.json')).default }));
+vi.mock('../src/data/printData.json', async () => ({ default: (await import('./fixtures/workbook/printData.json')).default }));
+vi.mock('../src/data/tierData.json', async () => ({ default: (await import('./fixtures/workbook/tierData.json')).default }));
+vi.mock('../src/data/addonData.json', async () => ({ default: (await import('./fixtures/workbook/addonData.json')).default }));
 import { calculateQuotation, validateQuotation } from '../src/engines/quotationEngine';
 import { getTier } from '../src/engines/tierEngine';
 import { calculateAddons } from '../src/engines/addonEngine';

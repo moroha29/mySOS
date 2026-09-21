@@ -103,7 +103,7 @@ function ReasonStack() {
                 </div>
                 <Photo
                   style={reason.scene}
-                  image={picture(reason.image, `benefits/${reason.icon}`)}
+                  image={picture(reason.image, `benefits/${reason.key ?? reason.icon}`)}
                   imagePath={contentPath('benefits', index, 'image')}
                   label={`${reason.title} illustration`}
                   className="reason-card-photo"
