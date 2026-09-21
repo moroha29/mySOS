@@ -30,7 +30,10 @@ describe('which page a style belongs to', () => {
   });
 
   it('nothing set, nothing applied', () => {
-    expect(stylesForPage(undefined, '/mySOS/')).toEqual([]);
+    // null, not undefined: undefined means "the site's own styles", which are
+    // whatever was last published, so the test broke the first time one was.
+    expect(stylesForPage(null, '/mySOS/')).toEqual([]);
+    expect(stylesForPage([], '/mySOS/')).toEqual([]);
     expect(stylesForPage([null, { page: 'homepage' }], '/mySOS/')).toEqual([]);
   });
 });
