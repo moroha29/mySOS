@@ -1,0 +1,10 @@
+[
+  { "label": "1–9", "minQty": 1, "maxQty": 9, "costMultiplier": 1, "sellMultiplier": 2.5, "marginAdjustment": 0 },
+  { "label": "10–20", "minQty": 10, "maxQty": 20, "costMultiplier": 0.95, "sellMultiplier": 2.2, "marginAdjustment": 0.02 },
+  { "label": "21–30", "minQty": 21, "maxQty": 30, "costMultiplier": 0.9, "sellMultiplier": 2, "marginAdjustment": 0.04 },
+  { "label": "31–50", "minQty": 31, "maxQty": 50, "costMultiplier": 0.85, "sellMultiplier": 1.85, "marginAdjustment": 0.06 },
+  { "label": "51–100", "minQty": 51, "maxQty": 100, "costMultiplier": 0.8, "sellMultiplier": 1.7, "marginAdjustment": 0.08 },
+  { "label": "101–300", "minQty": 101, "maxQty": 300, "costMultiplier": 0.75, "sellMultiplier": 1.55, "marginAdjustment": 0.1 },
+  { "label": "301–500", "minQty": 301, "maxQty": 500, "costMultiplier": 0.7, "sellMultiplier": 1.45, "marginAdjustment": 0.12 },
+  { "label": "500+", "minQty": 501, "maxQty": 99999, "costMultiplier": 0.65, "sellMultiplier": 1.35, "marginAdjustment": 0.15 }
+]

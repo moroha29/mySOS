@@ -92,7 +92,9 @@ describe('printing methods: "Our capabilities"', () => {
     for (const method of visibleMethods) {
       const copy = siteContent.printingMethods[method.id];
       expect(copy, method.id).toBeTruthy();
-      expect(copy.description, method.id).toBe(method.public.description);
+      // The wording is the site's own (edited on the Products page), so it is
+      // only required to be there, not to match the price list's copy.
+      expect(copy.description, method.id).toMatch(/\S/);
       expect(copy.bestFor, method.id).toMatch(/\S/);
       expect(copy).toHaveProperty('image');
     }

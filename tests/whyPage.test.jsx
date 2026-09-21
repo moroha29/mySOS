@@ -57,7 +57,7 @@ describe('why choose MySOS: the stacked reasons', () => {
   it('shows the heading and wording from the design, all editable', () => {
     const html = render();
     const why = siteContent.pages.why;
-    expect(why.benefitsTitle).toBe('Everything You Need, Without the Sourcing Headache.');
+    expect(why.benefitsTitle).toMatch(/\S/);
     for (const key of ['benefitsEyebrow', 'benefitsTitle', 'benefitsLead']) expect(html).toContain(cmsPath('pages', 'why', key));
     siteContent.benefits.forEach((_, index) => {
       for (const key of ['stackLabel', 'shortTitle', 'longDescription', 'image']) expect(html).toContain(cmsPath('benefits', index, key));
@@ -68,8 +68,9 @@ describe('why choose MySOS: the stacked reasons', () => {
     for (const benefit of siteContent.benefits) {
       expect(benefit.stackLabel, benefit.icon).toMatch(/\S/);
       expect(hasIcon(benefit.cardIcon), benefit.cardIcon).toBe(true);
-      // The photo is still found by the original icon name.
-      expect(getImage(`benefits/${benefit.icon}`), benefit.icon).toBeTruthy();
+      // Its photo is found by its own key, so choosing another icon keeps it.
+      expect(benefit.key, benefit.title).toMatch(/\S/);
+      expect(benefit.image || getImage(`benefits/${benefit.key}`), benefit.key).toBeTruthy();
     }
   });
 });

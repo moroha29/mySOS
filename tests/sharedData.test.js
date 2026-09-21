@@ -43,7 +43,7 @@ describe('shared catalogue', () => {
 
   it('uses the public display price from master product data', () => {
     const product = productData.catalogue.find((item) => item.id === 'premium_cotton_tee');
-    expect(getDisplayPrice(product)).toBe('From $12.90');
+    expect(getDisplayPrice(product)).toBe(`From $${product.public.displayPricing.amount.toFixed(2)}`);
   });
 
   it('filters public products by subcategory', () => {
@@ -83,8 +83,9 @@ describe('public and quotation integration', () => {
     expect(general.searchParams.get('text')).toBe(siteConfig.whatsapp.quoteMessage);
     // A product card names the product it was chosen from, for every product.
     const tee = new URL(getEnquiryHref('premium_cotton_tee'));
-    expect(tee.searchParams.get('text')).toBe('Hi MySOS, I would like to get a quote for Premium Cotton Tee.');
-    expect(new URL(getEnquiryHref('canvas_tote_bag')).searchParams.get('text')).toMatch(/quote for .*Tote/i);
+    const named = (id) => productData.catalogue.find((item) => item.id === id).public.name;
+    expect(tee.searchParams.get('text')).toBe(`Hi MySOS, I would like to get a quote for ${named('premium_cotton_tee')}.`);
+    expect(new URL(getEnquiryHref('canvas_tote_bag')).searchParams.get('text')).toContain(`quote for ${named('canvas_tote_bag')}`);
     expect(enquiryLinkProps(getEnquiryHref())).toEqual({ target: '_blank', rel: 'noreferrer' });
   });
 

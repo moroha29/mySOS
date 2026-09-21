@@ -48,7 +48,8 @@ describe('the icon library', () => {
       ...solutions.flatMap((solution) => [solution.icon, ...solution.useCases.map((useCase) => useCase.icon)]),
       ...successStories.flatMap((story) => (story.highlights ?? []).map((fact) => fact.icon)),
     ].filter(Boolean);
-    for (const name of used) expect(offered.has(name), name).toBe(true);
+    // A picture uploaded in the manager stands in for an icon; every icon named must exist.
+    for (const name of used.filter((value) => !isIconPicture(value))) expect(offered.has(name), name).toBe(true);
   });
 
   it('leaves out arrows, controls and other companies\' marks', () => {
@@ -59,8 +60,8 @@ describe('the icon library', () => {
 });
 
 describe('a solution has an icon of its own', () => {
-  it('starts as the icon it always showed', () => {
-    for (const solution of solutions) expect(solution.icon, solution.id).toBe(solution.imageStyle);
+  it('is one the library offers, or a picture uploaded in its place', () => {
+    for (const solution of solutions) expect(offered.has(solution.icon) || isIconPicture(solution.icon), solution.id).toBe(true);
   });
 });
 

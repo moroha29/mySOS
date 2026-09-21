@@ -132,7 +132,8 @@ describe('quotation preselection rendering', () => {
   it('preselects a public product slug and safely ignores invalid slugs', () => {
     globalThis.location = { pathname: '/mySOS/quotation_engine/', search: '?product=premium-cotton-tee' };
     const selected = renderToStaticMarkup(React.createElement(QuotationApp));
-    expect(selected).toContain('<option value="premium_cotton_tee" selected="">Premium Cotton Tee</option>');
+    // Named as the catalogue names it now; the name is edited from the website manager.
+    expect(selected).toMatch(/<option value="premium_cotton_tee" selected="">[^<]+<\/option>/);
     globalThis.location = { pathname: '/mySOS/quotation_engine/', search: '?product=invalid-product' };
     const invalid = renderToStaticMarkup(React.createElement(QuotationApp));
     expect(invalid).not.toContain('value="invalid-product"');
