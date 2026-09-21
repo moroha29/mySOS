@@ -9,7 +9,7 @@
   "sections": [
     {
       "id": "customer",
-      "title": "Customer details (QA)",
+      "title": "Customer details",
       "visible": true,
       "fields": [
         {
