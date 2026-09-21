@@ -1243,16 +1243,5 @@
         ]
       }
     ]
-  },
-  "appearance": {
-    "overrides": [
-      {
-        "page": "homepage",
-        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"heroTitleAccent\"]']",
-        "route": "/mySOS/",
-        "label": "Hero Title Accent",
-        "fontScale": 1.2
-      }
-    ]
   }
 }
