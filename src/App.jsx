@@ -7,6 +7,7 @@ import formSchema from './data/quotationForm.json';
 import QuotationPreview from './components/QuotationPreview';
 import { calculateSchemaQuotation, validateSchemaQuotation } from './utils/schemaQuotation';
 import { getQuotationPreset } from './utils/catalogue';
+import { applyDraftPricing } from './utils/draftPricing';
 
 const today = new Date().toLocaleDateString('en-CA');
 export function createInitialValue(search = globalThis.location?.search ?? '') {
@@ -23,9 +24,11 @@ export function createInitialValue(search = globalThis.location?.search ?? '') {
 export default function App() {
   const [schema, setSchema] = useState(() => globalThis.__quotationDraft || formSchema);
   useEffect(() => {
-    const change = event => { if (Array.isArray(event.detail?.sections)) setSchema(event.detail); };
+    // In the website manager's preview the draft's prices come with its form.
+    const draftPrices = () => { if ('__quotationPricing' in window) applyDraftPricing(window.__quotationPricing); };
+    const change = event => { if (Array.isArray(event.detail?.sections)) { draftPrices(); setSchema(event.detail); } };
     window.addEventListener('quotation-draft', change);
-    if (window.__quotationDraft) setSchema(window.__quotationDraft);
+    if (window.__quotationDraft) { draftPrices(); setSchema(window.__quotationDraft); }
     return () => window.removeEventListener('quotation-draft', change);
   }, []);
   const [form, setForm] = useState(createInitialValue);

@@ -17,7 +17,8 @@ import siteContent from '../data/siteContent.json';
 
 // The same choices the manager offers; anything else is ignored.
 const FONT_FAMILIES = new Set(['Arial, sans-serif', 'Georgia, serif', '"Trebuchet MS", sans-serif', '"Courier New", monospace']);
-const FONT_SCALES = new Set([0.9, 1.1, 1.25, 1.5]);
+// The manager's size slider: from half to three times the design's own size.
+const FONT_SCALES = { has: (value) => Number.isFinite(value) && value >= 0.5 && value <= 3 && value !== 1 };
 const COLOUR = /^#[0-9a-f]{6}$/i;
 
 // Styles saved before they recorded their exact page name one of these.
