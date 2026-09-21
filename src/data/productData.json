@@ -46,14 +46,14 @@
         "displayPricing": {
           "show": true,
           "prefix": "From",
-          "amount": 12.9,
+          "amount": 13.9,
           "unit": "piece"
         }
       },
       "quotation": {
         "enabled": true,
         "productId": "tee",
-        "baseCost": 4.5,
+        "baseCost": 4.6,
         "minimumQuantity": 1,
         "pricingModel": "tiered"
       },
