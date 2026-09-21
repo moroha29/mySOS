@@ -1,0 +1,27 @@
+name: Check MySOS website
+
+# Every pull request is tested and built before it can be merged. The website
+# manager publishes through pull requests and merges only once these checks
+# pass, so a content or price change that would break the site never goes live.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Test and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # A generous per-test limit: the mock-quotation test builds a workbook and
+      # has run past the default 5 seconds on a busy runner.
+      - run: npx vitest run --testTimeout=30000
+      - run: npm run build
