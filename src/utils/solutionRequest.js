@@ -61,6 +61,29 @@ export function suggestionsFor(useCase, lines) {
 }
 
 /*
+ * Everything a customer can ask for, under the products page's categories, so
+ * nothing is only found by knowing its name. Featured products lead each
+ * category; anything already in the request is left out, and a category left
+ * empty is not shown.
+ */
+export function browseCategories(lines = [], categories = siteContent.categories ?? []) {
+  const chosen = new Set(lines.map((line) => line.productId).filter(Boolean));
+  const products = [...catalogue.values()].filter((product) => !chosen.has(product.id));
+  const known = categories.map((category) => category.id);
+  const ids = [...new Set([...known, ...products.map((product) => product.public.category)])];
+  return ids
+    .map((id) => {
+      const inCategory = products.filter((product) => product.public.category === id);
+      return {
+        id,
+        name: categories.find((category) => category.id === id)?.name ?? id.replace(/-/g, ' ').replace(/^./, (letter) => letter.toUpperCase()),
+        products: [...inCategory.filter((product) => product.public.featured), ...inCategory.filter((product) => !product.public.featured)],
+      };
+    })
+    .filter((category) => category.products.length > 0);
+}
+
+/*
  * Anything in the catalogue, by name, kind or category — so a customer is never
  * held to what MySOS recommended for their use case. Matching is on whole words
  * from the query, in any order, and the list is short enough to read at a
