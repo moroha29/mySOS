@@ -1,16 +1,23 @@
 import { getTier } from './tierEngine';
-import { calculateProductCost, getProduct, productData } from './productEngine';
+import { allowedPrintMethodsFor, calculateProductCost, catalogueItemFor, getProduct, isManualItem, pricedByOwnCost, productData, resolveOrderItem } from './productEngine';
 import { calculatePrintCost } from './printEngine';
 import { calculateAddons } from './addonEngine';
 
-function validateOrderItem(item) {
+function validateOrderItem(orderItem) {
   const errors = {};
+  const item = resolveOrderItem(orderItem);
   const quantity = Number(item.quantity);
   if (!Number.isInteger(quantity) || quantity < 1) errors.quantity = 'Quantity must be a whole number of at least 1.';
   const product = getProduct(item.productId);
+  const entry = catalogueItemFor(item);
+  const manual = isManualItem(item);
   if (!item.productId) errors.productId = 'Select a product.';
   else if (!product) errors.productId = 'Select a valid product.';
-  if (item.productId === 'jersey_sublimation') {
+  // A product switched off for quotes in the Data tab since it was chosen.
+  if (item.catalogueId && item.catalogueId !== 'custom_product' && !entry) errors.productId = 'This product can no longer be quoted. Choose another.';
+  if (pricedByOwnCost(entry)) {
+    // Its cost comes from the Data tab; there is nothing more to choose.
+  } else if (item.productId === 'jersey_sublimation') {
     if (!item.productOptions?.fabric || !item.productOptions?.collar || !item.productOptions?.sleeve) errors.productOptions = 'Choose the jersey fabric, collar, and sleeve.';
     if (item.productOptions?.teamSet && quantity < 10) errors.teamSet = 'Team set pricing requires at least 10 pieces.';
   } else if (item.productId === 'tee' || item.productId === 'polo') {
@@ -21,7 +28,7 @@ function validateOrderItem(item) {
     if (!cap || cap.quotation.productId !== 'cap' || !cap.quotation.enabled) errors.productOptions = 'Choose a valid cap type.';
   } else if (item.productId === 'custom_cutsew' && !['basic', 'complex'].includes(item.productOptions?.complexity)) {
     errors.productOptions = 'Choose the sewing complexity.';
-  } else if (item.productId === 'custom_product') {
+  } else if (manual) {
     if (!item.productOptions?.customName?.trim() || !item.productOptions?.customDescription?.trim()) {
       errors.productOptions = 'Enter the custom product name and description.';
     }
@@ -30,19 +37,21 @@ function validateOrderItem(item) {
     const quotedUnitPrice = Number(item.quotedUnitPrice);
     if (!Number.isFinite(quotedUnitPrice) || quotedUnitPrice < 0) errors.quotedUnitPrice = 'Quotation price cannot be negative.';
   }
-  if (item.productId === 'custom_product' && (item.quotedUnitPrice === undefined || item.quotedUnitPrice === '' || !Number.isFinite(Number(item.quotedUnitPrice)) || Number(item.quotedUnitPrice) <= 0)) {
+  if (manual && (item.quotedUnitPrice === undefined || item.quotedUnitPrice === '' || !Number.isFinite(Number(item.quotedUnitPrice)) || Number(item.quotedUnitPrice) <= 0)) {
     errors.quotedUnitPrice = 'Enter a quotation price greater than zero for this unlisted product.';
   }
 
   const prints = item.prints ?? [];
   const activePrints = prints.filter((print) => print.method && print.method !== 'none');
-  if (item.productId !== 'custom_product') {
+  if (!manual) {
+    const allowed = allowedPrintMethodsFor(item);
+    const productName = entry?.public.name ?? product?.name;
     if (activePrints.length === 0) errors.prints = 'Select at least one printing method.';
     prints.forEach((print, index) => {
       if (!print.method || print.method === 'none') return;
       const key = `print${index}`;
       if (print.method === 'sublimation' && item.productId !== 'jersey_sublimation') errors[key] = 'Full sublimation printing is only available for jerseys.';
-      else if (product && !product.allowedPrintMethods.includes(print.method)) errors[key] = `${print.method.toUpperCase()} is not compatible with ${product.name}.`;
+      else if (product && !allowed.includes(print.method)) errors[key] = `${print.method.toUpperCase()} is not compatible with ${productName}.`;
       if (print.method === 'sublimation' && !print.option) errors[key] = 'Choose a sublimation type.';
       if ((print.method === 'dtf' || print.method === 'dtg') && !print.option) errors[key] = `Choose a ${print.method.toUpperCase()} print option.`;
       if (print.method === 'silkscreen' && (!print.technique || !print.size || !Number.isInteger(Number(print.colors)) || Number(print.colors) < 1)) errors[key] = 'Choose a silkscreen technique, size, and at least one colour.';
@@ -71,14 +80,16 @@ function normalizedItems(input) {
   }];
 }
 
-function buildItemDescription(productCost, prints, sizes = {}) {
+function buildItemDescription(productCost, prints, sizes = {}, productName = '') {
   const printDescriptions = prints.map((print) => `Print ${print.slot}: ${print.description}`);
   const sizeEntries = Object.entries(sizes)
     .map(([size, value]) => [size, Number(value)])
     .filter(([, value]) => Number.isInteger(value) && value > 0)
     .map(([size, value]) => `${size} ${value}`);
   const sizeDescription = sizeEntries.length > 0 ? `Sizes: ${sizeEntries.join(', ')}` : '';
-  return [productCost.description, ...printDescriptions, sizeDescription].filter(Boolean).join(' · ');
+  // A product named on the quote line is not repeated in its description.
+  const productDescription = productCost.description === productName ? '' : productCost.description;
+  return [productDescription, ...printDescriptions, sizeDescription].filter(Boolean).join(' · ');
 }
 
 export function validateQuotation(input) {
@@ -100,22 +111,24 @@ export function validateQuotation(input) {
   return errors;
 }
 
-export function calculateOrderItem(item) {
+export function calculateOrderItem(orderItem) {
+  const item = resolveOrderItem(orderItem);
   const enteredQuantity = Number(item.quantity);
   const quantity = Number.isFinite(enteredQuantity) ? Math.max(0, enteredQuantity) : 0;
   const tier = getTier(quantity);
   const selectedProduct = getProduct(item.productId);
-  const customProduct = item.productId === 'custom_product';
-  const product = customProduct && selectedProduct
-    ? { ...selectedProduct, name: item.productOptions?.customName?.trim() || selectedProduct.name }
-    : selectedProduct;
-  const productCost = calculateProductCost(item.productId, item.productOptions);
+  const entry = catalogueItemFor(item);
+  // The quote names what the agent chose: the Data tab product, or the typed name.
+  const name = item.catalogueId && entry ? entry.public.name
+    : isManualItem(item) ? item.productOptions?.customName?.trim() : '';
+  const product = selectedProduct && name ? { ...selectedProduct, name } : selectedProduct;
+  const productCost = calculateProductCost(item.productId, item.productOptions, entry);
   const costKnown = productCost.costKnown !== false;
   const prints = (item.prints ?? [])
     .map((print, index) => ({ ...print, slot: index + 1 }))
     .filter((print) => print.method && print.method !== 'none')
     .map((print) => ({ ...print, ...calculatePrintCost(print, quantity) }));
-  const description = buildItemDescription(productCost, prints, item.sizes);
+  const description = buildItemDescription(productCost, prints, item.sizes, product?.name);
   const apparelTotal = productCost.unitCost * quantity;
   const printingTotal = prints.reduce((sum, print) => sum + print.unitCost * quantity, 0);
   const setupFees = prints.reduce((sum, print) => sum + print.setupFee, 0);
@@ -129,7 +142,7 @@ export function calculateOrderItem(item) {
     && enteredQuotedUnitPrice >= 0;
   const sellingPrice = hasQuotedPriceOverride ? enteredQuotedUnitPrice * quantity : suggestedSellingPrice;
   return {
-    input: item,
+    input: orderItem,
     quantity,
     product,
     tier,

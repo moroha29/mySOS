@@ -1,7 +1,25 @@
 import { isVisible, resolveOptions } from '../utils/quotationForm';
 import { answerPath, readAnswer, writeAnswer, presentedOptions } from '../utils/formBindings';
-import { getProduct } from '../engines/productEngine';
+import { allowedPrintMethodsFor, isManualItem } from '../engines/productEngine';
 import { addonData } from '../engines/addonEngine';
+import { getQuotationPreset } from '../utils/catalogue';
+
+const noPrints = () => [{ method: 'none' }, { method: 'none' }];
+
+/* Choosing a product sets up its pricing model, garment and usual print. */
+export function itemForProduct(item, catalogueId) {
+  const preset = catalogueId === 'custom_product'
+    ? { productId: 'custom_product', productOptions: {}, prints: noPrints() }
+    : getQuotationPreset(catalogueId) ?? { productId: '', productOptions: {}, prints: noPrints() };
+  return { ...item, catalogueId, ...preset };
+}
+
+/* Options carrying a group are listed under it, in the order they come. */
+function optionList(options) {
+  const groups = [...new Set(options.map(option => option.group))];
+  if (groups.every(group => !group)) return options.map(option => <option key={option.id} value={option.id}>{option.name}</option>);
+  return groups.map(group => <optgroup key={group || 'other'} label={group || 'Other'}>{options.filter(option => option.group === group).map(option => <option key={option.id} value={option.id}>{option.name}</option>)}</optgroup>);
+}
 
 export default function SchemaQuotationForm({ schema, value, onChange, errors = {}, quote }) {
   const update = (path, answer) => onChange(writeAnswer(value, path, answer));
@@ -12,9 +30,13 @@ export default function SchemaQuotationForm({ schema, value, onChange, errors = 
     const context = { ...value, ...item, printMethods: (item.prints || []).map(print => print.method) };
     if (!isVisible(field, context)) return null;
     let options = presentedOptions(field, resolveOptions(field, context));
-    if (field.limitToProductMethods) options = options.filter(option => option.id === 'none' || getProduct(item.productId)?.allowedPrintMethods.includes(option.id));
+    if (field.limitToProductMethods) options = options.filter(option => option.id === 'none' || allowedPrintMethodsFor(item).includes(option.id));
     const set = (next) => {
-      if (field.key === 'productId') {
+      if (field.bind === 'item.catalogueId') {
+        const draft = structuredClone(value);
+        draft.items[itemIndex] = itemForProduct(draft.items[itemIndex], next);
+        onChange(draft);
+      } else if (field.key === 'productId') {
         const draft = writeAnswer(value, path, next);
         draft.items[itemIndex] = { ...draft.items[itemIndex], productOptions: {}, prints: [{ method: next === 'jersey_sublimation' ? 'sublimation' : 'none' }, { method: 'none' }] };
         onChange(draft);
@@ -22,7 +44,7 @@ export default function SchemaQuotationForm({ schema, value, onChange, errors = 
     };
     const common = { required: Boolean(field.required), 'aria-label': field.label };
     let control;
-    if (field.type === 'select') control = <select {...common} value={answer ?? ''} onChange={event => set(event.target.value)}><option value="">{field.key === 'productId' ? 'Choose a product' : 'Choose an option'}</option>{options.map(option => <option key={option.id} value={option.id}>{option.name}</option>)}</select>;
+    if (field.type === 'select') control = <select {...common} value={answer ?? ''} onChange={event => set(event.target.value)}><option value="">{field.key === 'productId' ? 'Choose a product' : 'Choose an option'}</option>{optionList(options)}</select>;
     else if (field.type === 'multiselect') control = <div className="schema-options">{options.map(option => <label key={option.id}><input type="checkbox" checked={(answer || []).includes(option.id)} onChange={event => set(event.target.checked ? [...(answer || []), option.id] : (answer || []).filter(id => id !== option.id))} />{option.name}</label>)}</div>;
     else if (field.type === 'toggle') control = <input {...common} type="checkbox" checked={Boolean(answer)} onChange={event => set(event.target.checked)} />;
     else if (field.type === 'sizeGrid') control = <div className="size-grid">{(field.sizes || []).map(size => <label key={size}>{size}<input aria-label={`${field.label}: ${size}`} type="number" min="0" step="1" value={answer?.[size] ?? ''} onChange={event => set({ ...answer, [size]: event.target.value })} /></label>)}</div>;
@@ -51,8 +73,8 @@ export default function SchemaQuotationForm({ schema, value, onChange, errors = 
     <section className="form-section"><h2>Order items & quotation prices</h2>
       {value.items.map((item, index) => <div className="selector-block" key={item.id}>
         <h3>Order item {index + 1}</h3>
-        {item.productId === 'custom_product' && <label className="field">Custom product name<input required value={item.productOptions.customName || ''} onChange={event => update(['items', index, 'productOptions', 'customName'], event.target.value)} /></label>}
-        <label className="field">Quotation price per piece (SGD){item.productId === 'custom_product' ? ' *' : ' — optional override'}<input type="number" min="0" step="0.01" value={item.quotedUnitPrice ?? ''} placeholder={quote?.items[index]?.suggestedUnitSellingPrice?.toFixed(2)} onChange={event => update(['items', index, 'quotedUnitPrice'], event.target.value)} /></label>
+        {isManualItem(item) && <label className="field">Custom product name<input required value={item.productOptions.customName || ''} onChange={event => update(['items', index, 'productOptions', 'customName'], event.target.value)} /></label>}
+        <label className="field">Quotation price per piece (SGD){isManualItem(item) ? ' *' : ' — optional override'}<input type="number" min="0" step="0.01" value={item.quotedUnitPrice ?? ''} placeholder={quote?.items[index]?.suggestedUnitSellingPrice?.toFixed(2)} onChange={event => update(['items', index, 'quotedUnitPrice'], event.target.value)} /></label>
         {value.items.length > 1 && <button type="button" onClick={() => onChange({ ...value, items: value.items.filter((_, i) => i !== index) })}>Remove this item</button>}
       </div>)}
       <button type="button" className="add-item" onClick={() => onChange({ ...value, items: [...value.items, { id: crypto.randomUUID(), quantity: '1', productId: '', productOptions: {}, prints: [{ method: 'none' }, { method: 'none' }], sizes: {} }] })}>+ Add another order item</button>

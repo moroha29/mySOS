@@ -73,7 +73,7 @@ export function getQuotationPreset(productId) {
   const prints = quoteProductId === 'jersey_sublimation'
     ? [{ method: 'sublimation', option: 'full' }, { method: 'none' }]
     : [{ method: 'none' }, { method: 'none' }];
-  return { productId: quoteProductId, productOptions, prints };
+  return { catalogueId: product.id, productId: quoteProductId, productOptions, prints };
 }
 
 export function getStories({ category = 'all', sort = 'latest' } = {}) {

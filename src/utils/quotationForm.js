@@ -28,6 +28,34 @@ export const PRICE_RULES = ['none', 'perPiece', 'flat', 'multiplier'];
 
 const asOption = (item) => ({ id: item.id, name: item.name ?? item.public?.name ?? item.id });
 
+/*
+ * A kind of product named from its subcategory: "caps" is Caps, "name-tents"
+ * Name tents. Site content stays out of the engine, so the demo build can
+ * replace every price list it reads.
+ */
+const kindNames = { tshirts: 'T-shirts' };
+function kindName(subcategory = '') {
+  const words = subcategory.replace(/[-_]+/g, ' ');
+  return kindNames[subcategory] ?? words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/*
+ * Every Data tab product agents can quote, grouped by kind in the order the
+ * Data tab lists them, then Other / Blank for anything that is not there.
+ */
+function quotableProducts() {
+  const engines = new Set(productData.quotationProducts.map((product) => product.id));
+  const quotable = productData.catalogue.filter((item) => item.quotation.enabled && engines.has(item.quotation.productId));
+  const kinds = [...new Set(quotable.map((item) => item.public.subcategory))];
+  const blank = productData.quotationProducts.find((product) => product.id === 'custom_product');
+  return [
+    ...kinds.flatMap((kind) => quotable
+      .filter((item) => item.public.subcategory === kind)
+      .map((item) => ({ ...asOption(item), group: kindName(kind) }))),
+    ...(blank ? [{ id: blank.id, name: blank.name, group: 'Other' }] : []),
+  ];
+}
+
 /** Resolves an `optionsFrom` path against the live pricing data. */
 export function resolveOptions(field, context = {}) {
   if (!field?.optionsFrom) return field?.options ?? [];
@@ -36,6 +64,8 @@ export function resolveOptions(field, context = {}) {
   switch (field.optionsFrom) {
     case 'productData.quotationProducts':
       return productData.quotationProducts.map(asOption);
+    case 'catalogue.quotable':
+      return quotableProducts();
     case 'productData.jersey.fabrics':
       return productData.jersey.fabrics.map(asOption);
     case 'productData.jersey.collars':
