@@ -33,7 +33,7 @@ function editedForm() {
   type.options.find((option) => option.id === 'school').name = 'School or college';
   customer.fields.find((field) => field.key === 'orderReference').visible = false;
   const product = form.sections.find((section) => section.id === 'product').fields.find((field) => field.key === 'productId');
-  product.optionLabels = { tee: 'Classic tee' };
+  product.optionLabels = { premium_cotton_tee: 'Classic tee' };
   form.sections.push({ id: 'packing', title: 'Packing', fields: [
     { key: 'finish', label: 'Finishing touches', type: 'multiselect', priceRule: 'perPiece', options: [{ id: 'fold', name: 'Folded and bagged', price: 0.5 }, { id: 'tag', name: 'Swing tag' }] },
     { key: 'gift', label: 'Gift boxed', type: 'toggle' },
@@ -46,7 +46,7 @@ function answeredValue() {
   value.customerName = 'Jamie Tan';
   value.customerType = 'school';
   value.orderReference = 'REF-1';
-  value.items[0] = { ...value.items[0], productId: 'tee', quantity: '50', productOptions: { garment: 'premium_cotton_tee' }, prints: [{ method: 'dtf', option: 'front_left_chest' }, { method: 'none' }] };
+  value.items[0] = { ...value.items[0], catalogueId: 'premium_cotton_tee', productId: 'tee', quantity: '50', productOptions: { garment: 'premium_cotton_tee' }, prints: [{ method: 'dtf', option: 'front_left_chest' }, { method: 'none' }] };
   value.customAnswers = { packing: { 0: { finish: ['fold', 'tag'], gift: true } } };
   return value;
 }
@@ -64,6 +64,7 @@ describe('the Excel quote follows the form', () => {
   it('uses the form\'s names for workbook choices', async () => {
     const text = cells(await sheetFor(editedForm(), answeredValue()));
     expect(text).toContain('Classic tee');
+    expect(text).not.toContain('Premium Cotton Tee');
     expect(text).not.toContain('Tee (DTF/DTG)');
   });
 

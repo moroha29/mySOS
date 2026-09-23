@@ -68,11 +68,11 @@
       "fields": [
         {
           "key": "productId",
-          "label": "Product type",
+          "label": "Product",
           "type": "select",
           "required": true,
-          "bind": "item.productId",
-          "optionsFrom": "productData.quotationProducts"
+          "bind": "item.catalogueId",
+          "optionsFrom": "catalogue.quotable"
         },
         {
           "key": "quantity",
@@ -179,55 +179,12 @@
       ]
     },
     {
-      "id": "productDetailsGarment",
-      "title": "Product details — Tee / Polo",
-      "visible": true,
-      "repeatsPerItem": true,
-      "showWhen": {
-        "field": "productId",
-        "in": [
-          "tee",
-          "polo"
-        ]
-      },
-      "fields": [
-        {
-          "key": "garment",
-          "label": "Garment type",
-          "type": "select",
-          "required": true,
-          "bind": "item.productOptions.garment",
-          "optionsFrom": "catalogue.byProduct"
-        }
-      ]
-    },
-    {
-      "id": "productDetailsCaps",
-      "title": "Product details — Caps",
-      "visible": true,
-      "repeatsPerItem": true,
-      "showWhen": {
-        "field": "productId",
-        "equals": "cap"
-      },
-      "fields": [
-        {
-          "key": "capType",
-          "label": "Cap type",
-          "type": "select",
-          "required": true,
-          "bind": "item.productOptions.capType",
-          "optionsFrom": "catalogue.byProduct"
-        }
-      ]
-    },
-    {
       "id": "productDetailsCutSew",
       "title": "Product details — Custom Cut & Sew",
       "visible": true,
       "repeatsPerItem": true,
       "showWhen": {
-        "field": "productId",
+        "field": "catalogueId",
         "equals": "custom_cutsew"
       },
       "fields": [
@@ -256,7 +213,7 @@
       "visible": true,
       "repeatsPerItem": true,
       "showWhen": {
-        "field": "productId",
+        "field": "catalogueId",
         "equals": "custom_product"
       },
       "fields": [

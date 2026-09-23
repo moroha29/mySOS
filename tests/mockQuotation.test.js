@@ -26,7 +26,7 @@ describe('isolated public quotation demo', () => {
       expect(validateQuotation(initial)).toEqual({});
       const quote = calculateQuotation(initial);
       expect(quote.sellingPrice).toBeGreaterThan(0);
-      expect(quote.items[0].description).toContain('Demo tee');
+      expect(quote.items[0].product.name).toContain('Demo tee');
       const changed = structuredClone(initial);
       changed.items[0].quantity = '100';
       expect(calculateQuotation(changed).sellingPrice).not.toBe(quote.sellingPrice);

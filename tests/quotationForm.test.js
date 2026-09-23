@@ -14,7 +14,7 @@ describe('quotation form schema', () => {
     const ids = formSchema.sections.map((section) => section.id);
     for (const required of [
       'customer', 'product', 'sizes',
-      'productDetailsJersey', 'productDetailsGarment', 'productDetailsCaps', 'productDetailsCutSew',
+      'productDetailsJersey', 'productDetailsCutSew',
       'printDetailsDtf', 'printDetailsSilkscreen', 'printDetailsEmbroidery', 'printDetailsSublimation',
       'addons', 'shipping',
     ]) {
@@ -77,15 +77,21 @@ describe('conditional visibility', () => {
     expect(jersey).not.toContain('productDetailsCaps');
     expect(jersey).not.toContain('productDetailsGarment');
 
-    const cap = visibleSections({ productId: 'cap', printMethods: ['embroidery'] }).map((s) => s.id);
-    expect(cap).toContain('productDetailsCaps');
-    expect(cap).not.toContain('productDetailsJersey');
+    const cutSew = visibleSections({ catalogueId: 'custom_cutsew', productId: 'custom_cutsew', printMethods: ['dtf'] }).map((s) => s.id);
+    expect(cutSew).toContain('productDetailsCutSew');
+    expect(cutSew).not.toContain('productDetailsJersey');
+
+    // A cut & sew product with its own cost has no sewing question.
+    const windbreaker = visibleSections({ catalogueId: 'windbreaker_jacket', productId: 'custom_cutsew', printMethods: ['dtf'] }).map((s) => s.id);
+    expect(windbreaker).not.toContain('productDetailsCutSew');
   });
 
-  it('treats tee and polo as the same garment section', () => {
-    for (const productId of ['tee', 'polo']) {
-      expect(visibleSections({ productId, printMethods: [] }).map((s) => s.id)).toContain('productDetailsGarment');
-    }
+  it('picks the garment or cap in the Product list itself', () => {
+    const product = formSchema.sections.find((section) => section.id === 'product').fields.find((field) => field.key === 'productId');
+    expect(product.optionsFrom).toBe('catalogue.quotable');
+    const bindings = formSchema.sections.flatMap((section) => section.fields.map((field) => field.bind));
+    expect(bindings).not.toContain('item.productOptions.garment');
+    expect(bindings).not.toContain('item.productOptions.capType');
   });
 
   it('shows print sections only for the methods actually selected', () => {
