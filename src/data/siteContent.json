@@ -24,7 +24,12 @@
     "budgetQuestionLabel": "What is your budget per person?",
     "budgetSeeIdeasLabel": "See matching ideas",
     "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery.",
-    "returnToQuoteButton": "Return to quote"
+    "returnToQuoteButton": "Return to quote",
+    "heroSuggestTitle": "Suggested products for",
+    "heroSearchEmpty": "No product goes by that name. Tell us what you are planning and we will find it.",
+    "heroSearchAskButton": "Tell us about it",
+    "addToQuoteLabel": "Add to quote",
+    "addedToQuoteLabel": "In your quote"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",

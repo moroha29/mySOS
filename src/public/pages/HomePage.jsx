@@ -5,9 +5,12 @@ import solutions from '../../data/solutions.json';
 import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
+import { mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
+import { searchProducts } from '../../utils/solutionRequest';
+import useSavedRequest from '../useSavedRequest';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, heading, label, Photo, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
+import { Button, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
@@ -81,33 +84,90 @@ function HeroCard({ slides }) {
   </div>;
 }
 
+/*
+ * What the search finds: the products themselves, each a picture and its name,
+ * with a button that puts it straight into the quote. A description on every
+ * card only slowed the list down — the product's own page has the detail.
+ *
+ * Nothing matches every phrase ("Orientation Pack" is a kind of job, not a
+ * product), so an empty result offers to describe it to MySOS instead.
+ */
+function SearchResults({ query, onAdd, added }) {
+  const waiting = useSavedRequest();
+  const results = useMemo(() => searchProducts(query), [query]);
+  if (!results.length) {
+    return <div className="hero-results is-empty">
+      <p data-cms-path={cms(labelPath('heroSearchEmpty'))}>{label('heroSearchEmpty', 'No product goes by that name. Tell us what you are planning and we will find it.')}</p>
+      <a className="btn btn-secondary btn-sm" href={askHref(query)}>
+        <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+      </a>
+    </div>;
+  }
+  return <div className="hero-results">
+    <p className="hero-results-title">
+      <span data-cms-path={cms(labelPath('heroSuggestTitle'))}>{label('heroSuggestTitle', 'Suggested products for')}</span>
+      {` “${query.trim()}”`}
+    </p>
+    <ul>
+      {results.slice(0, 6).map((product) => <li key={product.id}>
+        <span className="hero-result-shot"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
+        <a className="hero-result-name" href={`/mySOS/products/${product.public.slug}/`}>{product.public.name}</a>
+        <button type="button" className={added.includes(product.id) ? 'btn btn-outline btn-sm is-added' : 'btn btn-secondary btn-sm'} onClick={() => onAdd(product)}>
+          {added.includes(product.id)
+            ? <><Icon name="check" size={15} /> <span data-cms-path={cms(labelPath('addedToQuoteLabel'))}>{label('addedToQuoteLabel', 'In your quote')}</span></>
+            : <><Icon name="plus" size={15} /> <span data-cms-path={cms(labelPath('addToQuoteLabel'))}>{label('addToQuoteLabel', 'Add to quote')}</span></>}
+        </button>
+      </li>)}
+    </ul>
+    {/* Only once there is a quote to go back to. */}
+    {waiting > 0 && <a className="text-link hero-results-all" href={REQUEST_PATH}>
+      <span data-cms-path={cms(labelPath('returnToQuoteButton'))}>{label('returnToQuoteButton', 'Return to quote')}</span>
+      <Icon name="arrowRight" size={15} className="inline-arrow" />
+    </a>}
+  </div>;
+}
+
 function HeroSearch() {
   const [asked, setAsked] = useState('');
+  const [added, setAdded] = useState([]);
   const chips = siteContent.heroSearchChips ?? [];
   const href = askHref(asked.trim());
+  const query = asked.trim();
+
+  // Straight into the quote, without leaving the page they are reading.
+  const addProduct = (product) => {
+    const quantity = Number(siteContent.quantityPresets?.[1]) || 50;
+    const saved = readSavedRequest()?.lines ?? [];
+    writeSavedRequest({ lines: mergeArrival(saved, { productId: product.id, name: product.public.name, quantity, details: {} }) });
+    setAdded((current) => (current.includes(product.id) ? current : [...current, product.id]));
+  };
+
   return <>
     <form
       className="hero-search"
       role="search"
-      onSubmit={(event) => { event.preventDefault(); if (asked.trim()) globalThis.location.assign(href); }}
+      onSubmit={(event) => { event.preventDefault(); if (query) globalThis.location.assign(href); }}
     >
       <Icon name="search" size={20} />
       <input
         type="search"
         aria-label={label('heroSearchPlaceholder', 'Tell us what you need')}
-        placeholder={label('heroSearchPlaceholder', 'Try: 200 event kits under $15 each')}
+        placeholder={label('heroSearchPlaceholder', "Tell us what you're planning")}
         value={asked}
         onChange={(event) => setAsked(event.target.value)}
       />
-      <a className="btn btn-primary" href={asked.trim() ? href : REQUEST_PATH}>
+      <a className="btn btn-primary" href={query ? href : REQUEST_PATH}>
         <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find My Solution')}</span>
       </a>
     </form>
     <ul className="hero-chips">
       {chips.map((chip, index) => <li key={chip}>
-        <a href={askHref(chip)}><span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span></a>
+        <button type="button" onClick={() => setAsked(chip)}>
+          <span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span>
+        </button>
       </li>)}
     </ul>
+    {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
 }
 
