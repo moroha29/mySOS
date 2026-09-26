@@ -11,6 +11,7 @@ import RequestPage from './pages/RequestPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import solutions from '../data/solutions.json';
 import productData from '../data/productData.json';
+import watchReveals from './reveal';
 import { watchTextStyles } from './textStyles';
 
 export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/mySOS/') {
@@ -39,6 +40,8 @@ function NotFound() {
 export default function PublicApp() {
   // Sizes, fonts and colours chosen in the website manager.
   useEffect(() => watchTextStyles(), []);
+  // Sections fade and rise as they are reached.
+  useEffect(() => watchReveals(), []);
   const route = resolvePublicRoute();
   const content = route.page === 'home' ? <HomePage />
     : route.page === 'request' ? <RequestPage />

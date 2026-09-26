@@ -44,7 +44,7 @@ function Gallery({ product, category }) {
     return { own, others };
   }, [product]);
 
-  return <div className="pdp-gallery">
+  return <div className="pdp-gallery" data-reveal>
     <div className="pdp-shot">
       {product.public.featured && <span className="pdp-badge" data-cms-path={cms(contentPath('labels', 'featuredBadge'))}>{siteContent.labels?.featuredBadge ?? 'Most requested'}</span>}
       {photos.own
@@ -208,7 +208,7 @@ function InfoSection({ product }) {
   const sections = siteContent.productInfoSections ?? [];
   const [open, setOpen] = useState(0);
 
-  return <section className="section pdp-info">
+  return <section className="section pdp-info" data-reveal>
     <div className="pdp-info-copy">
       <span className="eyebrow" data-cms-path={wordPath('infoEyebrow')}>{word('infoEyebrow', 'Product information')}</span>
       <h2 data-cms-path={wordPath('infoTitle')}>{word('infoTitle', 'Everything important, kept simple.')}</h2>
@@ -249,7 +249,7 @@ export default function ProductDetailPage({ slug }) {
 
     <div className="pdp-top">
       <Gallery product={product} category={category} />
-      <div className="pdp-copy">
+      <div className="pdp-copy" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <span className="eyebrow">{category?.name ?? product.public.category}</span>
         <h1>{product.public.name}</h1>
         <p className="pdp-lead">{product.public.description}</p>
