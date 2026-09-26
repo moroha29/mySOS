@@ -11,6 +11,7 @@ import RequestPage from './pages/RequestPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import solutions from '../data/solutions.json';
 import productData from '../data/productData.json';
+import watchChrome from './chrome';
 import watchReveals from './reveal';
 import { watchTextStyles } from './textStyles';
 
@@ -42,6 +43,8 @@ export default function PublicApp() {
   useEffect(() => watchTextStyles(), []);
   // Sections fade and rise as they are reached.
   useEffect(() => watchReveals(), []);
+  // The reading line at the top, and the header tightening under it.
+  useEffect(() => watchChrome(), []);
   const route = resolvePublicRoute();
   const content = route.page === 'home' ? <HomePage />
     : route.page === 'request' ? <RequestPage />

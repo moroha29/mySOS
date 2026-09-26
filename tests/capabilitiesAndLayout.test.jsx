@@ -299,7 +299,11 @@ describe('the type scale: titles carry the page', () => {
   it('sets titles above the text around them', () => {
     expect(sizeOf(/\.hero h1 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(50);
     expect(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(34);
-    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(16);
+    // The lead sits under the headline but is still a comfortable read: the
+    // whole point of the last pass was that 16px was a squint.
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(19);
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/))
+      .toBeLessThan(Number(css.match(/\.hero-compact h1 \{ font-size: clamp\((\d+)px/)[1]));
     expect(sizeOf(/\.section-heading p \{[^}]*font-size: ([\d.]+)px/))
       .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
   });
@@ -371,5 +375,35 @@ describe('the page is comfortable to read', () => {
     const size = (pattern) => Number(css.match(pattern)[1]);
     expect(size(/\.home-tiles-head h2 \{[^}]*clamp\(\d+px, [\d.]+vw, (\d+)px\)/))
       .toBeGreaterThan(size(/\.home-tiles-head p \{ font-size: ([\d.]+)px/));
+  });
+});
+
+describe('the page moves as you read it', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const chrome = readFileSync(new URL('../src/public/chrome.js', import.meta.url), 'utf8');
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+
+  it('fills a line across the top and tightens the header once you scroll', () => {
+    expect(chrome).toMatch(/page\.style\.setProperty\('--scrolled'/);
+    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', scrolled > 24\)/);
+    expect(chrome).toMatch(/addEventListener\('scroll', onScroll, \{ passive: true \}\)/);
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?width: calc\(var\(--scrolled, 0\) \* 100%\)/);
+    expect(css).toMatch(/html\.is-scrolled \.site-header \{ height: 72px;/);
+  });
+
+  it('counts the review total up to itself, from the number the server drew', () => {
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = 1100 \}\)/);
+    expect(ui).toMatch(/const \[shown, setShown\] = useState\(target\);/);
+    expect(ui).toMatch(/<CountUp value=\{data\.totalReviewCount\} \/>/);
+  });
+
+  it('leaves every one of these out for a reader who asked for less motion', () => {
+    for (const source of [chrome, readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8')]) {
+      expect(source).toMatch(/prefers-reduced-motion: reduce/);
+    }
+    const quiet = css.slice(css.lastIndexOf('@media (prefers-reduced-motion: reduce)'));
+    for (const stopped of ['.site-announce::after', '.hero-card-slide', '.wa-bubble::after']) {
+      expect(quiet, stopped).toContain(stopped);
+    }
   });
 });
