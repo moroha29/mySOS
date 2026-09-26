@@ -18,6 +18,12 @@ import { Photo } from '../components/Ui';
 export default function RequestPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
   const wanted = params.get('product');
+  // What was chosen on the product's own page comes with it.
+  const chosen = {
+    quantity: params.get('qty'),
+    colour: params.get('colour') ?? '',
+    printing: params.get('printing') ?? '',
+  };
   // What someone typed into the homepage's search arrives here as their note.
   const asked = (params.get('ask') ?? '').slice(0, 500);
   return <main className="solution-page request-page">
@@ -46,7 +52,7 @@ export default function RequestPage() {
     </section>
 
     <RequestBuilder
-      startWith={wanted ? [{ productId: wanted }] : []}
+      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, details: { colour: chosen.colour, printing: chosen.printing } }] : []}
       startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}
       titlePath={cms(pagePath('request', 'builderTitle'))}

@@ -381,8 +381,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    a dark dotted band, vertical method tabs, details, and a photo. */
 .capabilities {
   background-color: #1b1b2f;
-  background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1.3px);
-  background-size: 22px 22px;
   color: #ecebe6;
   scroll-margin-top: var(--header-h);
 }
@@ -1224,7 +1222,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
    proof beneath it, then what can be made, how MySOS works and the work
    itself. Washed tiles, roomy cards and one accent per band. */
 
-.home-page { background: var(--paper); }
+.home-page, .page-paper { background: var(--paper); }
 .home-page .section { padding-top: 64px; padding-bottom: 64px; }
 
 .home-announce { padding: 11px 24px; background: var(--navy-deep); color: #dfe7f8; font-size: 14px; font-weight: 600; text-align: center; }
@@ -1421,6 +1419,201 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .home-process-rail { padding-inline: 18px; }
   .home-process-step { width: 80vw; }
   .home-closing-inner { padding: 52px 18px 58px; }
+}
+
+/* ================================================= 21. one product's page
+   The concept's product page: the photograph on the left, and on the right
+   everything needed to ask for it. Same washes, radii and type as the
+   homepage, so the two read as one site. */
+
+.pdp { padding-bottom: 20px; }
+.pdp-breadcrumb { max-width: var(--content); padding: 20px 24px 8px; font-size: 14px; }
+.pdp-breadcrumb span[aria-current] { color: var(--ink); font-weight: 700; }
+.pdp-top { max-width: var(--content); margin: 0 auto; padding: 8px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+
+.pdp-shot { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: 26px; background: var(--soft); overflow: hidden; }
+.pdp-shot img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-shot .product-visual { width: 70%; }
+.pdp-badge { position: absolute; top: 18px; left: 18px; padding: 7px 14px; border-radius: 999px; background: #fff; box-shadow: var(--shadow-sm); font-size: 13.5px; font-weight: 700; color: var(--navy); }
+.pdp-thumbs-label { margin-top: 20px; font-size: 13.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.pdp-thumbs { margin-top: 10px; display: flex; gap: 12px; }
+.pdp-thumbs a { display: block; width: 84px; height: 84px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+.pdp-thumbs a:hover { border-color: var(--green); }
+.pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
+.pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
+.pdp-mockup .icon { flex: none; margin-top: 2px; color: var(--green-dark); }
+.pdp-mockup strong { display: block; font-size: 15.5px; font-weight: 700; }
+.pdp-mockup small { display: block; margin-top: 4px; font-size: 14px; line-height: 1.5; color: #2f5b48; }
+.pdp-category-link { margin-top: 18px; }
+
+.pdp-copy .eyebrow { color: var(--green-dark); font-size: 14px; letter-spacing: .16em; }
+.pdp-copy h1 { font-size: clamp(34px, 3.6vw, 52px); font-weight: 800; line-height: 1.04; letter-spacing: -.035em; color: var(--ink); }
+.pdp-lead { margin-top: 16px; font-size: 17px; line-height: 1.6; color: var(--muted); }
+.pdp-promises { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
+.pdp-promises li { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; color: var(--ink); }
+.pdp-promises .icon { color: var(--green); }
+
+.pdp-build { margin-top: 26px; border: 1px solid var(--line); border-radius: 26px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
+.pdp-build-head { padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.pdp-build-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.pdp-step { padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.pdp-step-head { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.pdp-step-head small { margin-left: auto; font-size: 13.5px; font-weight: 600; color: var(--muted); }
+.pdp-step-number { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 13px; font-weight: 700; }
+
+.pdp-quantity { margin-top: 14px; display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 10px; }
+.pdp-quantity button { display: grid; place-items: center; height: 52px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); color: var(--ink); cursor: pointer; }
+.pdp-quantity button:hover { border-color: var(--navy); }
+.pdp-quantity input { height: 52px; border: 1px solid var(--line); border-radius: 12px; text-align: center; font-size: 18px; font-weight: 700; }
+.pdp-presets { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.pdp-presets button { min-width: 56px; min-height: 36px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.pdp-presets button.is-chosen, .pdp-colours button.is-chosen { border-color: var(--green); background: #e9f6ef; color: var(--green-dark); }
+
+.pdp-colours { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+.pdp-colours button { min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.pdp-colours button:hover { border-color: var(--navy); }
+
+.pdp-methods { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pdp-methods button { padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
+.pdp-methods button:hover { border-color: var(--navy); }
+.pdp-methods button.is-chosen { border-color: var(--green); background: #e9f6ef; }
+.pdp-methods strong { display: block; font-size: 15.5px; font-weight: 700; color: var(--ink); }
+.pdp-methods small { display: block; margin-top: 4px; font-size: 13.5px; line-height: 1.4; color: var(--muted); }
+
+.pdp-artwork { margin: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; border: 1.5px dashed #9fb6dc; border-radius: 14px; background: #f7f9fe; }
+.pdp-artwork strong { display: block; font-size: 15px; font-weight: 700; color: var(--ink); }
+.pdp-artwork small { display: block; margin-top: 3px; font-size: 13.5px; color: var(--muted); }
+
+.pdp-close { padding: 20px 24px 26px; border-top: 1px solid var(--line); background: var(--paper); }
+.pdp-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.pdp-price small { flex-basis: 100%; font-size: 13.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.pdp-price strong { font-size: 30px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.pdp-price span { font-size: 14.5px; color: var(--muted); }
+.pdp-price-note { margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--muted-light); }
+.pdp-add { width: 100%; height: 56px; margin-top: 16px; border-radius: 999px; font-size: 17px; }
+.pdp-ask { margin-top: 12px; text-align: center; font-size: 14.5px; color: var(--muted); }
+.pdp-ask a { font-weight: 700; color: var(--green-dark); text-decoration: underline; }
+
+.pdp-info { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; background: #fff; border-radius: 26px; }
+.pdp-info-copy h2 { margin-top: 12px; font-size: clamp(30px, 3vw, 44px); font-weight: 800; line-height: 1.06; letter-spacing: -.03em; color: var(--ink); }
+.pdp-info-copy > p { margin-top: 16px; font-size: 16px; line-height: 1.6; color: var(--muted); }
+.pdp-facts { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pdp-facts li { padding: 16px 18px; border-radius: 14px; background: var(--soft); }
+.pdp-facts strong { display: block; font-size: 15px; font-weight: 700; color: var(--ink); }
+.pdp-facts small { display: block; margin-top: 4px; font-size: 14px; line-height: 1.45; color: var(--muted); }
+
+.pdp-accordion > div { border-top: 1px solid var(--line); }
+.pdp-accordion > div:last-child { border-bottom: 1px solid var(--line); }
+.pdp-accordion button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 4px; border: 0; background: none; font-size: 17px; font-weight: 700; text-align: left; color: var(--ink); cursor: pointer; }
+.pdp-accordion p { padding: 0 4px 20px; font-size: 15.5px; line-height: 1.65; color: var(--muted); }
+
+@media (max-width: 1080px) {
+  .pdp-top { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 44px; }
+  .pdp-info { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+}
+
+@media (max-width: 620px) {
+  .pdp-breadcrumb { padding-inline: 18px; }
+  .pdp-top { padding: 8px 18px 36px; }
+  .pdp-shot { border-radius: 20px; }
+  .pdp-methods { grid-template-columns: minmax(0, 1fr); }
+  .pdp-facts { grid-template-columns: minmax(0, 1fr); }
+  .pdp-build-head, .pdp-step, .pdp-close { padding-inline: 18px; }
+  .pdp-artwork { margin-inline: 18px; }
+}
+
+/* ============================================== 22. one look across the site
+   The homepage set the pattern in the 2026 concept: a paper background, a dark
+   headline on it rather than a coloured banner, section heads that put the
+   title on the left and a line of explanation on the right, and cards with a
+   26px radius. These rules carry that to every other page, so moving between
+   them does not feel like moving between designs.
+
+   A banner with a picture chosen in the manager keeps its navy scrim and white
+   type: white on a photograph is what makes it readable. */
+
+main:not(.home-page) { background: var(--paper); }
+
+.hero:not(.has-background) { background: var(--paper); color: var(--ink); }
+.hero:not(.has-background)::after { display: none; }
+.hero:not(.has-background) h1 { color: var(--ink); font-weight: 800; letter-spacing: -.035em; line-height: 1.04; }
+.hero:not(.has-background) h1 em { color: var(--green-dark); }
+.hero:not(.has-background) .hero-lead { color: var(--muted); }
+.hero:not(.has-background) .eyebrow { color: var(--green-dark); }
+.hero:not(.has-background) .hero-promises li { color: var(--ink); }
+.hero:not(.has-background) .hero-promises .icon { color: var(--green); }
+.hero:not(.has-background) .btn-ghost { border-color: var(--line); color: var(--ink); background: #fff; }
+.hero:not(.has-background) .btn-ghost:hover { border-color: var(--navy); background: #fff; }
+.hero:not(.has-background) .back-link { color: var(--muted); }
+/* The banner picture sits in the same rounded card the homepage uses. */
+.hero-scene, .hero-collage .scene, .hero-art .scene { border-radius: 22px; }
+.hero-scene { box-shadow: 0 24px 70px rgba(26, 50, 138, .16); }
+.hero-compact .hero-inner { padding: 56px 24px 52px; }
+.hero-compact h1 { font-size: clamp(34px, 3.6vw, 52px); }
+
+/* Section heads: eyebrow and title left, the sentence about them on the right. */
+.section-heading.eyebrow-title .eyebrow, .section-heading .eyebrow { color: var(--green-dark); font-size: 14px; letter-spacing: .16em; }
+.section-heading h2 { font-size: clamp(28px, 3vw, 42px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+.section-heading.eyebrow-title .eyebrow { font-size: clamp(24px, 2.6vw, 38px); font-weight: 800; letter-spacing: -.03em; text-transform: none; color: var(--ink); }
+.section-heading p { font-size: 16px; line-height: 1.6; color: var(--muted); }
+
+/* Cards, panels and rails, all on the same radius and wash. */
+.product-card, .story-card, .solution-card, .benefit-grid article, .loyalty-card,
+.popular-grid article, .faq-list, .empty-state, .request-layout > *, .use-case-card,
+.journey-card-face, .reason-card, .stories-reviews, .project-tile, .capabilities-photo .scene {
+  border-radius: 22px;
+}
+.product-card { padding: 14px; border: 1px solid var(--line); background: #fff; }
+.product-card .product-visual { border-radius: 16px; background: var(--soft); }
+.product-card:hover { border-color: var(--green); box-shadow: var(--shadow); transform: translateY(-3px); }
+.product-card h3 { font-size: 16.5px; }
+.product-card .price { color: var(--navy); font-weight: 700; }
+
+/* Bands: navy for the "why" kind of section, green for the closing call. */
+.promo-band, .industry-band { background: var(--navy); }
+.promo-band::after, .industry-band::after { display: none; }
+.page-cta { background: linear-gradient(120deg, #046b45, var(--green-dark) 60%, #05835a); }
+.page-cta h2 { font-size: clamp(26px, 2.6vw, 38px); font-weight: 800; letter-spacing: -.03em; }
+.page-cta .btn, .promo-band .btn { border-radius: 999px; height: 50px; padding: 0 26px; }
+
+/* The products page's printing methods: the same navy band as "Why MySOS" on
+   the homepage, rather than the near-black panel it used to be. */
+.capabilities { background: var(--navy); }
+.capabilities-eyebrow { color: #9fb8e6; letter-spacing: .16em; }
+.capabilities-title { color: #fff; font-weight: 800; letter-spacing: -.03em; }
+.capabilities-tabs button { color: #c6d3ea; }
+.capabilities-tabs button { border-radius: 999px; }
+.capabilities-tabs button[aria-selected="true"] { background: rgba(255, 255, 255, .14); color: #fff; }
+.capabilities-tabs button:focus-visible { outline-color: var(--green-light); }
+.capabilities-best { border-color: rgba(255, 255, 255, .24); border-radius: 12px; background: rgba(255, 255, 255, .08); }
+.capabilities-photo { border-radius: 22px; box-shadow: 0 24px 60px rgba(9, 28, 72, .45); }
+.capabilities-title { max-width: 620px; }
+.capabilities-panel h3 { color: #fff; }
+.capabilities-panel p { color: #c6d3ea; }
+.capabilities-best small { color: var(--green-light); }
+.capabilities-best span { color: #fff; }
+
+/* Questions, wherever they are asked, look like the product page's. */
+.faq-list { gap: 0; border: 0; background: none; }
+.faq-list details { border: 0; border-top: 1px solid var(--line); border-radius: 0; background: none; }
+.faq-list details:last-child { border-bottom: 1px solid var(--line); }
+.faq-list summary { padding: 20px 4px; font-size: 17px; font-weight: 700; }
+.faq-list p { padding: 0 4px 20px; font-size: 15.5px; }
+
+/* The category strip, shared by the homepage and the products page. */
+.category-strip { background: #fff; border-bottom: 1px solid var(--line); }
+.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; }
+.category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+.category-strip ul::-webkit-scrollbar { display: none; }
+.category-strip a { display: inline-block; padding: 10px 16px; margin: 11px 0; border-radius: 999px; font-size: 15.5px; font-weight: 600; white-space: nowrap; color: var(--ink); }
+.category-strip a:hover { background: var(--soft); }
+.category-strip a.is-active { background: var(--green-dark); color: #fff; }
+.category-strip-inner > .text-link { flex: none; }
+
+@media (max-width: 620px) {
+  .category-strip-inner { padding-inline: 18px; }
+  .category-strip-inner > .text-link { display: none; }
+  .hero-compact .hero-inner { padding: 34px 18px 32px; }
 }
 
 /* ---------------------------------------------------------- small screens

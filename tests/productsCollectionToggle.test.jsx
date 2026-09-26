@@ -47,21 +47,21 @@ describe('the product collection View All / Show Less toggle', () => {
 });
 
 describe('category tabs', () => {
-  it('are plain links, with no dropdown arrow beside the name', async () => {
+  it('are a strip of plain pills, the chosen one marked, with no dropdown arrow', async () => {
     const { renderToStaticMarkup } = await import('react-dom/server');
     const { default: ProductsPage } = await import('../src/public/pages/ProductsPage');
     const React = (await import('react')).default;
     const saved = globalThis.location;
-    globalThis.location = { pathname: '/mySOS/products/', search: '' };
+    globalThis.location = { pathname: '/mySOS/products/', search: '?category=bags' };
     try {
       const html = renderToStaticMarkup(React.createElement(ProductsPage));
-      const row = html.match(/<div class="browse-row">.*?<\/div>/s)?.[0] ?? '';
-      expect(row).toContain('class="browse-label"');
+      const strip = html.match(/<nav class="category-strip"[\s\S]*?<\/nav>/)?.[0] ?? '';
+      expect(strip).toContain('href="?category=apparel"');
+      expect(strip).toMatch(/class="is-active" href="\?category=bags"/);
       // The chevron glyph's path, which the tabs used to carry.
-      expect(row).not.toContain('m6.5 9.5 5.5 5.5 5.5-5.5');
+      expect(strip).not.toContain('m6.5 9.5 5.5 5.5 5.5-5.5');
     } finally {
-      if (saved === undefined) delete globalThis.location;
-      else globalThis.location = saved;
+      globalThis.location = saved;
     }
   });
 });
