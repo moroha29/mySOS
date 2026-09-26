@@ -5,6 +5,7 @@ import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { enquiryLinkProps, getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
 import Icon from './Icons';
@@ -30,6 +31,21 @@ export function Arrow() {
 
 export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
   return <a className={`btn btn-${variant} ${className}`.trim()} href={href} {...rest}>{children}</a>;
+}
+
+/*
+ * "Get a Quote" — or, once this browser has a request waiting, the way back
+ * into it, with the number of products in it. The count is read after the page
+ * loads (see useSavedRequest), so the drawn page and the first render agree.
+ */
+export function QuoteButton({ variant = 'primary', className = '', showArrow = false, ...rest }) {
+  const waiting = useSavedRequest();
+  const key = waiting ? 'returnToQuoteButton' : 'heroQuoteButton';
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label('heroQuoteButton', 'Get a Quote');
+  return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
+    <span data-cms-path={cms(labelPath(key))}>{text}</span>
+    {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}
+  </Button>;
 }
 
 export function TextLink({ href, children, className = '' }) {
@@ -75,10 +91,10 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
 
 /* -------------------------------------------------------------------- cards */
 
-// A product card starts a request with that product already in it.
+// A product card opens that product's own page, where the request is built.
 export function ProductCard({ product }) {
   const price = getDisplayPrice(product);
-  return <a className="product-card" href={requestPathFor(product.id)} aria-label={`Ask MySOS for a quote on ${product.public.name}`}>
+  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`}>
     <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
     <h3>{product.public.name}</h3>
     {price && <p className="price">{price}</p>}
@@ -245,24 +261,18 @@ export function PageCTA({
   description = "Let's create something amazing together.",
   titlePath,
   descriptionPath,
-  primaryLabel = label('heroQuoteButton', 'Get a Quote'),
-  primaryPath = labelPath('heroQuoteButton'),
-  primaryHref = REQUEST_PATH,
   showWhatsApp = true,
 }) {
-  const bandBg = picture(siteContent.scenes?.ctaBandImage, 'scenes/band-cta');
-  return <section className="page-cta" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
+  return <section className="page-cta">
     <div className="page-cta-inner">
+      <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
       <div>
-        <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
         <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
-      </div>
-      <div className="page-cta-actions">
-        {/* The button's wording and where it sends people, together. */}
-        <Button href={primaryHref} {...enquiryLinkProps(primaryHref)}>
-          <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
-        </Button>
-        {showWhatsApp && <WhatsAppLink />}
+        <div className="page-cta-actions">
+          {/* Says "Get a Quote", or the way back once a request is waiting. */}
+          <QuoteButton />
+          {showWhatsApp && <WhatsAppLink />}
+        </div>
       </div>
     </div>
   </section>;

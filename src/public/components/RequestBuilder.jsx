@@ -5,6 +5,9 @@ import {
   allFileNames, browseCategories, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
   packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, searchProducts, suggestionsFor,
 } from '../../utils/solutionRequest';
+import { REQUEST_PATH } from '../../utils/catalogue';
+import { clearSavedRequest, mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
+import useSavedRequest from '../useSavedRequest';
 import { cms, pagePath } from '../cms';
 import Icon from './Icons';
 import { ProductShot } from './Ui';
@@ -215,6 +218,9 @@ export default function RequestBuilder({
   useCase = null,
   startWith = [],
   startNotes = '',
+  // The quote page keeps what is in it between visits; a solution page is a
+  // recommendation to start from, so it does not.
+  remember = false,
   title = word('packageTitle', 'Your Recommended Team Package'),
   titlePath = wordPath('packageTitle'),
   lead = word('packageLead'),
@@ -230,6 +236,11 @@ export default function RequestBuilder({
   const [custom, setCustom] = useState('');
   const [neededBy, setNeededBy] = useState('');
   const [notes, setNotes] = useState(startNotes);
+  // Nothing is read from storage while rendering: these pages are drawn ahead
+  // of time, and a first render that disagreed with the drawn page would flash.
+  const [restored, setRestored] = useState(false);
+  // A recommended package is not the customer's quote until they say so.
+  const waiting = useSavedRequest();
   const [files, setFiles] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [sent, setSent] = useState(null);
@@ -243,6 +254,30 @@ export default function RequestBuilder({
     browseRef.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
     browseRef.current?.focus?.({ preventScroll: true });
   }, [browseAsked]);
+
+  /*
+   * What this browser already had, plus whatever product they arrived on. The
+   * arrival is merged in rather than replacing the list, so "add to my request"
+   * from a product page adds to the request instead of starting a new one.
+   */
+  useEffect(() => {
+    if (!remember || restored) return;
+    const saved = readSavedRequest();
+    const arrivals = startWith.filter((item) => productFor(item.productId));
+    if (saved?.lines?.length) {
+      const kept = arrivals.reduce((lines, arrival) => mergeArrival(lines, arrival), saved.lines);
+      setLines(kept.map((line) => makeLine(line, 'saved')));
+      if (saved.neededBy) setNeededBy(saved.neededBy);
+      if (saved.notes && !startNotes) setNotes(saved.notes);
+    }
+    setRestored(true);
+  }, [remember, restored, startWith, startNotes]);
+
+  // Every change is kept, so leaving the page does not lose the request.
+  useEffect(() => {
+    if (!remember || !restored) return;
+    writeSavedRequest({ lines, neededBy, notes });
+  }, [remember, restored, lines, neededBy, notes]);
 
   // A different use case starts again from its own recommendation.
   useEffect(() => {
@@ -293,6 +328,21 @@ export default function RequestBuilder({
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   /*
+   * Putting this package into the customer's own quote: beside what is already
+   * there, or in place of it. Either way the quote page is where they land,
+   * because that is where the whole request is.
+   */
+  const addToQuote = (how) => {
+    const rows = lines.map((line) => ({
+      productId: line.productId, name: line.name, note: line.note,
+      quantity: line.quantity, details: line.details, detailNotes: line.detailNotes,
+    }));
+    const existing = how === 'replace' ? [] : readSavedRequest()?.lines ?? [];
+    writeSavedRequest({ lines: rows.reduce((kept, row) => mergeArrival(kept, row), existing) });
+    globalThis.location?.assign?.(REQUEST_PATH);
+  };
+
+  /*
    * A chat link cannot carry files. Where the device can share files (most
    * phones), the files go to WhatsApp with the message through the share
    * sheet. Everywhere else the chat opens with the message, which names the
@@ -305,6 +355,7 @@ export default function RequestBuilder({
       try {
         await navigator.share({ files: attached, text: message });
         setSent('shared');
+        if (remember) clearSavedRequest();
       } catch {
         // Cancelled, or sharing failed: fall back to the chat link.
         if (href) window.open(href, '_blank', 'noreferrer');
@@ -335,6 +386,14 @@ export default function RequestBuilder({
           </button>
           <small data-cms-path={wordPath('applyAllHint')}>{word('applyAllHint')}</small>
         </div>
+
+        {remember && lines.length > 0 && <p className="request-kept">
+          <Icon name="checkCircle" size={16} />
+          <span data-cms-path={wordPath('keptNote')}>{word('keptNote', 'Your request is kept on this device, so you can leave and come back to it.')}</span>
+          <button type="button" onClick={() => { clearSavedRequest(); setLines([]); setNeededBy(''); setNotes(''); setFiles([]); }}>
+            <span data-cms-path={wordPath('startOverButton')}>{word('startOverButton', 'Start a new request')}</span>
+          </button>
+        </p>}
 
         {lines.length
           ? <ul className="request-rows">
@@ -438,6 +497,25 @@ export default function RequestBuilder({
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
+
+        {/*
+          * A recommended package. It can join the quote the customer is
+          * already building, or take its place — their call, not ours.
+          */}
+        {!remember && lines.length > 0 && <div className="request-to-quote">
+          {waiting > 0 && <p data-cms-path={wordPath('quoteHasItemsNote')}>
+            {fill(word('quoteHasItemsNote', 'You already have {count} in your quote.'), { count: `${waiting} ${waiting === 1 ? 'product' : 'products'}` })}
+          </p>}
+          <div className="request-to-quote-actions">
+            <button type="button" className="btn btn-secondary" onClick={() => addToQuote('add')}>
+              <Icon name="plus" size={16} />
+              <span data-cms-path={wordPath('addToQuoteButton')}>{word('addToQuoteButton', 'Add to quote')}</span>
+            </button>
+            {waiting > 0 && <button type="button" className="btn btn-outline" onClick={() => addToQuote('replace')}>
+              <span data-cms-path={wordPath('replaceQuoteButton')}>{word('replaceQuoteButton', 'Replace quote')}</span>
+            </button>}
+          </div>
+        </div>}
 
         {href && lines.length > 0
           ? <a className="btn btn-primary btn-whatsapp request-send" href={href} {...enquiryLinkProps(href)} onClick={send}>

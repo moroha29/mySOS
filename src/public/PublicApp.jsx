@@ -8,7 +8,9 @@ import StoriesPage from './pages/StoriesPage';
 import StoryDetailPage from './pages/StoryDetailPage';
 import SolutionDetailPage from './pages/SolutionDetailPage';
 import RequestPage from './pages/RequestPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 import solutions from '../data/solutions.json';
+import productData from '../data/productData.json';
 import { watchTextStyles } from './textStyles';
 
 export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/mySOS/') {
@@ -19,6 +21,10 @@ export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '
   if (normalized === '/solutions') return { page: 'solutions' };
   if (normalized === '/why-mysos') return { page: 'why' };
   if (normalized === '/success-stories') return { page: 'stories' };
+  const productMatch = normalized.match(/^\/products\/([^/]+)$/);
+  if (productMatch && productData.catalogue.some((item) => item.public.visible && item.public.slug === productMatch[1])) {
+    return { page: 'product', slug: productMatch[1] };
+  }
   const solutionMatch = normalized.match(/^\/solutions\/([^/]+)$/);
   if (solutionMatch && solutions.some((item) => item.id === solutionMatch[1])) return { page: 'solution', id: solutionMatch[1] };
   const storyMatch = normalized.match(/^\/success-stories\/([^/]+)$/);
@@ -37,6 +43,7 @@ export default function PublicApp() {
   const content = route.page === 'home' ? <HomePage />
     : route.page === 'request' ? <RequestPage />
     : route.page === 'products' ? <ProductsPage />
+    : route.page === 'product' ? <ProductDetailPage slug={route.slug} />
       : route.page === 'solutions' ? <SolutionsPage />
         : route.page === 'why' ? <WhyPage />
           : route.page === 'stories' ? <StoriesPage />

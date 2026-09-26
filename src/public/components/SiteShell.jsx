@@ -5,6 +5,7 @@ import solutions from '../../data/solutions.json';
 import { REQUEST_PATH } from '../../utils/catalogue';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, solutionPath } from '../cms';
 import Icon from './Icons';
+import useSavedRequest from '../useSavedRequest';
 
 const label = (key, fallback) => siteContent.labels?.[key] ?? fallback;
 
@@ -94,10 +95,18 @@ function NavigationItem({ item, index, onNavigate }) {
   </div>;
 }
 
-// "Get a Quote" opens the site's own request page, where a customer says what
-// they need. Never the agents' quotation engine.
-const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'));
-const quoteLink = { href: REQUEST_PATH };
+/*
+ * "Get a Quote" opens the site's own request page, where a customer says what
+ * they need — never the agents' quotation engine. Once a quote is waiting in
+ * this browser, the button offers the way back into it instead. The count is
+ * deliberately not on the button: it made it wider than everything beside it.
+ */
+function HeaderQuoteButton({ className }) {
+  const waiting = useSavedRequest();
+  const key = waiting ? 'returnToQuoteButton' : 'headerQuoteButton';
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label('headerQuoteButton', 'Get a Quote');
+  return <a className={className} href={REQUEST_PATH} data-cms-paths={cmsAll(labelPath(key))}>{text}</a>;
+}
 
 // Several fields hold "/mySOS/" — the site's base path and the placeholder
 // legal links — so the manager cannot tell them apart from the URL alone.
@@ -114,10 +123,10 @@ export function SiteHeader() {
       </button>
       <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`.trim()} aria-label="Main navigation">
         {siteConfig.navigation.map((item, index) => <NavigationItem key={item.label} item={item} index={index} onNavigate={() => setOpen(false)} />)}
-        <a className="btn btn-primary btn-sm mobile-quote" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <HeaderQuoteButton className="btn btn-primary btn-sm mobile-quote" />
       </nav>
       <div className="header-actions">
-        <a className="btn btn-primary btn-sm" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <HeaderQuoteButton className="btn btn-primary btn-sm" />
         <WhatsAppButton />
       </div>
     </div>
@@ -187,11 +196,28 @@ export function SiteFooter() {
   </footer>;
 }
 
+/*
+ * The line across the very top of every page. It sits outside the page's own
+ * column so it runs the full width of the screen, however wide that is — inside
+ * it, it stopped at the edge of the column and looked cut off.
+ */
+function Announcement() {
+  const text = String(siteContent.announcement ?? '').trim();
+  if (!text) return null;
+  return <p className="site-announce" data-cms-path={cms(contentPath('announcement'))}>{text}</p>;
+}
+
 export default function SiteShell({ children }) {
-  return <div className="site-app">
-    <SiteHeader />
-    {children}
-    <SiteFooter />
-    <WhatsAppBubble />
-  </div>;
+  // The strip is a sibling of the page column, not a child of it: that is what
+  // lets it run the full width of the screen without a 100vw trick, which
+  // would overflow by the width of the scrollbar.
+  return <>
+    <Announcement />
+    <div className="site-app">
+      <SiteHeader />
+      {children}
+      <SiteFooter />
+      <WhatsAppBubble />
+    </div>
+  </>;
 }

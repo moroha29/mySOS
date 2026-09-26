@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe('production route rendering', () => {
   it.each([
-    ['/mySOS/', 'Tell us what you need.'],
+    ['/mySOS/', 'Custom Merchandise,'],
     ['/mySOS/products/', 'Apparel collection'],
     ['/mySOS/request/', 'Build Your Request'],
     ['/mySOS/solutions/', 'Solutions Designed'],
@@ -44,13 +44,13 @@ describe('production route rendering', () => {
 
   it('renders data-driven product and solution filters', () => {
     const apparel = renderAt('/mySOS/products/');
-    // A product card starts a request with that product already in it.
-    expect(apparel).toContain('href="/mySOS/request/?product=premium_cotton_tee"');
+    // A product card opens that product's own page.
+    expect(apparel).toContain('href="/mySOS/products/premium-cotton-tee/"');
     expect(renderAt('/mySOS/products/', '?category=bags')).toContain('Canvas Tote Bag');
     const schools = renderAt('/mySOS/solutions/', '?industry=schools');
     expect(schools).toContain('Recommended for Schools');
     expect(schools).toContain('Sublimation Jersey');
-    expect(schools).toContain('href="/mySOS/request/?product=jersey-sublimation"');
+    expect(schools).toContain('href="/mySOS/products/sublimation-jersey/"');
     const stories = renderAt('/mySOS/success-stories/');
     expect(stories).toContain('/mySOS/success-stories/ntu-cca-jerseys-2024/');
     expect(renderAt('/mySOS/success-stories/ntu-cca-jerseys-2024/')).toContain('Need something similar?');

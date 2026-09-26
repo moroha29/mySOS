@@ -20,6 +20,27 @@ const render = (Page, pathname) => {
   return renderToStaticMarkup(<Page />);
 };
 
+/*
+ * Every size that carries words someone reads. The badge and the numbered step
+ * marker are shapes with a character in them, so they are left out.
+ */
+const CHROME = /\.badge|pdp-step-number/;
+
+function readingSizes(css) {
+  let selector = '';
+  const found = [];
+  for (const line of css.split(/\r?\n/)) {
+    const brace = line.indexOf('{');
+    if (brace >= 0) {
+      const head = line.slice(0, brace).trim();
+      if (head && !head.startsWith('@')) selector = head;
+    }
+    if (CHROME.test(selector)) continue;
+    for (const [, size] of line.matchAll(/font-size: ([\d.]+)px/g)) found.push(Number(size));
+  }
+  return found;
+}
+
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
@@ -123,12 +144,19 @@ describe('the home banner and the sections under it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('asks what the visitor needs, and sends the answer to the request page', () => {
+  it('keeps the wording the client chose, and sends the answer to the request page', () => {
     const markup = render(HomePage, '/mySOS/');
-    expect(markup).toContain('Tell us what you need.');
+    // The banner is their own headline and lead, not the concept's stand-in
+    // copy, and the search suggestions are their own popular solutions.
+    expect(markup).toContain(siteContent.headings.heroTitle);
+    expect(markup).toContain(siteContent.headings.heroTitleAccent);
+    expect(markup).toContain(siteContent.headings.heroLead);
+    expect(markup).not.toContain('Tell us what you need.');
     expect(markup).toContain('class="hero-search"');
-    // Both the button and the suggestion chips open a request, never a chat.
-    expect(markup).toContain('href="/mySOS/request/?ask=Company%20welcome%20packs"');
+    for (const chip of siteContent.heroSearchChips) {
+      expect(siteContent.popularSolutions.some((item) => item.name === chip), chip).toBe(true);
+      expect(markup).toContain(`/mySOS/request/?ask=${encodeURIComponent(chip)}`);
+    }
     expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
     expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
   });
@@ -170,6 +198,39 @@ describe('the home banner and the sections under it', () => {
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
   });
 
+  it('titles every section with the heading the client already wrote', () => {
+    const markup = render(HomePage, '/mySOS/');
+    for (const key of ['categoriesHeading', 'benefitsHeading', 'storiesHeading', 'processHeading', 'closingCtaTitle']) {
+      expect(markup, key).toContain(siteContent.headings[key]);
+    }
+    // The concept's own headings are gone from the content altogether.
+    for (const key of ['homeWhyHeading', 'homeWorkHeading', 'homeProcessHeading', 'heroTitleLead']) {
+      expect(siteContent.headings, key).not.toHaveProperty(key);
+    }
+    // The four promises are the ones they list, nothing invented about them.
+    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(siteContent.heroPromises);
+  });
+
+  it('sets the page in the typeface the concept uses', () => {
+    // The headlines read differently in Inter; DM Sans is what the design uses.
+    expect(css).toMatch(/fonts\.googleapis\.com\/css2\?family=DM\+Sans/);
+    expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
+  });
+
+  it('gives each promise a mark of its own, not a stray glyph', () => {
+    // The row opened with a drawn infinity sign, which read as a typo.
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).not.toContain('∞');
+    expect([...markup.matchAll(/class="home-stat-icon"/g)]).toHaveLength(siteContent.homeStats.length);
+    for (const stat of siteContent.homeStats) expect(stat.icon, stat.value).toBeTruthy();
+  });
+
+  it('sets the reviews at a size people can read', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.review-card p \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(16);
+    expect(size(/\.review-summary \.rating-value \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(26);
+  });
+
   it('carries the stats, the reasons, the budget bands and the work', () => {
     const markup = render(HomePage, '/mySOS/');
     for (const stat of siteContent.homeStats) expect(markup).toContain(stat.note);
@@ -196,9 +257,8 @@ describe('the type scale: titles carry the page', () => {
       .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
   });
 
-  it('never drops text below 12.5px, however small the scale gets', () => {
-    const sizes = [...css.matchAll(/font-size: ([\d.]+)px/g)].map(([, size]) => Number(size));
-    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(12.5);
+  it('never drops readable text below 13.5px, however small the scale gets', () => {
+    expect(Math.min(...readingSizes(css))).toBeGreaterThanOrEqual(13.5);
   });
 
   it('runs the page wider than it used to, halving the side margins', () => {
@@ -244,5 +304,25 @@ describe('how a product should be printed', () => {
     for (const kind of ['choice', 'select', 'text']) {
       expect(builder).toContain(`{!isPrinting && field.type === '${kind}'`);
     }
+  });
+});
+
+describe('the page is comfortable to read', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const sizes = readingSizes(css);
+
+  it('sets no text below 13.5px, and the leads at 17px or more', () => {
+    // The type pass had trimmed body text about 6%, which left whole sections
+    // hard to read at arm's length.
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(13.5);
+    for (const lead of [/\.home-hero-lead \{[^}]*font-size: ([\d.]+)px/, /\.pdp-lead \{[^}]*font-size: ([\d.]+)px/, /\.section-heading p \{[^}]*font-size: ([\d.]+)px/]) {
+      expect(Number(css.match(lead)[1]), String(lead)).toBeGreaterThanOrEqual(17);
+    }
+  });
+
+  it('keeps titles clearly above the text they sit over', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.home-tiles-head h2 \{[^}]*clamp\(\d+px, [\d.]+vw, (\d+)px\)/))
+      .toBeGreaterThan(size(/\.home-tiles-head p \{ font-size: ([\d.]+)px/));
   });
 });

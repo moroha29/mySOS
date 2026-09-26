@@ -16,14 +16,15 @@
     "reviewsFallbackLabel": "Reviews from Google",
     "reviewsCountPrefix": "Based on",
     "reviewsCountSuffix": "reviews",
-    "heroSearchPlaceholder": "Try: 200 event kits under $15 each",
-    "heroSearchButton": "Find it for me",
+    "heroSearchPlaceholder": "Tell us what you're planning",
+    "heroSearchButton": "Find My Solution",
     "quickNavAllLabel": "View all products",
     "workDiscussLabel": "Discuss your project",
     "budgetQuantityLabel": "Estimated quantity",
     "budgetQuestionLabel": "What is your budget per person?",
     "budgetSeeIdeasLabel": "See matching ideas",
-    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery."
+    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery.",
+    "returnToQuoteButton": "Return to quote"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -44,19 +45,6 @@
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
     "whyProcessHeading": "Our process",
-    "heroEyebrow": "Custom printing and merchandise solutions in Singapore",
-    "heroTitleLead": "Tell us what you need.",
-    "heroTitleAccentLong": "We'll source the rest.",
-    "homeWorkHeading": "Complex orders. Simple solutions.",
-    "homeWorkEyebrow": "Selected work",
-    "homeProcessEyebrow": "How it works",
-    "homeProcessHeading": "From brief to delivery.",
-    "homeProcessLead": "Move through each stage to see how your project progresses.",
-    "homeWhyEyebrow": "Why MySOS",
-    "homeWhyHeading": "One team. Every step handled.",
-    "homeWhyLead": "What working with MySOS means, from the first message to the delivery.",
-    "homeTilesEyebrow": "Explore products",
-    "homeTilesLead": "Start with a category, or tell us about the project in the search above. We will guide you to the right specifications.",
     "budgetEyebrow": "Find by budget",
     "budgetHeading": "Know the budget, not the product?",
     "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size."
@@ -588,6 +576,37 @@
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today."
     },
+    "product": {
+      "buildTitle": "Build your request",
+      "quantityQuestion": "How many pieces?",
+      "quantityHint": "Minimum {min}",
+      "colourQuestion": "Choose a base colour",
+      "colourHint": "Optional",
+      "methodQuestion": "How would you like to customise it?",
+      "methodHint": "Choose one",
+      "methodHelpTitle": "Help me decide",
+      "methodHelpNote": "We will recommend one",
+      "artworkTitle": "Have artwork or a reference?",
+      "artworkHint": "PNG, JPG or PDF",
+      "addButton": "Add to my request",
+      "askPrefix": "Need something different?",
+      "askLink": "Ask MySOS for help",
+      "estimateLabel": "Indicative price",
+      "estimateNote": "A guide only. Your quote depends on artwork, quantity, sizes, colours, packaging and delivery.",
+      "noPriceNote": "We will quote once we know the artwork, quantity and finishing.",
+      "mockupTitle": "Free visual mockup before production",
+      "mockupNote": "Your logo placement and print size are confirmed before we proceed.",
+      "promises": [
+        "Small & Bulk Orders",
+        "Product Recommendations",
+        "One-Stop Sourcing"
+      ],
+      "infoEyebrow": "Product information",
+      "infoTitle": "Everything important, kept simple.",
+      "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
+      "relatedTitle": "More in this category",
+      "addedButton": "In your request"
+    },
     "request": {
       "breadcrumb": "Get a Quote",
       "heroTitle": "Tell Us What You Need",
@@ -735,7 +754,13 @@
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
       "showFewerLabel": "Show fewer",
       "printingPlaceholder": "Choose a printing method…",
-      "printingOtherHint": "Describe the printing you have in mind in the notes below."
+      "printingOtherHint": "Describe the printing you have in mind in the notes below.",
+      "keptNote": "Your request is kept on this device, so you can leave and come back to it.",
+      "startOverButton": "Start a new request",
+      "addToQuoteButton": "Add to quote",
+      "replaceQuoteButton": "Replace quote",
+      "quoteHasItemsNote": "You already have {count} in your quote.",
+      "addedToQuoteNote": "Added to your quote."
     }
   },
   "apparelTabs": [
@@ -1270,32 +1295,32 @@
       }
     ]
   },
-  "announcement": "Custom printing and merchandise solutions for businesses, schools, events and communities",
+  "announcement": "You're One Step Away From Your Solution!",
   "heroSearchChips": [
-    "Company welcome packs",
-    "School camp tees",
-    "Last minute event gifts"
+    "Orientation Pack",
+    "Welcome Kit",
+    "Graduation Pack"
   ],
   "homeStats": [
     {
-      "value": "∞",
-      "label": "Products",
-      "note": "One source. Endless solutions."
+      "icon": "supplier",
+      "value": "Small & Bulk Orders",
+      "note": ""
     },
     {
-      "value": "Quality assured",
-      "label": "",
-      "note": "Verified production errors replaced or reimbursed"
+      "icon": "expert",
+      "value": "Product Recommendations",
+      "note": ""
     },
     {
-      "value": "Within 1 day",
-      "label": "",
-      "note": "Response time, excluding Sundays"
+      "icon": "value",
+      "value": "One-Stop Sourcing",
+      "note": ""
     },
     {
-      "value": "Free",
-      "label": "",
-      "note": "Visual mockups before production"
+      "icon": "delivery",
+      "value": "On-Time Delivery",
+      "note": ""
     }
   ],
   "budgetBands": [
@@ -1322,6 +1347,55 @@
       "label": "$35+",
       "title": "Premium gifting and kit-outs",
       "description": "Jackets, full uniform sets and curated welcome packs"
+    }
+  ],
+  "quantityPresets": [
+    20,
+    50,
+    100,
+    250
+  ],
+  "productMinimum": 10,
+  "productFacts": {
+    "default": [
+      {
+        "label": "Branding",
+        "value": "Printed or embroidered with your artwork"
+      },
+      {
+        "label": "Quantities",
+        "value": "Small runs to bulk orders"
+      },
+      {
+        "label": "Mockup",
+        "value": "Sent for approval before production"
+      },
+      {
+        "label": "Support",
+        "value": "One team from enquiry to delivery"
+      }
+    ]
+  },
+  "productInfoSections": [
+    {
+      "title": "What is the minimum order quantity?",
+      "body": "Minimum quantities vary by product and customisation method. The quotation engine shows accurate options for the selected product."
+    },
+    {
+      "title": "How long is the production lead time?",
+      "body": "Most projects take two to four weeks after artwork and sample approval. Complex custom products may take longer."
+    },
+    {
+      "title": "Can you help with design?",
+      "body": "Yes. We can advise on product selection, print placement and artwork preparation."
+    },
+    {
+      "title": "Do you ship internationally?",
+      "body": "International delivery can be arranged. Shipping is quoted separately based on destination and order size."
+    },
+    {
+      "title": "What file formats do you accept?",
+      "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
   ]
 }

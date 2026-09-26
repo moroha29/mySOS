@@ -47,21 +47,21 @@ describe('the product collection View All / Show Less toggle', () => {
 });
 
 describe('category tabs', () => {
-  it('are plain links, with no dropdown arrow beside the name', async () => {
+  it('are a strip of plain pills, the chosen one marked, with no dropdown arrow', async () => {
     const { renderToStaticMarkup } = await import('react-dom/server');
     const { default: ProductsPage } = await import('../src/public/pages/ProductsPage');
     const React = (await import('react')).default;
     const saved = globalThis.location;
-    globalThis.location = { pathname: '/mySOS/products/', search: '' };
+    globalThis.location = { pathname: '/mySOS/products/', search: '?category=bags' };
     try {
       const html = renderToStaticMarkup(React.createElement(ProductsPage));
-      const row = html.match(/<div class="browse-row">.*?<\/div>/s)?.[0] ?? '';
-      expect(row).toContain('class="browse-label"');
+      const strip = html.match(/<nav class="category-strip"[\s\S]*?<\/nav>/)?.[0] ?? '';
+      expect(strip).toContain('href="?category=apparel"');
+      expect(strip).toMatch(/class="is-active" href="\?category=bags"/);
       // The chevron glyph's path, which the tabs used to carry.
-      expect(row).not.toContain('m6.5 9.5 5.5 5.5 5.5-5.5');
+      expect(strip).not.toContain('m6.5 9.5 5.5 5.5 5.5-5.5');
     } finally {
-      if (saved === undefined) delete globalThis.location;
-      else globalThis.location = saved;
+      globalThis.location = saved;
     }
   });
 });
@@ -73,7 +73,11 @@ describe('choosing a category', () => {
     expect(source).toMatch(/const chooseCategory = \(event, id\) => \{/);
     expect(source).toMatch(/event\.preventDefault\(\);\s*setCategory\(id\);/);
     expect(source).toMatch(/globalThis\.history\?\.pushState\?\.\(\{ category: id \}, '', `\?category=\$\{id\}`\)/);
-    expect(source).toMatch(/onClick=\{\(event\) => chooseCategory\(event, item\.id\)\}/);
+    // The strip itself is shared with the homepage; the products page hands it
+    // the category being shown and what to do when one is chosen.
+    expect(source).toMatch(/<CategoryStrip activeId=\{category\} onChoose=\{chooseCategory\} \/>/);
+    const strip = readFileSync(new URL('../src/public/components/CategoryStrip.jsx', import.meta.url), 'utf8');
+    expect(strip).toMatch(/onClick=\{onChoose \? \(event\) => onChoose\(event, category\.id\) : undefined\}/);
     // Nothing scrolls the page: the reader stays where they were.
     expect(source.slice(source.indexOf('const chooseCategory'), source.indexOf('const toggleShowAll'))).not.toMatch(/scrollIntoView|scrollTo/);
   });

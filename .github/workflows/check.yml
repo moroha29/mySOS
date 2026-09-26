@@ -3,9 +3,11 @@ name: Check MySOS website
 # Every pull request is tested and built before it can be merged. The website
 # manager publishes through pull requests and merges only once these checks
 # pass, so a content or price change that would break the site never goes live.
-on:
-  pull_request:
-    branches: [main]
+#
+# Every pull request, whatever it is aimed at: a branch built on another branch
+# used to get no checks at all, which reads as "nothing ran" rather than "this
+# is fine".
+on: pull_request
 
 permissions:
   contents: read

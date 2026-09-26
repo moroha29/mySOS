@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
-import { getPublicProducts } from '../../utils/catalogue';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
-import { Product } from '../components/Visuals';
-import { Button, enquiryProps, heading, PageCTA, Photo, ProductCard, SectionHeading } from '../components/Ui';
+import { Button, enquiryProps, heading, label, PageCTA, Photo, ProductCard, SectionHeading } from '../components/Ui';
 
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
@@ -135,42 +135,30 @@ export default function ProductsPage() {
   const visible = showAll ? products : products.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
   const methods = printData.methods.filter((method) => method.public?.visible);
-  const heroShot = picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero');
 
-  return <main>
+  return <main className="page-paper">
+    <CategoryStrip activeId={category} onChoose={chooseCategory} />
+
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
+          <span className="eyebrow" data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
           <h1>
             <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
             <em><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
           </h1>
           <p className="hero-lead" data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          {heroShot ? <img className="hero-shot" src={heroShot} alt="" data-cms-path={cms(scenePath('productsHeroImage'))} /> : <>
-            <Product type="tote" color="sand" mark="YOUR BRAND HERE" className="ha-3" />
-            <Product type="jacket" color="black" className="ha-1" />
-            <Product type="bottle" color="teal" className="ha-4" />
-          </>}
+        <div className="hero-scene">
+          <Photo
+            style="hall"
+            image={picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero')}
+            imagePath={scenePath('productsHeroImage')}
+            label="Merchandise MySOS has made"
+            wide
+            eager
+          />
         </div>
-      </div>
-    </section>
-
-    <section className="section section-tight">
-      <SectionHeading eyebrow={heading('browseCategoryHeading', 'Browse by category')} eyebrowPath={headingPath('browseCategoryHeading')} />
-      <div className="browse-row">
-        {siteContent.categories.map((item) => <a
-          key={item.id}
-          className={item.id === category ? 'is-active' : ''}
-          href={`?category=${item.id}`}
-          aria-current={item.id === category ? 'page' : undefined}
-          onClick={(event) => chooseCategory(event, item.id)}
-        >
-          <Icon name={item.icon} size={26} cmsPath={categoryPath(item, 'icon')} />
-          {/* A plain link to the category, so no dropdown arrow. */}
-          <span className="browse-label"><span data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</span></span>
-        </a>)}
       </div>
     </section>
 
