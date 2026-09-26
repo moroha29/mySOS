@@ -15,7 +15,15 @@
     "menuToggleLabel": "Menu",
     "reviewsFallbackLabel": "Reviews from Google",
     "reviewsCountPrefix": "Based on",
-    "reviewsCountSuffix": "reviews"
+    "reviewsCountSuffix": "reviews",
+    "heroSearchPlaceholder": "Try: 200 event kits under $15 each",
+    "heroSearchButton": "Find it for me",
+    "quickNavAllLabel": "View all products",
+    "workDiscussLabel": "Discuss your project",
+    "budgetQuantityLabel": "Estimated quantity",
+    "budgetQuestionLabel": "What is your budget per person?",
+    "budgetSeeIdeasLabel": "See matching ideas",
+    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery."
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -35,7 +43,23 @@
     "popularSolutionsHeading": "Popular solutions",
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
-    "whyProcessHeading": "Our process"
+    "whyProcessHeading": "Our process",
+    "heroEyebrow": "Custom printing and merchandise solutions in Singapore",
+    "heroTitleLead": "Tell us what you need.",
+    "heroTitleAccentLong": "We'll source the rest.",
+    "homeWorkHeading": "Complex orders. Simple solutions.",
+    "homeWorkEyebrow": "Selected work",
+    "homeProcessEyebrow": "How it works",
+    "homeProcessHeading": "From brief to delivery.",
+    "homeProcessLead": "Move through each stage to see how your project progresses.",
+    "homeWhyEyebrow": "Why MySOS",
+    "homeWhyHeading": "One team. Every step handled.",
+    "homeWhyLead": "What working with MySOS means, from the first message to the delivery.",
+    "homeTilesEyebrow": "Explore products",
+    "homeTilesLead": "Start with a category, or tell us about the project in the search above. We will guide you to the right specifications.",
+    "budgetEyebrow": "Find by budget",
+    "budgetHeading": "Know the budget, not the product?",
+    "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size."
   },
   "footer": {
     "productsHeading": "Products",
@@ -1245,5 +1269,59 @@
         ]
       }
     ]
-  }
+  },
+  "announcement": "Custom printing and merchandise solutions for businesses, schools, events and communities",
+  "heroSearchChips": [
+    "Company welcome packs",
+    "School camp tees",
+    "Last minute event gifts"
+  ],
+  "homeStats": [
+    {
+      "value": "∞",
+      "label": "Products",
+      "note": "One source. Endless solutions."
+    },
+    {
+      "value": "Quality assured",
+      "label": "",
+      "note": "Verified production errors replaced or reimbursed"
+    },
+    {
+      "value": "Within 1 day",
+      "label": "",
+      "note": "Response time, excluding Sundays"
+    },
+    {
+      "value": "Free",
+      "label": "",
+      "note": "Visual mockups before production"
+    }
+  ],
+  "budgetBands": [
+    {
+      "id": "under-10",
+      "label": "$5 to $10",
+      "title": "Smart essentials for larger groups",
+      "description": "Tote bags, simple tees, stationery and practical event items"
+    },
+    {
+      "id": "10-20",
+      "label": "$10 to $20",
+      "title": "Everyday branded favourites",
+      "description": "Cotton tees, drawstring bags, bottles and lanyard sets"
+    },
+    {
+      "id": "20-35",
+      "label": "$20 to $35",
+      "title": "Pieces people keep",
+      "description": "Polos, hoodies, insulated bottles and gift sets"
+    },
+    {
+      "id": "35-plus",
+      "label": "$35+",
+      "title": "Premium gifting and kit-outs",
+      "description": "Jackets, full uniform sets and curated welcome packs"
+    }
+  ]
 }

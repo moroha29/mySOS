@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe('production route rendering', () => {
   it.each([
-    ['/mySOS/', 'Custom Merchandise'],
+    ['/mySOS/', 'Tell us what you need.'],
     ['/mySOS/products/', 'Apparel collection'],
     ['/mySOS/request/', 'Build Your Request'],
     ['/mySOS/solutions/', 'Solutions Designed'],
