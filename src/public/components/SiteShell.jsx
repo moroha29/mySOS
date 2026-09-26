@@ -187,11 +187,28 @@ export function SiteFooter() {
   </footer>;
 }
 
+/*
+ * The line across the very top of every page. It sits outside the page's own
+ * column so it runs the full width of the screen, however wide that is — inside
+ * it, it stopped at the edge of the column and looked cut off.
+ */
+function Announcement() {
+  const text = String(siteContent.announcement ?? '').trim();
+  if (!text) return null;
+  return <p className="site-announce" data-cms-path={cms(contentPath('announcement'))}>{text}</p>;
+}
+
 export default function SiteShell({ children }) {
-  return <div className="site-app">
-    <SiteHeader />
-    {children}
-    <SiteFooter />
-    <WhatsAppBubble />
-  </div>;
+  // The strip is a sibling of the page column, not a child of it: that is what
+  // lets it run the full width of the screen without a 100vw trick, which
+  // would overflow by the width of the scrollbar.
+  return <>
+    <Announcement />
+    <div className="site-app">
+      <SiteHeader />
+      {children}
+      <SiteFooter />
+      <WhatsAppBubble />
+    </div>
+  </>;
 }

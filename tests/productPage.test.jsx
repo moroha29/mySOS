@@ -118,3 +118,27 @@ describe('one look across the pages', () => {
     }
   });
 });
+
+describe('the line across the top of every page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const shell = readFileSync(new URL('../src/public/components/SiteShell.jsx', import.meta.url), 'utf8');
+
+  it('sits above the header, on every page, from the content', () => {
+    for (const pathname of ['/mySOS/', '/mySOS/products/', '/mySOS/request/', '/mySOS/why-mysos/', `/mySOS/products/${tee.public.slug}/`]) {
+      const markup = render(pathname);
+      const strip = markup.indexOf('class="site-announce"');
+      expect(strip, pathname).toBeGreaterThan(-1);
+      expect(strip, pathname).toBeLessThan(markup.indexOf('class="site-header"'));
+      expect(markup, pathname).toContain(siteContent.announcement);
+    }
+  });
+
+  it('runs the full width of the screen, whatever the page column does', () => {
+    // It is a sibling of the page column, not a child: inside it, the strip
+    // stopped at the column's edge and looked cut off on a wide screen. A
+    // 100vw trick would instead overflow by the width of the scrollbar.
+    expect(shell).toMatch(/<Announcement \/>\s*<div className="site-app">/);
+    expect(css).toMatch(/\.site-announce \{ padding: 11px 24px; background: var\(--navy-deep\)/);
+    expect(css).not.toMatch(/\.site-announce \{[^}]*100vw/);
+  });
+});
