@@ -165,9 +165,18 @@ function HeroSearch() {
     <ul className="hero-chips">
       {chips.map((chip, index) => <li key={chip}>
         <button type="button" onClick={() => setAsked(chip)}>
+          <span aria-hidden="true">+</span>
           <span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span>
         </button>
       </li>)}
+      {/* Artwork and photographs are attached on the quote page, where the
+          message that carries them is put together. */}
+      <li>
+        <a className="hero-chip-upload" href={`${REQUEST_PATH}?upload=1`}>
+          <Icon name="upload" size={15} />
+          <span data-cms-path={cms(labelPath('uploadPhotoChip'))}>{label('uploadPhotoChip', 'Upload product photo')}</span>
+        </a>
+      </li>
     </ul>
     {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
@@ -286,7 +295,11 @@ const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
 function CategoryTiles() {
   return <section className="section home-tiles">
     <div className="home-tiles-head" data-reveal>
-      <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeTilesEyebrow'))}>{heading('homeTilesEyebrow', 'Explore products')}</span>
+        <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
+      </div>
+      <p data-cms-path={cms(headingPath('homeTilesLead'))}>{heading('homeTilesLead')}</p>
     </div>
     <div className="home-tile-grid">
       {siteContent.categories.map((category, index) => <a
@@ -311,7 +324,11 @@ function WhyBand() {
   return <section className="home-why">
     <div className="home-why-inner">
       <div className="home-why-head" data-reveal>
-        <h2 data-cms-path={cms(headingPath('benefitsHeading'))}>{heading('benefitsHeading', 'Why choose MySOS?')}</h2>
+        <div>
+          <span className="eyebrow" data-cms-path={cms(headingPath('homeWhyEyebrow'))}>{heading('homeWhyEyebrow', 'Why MySOS')}</span>
+          <h2 data-cms-path={cms(headingPath('homeWhyHeading'))}>{heading('homeWhyHeading', 'One team. Every step handled.')}</h2>
+        </div>
+        <p data-cms-path={cms(headingPath('homeWhyLead'))}>{heading('homeWhyLead')}</p>
       </div>
       <ol className="home-why-grid">
         {reasons.map((reason, index) => <li key={reason.icon} data-reveal style={{ '--reveal-delay': `${index * 80}ms` }}>
@@ -380,9 +397,12 @@ function SelectedWork({ stories }) {
   if (!stories.length) return null;
   return <section className="section home-work">
     <div className="home-work-head" data-reveal>
-      <h2 data-cms-path={cms(headingPath('storiesHeading'))}>{heading('storiesHeading', 'Real projects. Real results.')}</h2>
-      <a className="text-link" href="/mySOS/success-stories/">
-        <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeWorkEyebrow'))}>{heading('homeWorkEyebrow', 'Selected work')}</span>
+        <h2 data-cms-path={cms(headingPath('homeWorkHeading'))}>{heading('homeWorkHeading', 'Complex orders. Simple solutions.')}</h2>
+      </div>
+      <a className="text-link" href={REQUEST_PATH}>
+        <span data-cms-path={cms(labelPath('workDiscussLabel'))}>{label('workDiscussLabel', 'Discuss your project')}</span>
         <Icon name="arrowRight" size={15} className="inline-arrow" />
       </a>
     </div>
@@ -415,7 +435,11 @@ function ProcessRail() {
 
   return <section className="section home-process">
     <div className="home-process-head" data-reveal>
-      <h2 data-cms-path={cms(headingPath('processHeading'))}>{heading('processHeading', 'How it works')}</h2>
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeProcessEyebrow'))}>{heading('homeProcessEyebrow', 'How it works')}</span>
+        <h2 data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
+      </div>
+      <p data-cms-path={cms(headingPath('homeProcessLead'))}>{heading('homeProcessLead')}</p>
     </div>
     <div className="home-process-card">
       <ol className="home-process-track" style={{ '--reached': reached }}>
@@ -440,10 +464,10 @@ function ProcessRail() {
 function ClosingBand() {
   return <section className="home-closing">
     <div className="home-closing-inner" data-reveal>
-      <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
+      <h2 data-cms-path={cms(headingPath('homeClosingTitle'))}>{heading('homeClosingTitle', "Have a difficult request? That's our thing.")}</h2>
       <div>
-        <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
-        <div className="home-closing-actions"><QuoteButton showArrow /></div>
+        <p data-cms-path={cms(headingPath('homeClosingLead'))}>{heading('homeClosingLead')}</p>
+        <div className="home-closing-actions"><QuoteButton labelKey="homeStartButton" showArrow /></div>
       </div>
     </div>
   </section>;
@@ -463,15 +487,15 @@ export default function HomePage() {
     <section className="home-hero">
       <div className="home-hero-inner">
         <div className="home-hero-copy">
-          <span className="eyebrow" data-reveal data-cms-path={cms(configPath('tagline'))}>{siteConfig.tagline}</span>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
           {/* The two halves arrive one after the other. The words inside are not
               split: the manager rewrites these elements, and a value has to sit
               in an element of its own. */}
           <h1>
-            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>{' '}
-            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(headingPath('heroTitleAccent'))}>{heading('heroTitleAccent', 'Made Simple.')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(headingPath('heroTitleLead'))}>{heading('heroTitleLead', 'Tell us what you need.')}</span>{' '}
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(headingPath('heroTitleAccentLong'))}>{heading('heroTitleAccentLong', "We'll source the rest.")}</span></em>
           </h1>
-          <p className="home-hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
+          <p className="home-hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(headingPath('heroSearchLead'))}>{heading('heroSearchLead')}</p>
           <HeroSearch />
         </div>
         <HeroCard slides={slides} />
