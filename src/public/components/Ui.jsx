@@ -250,19 +250,18 @@ export function PageCTA({
   primaryHref = REQUEST_PATH,
   showWhatsApp = true,
 }) {
-  const bandBg = picture(siteContent.scenes?.ctaBandImage, 'scenes/band-cta');
-  return <section className="page-cta" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
+  return <section className="page-cta">
     <div className="page-cta-inner">
+      <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
       <div>
-        <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
         <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
-      </div>
-      <div className="page-cta-actions">
+        <div className="page-cta-actions">
         {/* The button's wording and where it sends people, together. */}
         <Button href={primaryHref} {...enquiryLinkProps(primaryHref)}>
           <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
         </Button>
-        {showWhatsApp && <WhatsAppLink />}
+          {showWhatsApp && <WhatsAppLink />}
+        </div>
       </div>
     </div>
   </section>;

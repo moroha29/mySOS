@@ -20,6 +20,27 @@ const render = (Page, pathname) => {
   return renderToStaticMarkup(<Page />);
 };
 
+/*
+ * Every size that carries words someone reads. The badge and the numbered step
+ * marker are shapes with a character in them, so they are left out.
+ */
+const CHROME = /\.badge|pdp-step-number/;
+
+function readingSizes(css) {
+  let selector = '';
+  const found = [];
+  for (const line of css.split(/\r?\n/)) {
+    const brace = line.indexOf('{');
+    if (brace >= 0) {
+      const head = line.slice(0, brace).trim();
+      if (head && !head.startsWith('@')) selector = head;
+    }
+    if (CHROME.test(selector)) continue;
+    for (const [, size] of line.matchAll(/font-size: ([\d.]+)px/g)) found.push(Number(size));
+  }
+  return found;
+}
+
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
@@ -216,9 +237,8 @@ describe('the type scale: titles carry the page', () => {
       .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
   });
 
-  it('never drops text below 12.5px, however small the scale gets', () => {
-    const sizes = [...css.matchAll(/font-size: ([\d.]+)px/g)].map(([, size]) => Number(size));
-    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(12.5);
+  it('never drops readable text below 13.5px, however small the scale gets', () => {
+    expect(Math.min(...readingSizes(css))).toBeGreaterThanOrEqual(13.5);
   });
 
   it('runs the page wider than it used to, halving the side margins', () => {
@@ -264,5 +284,25 @@ describe('how a product should be printed', () => {
     for (const kind of ['choice', 'select', 'text']) {
       expect(builder).toContain(`{!isPrinting && field.type === '${kind}'`);
     }
+  });
+});
+
+describe('the page is comfortable to read', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const sizes = readingSizes(css);
+
+  it('sets no text below 13.5px, and the leads at 17px or more', () => {
+    // The type pass had trimmed body text about 6%, which left whole sections
+    // hard to read at arm's length.
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(13.5);
+    for (const lead of [/\.home-hero-lead \{[^}]*font-size: ([\d.]+)px/, /\.pdp-lead \{[^}]*font-size: ([\d.]+)px/, /\.section-heading p \{[^}]*font-size: ([\d.]+)px/]) {
+      expect(Number(css.match(lead)[1]), String(lead)).toBeGreaterThanOrEqual(17);
+    }
+  });
+
+  it('keeps titles clearly above the text they sit over', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.home-tiles-head h2 \{[^}]*clamp\(\d+px, [\d.]+vw, (\d+)px\)/))
+      .toBeGreaterThan(size(/\.home-tiles-head p \{ font-size: ([\d.]+)px/));
   });
 });
