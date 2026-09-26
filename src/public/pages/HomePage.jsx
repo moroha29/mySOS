@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
@@ -171,6 +171,53 @@ function HeroSearch() {
   </>;
 }
 
+/*
+ * The figure at the head of the promises: counts up from nothing and settles
+ * on the mark for "endless". The final mark is what the server draws, so it is
+ * what a reader sees with no JavaScript, or one who asked for less motion; the
+ * count only replaces it while it runs.
+ */
+const COUNT_MS = 1400;
+
+function CountToInfinity({ value = '∞' }) {
+  const [shown, setShown] = useState(value);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let frame = 0;
+    let started = 0;
+    const tick = (now) => {
+      started ||= now;
+      const part = Math.min(1, (now - started) / COUNT_MS);
+      // Fast at first, easing into the last few, then the mark itself.
+      const eased = 1 - (1 - part) ** 3;
+      if (part < 1) {
+        setShown(String(Math.round(eased * 99)));
+        frame = requestAnimationFrame(tick);
+      } else {
+        setShown(value);
+        node.classList.add('is-settled');
+      }
+    };
+
+    const watcher = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      watcher.disconnect();
+      setShown('0');
+      frame = requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    watcher.observe(node);
+
+    return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
+  }, [value]);
+
+  return <strong className="home-figure-value" ref={ref} aria-label={value} data-cms-path={cms(contentPath('homeFigure', 'value'))}>{shown}</strong>;
+}
+
 /* ------------------------------------------------------- proof and logos */
 
 function LogoCard({ logo, index, duplicate = false }) {
@@ -236,7 +283,7 @@ const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
 
 function CategoryTiles() {
   return <section className="section home-tiles">
-    <div className="home-tiles-head">
+    <div className="home-tiles-head" data-reveal>
       <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
     </div>
     <div className="home-tile-grid">
@@ -244,6 +291,8 @@ function CategoryTiles() {
         key={category.id}
         className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}`}
         href={`/mySOS/products/?category=${category.id}`}
+        data-reveal
+        style={{ '--reveal-delay': `${index * 60}ms` }}
       >
         <Icon name={category.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
         <span className="home-tile-body">
@@ -259,11 +308,11 @@ function WhyBand() {
   const reasons = siteContent.benefits.slice(0, 4);
   return <section className="home-why">
     <div className="home-why-inner">
-      <div className="home-why-head">
+      <div className="home-why-head" data-reveal>
         <h2 data-cms-path={cms(headingPath('benefitsHeading'))}>{heading('benefitsHeading', 'Why choose MySOS?')}</h2>
       </div>
       <ol className="home-why-grid">
-        {reasons.map((reason, index) => <li key={reason.icon}>
+        {reasons.map((reason, index) => <li key={reason.icon} data-reveal style={{ '--reveal-delay': `${index * 80}ms` }}>
           <span className="home-why-number">{two(index + 1)}</span>
           <Icon name={reason.cardIcon || reason.icon} size={26} cmsPath={contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon')} />
           <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle || reason.title}</h3>
@@ -289,7 +338,7 @@ function BudgetFinder() {
   const ask = `Hi MySOS, I am planning about ${quantity} pieces at ${band.label} per person. ${band.title}.`;
 
   return <section className="section home-budget">
-    <div className="home-budget-card">
+    <div className="home-budget-card" data-reveal>
       <div className="home-budget-copy">
         <span className="eyebrow" data-cms-path={cms(headingPath('budgetEyebrow'))}>{heading('budgetEyebrow', 'Find by budget')}</span>
         <h2 data-cms-path={cms(headingPath('budgetHeading'))}>{heading('budgetHeading', 'Know the budget, not the product?')}</h2>
@@ -328,7 +377,7 @@ function BudgetFinder() {
 function SelectedWork({ stories }) {
   if (!stories.length) return null;
   return <section className="section home-work">
-    <div className="home-work-head">
+    <div className="home-work-head" data-reveal>
       <h2 data-cms-path={cms(headingPath('storiesHeading'))}>{heading('storiesHeading', 'Real projects. Real results.')}</h2>
       <a className="text-link" href="/mySOS/success-stories/">
         <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
@@ -336,7 +385,7 @@ function SelectedWork({ stories }) {
       </a>
     </div>
     <div className="home-work-grid">
-      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`}>
+      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`} data-reveal style={{ '--reveal-delay': `${index * 90}ms` }}>
         <span className="home-work-tag">{story.category.replace('-', ' ')}</span>
         <span className="home-work-shot"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/cover`)} label={`${story.title} project`} /></span>
         <h3>{story.title}</h3>
@@ -363,7 +412,7 @@ function ProcessRail() {
   const reached = steps.length > 1 ? active / (steps.length - 1) : 0;
 
   return <section className="section home-process">
-    <div className="home-process-head">
+    <div className="home-process-head" data-reveal>
       <h2 data-cms-path={cms(headingPath('processHeading'))}>{heading('processHeading', 'How it works')}</h2>
     </div>
     <div className="home-process-card">
@@ -375,7 +424,7 @@ function ProcessRail() {
         </li>)}
       </ol>
       <div className="home-process-rail" ref={scrollerRef} role="region" aria-label="How a MySOS order works, one step per card. Scroll sideways to move between them." tabIndex={0}>
-        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined}>
+        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined} data-reveal style={{ '--reveal-delay': `${index * 60}ms` }}>
           <span className="home-process-shot"><Photo style="studio" image={processPhoto(step)} imagePath={contentPath('process', index, 'image')} label={step.headline || step.title} wide /></span>
           <span className="home-process-label">{two(index + 1)} · <span data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span></span>
           <h3 data-cms-path={cms(contentPath('process', index, 'headline'))}>{step.headline || step.title}</h3>
@@ -388,7 +437,7 @@ function ProcessRail() {
 
 function ClosingBand() {
   return <section className="home-closing">
-    <div className="home-closing-inner">
+    <div className="home-closing-inner" data-reveal>
       <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
       <div>
         <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
@@ -404,6 +453,7 @@ export default function HomePage() {
   const featuredStories = useMemo(() => getStories().filter((story) => story.featured).slice(0, 2), []);
   const slides = heroSlides();
   const stats = siteContent.homeStats ?? [];
+  const figure = siteContent.homeFigure ?? null;
 
   return <main className="home-page">
     <CategoryStrip />
@@ -424,11 +474,18 @@ export default function HomePage() {
     </section>
 
     {stats.length > 0 && <section className="home-stats">
-      {stats.map((stat, index) => <div key={stat.value}>
-        {stat.icon && <span className="home-stat-icon"><Icon name={stat.icon} size={22} cmsPath={contentPath('homeStats', index, 'icon')} /></span>}
-        <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
-        {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
-      </div>)}
+      {figure && <div className="home-figure" data-reveal>
+        <CountToInfinity value={figure.value} />
+        <span className="home-figure-label" data-cms-path={cms(contentPath('homeFigure', 'label'))}>{figure.label}</span>
+        {figure.note && <small data-cms-path={cms(contentPath('homeFigure', 'note'))}>{figure.note}</small>}
+      </div>}
+      <ul className="home-stat-list">
+        {stats.map((stat, index) => <li key={stat.value} data-reveal style={{ '--reveal-delay': `${(index + 1) * 80}ms` }}>
+          {stat.icon && <Icon name={stat.icon} size={19} cmsPath={contentPath('homeStats', index, 'icon')} />}
+          <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
+          {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
+        </li>)}
+      </ul>
     </section>}
 
     <TrustStrip />

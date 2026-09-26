@@ -239,12 +239,37 @@ describe('the home banner and the sections under it', () => {
     expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
   });
 
-  it('gives each promise a mark of its own, not a stray glyph', () => {
-    // The row opened with a drawn infinity sign, which read as a typo.
+  it('opens the promises with a figure that counts up, then each with its mark', () => {
     const markup = render(HomePage, '/mySOS/');
-    expect(markup).not.toContain('∞');
-    expect([...markup.matchAll(/class="home-stat-icon"/g)]).toHaveLength(siteContent.homeStats.length);
-    for (const stat of siteContent.homeStats) expect(stat.icon, stat.value).toBeTruthy();
+    // The figure the server draws is the mark itself, so a reader with no
+    // JavaScript — or one who asked for less motion — sees it, not a zero.
+    expect(markup).toContain(`>${siteContent.homeFigure.value}</strong>`);
+    expect(markup).toContain(siteContent.homeFigure.label);
+    expect(home).toMatch(/setShown\(String\(Math\.round\(eased \* 99\)\)\)/);
+    expect(home).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
+    // Each promise keeps its own mark, and the row is a plain divided row now.
+    expect([...markup.matchAll(/class="home-stat-list"/g)]).toHaveLength(1);
+    for (const stat of siteContent.homeStats) {
+      expect(stat.icon, stat.value).toBeTruthy();
+      expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
+    }
+  });
+
+  it('brings sections in as they are reached, and never leaves them hidden', () => {
+    const reveal = readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8');
+    // The hidden state hangs off a class the script adds, so a page whose
+    // JavaScript never runs shows everything.
+    expect(css).toMatch(/html\.has-reveal \[data-reveal\] \{ opacity: 0; transform: translateY\(18px\); \}/);
+    expect(reveal).toMatch(/classList\.add\(HIDE_CLASS\)/);
+    expect(reveal).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return \(\) => \{\};/);
+    // And where the observer never reports, everything is shown anyway.
+    expect(reveal).toMatch(/const safety = setTimeout\(\(\) => \{/);
+    expect(reveal).toMatch(/for \(const node of root\.querySelectorAll\('\[data-reveal\]'\)\) node\.classList\.add\(SEEN\);/);
+    expect(render(HomePage, '/mySOS/')).toMatch(/data-reveal/);
+  });
+
+  it('turns the category pills dark green under the cursor', () => {
+    expect(css).toMatch(/\.category-strip ul a:hover \{ background: var\(--green-dark\); color: #fff; \}/);
   });
 
   it('sets the reviews at a size people can read', () => {

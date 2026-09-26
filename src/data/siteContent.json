@@ -1402,5 +1402,10 @@
       "title": "What file formats do you accept?",
       "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
-  ]
+  ],
+  "homeFigure": {
+    "value": "∞",
+    "label": "Products",
+    "note": "One supplier, endless possibilities."
+  }
 }
