@@ -1,7 +1,7 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-09-19T21:27:42.962Z",
+  "fetchedAt": "2026-09-26T21:57:26.869Z",
   "averageRating": 5,
   "totalReviewCount": 87,
   "reviews": [
