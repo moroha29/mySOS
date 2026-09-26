@@ -344,11 +344,15 @@ function ClosingBand() {
   return <section className="home-closing">
     <div className="home-closing-inner">
       <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
-      <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
-      <Button href={REQUEST_PATH} variant="light">
-        <span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span>
-        <Icon name="arrowRight" size={16} className="inline-arrow" />
-      </Button>
+      <div>
+        <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
+        <div className="home-closing-actions">
+          <Button href={REQUEST_PATH}>
+            <span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span>
+            <Icon name="arrowRight" size={16} className="inline-arrow" />
+          </Button>
+        </div>
+      </div>
     </div>
   </section>;
 }

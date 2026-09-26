@@ -104,7 +104,9 @@ describe('one look across the pages', () => {
     expect(css).toMatch(/\.product-card, \.story-card, \.solution-card[\s\S]*?border-radius: 22px;/);
     // The printing methods band matches the homepage's navy one.
     expect(css).toMatch(/\.capabilities \{ background: var\(--navy\); \}/);
-    expect(css).toMatch(/\.page-cta \{ background: linear-gradient\(120deg, #046b45/);
+    // The closing band is flat green with a navy button, as the concept has it.
+    expect(css).toMatch(/\.page-cta, \.home-closing \{ background: #046b45; \}/);
+    expect(css).toMatch(/\.page-cta \.btn, \.home-closing \.btn \{[^}]*background: var\(--navy\)/);
   });
 
   it('shares one strip of categories between the homepage and products', () => {
