@@ -23,7 +23,8 @@
     "budgetQuantityLabel": "Estimated quantity",
     "budgetQuestionLabel": "What is your budget per person?",
     "budgetSeeIdeasLabel": "See matching ideas",
-    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery."
+    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery.",
+    "returnToQuoteButton": "Return to my request"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -603,7 +604,8 @@
       "infoEyebrow": "Product information",
       "infoTitle": "Everything important, kept simple.",
       "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
-      "relatedTitle": "More in this category"
+      "relatedTitle": "More in this category",
+      "addedButton": "In your request"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -752,7 +754,9 @@
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
       "showFewerLabel": "Show fewer",
       "printingPlaceholder": "Choose a printing method…",
-      "printingOtherHint": "Describe the printing you have in mind in the notes below."
+      "printingOtherHint": "Describe the printing you have in mind in the notes below.",
+      "keptNote": "Your request is kept on this device, so you can leave and come back to it.",
+      "startOverButton": "Start a new request"
     }
   },
   "apparelTabs": [

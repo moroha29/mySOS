@@ -7,7 +7,7 @@ import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, heading, label, Photo, Testimonials, useGoogleReviews } from '../components/Ui';
+import { Button, heading, label, Photo, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
@@ -100,7 +100,7 @@ function HeroSearch() {
         onChange={(event) => setAsked(event.target.value)}
       />
       <a className="btn btn-primary" href={asked.trim() ? href : REQUEST_PATH}>
-        <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find it for me')}</span>
+        <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find My Solution')}</span>
       </a>
     </form>
     <ul className="hero-chips">
@@ -332,12 +332,7 @@ function ClosingBand() {
       <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
       <div>
         <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
-        <div className="home-closing-actions">
-          <Button href={REQUEST_PATH}>
-            <span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span>
-            <Icon name="arrowRight" size={16} className="inline-arrow" />
-          </Button>
-        </div>
+        <div className="home-closing-actions"><QuoteButton showArrow /></div>
       </div>
     </div>
   </section>;

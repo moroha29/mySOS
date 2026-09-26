@@ -52,6 +52,7 @@ export default function RequestPage() {
     </section>
 
     <RequestBuilder
+      remember
       startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, details: { colour: chosen.colour, printing: chosen.printing } }] : []}
       startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}

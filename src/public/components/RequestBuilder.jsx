@@ -5,6 +5,7 @@ import {
   allFileNames, browseCategories, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
   packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, searchProducts, suggestionsFor,
 } from '../../utils/solutionRequest';
+import { clearSavedRequest, mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
 import { cms, pagePath } from '../cms';
 import Icon from './Icons';
 import { ProductShot } from './Ui';
@@ -215,6 +216,9 @@ export default function RequestBuilder({
   useCase = null,
   startWith = [],
   startNotes = '',
+  // The quote page keeps what is in it between visits; a solution page is a
+  // recommendation to start from, so it does not.
+  remember = false,
   title = word('packageTitle', 'Your Recommended Team Package'),
   titlePath = wordPath('packageTitle'),
   lead = word('packageLead'),
@@ -230,6 +234,9 @@ export default function RequestBuilder({
   const [custom, setCustom] = useState('');
   const [neededBy, setNeededBy] = useState('');
   const [notes, setNotes] = useState(startNotes);
+  // Nothing is read from storage while rendering: these pages are drawn ahead
+  // of time, and a first render that disagreed with the drawn page would flash.
+  const [restored, setRestored] = useState(false);
   const [files, setFiles] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [sent, setSent] = useState(null);
@@ -243,6 +250,30 @@ export default function RequestBuilder({
     browseRef.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
     browseRef.current?.focus?.({ preventScroll: true });
   }, [browseAsked]);
+
+  /*
+   * What this browser already had, plus whatever product they arrived on. The
+   * arrival is merged in rather than replacing the list, so "add to my request"
+   * from a product page adds to the request instead of starting a new one.
+   */
+  useEffect(() => {
+    if (!remember || restored) return;
+    const saved = readSavedRequest();
+    const arrivals = startWith.filter((item) => productFor(item.productId));
+    if (saved?.lines?.length) {
+      const kept = arrivals.reduce((lines, arrival) => mergeArrival(lines, arrival), saved.lines);
+      setLines(kept.map((line) => makeLine(line, 'saved')));
+      if (saved.neededBy) setNeededBy(saved.neededBy);
+      if (saved.notes && !startNotes) setNotes(saved.notes);
+    }
+    setRestored(true);
+  }, [remember, restored, startWith, startNotes]);
+
+  // Every change is kept, so leaving the page does not lose the request.
+  useEffect(() => {
+    if (!remember || !restored) return;
+    writeSavedRequest({ lines, neededBy, notes });
+  }, [remember, restored, lines, neededBy, notes]);
 
   // A different use case starts again from its own recommendation.
   useEffect(() => {
@@ -305,6 +336,7 @@ export default function RequestBuilder({
       try {
         await navigator.share({ files: attached, text: message });
         setSent('shared');
+        if (remember) clearSavedRequest();
       } catch {
         // Cancelled, or sharing failed: fall back to the chat link.
         if (href) window.open(href, '_blank', 'noreferrer');
@@ -335,6 +367,14 @@ export default function RequestBuilder({
           </button>
           <small data-cms-path={wordPath('applyAllHint')}>{word('applyAllHint')}</small>
         </div>
+
+        {remember && lines.length > 0 && <p className="request-kept">
+          <Icon name="checkCircle" size={16} />
+          <span data-cms-path={wordPath('keptNote')}>{word('keptNote', 'Your request is kept on this device, so you can leave and come back to it.')}</span>
+          <button type="button" onClick={() => { clearSavedRequest(); setLines([]); setNeededBy(''); setNotes(''); setFiles([]); }}>
+            <span data-cms-path={wordPath('startOverButton')}>{word('startOverButton', 'Start a new request')}</span>
+          </button>
+        </p>}
 
         {lines.length
           ? <ul className="request-rows">
