@@ -41,10 +41,9 @@ export function Button({ href, children, variant = 'primary', className = '', ..
 export function QuoteButton({ variant = 'primary', className = '', showArrow = false, ...rest }) {
   const waiting = useSavedRequest();
   const key = waiting ? 'returnToQuoteButton' : 'heroQuoteButton';
-  const text = waiting ? label('returnToQuoteButton', 'Return to my request') : label('heroQuoteButton', 'Get a Quote');
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label('heroQuoteButton', 'Get a Quote');
   return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
     <span data-cms-path={cms(labelPath(key))}>{text}</span>
-    {waiting ? <span className="quote-count" aria-label={`${waiting} products in your request`}>{waiting}</span> : null}
     {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}
   </Button>;
 }

@@ -97,19 +97,15 @@ function NavigationItem({ item, index, onNavigate }) {
 
 /*
  * "Get a Quote" opens the site's own request page, where a customer says what
- * they need — never the agents' quotation engine. Once a request is waiting in
- * this browser, the button offers the way back to it instead, with the number
- * of products in it. The count is read after the page loads, so the drawn page
- * and the first render agree.
+ * they need — never the agents' quotation engine. Once a quote is waiting in
+ * this browser, the button offers the way back into it instead. The count is
+ * deliberately not on the button: it made it wider than everything beside it.
  */
 function HeaderQuoteButton({ className }) {
   const waiting = useSavedRequest();
   const key = waiting ? 'returnToQuoteButton' : 'headerQuoteButton';
-  const text = waiting ? label('returnToQuoteButton', 'Return to my request') : label('headerQuoteButton', 'Get a Quote');
-  return <a className={className} href={REQUEST_PATH} data-cms-paths={cmsAll(labelPath(key))}>
-    {text}
-    {waiting ? <span className="quote-count" aria-label={`${waiting} products in your request`}>{waiting}</span> : null}
-  </a>;
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label('headerQuoteButton', 'Get a Quote');
+  return <a className={className} href={REQUEST_PATH} data-cms-paths={cmsAll(labelPath(key))}>{text}</a>;
 }
 
 // Several fields hold "/mySOS/" — the site's base path and the placeholder

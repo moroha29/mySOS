@@ -5,7 +5,9 @@ import {
   allFileNames, browseCategories, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
   packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, searchProducts, suggestionsFor,
 } from '../../utils/solutionRequest';
+import { REQUEST_PATH } from '../../utils/catalogue';
 import { clearSavedRequest, mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
+import useSavedRequest from '../useSavedRequest';
 import { cms, pagePath } from '../cms';
 import Icon from './Icons';
 import { ProductShot } from './Ui';
@@ -237,6 +239,8 @@ export default function RequestBuilder({
   // Nothing is read from storage while rendering: these pages are drawn ahead
   // of time, and a first render that disagreed with the drawn page would flash.
   const [restored, setRestored] = useState(false);
+  // A recommended package is not the customer's quote until they say so.
+  const waiting = useSavedRequest();
   const [files, setFiles] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [sent, setSent] = useState(null);
@@ -322,6 +326,21 @@ export default function RequestBuilder({
   const message = buildRequestMessage({ solutionName: topic, useCaseName: useCase?.name ?? '', lines, neededBy, notes, fileNames });
   const href = requestHref(message, topic);
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
+
+  /*
+   * Putting this package into the customer's own quote: beside what is already
+   * there, or in place of it. Either way the quote page is where they land,
+   * because that is where the whole request is.
+   */
+  const addToQuote = (how) => {
+    const rows = lines.map((line) => ({
+      productId: line.productId, name: line.name, note: line.note,
+      quantity: line.quantity, details: line.details, detailNotes: line.detailNotes,
+    }));
+    const existing = how === 'replace' ? [] : readSavedRequest()?.lines ?? [];
+    writeSavedRequest({ lines: rows.reduce((kept, row) => mergeArrival(kept, row), existing) });
+    globalThis.location?.assign?.(REQUEST_PATH);
+  };
 
   /*
    * A chat link cannot carry files. Where the device can share files (most
@@ -478,6 +497,25 @@ export default function RequestBuilder({
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
+
+        {/*
+          * A recommended package. It can join the quote the customer is
+          * already building, or take its place — their call, not ours.
+          */}
+        {!remember && lines.length > 0 && <div className="request-to-quote">
+          {waiting > 0 && <p data-cms-path={wordPath('quoteHasItemsNote')}>
+            {fill(word('quoteHasItemsNote', 'You already have {count} in your quote.'), { count: `${waiting} ${waiting === 1 ? 'product' : 'products'}` })}
+          </p>}
+          <div className="request-to-quote-actions">
+            <button type="button" className="btn btn-secondary" onClick={() => addToQuote('add')}>
+              <Icon name="plus" size={16} />
+              <span data-cms-path={wordPath('addToQuoteButton')}>{word('addToQuoteButton', 'Add to quote')}</span>
+            </button>
+            {waiting > 0 && <button type="button" className="btn btn-outline" onClick={() => addToQuote('replace')}>
+              <span data-cms-path={wordPath('replaceQuoteButton')}>{word('replaceQuoteButton', 'Replace quote')}</span>
+            </button>}
+          </div>
+        </div>}
 
         {href && lines.length > 0
           ? <a className="btn btn-primary btn-whatsapp request-send" href={href} {...enquiryLinkProps(href)} onClick={send}>

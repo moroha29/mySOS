@@ -1486,9 +1486,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .pdp-add { width: 100%; height: 56px; margin-top: 16px; border-radius: 999px; font-size: 17px; }
 .pdp-ask { margin-top: 12px; text-align: center; font-size: 15.5px; color: var(--muted); }
 
-/* How many products are waiting in the request, on the button back into it. */
-.quote-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; margin-left: 2px; padding: 0 6px; border-radius: 999px; background: rgba(255, 255, 255, .24); font-size: 13.5px; font-weight: 800; }
-.btn-outline .quote-count, .btn-light .quote-count { background: rgba(14, 47, 120, .12); color: var(--navy); }
+/* A recommended package joining the customer's own quote, or replacing it. */
+.request-to-quote { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.request-to-quote p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.5; color: var(--muted); }
+.request-to-quote-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.request-to-quote-actions .btn { flex: 1 1 auto; min-width: 150px; border-radius: 999px; }
 
 /* The line that says the request is kept, and the way to start a new one. */
 .request-kept { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 0 4px; padding: 12px 14px; border-radius: 12px; background: #e9f6ef; font-size: 14.5px; line-height: 1.5; color: #14543c; }
