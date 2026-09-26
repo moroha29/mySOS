@@ -160,7 +160,7 @@ function StoryReviews() {
 function ProjectMosaic({ stories, page, pages, onPage }) {
   const start = (page - 1) * PAGE_SIZE;
   const shown = stories.slice(start, start + PAGE_SIZE);
-  return <div className="projects-panel">
+  return <div className="projects-panel" data-reveal>
     <div className="projects-mosaic">
       {shown.map((story, index) => <a key={story.slug} className={index === 0 ? 'project-tile is-large' : 'project-tile'} href={storyHref(story)}>
         <Photo style={story.imageStyle} label={`${story.title} project`} image={storyPicture(story)} imagePath={storyPath(story, 'image')} wide={index === 0} />
@@ -209,7 +209,7 @@ function CategoryShowcase({ stories }) {
   const go = (next) => setIndex((next + stories.length) % stories.length);
   const highlights = story.highlights ?? [];
 
-  return <div className="projects-panel">
+  return <div className="projects-panel" data-reveal>
     <article className="project-feature">
       <a className="project-feature-media" href={storyHref(story)} tabIndex={-1} aria-hidden="true">
         <Photo style={story.imageStyle} label={`${story.title} project`} image={storyPicture(story)} imagePath={storyPath(story, 'image')} wide />

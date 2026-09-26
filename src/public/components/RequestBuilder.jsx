@@ -375,7 +375,7 @@ export default function RequestBuilder({
     </div>
 
     <div className="request-layout">
-      <div className="request-main">
+      <div className="request-main" data-reveal>
         <h3 data-cms-path={wordPath('includedTitle')}>{includedTitle}</h3>
 
         <div className="request-same">
@@ -470,7 +470,7 @@ export default function RequestBuilder({
         </div>
       </div>
 
-      <aside className="request-summary" aria-labelledby="summary-title">
+      <aside className="request-summary" aria-labelledby="summary-title" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <h3 id="summary-title" data-cms-path={wordPath('summaryTitle')}>{word('summaryTitle', 'Your Request')}</h3>
         <p className="request-count">{fill(word('summaryCountLabel', '{count} products selected'), { count: lines.length })}</p>
         <ul className="request-summary-list">

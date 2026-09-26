@@ -5,7 +5,7 @@ import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pag
 import { getPublicProduct } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Product } from '../components/Visuals';
-import { Button, enquiryProps, heading, label, Photo, ProductCard, SectionHeading, SolutionCard } from '../components/Ui';
+import { Button, heading, label, Photo, ProductCard, QuoteButton, SectionHeading, SolutionCard } from '../components/Ui';
 
 export default function SolutionsPage() {
   const industryId = new URLSearchParams(globalThis.location?.search ?? '').get('industry');
@@ -50,7 +50,7 @@ export default function SolutionsPage() {
 
     <section className="section section-tight">
       <div className="solution-grid">
-        {solutions.map((solution) => <SolutionCard key={solution.id} solution={solution} active={selected?.id === solution.id} />)}
+        {solutions.map((solution, index) => <SolutionCard key={solution.id} solution={solution} active={selected?.id === solution.id} reveal={index} />)}
       </div>
     </section>
 
@@ -71,11 +71,11 @@ export default function SolutionsPage() {
     </section>
 
     <section className="promo-band">
-      <div className="promo-copy">
+      <div className="promo-copy" data-reveal>
         <span className="eyebrow" data-cms-path={cms(pagePath('solutions', 'promoEyebrow'))}>{pageText('solutions', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('solutions', 'promoTitle'))}>{pageText('solutions', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('solutions', 'promoDescription'))}>{pageText('solutions', 'promoDescription')}</p>
-        <Button {...enquiryProps}><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <QuoteButton showArrow />
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.solutionsPromoImage, 'scenes/solutions-promo')} imagePath={scenePath('solutionsPromoImage')} /></div>
     </section>

@@ -4,7 +4,7 @@ import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
-import { enquiryLinkProps, getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import { getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
 import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
@@ -91,10 +91,15 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
 
 /* -------------------------------------------------------------------- cards */
 
-// A product card opens that product's own page, where the request is built.
-export function ProductCard({ product }) {
+/*
+ * A product card opens that product's own page, where the request is built.
+ * `reveal` is its place in the row, so a grid of them arrives in order rather
+ * than all at once.
+ */
+export function ProductCard({ product, reveal }) {
   const price = getDisplayPrice(product);
-  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`}>
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 50}ms` } } : {};
+  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`} {...arriving}>
     <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
     <h3>{product.public.name}</h3>
     {price && <p className="price">{price}</p>}
@@ -114,9 +119,10 @@ export function CategoryCard({ category }) {
   </a>;
 }
 
-export function StoryCard({ story, showBadge = true }) {
+export function StoryCard({ story, showBadge = true, reveal }) {
   const href = `/mySOS/success-stories/${story.slug}/`;
-  return <article className="story-card">
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
+  return <article className="story-card" {...arriving}>
     <a className="story-card-media" href={href}>
       <Photo style={story.imageStyle} label={`${story.title} project`} image={picture(story.image, `stories/${story.slug}/cover`)} imagePath={storyPath(story, 'image')} />
       {showBadge && <span className="badge">{story.category.replace('-', ' ')}</span>}
@@ -129,9 +135,10 @@ export function StoryCard({ story, showBadge = true }) {
   </article>;
 }
 
-export function SolutionCard({ solution, active = false }) {
+export function SolutionCard({ solution, active = false, reveal }) {
   const href = `/mySOS/solutions/${solution.id}/`;
-  return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()}>
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
+  return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()} {...arriving}>
     <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} image={picture(solution.image, `solutions/${solution.id}`)} imagePath={solutionPath(solution, 'image')} /></a>
     <div>
       <h3 data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name}</h3>
@@ -264,7 +271,7 @@ export function PageCTA({
   showWhatsApp = true,
 }) {
   return <section className="page-cta">
-    <div className="page-cta-inner">
+    <div className="page-cta-inner" data-reveal>
       <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
       <div>
         <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
