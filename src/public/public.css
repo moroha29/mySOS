@@ -48,7 +48,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* A picture uploaded in place of a drawn icon: fitted inside the icon's square, never stretched or cropped. */
 .icon-picture { object-fit: contain; }
 
-.site-app { width: min(100%, 1700px); margin: 0 auto; min-height: 100vh; background: var(--surface); box-shadow: 0 0 48px rgba(9, 28, 72, .08); overflow-x: clip; position: relative; }
+.site-app { width: min(100%, 1700px); margin: 0 auto; min-height: calc(100vh - 44px); background: var(--surface); box-shadow: 0 0 48px rgba(9, 28, 72, .08); position: relative; }
+/* Everything except the top strip stays inside the column. */
+.site-app > main, .site-app > .site-footer { overflow-x: clip; }
 
 /* ============================================== 2. type & shared primitives */
 /* Type scale: titles carry the page, body text sits quietly under them.
@@ -1225,7 +1227,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-page, .page-paper { background: var(--paper); }
 .home-page .section { padding-top: 64px; padding-bottom: 64px; }
 
-.home-announce { padding: 11px 24px; background: var(--navy-deep); color: #dfe7f8; font-size: 14px; font-weight: 600; text-align: center; }
+/* Edge to edge, above everything: it sits outside the page column, which used
+   to cut it off halfway across a wide screen. */
+.site-announce { padding: 11px 24px; background: var(--navy-deep); color: #dfe7f8; font-size: 14px; font-weight: 600; text-align: center; }
 
 .home-quicknav { background: #fff; border-bottom: 1px solid var(--line); }
 .home-quicknav-inner { max-width: var(--content); margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; }
@@ -1399,7 +1403,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 @media (max-width: 620px) {
   .home-page .section { padding: 44px 18px; }
   .home-hero-inner { padding: 32px 18px 40px; }
-  .home-announce { font-size: 13px; }
+  .site-announce { font-size: 13px; }
   /* The strip scrolls sideways on a phone; the trailing link would eat the
      width the category names need, and the menu carries it anyway. */
   .home-quicknav-inner { padding-inline: 18px; }

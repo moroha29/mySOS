@@ -360,8 +360,6 @@ export default function HomePage() {
   const stats = siteContent.homeStats ?? [];
 
   return <main className="home-page">
-    <p className="home-announce" data-cms-path={cms(contentPath('announcement'))}>{siteContent.announcement}</p>
-
     <nav className="home-quicknav" aria-label="Product categories">
       <div className="home-quicknav-inner">
         <ul>
