@@ -144,12 +144,19 @@ describe('the home banner and the sections under it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('asks what the visitor needs, and sends the answer to the request page', () => {
+  it('keeps the wording the client chose, and sends the answer to the request page', () => {
     const markup = render(HomePage, '/mySOS/');
-    expect(markup).toContain('Tell us what you need.');
+    // The banner is their own headline and lead, not the concept's stand-in
+    // copy, and the search suggestions are their own popular solutions.
+    expect(markup).toContain(siteContent.headings.heroTitle);
+    expect(markup).toContain(siteContent.headings.heroTitleAccent);
+    expect(markup).toContain(siteContent.headings.heroLead);
+    expect(markup).not.toContain('Tell us what you need.');
     expect(markup).toContain('class="hero-search"');
-    // Both the button and the suggestion chips open a request, never a chat.
-    expect(markup).toContain('href="/mySOS/request/?ask=Company%20welcome%20packs"');
+    for (const chip of siteContent.heroSearchChips) {
+      expect(siteContent.popularSolutions.some((item) => item.name === chip), chip).toBe(true);
+      expect(markup).toContain(`/mySOS/request/?ask=${encodeURIComponent(chip)}`);
+    }
     expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
     expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
   });
@@ -189,6 +196,19 @@ describe('the home banner and the sections under it', () => {
     expect(css).toMatch(/\.home-tile-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
     const phone = css.slice(css.indexOf('@media (max-width: 620px)', css.indexOf('20. homepage')));
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
+  });
+
+  it('titles every section with the heading the client already wrote', () => {
+    const markup = render(HomePage, '/mySOS/');
+    for (const key of ['categoriesHeading', 'benefitsHeading', 'storiesHeading', 'processHeading', 'closingCtaTitle']) {
+      expect(markup, key).toContain(siteContent.headings[key]);
+    }
+    // The concept's own headings are gone from the content altogether.
+    for (const key of ['homeWhyHeading', 'homeWorkHeading', 'homeProcessHeading', 'heroTitleLead']) {
+      expect(siteContent.headings, key).not.toHaveProperty(key);
+    }
+    // The four promises are the ones they list, nothing invented about them.
+    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(siteContent.heroPromises);
   });
 
   it('sets the page in the typeface the concept uses', () => {

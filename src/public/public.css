@@ -1292,8 +1292,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-review .text-link { flex: none; }
 
 /* what can we make for you */
-.home-tiles-head { margin-bottom: 30px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 36px; align-items: end; }
-.home-tiles-head h2 { margin-top: 12px; font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+.home-tiles-head { margin-bottom: 30px; }
+.home-tiles-head h2 { font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
 .home-tiles-head p { font-size: 17px; line-height: 1.65; color: var(--muted); }
 .home-tile-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .home-tile { display: flex; flex-direction: column; justify-content: space-between; min-height: 230px; padding: 24px; border-radius: 22px; transition: transform .16s, box-shadow .16s; }
@@ -1311,9 +1311,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 /* why mysos */
 .home-why { background: var(--navy); color: #fff; }
 .home-why-inner { max-width: var(--content); margin: 0 auto; padding: 72px 24px 78px; }
-.home-why-head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 36px; align-items: end; }
+.home-why-head { margin-bottom: 4px; }
 .home-why-head .eyebrow { color: #9fb8e6; }
-.home-why-head h2 { margin-top: 12px; font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: #fff; }
+.home-why-head h2 { font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: #fff; }
 .home-why-head p { font-size: 17px; line-height: 1.65; color: #d4dff1; }
 .home-why-grid { margin-top: 42px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(255, 255, 255, .22); }
 .home-why-grid li { padding: 26px 26px 30px; border-bottom: 1px solid rgba(255, 255, 255, .22); }
@@ -1342,10 +1342,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-budget-note { margin-top: 14px; font-size: 14.5px; line-height: 1.5; color: var(--muted-light); }
 
 /* selected work */
-.home-work-head, .home-process-head { margin-bottom: 30px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 36px; align-items: end; }
-.home-work-head h2, .home-process-head h2 { margin-top: 12px; font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
-.home-work-head .text-link, .home-process-head p { justify-self: end; }
-.home-process-head p { max-width: 420px; font-size: 17px; line-height: 1.65; color: var(--muted); }
+.home-work-head, .home-process-head { margin-bottom: 30px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 16px 36px; }
+.home-work-head h2, .home-process-head h2 { font-size: clamp(30px, 3.2vw, 46px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
 .home-work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .home-work-card { position: relative; display: block; padding: 24px; border-radius: 26px; transition: transform .16s, box-shadow .16s; }
 .home-work-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
@@ -1391,8 +1389,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .home-budget-card { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 30px; }
   .home-budget-quantity { align-items: flex-start; }
   .home-work-grid { grid-template-columns: minmax(0, 1fr); }
-  .home-tiles-head, .home-why-head, .home-work-head, .home-process-head { grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
-  .home-work-head .text-link, .home-process-head p { justify-self: start; }
+  .home-work-head, .home-process-head { gap: 12px; }
 }
 
 @media (max-width: 620px) {

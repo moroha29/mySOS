@@ -16,8 +16,8 @@
     "reviewsFallbackLabel": "Reviews from Google",
     "reviewsCountPrefix": "Based on",
     "reviewsCountSuffix": "reviews",
-    "heroSearchPlaceholder": "Try: 200 event kits under $15 each",
-    "heroSearchButton": "Find it for me",
+    "heroSearchPlaceholder": "Tell us what you're planning",
+    "heroSearchButton": "Find My Solution",
     "quickNavAllLabel": "View all products",
     "workDiscussLabel": "Discuss your project",
     "budgetQuantityLabel": "Estimated quantity",
@@ -44,19 +44,6 @@
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
     "whyProcessHeading": "Our process",
-    "heroEyebrow": "Custom printing and merchandise solutions in Singapore",
-    "heroTitleLead": "Tell us what you need.",
-    "heroTitleAccentLong": "We'll source the rest.",
-    "homeWorkHeading": "Complex orders. Simple solutions.",
-    "homeWorkEyebrow": "Selected work",
-    "homeProcessEyebrow": "How it works",
-    "homeProcessHeading": "From brief to delivery.",
-    "homeProcessLead": "Move through each stage to see how your project progresses.",
-    "homeWhyEyebrow": "Why MySOS",
-    "homeWhyHeading": "One team. Every step handled.",
-    "homeWhyLead": "What working with MySOS means, from the first message to the delivery.",
-    "homeTilesEyebrow": "Explore products",
-    "homeTilesLead": "Start with a category, or tell us about the project in the search above. We will guide you to the right specifications.",
     "budgetEyebrow": "Find by budget",
     "budgetHeading": "Know the budget, not the product?",
     "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size."
@@ -609,13 +596,13 @@
       "mockupTitle": "Free visual mockup before production",
       "mockupNote": "Your logo placement and print size are confirmed before we proceed.",
       "promises": [
-        "No minimum for enquiry",
-        "Free mockup",
-        "Local support"
+        "Small & Bulk Orders",
+        "Product Recommendations",
+        "One-Stop Sourcing"
       ],
       "infoEyebrow": "Product information",
       "infoTitle": "Everything important, kept simple.",
-      "infoLead": "The final material, sizing and print method are confirmed with you before production. You get a visual mockup and a final quotation first.",
+      "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
       "relatedTitle": "More in this category"
     },
     "request": {
@@ -1300,36 +1287,32 @@
       }
     ]
   },
-  "announcement": "Custom printing and merchandise solutions for businesses, schools, events and communities",
+  "announcement": "You're One Step Away From Your Solution!",
   "heroSearchChips": [
-    "Company welcome packs",
-    "School camp tees",
-    "Last minute event gifts"
+    "Orientation Pack",
+    "Welcome Kit",
+    "Graduation Pack"
   ],
   "homeStats": [
     {
       "icon": "supplier",
-      "value": "One source",
-      "label": "",
-      "note": "Every product your organisation needs, from one team."
+      "value": "Small & Bulk Orders",
+      "note": ""
     },
     {
-      "icon": "award",
-      "value": "Quality assured",
-      "label": "",
-      "note": "Verified production errors replaced or reimbursed."
+      "icon": "expert",
+      "value": "Product Recommendations",
+      "note": ""
     },
     {
-      "icon": "calendar",
-      "value": "Within 1 day",
-      "label": "",
-      "note": "Response time, excluding Sundays."
+      "icon": "value",
+      "value": "One-Stop Sourcing",
+      "note": ""
     },
     {
-      "icon": "design",
-      "value": "Free mockups",
-      "label": "",
-      "note": "Visuals to approve before anything is produced."
+      "icon": "delivery",
+      "value": "On-Time Delivery",
+      "note": ""
     }
   ],
   "budgetBands": [
@@ -1368,10 +1351,6 @@
   "productFacts": {
     "default": [
       {
-        "label": "Material",
-        "value": "Confirmed with you before production"
-      },
-      {
         "label": "Branding",
         "value": "Printed or embroidered with your artwork"
       },
@@ -1380,59 +1359,35 @@
         "value": "Small runs to bulk orders"
       },
       {
-        "label": "Lead time",
-        "value": "Usually 7 to 14 working days"
-      }
-    ],
-    "tshirts": [
-      {
-        "label": "Material",
-        "value": "Premium combed cotton"
+        "label": "Mockup",
+        "value": "Sent for approval before production"
       },
       {
-        "label": "Fit",
-        "value": "Unisex regular fit"
-      },
-      {
-        "label": "Sizes",
-        "value": "XS to 5XL"
-      },
-      {
-        "label": "Lead time",
-        "value": "Usually 7 to 14 working days"
-      }
-    ],
-    "polos": [
-      {
-        "label": "Material",
-        "value": "Cotton pique or dri-fit"
-      },
-      {
-        "label": "Fit",
-        "value": "Unisex regular fit"
-      },
-      {
-        "label": "Sizes",
-        "value": "XS to 5XL"
-      },
-      {
-        "label": "Lead time",
-        "value": "Usually 7 to 14 working days"
+        "label": "Support",
+        "value": "One team from enquiry to delivery"
       }
     ]
   },
   "productInfoSections": [
     {
-      "title": "Size guide",
-      "body": "Sizes run from XS to 5XL on most apparel. Send us your size breakdown, or ask for a size set to measure against before you commit."
+      "title": "What is the minimum order quantity?",
+      "body": "Minimum quantities vary by product and customisation method. The quotation engine shows accurate options for the selected product."
     },
     {
-      "title": "Printing and artwork",
-      "body": "Send artwork as PNG, JPG or PDF, ideally at 300dpi or as a vector file. We check it, advise on the best print method and send a mockup before production."
+      "title": "How long is the production lead time?",
+      "body": "Most projects take two to four weeks after artwork and sample approval. Complex custom products may take longer."
     },
     {
-      "title": "Delivery and quality assurance",
-      "body": "Every order is checked before it leaves us, and verified production errors are replaced or reimbursed. Delivery across Singapore is arranged with your timeline in mind."
+      "title": "Can you help with design?",
+      "body": "Yes. We can advise on product selection, print placement and artwork preparation."
+    },
+    {
+      "title": "Do you ship internationally?",
+      "body": "International delivery can be arranged. Shipping is quoted separately based on destination and order size."
+    },
+    {
+      "title": "What file formats do you accept?",
+      "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
   ]
 }
