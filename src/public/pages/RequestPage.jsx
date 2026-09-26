@@ -16,7 +16,10 @@ import { Photo } from '../components/Ui';
  * a job, is a separate application and is never linked from here.
  */
 export default function RequestPage() {
-  const wanted = new URLSearchParams(globalThis.location?.search ?? '').get('product');
+  const params = new URLSearchParams(globalThis.location?.search ?? '');
+  const wanted = params.get('product');
+  // What someone typed into the homepage's search arrives here as their note.
+  const asked = (params.get('ask') ?? '').slice(0, 500);
   return <main className="solution-page request-page">
     <section {...heroBackground(siteContent.scenes?.requestHeroBackgroundImage, scenePath('requestHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
@@ -44,6 +47,7 @@ export default function RequestPage() {
 
     <RequestBuilder
       startWith={wanted ? [{ productId: wanted }] : []}
+      startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}
       titlePath={cms(pagePath('request', 'builderTitle'))}
       lead={pageText('request', 'builderLead')}

@@ -23,15 +23,14 @@ const render = (Page, pathname) => {
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
-  it('home: under the client logos, which sit right below the banner', () => {
+  it('home: the logos sit right under the banner, then the rating', () => {
     const markup = render(HomePage, '/mySOS/');
-    const banner = markup.indexOf('Custom Merchandise,');
-    const reviews = markup.indexOf('class="section reviews"');
+    const banner = markup.indexOf('class="home-hero"');
     const logos = markup.indexOf('class="trust-strip"');
+    const review = markup.indexOf('class="home-review"');
     expect(banner).toBeGreaterThan(-1);
     expect(logos).toBeGreaterThan(banner);
-    expect(reviews).toBeGreaterThan(logos);
-    expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
+    expect(review).toBeGreaterThan(logos);
   });
 
   it('why mysos: directly under the banner, above the reasons', () => {
@@ -114,51 +113,68 @@ describe('printing methods: "Our capabilities"', () => {
   });
 });
 
-describe('the home banner and the grids under it', () => {
+describe('the home banner and the sections under it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('runs a slideshow behind the banner, starting on a picture the server drew', () => {
+  it('asks what the visitor needs, and sends the answer to the request page', () => {
     const markup = render(HomePage, '/mySOS/');
-    const slides = [...markup.matchAll(/class="hero-slide( is-active)?"/g)];
-    expect(slides.length).toBeGreaterThan(1);
-    expect(slides.filter(([, active]) => active)).toHaveLength(1);
-    // The scrim goes over it, as with any banner picture, so white text reads.
-    expect(markup).toMatch(/class="hero hero-home has-background"/);
-    expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
-    expect(home).toMatch(/prefers-reduced-motion: reduce/);
-    expect(css).toMatch(/\.hero-slide \{[^}]*opacity: 0; transition: opacity/);
-    expect(css).toMatch(/\.hero-home \.hero-inner \{ min-height: 640px;/);
+    expect(markup).toContain('Tell us what you need.');
+    expect(markup).toContain('class="hero-search"');
+    // Both the button and the suggestion chips open a request, never a chat.
+    expect(markup).toContain('href="/mySOS/request/?ask=Company%20welcome%20packs"');
+    expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
+    expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
   });
 
-  it('leaves the photograph to carry the banner, with no drawn products on it', () => {
-    // The tote, jerseys and bottle were drawn over what is now a photograph.
+  it('runs the banner picture card as a slideshow, starting on one the server drew', () => {
     const markup = render(HomePage, '/mySOS/');
-    expect(markup).not.toContain('class="hero-art"');
+    const slides = [...markup.matchAll(/class="hero-card-slide( is-active)?"/g)];
+    expect(slides.length).toBeGreaterThan(1);
+    expect(slides.filter(([, active]) => active)).toHaveLength(1);
+    expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
+    expect(home).toMatch(/prefers-reduced-motion: reduce/);
+    expect(css).toMatch(/\.hero-card-slide \{[^}]*opacity: 0; transition: opacity/);
+    // No drawn products anywhere on it: the photograph carries the banner.
     expect(markup).not.toMatch(/class="[^"]*ha-[1-5]/);
-    expect(markup).toContain('hero-inner hero-inner-wide');
-    // A picture uploaded in the manager still shows beside the words.
-    expect(readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8'))
-      .toMatch(/\{heroShot && <div className="hero-art"/);
   });
 
   it('lets the manager choose the slideshow pictures', () => {
     expect(siteContent.scenes.homeHeroSlides).toBeInstanceOf(Array);
-    const markup = render(HomePage, '/mySOS/');
-    expect(markup).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
+    expect(render(HomePage, '/mySOS/')).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
   });
 
   it('measures the logo marquee against the width the stylesheet uses', () => {
     // The track slides exactly -50%, so a card width that disagrees with the
-    // CSS makes the marquee drift or race.
+    // CSS makes the marquee drift or race. The marks themselves are pictures,
+    // not the organisations' names set as text.
     const width = Number(css.match(/\.trust-logo \{[^}]*width: (\d+)px/)[1]);
     expect(Number(home.match(/const CARD_WIDTH = (\d+);/)[1])).toBe(width);
+    expect(render(HomePage, '/mySOS/')).toMatch(/class="crest-img" src="[^"]+" alt="Nanyang Technological University"/);
   });
 
-  it('gives "What can we make for you?" three across, two on a phone', () => {
-    expect(css).toMatch(/\.category-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
-    const phone = css.slice(css.indexOf('@media (max-width: 620px)'));
-    expect(phone).toMatch(/\.category-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
+  it('gives every category a tile, one for one, each in its own wash', () => {
+    const markup = render(HomePage, '/mySOS/');
+    const tiles = [...markup.matchAll(/class="home-tile tone-(\w+)"/g)].map(([, tone]) => tone);
+    expect(tiles).toHaveLength(siteContent.categories.length);
+    expect(new Set(tiles).size).toBe(siteContent.categories.length);
+    for (const category of siteContent.categories) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
+    expect(css).toMatch(/\.home-tile-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
+    const phone = css.slice(css.indexOf('@media (max-width: 620px)', css.indexOf('20. homepage')));
+    expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
+  });
+
+  it('carries the stats, the reasons, the budget bands and the work', () => {
+    const markup = render(HomePage, '/mySOS/');
+    for (const stat of siteContent.homeStats) expect(markup).toContain(stat.note);
+    for (const band of siteContent.budgetBands) expect(markup).toContain(band.label);
+    // Four reasons in the navy band, numbered.
+    expect([...markup.matchAll(/class="home-why-number"/g)]).toHaveLength(4);
+    // The budget section suggests, and never prices: MySOS's own numbers stay
+    // in the agents' quotation engine.
+    expect(markup).not.toMatch(/\$\d+\.\d\d/);
+    expect(markup).toContain('class="home-work-card');
+    expect(markup).toContain('class="home-process-step"');
   });
 });
 

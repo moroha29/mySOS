@@ -1,30 +1,16 @@
 import { useEffect } from 'react';
 import siteContent from '../../data/siteContent.json';
-import { getImage } from '../../utils/imageRegistry';
 import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, SectionHeading, Testimonials } from '../components/Ui';
 import useScrollSteps from '../components/useScrollSteps';
+import { processPhoto } from '../processPhotos';
 
 const two = (number) => String(number).padStart(2, '0');
 
 // How far the reasons box scrolls inside itself for each card.
 const REASON_STEP = 150;
 
-/*
- * The process has no photographs of its own yet. Until one is chosen in the
- * manager, or dropped in as src/assets/images/process/<icon>, each step borrows
- * one of MySOS's own photos that shows the same kind of moment.
- */
-const PROCESS_PHOTOS = {
-  consult: 'solutions/community',
-  expert: 'benefits/expert',
-  clipboard: 'benefits/tailored',
-  sample: 'solutions/schools',
-  production: 'solutions/events',
-  delivery: 'solutions/businesses',
-};
-const processPhoto = (step) => picture(step.image, `process/${step.icon}`) || getImage(PROCESS_PHOTOS[step.icon]);
 
 function StepCount({ active, total, className = '' }) {
   return <p className={`step-count ${className}`.trim()} aria-live="polite">

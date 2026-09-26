@@ -1,33 +1,52 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, contentPath, headingPath, heroBackground, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
-import { getStories } from '../../utils/catalogue';
+import { getStories, REQUEST_PATH } from '../../utils/catalogue';
+import { formatRating, hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, CategoryCard, enquiryProps, heading, label, PageCTA, ProcessSteps, SectionHeading, StoryCard, Testimonials, TextLink } from '../components/Ui';
+import { Button, GoogleReviewsLink, heading, label, Photo, useGoogleReviews } from '../components/Ui';
+import useScrollSteps from '../components/useScrollSteps';
+import { processPhoto } from '../processPhotos';
+
+/*
+ * The homepage, laid out after the 2026 concept: a banner that asks what the
+ * visitor needs rather than listing what MySOS sells, then the proof (who MySOS
+ * works for, what people say), what can be made, how MySOS works, and the work
+ * itself.
+ *
+ * Everything on it is content the website manager can edit, and every route out
+ * of it goes either to the products or to the request page — never to the
+ * agents' quotation engine.
+ */
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
 const CARD_WIDTH = 232;   // keep in sync with .trust-logo width in public.css
 const SLIDE_SECONDS = 6;
 
+const two = (number) => String(number).padStart(2, '0');
+// What the visitor typed becomes the opening note of their request.
+const askHref = (text) => `${REQUEST_PATH}?ask=${encodeURIComponent(text)}`;
+
+/* ------------------------------------------------------------------ banner */
+
 /*
- * The banner's slideshow.
- *
- * Pictures come from scenes.homeHeroSlides, so the manager chooses them. Until
- * any are set it runs MySOS's own photographs of the work. The first picture is
- * in the prerendered HTML, so the banner is never blank before the page wakes
- * up, and a reader who asked for less motion keeps that one picture.
+ * The banner's picture card. Pictures come from scenes.homeHeroSlides so the
+ * manager chooses them; until any are set it runs MySOS's own photographs, one
+ * per solution, and each names the solution it shows. The first is in the
+ * prerendered HTML, so the card is never blank, and a reader who asked for less
+ * motion keeps that one.
  */
 const SLIDE_FALLBACKS = ['scenes/solutions-hero', 'solutions/events', 'solutions/schools', 'scenes/why-hero', 'solutions/businesses'];
 
 function heroSlides() {
   const chosen = (siteContent.scenes?.homeHeroSlides ?? []).map((value) => String(value ?? '').trim()).filter(Boolean);
-  if (chosen.length) return chosen;
-  return SLIDE_FALLBACKS.map((key) => firstImage(key)).filter(Boolean);
+  const pictures = chosen.length ? chosen : SLIDE_FALLBACKS.map((key) => firstImage(key)).filter(Boolean);
+  return pictures.map((src, index) => ({ src, index, solution: solutions[index % Math.max(1, solutions.length)] }));
 }
 
-function HeroSlideshow({ slides }) {
+function HeroCard({ slides }) {
   const [shown, setShown] = useState(0);
   useEffect(() => {
     if (slides.length < 2 || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
@@ -35,15 +54,62 @@ function HeroSlideshow({ slides }) {
     return () => clearInterval(timer);
   }, [slides.length]);
 
-  return <div className="hero-slides" aria-hidden="true">
-    {slides.map((src, index) => <div
+  const current = slides[shown] ?? slides[0];
+  if (!current) return null;
+  return <div className="hero-card">
+    {slides.map(({ src, index }) => <div
       key={src}
-      className={index === shown ? 'hero-slide is-active' : 'hero-slide'}
+      className={index === shown ? 'hero-card-slide is-active' : 'hero-card-slide'}
       style={{ backgroundImage: `url("${src.replaceAll('"', '%22')}")` }}
       data-cms-path={cms(scenePath('homeHeroSlides', index))}
+      aria-hidden="true"
     />)}
+    <div className="hero-card-copy">
+      <span className="hero-card-eyebrow" data-cms-path={cms(solutionPath(current.solution, 'name'))}>{current.solution?.name}</span>
+      <p className="hero-card-title" data-cms-path={cms(solutionPath(current.solution, 'description'))}>{current.solution?.description}</p>
+      <ul className="hero-card-tags">
+        {siteContent.categories.slice(0, 5).map((category) => <li key={category.id}>
+          <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</a>
+        </li>)}
+      </ul>
+      {slides.length > 1 && <div className="hero-card-dots" aria-hidden="true">
+        {slides.map(({ src, index }) => <span key={src} className={index === shown ? 'is-active' : ''} />)}
+      </div>}
+    </div>
   </div>;
 }
+
+function HeroSearch() {
+  const [asked, setAsked] = useState('');
+  const chips = siteContent.heroSearchChips ?? [];
+  const href = askHref(asked.trim());
+  return <>
+    <form
+      className="hero-search"
+      role="search"
+      onSubmit={(event) => { event.preventDefault(); if (asked.trim()) globalThis.location.assign(href); }}
+    >
+      <Icon name="search" size={20} />
+      <input
+        type="search"
+        aria-label={label('heroSearchPlaceholder', 'Tell us what you need')}
+        placeholder={label('heroSearchPlaceholder', 'Try: 200 event kits under $15 each')}
+        value={asked}
+        onChange={(event) => setAsked(event.target.value)}
+      />
+      <a className="btn btn-primary" href={asked.trim() ? href : REQUEST_PATH}>
+        <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find it for me')}</span>
+      </a>
+    </form>
+    <ul className="hero-chips">
+      {chips.map((chip, index) => <li key={chip}>
+        <a href={askHref(chip)}><span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span></a>
+      </li>)}
+    </ul>
+  </>;
+}
+
+/* ------------------------------------------------------- proof and logos */
 
 function LogoCard({ logo, index, duplicate = false }) {
   const src = picture(logo.image, `logos/${logo.key}`);
@@ -58,15 +124,13 @@ function LogoCard({ logo, index, duplicate = false }) {
 }
 
 /*
- * Continuous marquee. The list is rendered twice and the track slides exactly
- * -50%, so the wrap is seamless. Driven by a CSS animation rather than a rAF
- * loop: it runs on the compositor, survives tab throttling without jumping,
- * and pauses on hover/focus purely declaratively.
+ * Continuous marquee of the organisations MySOS works for — their own marks,
+ * not their names set as text. The list is rendered twice and the track slides
+ * exactly -50%, so the wrap is seamless. A CSS animation rather than a rAF
+ * loop: it runs on the compositor and pauses on hover declaratively.
  */
 function TrustStrip() {
   const logos = siteContent.trustedBy;
-  // Duration derived from the track length so the speed stays constant as
-  // logos are added or removed.
   const duration = Math.round((logos.length * CARD_WIDTH) / MARQUEE_SPEED);
 
   return <section className="trust-strip">
@@ -83,104 +147,261 @@ function TrustStrip() {
   </section>;
 }
 
-export default function HomePage() {
-  const featuredStories = getStories().filter((story) => story.featured).slice(0, 4);
-  const heroShot = picture(siteContent.scenes?.homeHeroImage, 'scenes/home-hero');
-  const bandBg = picture(siteContent.scenes?.industryBandImage, 'scenes/band-industry');
-  const slides = heroSlides();
-  // A single background picture still wins, if one is set.
-  const banner = heroBackground(siteContent.scenes?.homeHeroBackgroundImage, scenePath('homeHeroBackgroundImage'), 'hero hero-home');
-  const slideshow = slides.length > 0 && !banner.style;
-  return <main>
-    <section {...banner} className={slideshow ? `${banner.className} has-background` : banner.className}>
-      {slideshow && <HeroSlideshow slides={slides} />}
-      <div className={heroShot ? 'hero-inner' : 'hero-inner hero-inner-wide'}>
+/* One line of proof: the rating, the newest review and the way to all of them. */
+function ReviewLine() {
+  const data = useGoogleReviews();
+  if (!hasGoogleReviews(data)) return null;
+  const newest = data.reviews[0];
+  return <section className="home-review">
+    <span className="home-review-score">
+      <Icon name="google" size={26} />
+      <strong>{formatRating(data.averageRating)}</strong>
+      <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={15} />)}</span>
+    </span>
+    {newest && <p className="home-review-quote">&ldquo;{newest.text}&rdquo;</p>}
+    <GoogleReviewsLink />
+  </section>;
+}
+
+/* --------------------------------------------------------------- sections */
+
+// The tiles alternate through a fixed set of washes, as the design has them.
+const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
+
+function CategoryTiles() {
+  return <section className="section home-tiles">
+    <div className="home-tiles-head">
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeTilesEyebrow'))}>{heading('homeTilesEyebrow', 'Explore products')}</span>
+        <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
+      </div>
+      <p data-cms-path={cms(headingPath('homeTilesLead'))}>{heading('homeTilesLead')}</p>
+    </div>
+    <div className="home-tile-grid">
+      {siteContent.categories.map((category, index) => <a
+        key={category.id}
+        className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}`}
+        href={`/mySOS/products/?category=${category.id}`}
+      >
+        <Icon name={category.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
+        <span className="home-tile-body">
+          <strong data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</strong>
+          <small data-cms-path={cms(contentPath('categories', index, 'description'))}>{category.description}</small>
+        </span>
+      </a>)}
+    </div>
+  </section>;
+}
+
+function WhyBand() {
+  const reasons = siteContent.benefits.slice(0, 4);
+  return <section className="home-why">
+    <div className="home-why-inner">
+      <div className="home-why-head">
         <div>
-          <h1>
-            <span data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>
-            <em><span data-cms-path={cms(headingPath('heroTitleAccent'))}>{heading('heroTitleAccent', 'Made Simple.')}</span></em>
-          </h1>
-          <p className="hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
-          <div className="hero-actions">
-            <Button {...enquiryProps}><span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span></Button>
-            <Button href="/mySOS/products/" variant="ghost"><span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+          <span className="eyebrow" data-cms-path={cms(headingPath('homeWhyEyebrow'))}>{heading('homeWhyEyebrow', 'Why MySOS')}</span>
+          <h2 data-cms-path={cms(headingPath('homeWhyHeading'))}>{heading('homeWhyHeading', 'One team. Every step handled.')}</h2>
+        </div>
+        <p data-cms-path={cms(headingPath('homeWhyLead'))}>{heading('homeWhyLead')}</p>
+      </div>
+      <ol className="home-why-grid">
+        {reasons.map((reason, index) => <li key={reason.icon}>
+          <span className="home-why-number">{two(index + 1)}</span>
+          <Icon name={reason.cardIcon || reason.icon} size={26} cmsPath={contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon')} />
+          <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle || reason.title}</h3>
+          <p data-cms-path={cms(contentPath('benefits', index, 'description'))}>{reason.description}</p>
+        </li>)}
+      </ol>
+    </div>
+  </section>;
+}
+
+/*
+ * Budget first, product second: a visitor who knows what they can spend per
+ * person, and roughly how many, is shown what that usually buys. The bands and
+ * their wording are content; no MySOS price appears here or anywhere else on
+ * the public site.
+ */
+function BudgetFinder() {
+  const bands = siteContent.budgetBands ?? [];
+  const [bandId, setBandId] = useState(bands[0]?.id);
+  const [quantity, setQuantity] = useState(100);
+  const band = bands.find((item) => item.id === bandId) ?? bands[0];
+  if (!band) return null;
+  const ask = `Hi MySOS, I am planning about ${quantity} pieces at ${band.label} per person. ${band.title}.`;
+
+  return <section className="section home-budget">
+    <div className="home-budget-card">
+      <div className="home-budget-copy">
+        <span className="eyebrow" data-cms-path={cms(headingPath('budgetEyebrow'))}>{heading('budgetEyebrow', 'Find by budget')}</span>
+        <h2 data-cms-path={cms(headingPath('budgetHeading'))}>{heading('budgetHeading', 'Know the budget, not the product?')}</h2>
+        <p data-cms-path={cms(headingPath('budgetLead'))}>{heading('budgetLead')}</p>
+      </div>
+      <div className="home-budget-picker">
+        <div className="home-budget-quantity">
+          <label htmlFor="budget-quantity" data-cms-path={cms(labelPath('budgetQuantityLabel'))}>{label('budgetQuantityLabel', 'Estimated quantity')}</label>
+          <input id="budget-quantity" type="number" min="1" inputMode="numeric" value={quantity} onChange={(event) => setQuantity(event.target.value)} />
+        </div>
+        <span className="home-budget-question" id="budget-question" data-cms-path={cms(labelPath('budgetQuestionLabel'))}>{label('budgetQuestionLabel', 'What is your budget per person?')}</span>
+        <div className="home-budget-bands" role="radiogroup" aria-labelledby="budget-question">
+          {bands.map((item, index) => <button
+            key={item.id}
+            type="button"
+            role="radio"
+            aria-checked={item.id === band.id}
+            className={item.id === band.id ? 'is-chosen' : ''}
+            onClick={() => setBandId(item.id)}
+            data-cms-path={cms(contentPath('budgetBands', index, 'label'))}
+          >{item.label}</button>)}
+        </div>
+        <div className="home-budget-result">
+          <div>
+            <strong data-cms-path={cms(contentPath('budgetBands', bands.indexOf(band), 'title'))}>{band.title}</strong>
+            <small data-cms-path={cms(contentPath('budgetBands', bands.indexOf(band), 'description'))}>{band.description}</small>
           </div>
-          <ul className="hero-promises">
-            {siteContent.heroPromises.map((promise, index) => <li key={promise}>
-              <Icon name="check" size={15} />
-              <span data-cms-path={cms(contentPath('heroPromises', index))}>{promise}</span>
-            </li>)}
-          </ul>
+          <Button href={askHref(ask)}><span data-cms-path={cms(labelPath('budgetSeeIdeasLabel'))}>{label('budgetSeeIdeasLabel', 'See matching ideas')}</span></Button>
         </div>
-        {/* The drawn bag, shirts and bottle are gone: the banner is a
-            photograph now, and they were sitting on top of it. A picture
-            uploaded in the manager still shows here. */}
-        {heroShot && <div className="hero-art" aria-hidden="true">
-          <img className="hero-shot" src={heroShot} alt="" data-cms-path={cms(scenePath('homeHeroImage'))} />
-        </div>}
+        <p className="home-budget-note" data-cms-path={cms(labelPath('budgetFootnote'))}>{label('budgetFootnote')}</p>
       </div>
-    </section>
+    </div>
+  </section>;
+}
 
-    {/* The organisations MySOS works for come first, then the reviews. */}
-    <TrustStrip />
-
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
-
-    <section className="section">
-      <SectionHeading eyebrow={heading('categoriesHeading', 'What can we make for you?')} eyebrowPath={headingPath('categoriesHeading')} />
-      <div className="category-grid">
-        {siteContent.categories.map((category) => <CategoryCard key={category.id} category={category} />)}
-        <div className="grid-action"><TextLink href="/mySOS/products/"><span data-cms-path={cms(labelPath('viewAllProductsLabel'))}>{label('viewAllProductsLabel', 'View All Products')}</span></TextLink></div>
+function SelectedWork({ stories }) {
+  if (!stories.length) return null;
+  return <section className="section home-work">
+    <div className="home-work-head">
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeWorkEyebrow'))}>{heading('homeWorkEyebrow', 'Selected work')}</span>
+        <h2 data-cms-path={cms(headingPath('homeWorkHeading'))}>{heading('homeWorkHeading', 'Complex orders. Simple solutions.')}</h2>
       </div>
-    </section>
+      <a className="text-link" href={REQUEST_PATH}>
+        <span data-cms-path={cms(labelPath('workDiscussLabel'))}>{label('workDiscussLabel', 'Discuss your project')}</span>
+        <Icon name="arrowRight" size={15} className="inline-arrow" />
+      </a>
+    </div>
+    <div className="home-work-grid">
+      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`}>
+        <span className="home-work-tag">{story.category.replace('-', ' ')}</span>
+        <span className="home-work-shot"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/cover`)} label={`${story.title} project`} /></span>
+        <h3>{story.title}</h3>
+        <p>{story.summary}</p>
+        {story.highlights?.length > 0 && <ul className="home-work-stats">
+          {story.highlights.map((highlight) => <li key={highlight.text}>
+            <Icon name={highlight.icon} size={18} />
+            <span>{highlight.text}</span>
+          </li>)}
+        </ul>}
+      </a>)}
+    </div>
+  </section>;
+}
 
-    <section className="industry-band" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
-      <div className="section">
-        <SectionHeading
-          eyebrow={heading('industryHeading')}
-          eyebrowPath={headingPath('industryHeading')}
-          description={heading('industryDescription')}
-          descriptionPath={headingPath('industryDescription')}
-        />
-        <div className="industry-nav">
-          {solutions.map((solution) => <a key={solution.id} href={`/mySOS/solutions/${solution.id}/`}>
-            <Icon name={solution.icon || solution.imageStyle} size={26} cmsPath={solutionPath(solution, 'icon')} />
-            <span data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
-          </a>)}
-        </div>
-        <div className="center-action"><Button href="/mySOS/solutions/"><span data-cms-path={cms(labelPath('findMySolutionButton'))}>{label('findMySolutionButton', 'Find My Solution')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+/*
+ * How it works: the steps as a row that scrolls sideways, with the line above
+ * following whichever card is centred. The page itself is never held —
+ * see useScrollSteps.
+ */
+function ProcessRail() {
+  const steps = siteContent.process;
+  const { scrollerRef, active, goTo } = useScrollSteps(steps.length, { axis: 'x', align: 'start' });
+  const reached = steps.length > 1 ? active / (steps.length - 1) : 0;
+
+  return <section className="section home-process">
+    <div className="home-process-head">
+      <div>
+        <span className="eyebrow" data-cms-path={cms(headingPath('homeProcessEyebrow'))}>{heading('homeProcessEyebrow', 'How it works')}</span>
+        <h2 data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
       </div>
-    </section>
-
-    <section className="section">
-      <SectionHeading eyebrow={heading('benefitsHeading', 'Why choose MySOS?')} eyebrowPath={headingPath('benefitsHeading')} />
-      <div className="benefit-grid">
-        {siteContent.benefits.map((benefit, index) => <article key={benefit.title}>
-          <span className="benefit-icon"><Icon name={benefit.icon} size={22} cmsPath={contentPath('benefits', index, 'icon')} /></span>
-          <h3 data-cms-path={cms(contentPath('benefits', index, 'title'))}>{benefit.title}</h3>
-          <p data-cms-path={cms(contentPath('benefits', index, 'description'))}>{benefit.description}</p>
+      <p data-cms-path={cms(headingPath('homeProcessLead'))}>{heading('homeProcessLead')}</p>
+    </div>
+    <div className="home-process-card">
+      <ol className="home-process-track" style={{ '--reached': reached }}>
+        {steps.map((step, index) => <li key={step.title} className={index <= active ? 'is-done' : ''}>
+          <button type="button" aria-current={index === active ? 'step' : undefined} onClick={() => goTo(index)}>
+            <span className="sr-only">{`${two(index + 1)} ${step.title}`}</span>
+          </button>
+        </li>)}
+      </ol>
+      <div className="home-process-rail" ref={scrollerRef} role="region" aria-label="How a MySOS order works, one step per card. Scroll sideways to move between them." tabIndex={0}>
+        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined}>
+          <span className="home-process-shot"><Photo style="studio" image={processPhoto(step)} imagePath={contentPath('process', index, 'image')} label={step.headline || step.title} wide /></span>
+          <span className="home-process-label">{two(index + 1)} · <span data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span></span>
+          <h3 data-cms-path={cms(contentPath('process', index, 'headline'))}>{step.headline || step.title}</h3>
+          <p data-cms-path={cms(contentPath('process', index, 'detail'))}>{step.detail || step.description}</p>
         </article>)}
       </div>
-    </section>
+    </div>
+  </section>;
+}
 
-    <section className="section">
-      <SectionHeading eyebrow={heading('processHeading', 'How it works')} eyebrowPath={headingPath('processHeading')} />
-      <ProcessSteps items={siteContent.process} pathAt={(index, key) => contentPath('process', index, key)} />
-    </section>
+function ClosingBand() {
+  return <section className="home-closing">
+    <div className="home-closing-inner">
+      <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
+      <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
+      <Button href={REQUEST_PATH} variant="light">
+        <span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span>
+        <Icon name="arrowRight" size={16} className="inline-arrow" />
+      </Button>
+    </div>
+  </section>;
+}
 
-    <section className="section">
-      <SectionHeading eyebrow={heading('storiesHeading', 'Real projects. Real results.')} eyebrowPath={headingPath('storiesHeading')} />
-      <div className="story-grid">
-        {featuredStories.map((story) => <StoryCard key={story.slug} story={story} showBadge={false} />)}
+/* ------------------------------------------------------------------- page */
+
+export default function HomePage() {
+  const featuredStories = useMemo(() => getStories().filter((story) => story.featured).slice(0, 2), []);
+  const slides = heroSlides();
+  const stats = siteContent.homeStats ?? [];
+
+  return <main className="home-page">
+    <p className="home-announce" data-cms-path={cms(contentPath('announcement'))}>{siteContent.announcement}</p>
+
+    <nav className="home-quicknav" aria-label="Product categories">
+      <div className="home-quicknav-inner">
+        <ul>
+          {siteContent.categories.map((category, index) => <li key={category.id}>
+            <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</a>
+          </li>)}
+        </ul>
+        <a className="text-link" href="/mySOS/products/">
+          <span data-cms-path={cms(labelPath('quickNavAllLabel'))}>{label('quickNavAllLabel', 'View all products')}</span>
+          <Icon name="arrowRight" size={15} className="inline-arrow" />
+        </a>
       </div>
-      <div className="center-action"><Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+    </nav>
+
+    <section className="home-hero">
+      <div className="home-hero-inner">
+        <div className="home-hero-copy">
+          <span className="eyebrow" data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
+          <h1>
+            <span data-cms-path={cms(headingPath('heroTitleLead'))}>{heading('heroTitleLead', 'Tell us what you need.')}</span>{' '}
+            <em><span data-cms-path={cms(headingPath('heroTitleAccentLong'))}>{heading('heroTitleAccentLong', "We'll source the rest.")}</span></em>
+          </h1>
+          <p className="home-hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
+          <HeroSearch />
+        </div>
+        <HeroCard slides={slides} />
+      </div>
     </section>
 
-    <PageCTA
-      title={heading('closingCtaTitle')}
-      titlePath={headingPath('closingCtaTitle')}
-      description={heading('closingCtaDescription')}
-      descriptionPath={headingPath('closingCtaDescription')}
-    />
+    {stats.length > 0 && <section className="home-stats">
+      {stats.map((stat, index) => <div key={stat.value}>
+        <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
+        {stat.label && <span data-cms-path={cms(contentPath('homeStats', index, 'label'))}>{stat.label}</span>}
+        <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>
+      </div>)}
+    </section>}
+
+    <TrustStrip />
+    <ReviewLine />
+    <CategoryTiles />
+    <WhyBand />
+    <BudgetFinder />
+    <SelectedWork stories={featuredStories} />
+    <ProcessRail />
+    <ClosingBand />
   </main>;
 }
