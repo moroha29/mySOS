@@ -23,14 +23,20 @@ const render = (Page, pathname) => {
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
-  it('home: the logos sit right under the banner, then the rating', () => {
+  it('home: the logos sit right under the banner, then the reviews', () => {
     const markup = render(HomePage, '/mySOS/');
     const banner = markup.indexOf('class="home-hero"');
     const logos = markup.indexOf('class="trust-strip"');
-    const review = markup.indexOf('class="home-review"');
+    const reviews = markup.indexOf('class="home-reviews"');
     expect(banner).toBeGreaterThan(-1);
     expect(logos).toBeGreaterThan(banner);
-    expect(review).toBeGreaterThan(logos);
+    expect(reviews).toBeGreaterThan(logos);
+    // The reviews themselves, not only a rating: the slider the site has
+    // always carried, with the rating above it and the way to all of them.
+    expect(markup.match(/class="review-card"/g).length).toBeGreaterThan(1);
+    expect(markup).toContain('class="review-rail"');
+    expect(markup).toContain('Read all reviews on Google');
+    expect(markup.match(/class="section reviews"/g)).toHaveLength(1);
   });
 
   it('why mysos: directly under the banner, above the reasons', () => {

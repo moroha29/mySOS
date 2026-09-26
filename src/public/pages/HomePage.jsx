@@ -4,9 +4,9 @@ import solutions from '../../data/solutions.json';
 import { cms, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
-import { formatRating, hasGoogleReviews } from '../../utils/googleReviews';
+import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, GoogleReviewsLink, heading, label, Photo, useGoogleReviews } from '../components/Ui';
+import { Button, heading, label, Photo, Testimonials, useGoogleReviews } from '../components/Ui';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
 
@@ -147,20 +147,24 @@ function TrustStrip() {
   </section>;
 }
 
-/* One line of proof: the rating, the newest review and the way to all of them. */
-function ReviewLine() {
+/*
+ * What clients say: the rating and the reviews themselves, in the slider the
+ * site has always carried. The concept showed a single line of proof here; the
+ * slider stays, because a rating alone says much less than the reviews do.
+ */
+function Reviews() {
   const data = useGoogleReviews();
   if (!hasGoogleReviews(data)) return null;
-  const newest = data.reviews[0];
-  return <section className="home-review">
-    <span className="home-review-score">
-      <Icon name="google" size={26} />
-      <strong>{formatRating(data.averageRating)}</strong>
-      <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={15} />)}</span>
-    </span>
-    {newest && <p className="home-review-quote">&ldquo;{newest.text}&rdquo;</p>}
-    <GoogleReviewsLink />
-  </section>;
+  return <div className="home-reviews">
+    <Testimonials
+      eyebrow={heading('reviewsHeading', 'What our clients say')}
+      eyebrowPath={headingPath('reviewsHeading')}
+      action={<Button href="/mySOS/success-stories/" variant="outline">
+        <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
+        <Icon name="arrowRight" size={15} className="inline-arrow" />
+      </Button>}
+    />
+  </div>;
 }
 
 /* --------------------------------------------------------------- sections */
@@ -396,7 +400,7 @@ export default function HomePage() {
     </section>}
 
     <TrustStrip />
-    <ReviewLine />
+    <Reviews />
     <CategoryTiles />
     <WhyBand />
     <BudgetFinder />

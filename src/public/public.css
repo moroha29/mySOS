@@ -1280,6 +1280,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-page .trust-strip { max-width: none; padding: 26px 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
 .home-page .trust-row { max-width: var(--content); margin: 18px auto 0; }
 
+/* The reviews slider, in the homepage's own spacing and card shapes. */
+.home-reviews .reviews { padding-top: 54px; padding-bottom: 20px; }
+.home-reviews .review-card { border-radius: 22px; }
 .home-review { max-width: var(--content); margin: 0 auto; padding: 30px 24px 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
 .home-review-score { display: inline-flex; align-items: center; gap: 10px; }
 .home-review-score strong { font-size: 26px; font-weight: 800; color: var(--ink); }
