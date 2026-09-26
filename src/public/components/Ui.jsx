@@ -171,6 +171,42 @@ export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
   </ol>;
 }
 
+/*
+ * A number that counts up to itself the first time it is reached. The finished
+ * number is what the server draws, so it is what a reader sees with no
+ * JavaScript, or one who asked for less motion.
+ */
+export function CountUp({ value, ms = 1100 }) {
+  const target = Number(value) || 0;
+  const [shown, setShown] = useState(target);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || !target || typeof IntersectionObserver === 'undefined') return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let frame = 0;
+    let started = 0;
+    const tick = (now) => {
+      started ||= now;
+      const part = Math.min(1, (now - started) / ms);
+      setShown(Math.round((1 - (1 - part) ** 3) * target));
+      if (part < 1) frame = requestAnimationFrame(tick);
+    };
+    const watcher = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      watcher.disconnect();
+      setShown(0);
+      frame = requestAnimationFrame(tick);
+    }, { threshold: 0.5 });
+    watcher.observe(node);
+    return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
+  }, [target, ms]);
+
+  return <span ref={ref} className="count-up">{shown}</span>;
+}
+
 /* --------------------------------------------------------- reviews slider */
 
 /*
@@ -228,7 +264,7 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
           <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
           {data.totalReviewCount ? <small>
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
-            {' '}{data.totalReviewCount}{' '}
+            {' '}<CountUp value={data.totalReviewCount} />{' '}
             <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
           </small> : null}
         </>

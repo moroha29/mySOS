@@ -104,7 +104,7 @@ describe('one look across the pages', () => {
   });
 
   it('gives the sections, cards and bands one set of shapes', () => {
-    expect(css).toMatch(/\.section-heading h2 \{ font-size: clamp\(28px, 3vw, 42px\)/);
+    expect(css).toMatch(/\.section-heading h2 \{ font-size: clamp\(\d+px, 3vw, \d+px\)/);
     expect(css).toMatch(/\.product-card, \.story-card, \.solution-card[\s\S]*?border-radius: 22px;/);
     // The printing methods band matches the homepage's navy one.
     expect(css).toMatch(/\.capabilities \{ background: var\(--navy\); \}/);

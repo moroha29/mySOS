@@ -192,8 +192,8 @@ function BuildPanel({ product }) {
         : null}
       <p className="pdp-price-note" data-cms-path={price ? wordPath('estimateNote') : wordPath('noPriceNote')}>{price ? word('estimateNote') : word('noPriceNote')}</p>
       <a className="btn btn-primary pdp-add" href={href}>
+        <Icon name="plus" size={16} />
         <span data-cms-path={wordPath('addButton')}>{word('addButton', 'Add to my request')}</span>
-        <Icon name="arrowRight" size={16} className="inline-arrow" />
       </a>
       <p className="pdp-ask">
         <span data-cms-path={wordPath('askPrefix')}>{word('askPrefix', 'Need something different?')}</span>{' '}
