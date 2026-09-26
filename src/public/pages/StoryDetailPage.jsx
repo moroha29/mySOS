@@ -130,7 +130,7 @@ export default function StoryDetailPage({ slug }) {
       </div>
     </section>
 
-    <div className="gallery-strip">
+    <div className="gallery-strip" data-reveal>
       {gallery.map((style, index) => <Photo
         key={style}
         style={style}
@@ -152,7 +152,7 @@ export default function StoryDetailPage({ slug }) {
       </aside>
 
       <div className="story-narrative">
-        <section className="narrative-block" id="challenge">
+        <section data-reveal className="narrative-block" id="challenge">
           <div>
             <div className="narrative-head"><span>01</span><h2 data-cms-path={cms(sectionPath(sections[0]))}>{sectionLabel(sections[0])}</h2></div>
             {/*
@@ -165,7 +165,7 @@ export default function StoryDetailPage({ slug }) {
           <Photo style="sketch" imageKey={`stories/${story.slug}/challenge`} label="Early design sketches" />
         </section>
 
-        <section className="narrative-block" id="solution">
+        <section data-reveal className="narrative-block" id="solution">
           <div>
             <div className="narrative-head"><span>02</span><h2 data-cms-path={cms(sectionPath(sections[1]))}>{sectionLabel(sections[1])}</h2></div>
             {paragraphs(story.solution).map((text) => <p key={text} data-cms-paths={cmsAll(storyPath(story, 'solution'))}>{text}</p>)}
@@ -175,13 +175,13 @@ export default function StoryDetailPage({ slug }) {
             : <Photo style="studio" imageKey={`stories/${story.slug}/solution`} label="Finished product" />}
         </section>
 
-        <section className="narrative-block is-wide" id="process">
+        <section data-reveal className="narrative-block is-wide" id="process">
           <div className="narrative-head"><span>03</span><h2 data-cms-path={cms(sectionPath(sections[2]))}>{sectionLabel(sections[2])}</h2></div>
           {/* Only the step titles are content; the captions are written above. */}
           <ProcessSteps items={processSteps} variant="icon" pathAt={(index, key) => (key === 'title' ? storyPath(story, 'process', index) : processSteps[index]?.descriptionPath)} />
         </section>
 
-        <section className="narrative-block" id="outcome">
+        <section data-reveal className="narrative-block" id="outcome">
           <div>
             <div className="narrative-head"><span>04</span><h2 data-cms-path={cms(sectionPath(sections[3]))}>{sectionLabel(sections[3])}</h2></div>
             <ul className="outcome-list">
@@ -194,7 +194,7 @@ export default function StoryDetailPage({ slug }) {
           <Photo style={story.gallery[1] ?? story.imageStyle} imageKey={`stories/${story.slug}/outcome`} label="The finished project" />
         </section>
 
-        <section className="narrative-block is-wide" id="feedback">
+        <section data-reveal className="narrative-block is-wide" id="feedback">
           <div className="narrative-head"><span>05</span><h2 data-cms-path={cms(sectionPath(sections[4]))}>{sectionLabel(sections[4])}</h2></div>
           <div className="feedback-block">
             <p className="feedback-quote">&ldquo;<span data-cms-path={cms(storyPath(story, 'testimonial', 'quote'))}>{story.testimonial.quote}</span>&rdquo;</p>

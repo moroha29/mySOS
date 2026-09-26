@@ -145,6 +145,8 @@ function HeroSearch() {
   return <>
     <form
       className="hero-search"
+      data-reveal
+      style={{ '--reveal-delay': '320ms' }}
       role="search"
       onSubmit={(event) => { event.preventDefault(); if (query) globalThis.location.assign(href); }}
     >
@@ -461,12 +463,15 @@ export default function HomePage() {
     <section className="home-hero">
       <div className="home-hero-inner">
         <div className="home-hero-copy">
-          <span className="eyebrow" data-cms-path={cms(configPath('tagline'))}>{siteConfig.tagline}</span>
+          <span className="eyebrow" data-reveal data-cms-path={cms(configPath('tagline'))}>{siteConfig.tagline}</span>
+          {/* The two halves arrive one after the other. The words inside are not
+              split: the manager rewrites these elements, and a value has to sit
+              in an element of its own. */}
           <h1>
-            <span data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>{' '}
-            <em><span data-cms-path={cms(headingPath('heroTitleAccent'))}>{heading('heroTitleAccent', 'Made Simple.')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>{' '}
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(headingPath('heroTitleAccent'))}>{heading('heroTitleAccent', 'Made Simple.')}</span></em>
           </h1>
-          <p className="home-hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
+          <p className="home-hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
           <HeroSearch />
         </div>
         <HeroCard slides={slides} />

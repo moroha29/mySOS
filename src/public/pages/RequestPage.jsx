@@ -29,7 +29,7 @@ export default function RequestPage() {
   return <main className="solution-page request-page">
     <section {...heroBackground(siteContent.scenes?.requestHeroBackgroundImage, scenePath('requestHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
-        <div>
+        <div data-reveal>
           <nav className="breadcrumb" aria-label="Breadcrumb">
             <a href="/mySOS/" aria-label="Home"><Icon name="home" size={15} /></a>
             <span aria-hidden="true">/</span>
@@ -38,7 +38,7 @@ export default function RequestPage() {
           <h1 data-cms-path={cms(pagePath('request', 'heroTitle'))}>{pageText('request', 'heroTitle', 'Tell Us What You Need')}</h1>
           <p className="hero-lead" data-cms-path={cms(pagePath('request', 'heroLead'))}>{pageText('request', 'heroLead')}</p>
         </div>
-        <div className="hero-scene">
+        <div className="hero-scene" data-reveal style={{ '--reveal-delay': '90ms' }}>
           <Photo
             style="workshop"
             image={picture(siteContent.scenes?.requestHeroImage, 'scenes/products-promo')}

@@ -1242,6 +1242,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-hero-inner { max-width: var(--content); margin: 0 auto; padding: 68px 24px 76px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 54px; align-items: center; }
 .home-hero-copy .eyebrow { color: var(--muted); font-size: 14px; letter-spacing: .16em; }
 .home-hero h1 { font-size: clamp(42px, 4.6vw, 68px); font-weight: 800; line-height: 1.02; letter-spacing: -.035em; color: var(--ink); }
+.home-hero h1 span, .home-hero h1 em { display: inline-block; }
 .home-hero h1 em { font-style: normal; color: var(--green-dark); }
 .home-hero-lead { margin-top: 22px; max-width: 540px; font-size: 18px; line-height: 1.65; color: var(--muted); }
 
@@ -1272,7 +1273,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .hero-results.is-empty { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
 .hero-results.is-empty p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
 
-.hero-card { position: relative; overflow: hidden; min-height: 500px; display: flex; align-items: flex-end; border-radius: 26px; box-shadow: 0 24px 70px rgba(26, 50, 138, .18); }
+/* The banner picture drifts a few pixels, slowly, the way the reference site
+   lets its art breathe. Six seconds a cycle: noticeable only if you look. */
+.hero-card { position: relative; overflow: hidden; min-height: 500px; display: flex; align-items: flex-end; border-radius: 26px; box-shadow: 0 24px 70px rgba(26, 50, 138, .18); animation: hero-float 7s ease-in-out infinite; }
+@keyframes hero-float { 50% { transform: translateY(-7px); } }
+@media (prefers-reduced-motion: reduce) { .hero-card { animation: none; } }
 .hero-card-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.1s ease; }
 .hero-card-slide.is-active { opacity: 1; }
 .hero-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 33, 89, .05) 30%, rgba(10, 33, 89, .82)); }

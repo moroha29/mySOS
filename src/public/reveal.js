@@ -43,10 +43,16 @@ export default function watchReveals(root = globalThis.document) {
     for (const node of root.querySelectorAll(`[data-reveal]:not(.${SEEN})`)) {
       if (watched.has(node)) continue;
       watched.add(node);
-      // Already on screen when the page opens: show it without waiting.
+      /*
+       * Already on screen when the page opens: it still arrives, on the next
+       * frame, so the banner is not simply there when someone lands. Anything
+       * further down waits until it is reached.
+       */
       const box = node.getBoundingClientRect();
-      if (box.top < (globalThis.innerHeight ?? 0) * 0.92 && box.bottom > 0) { node.classList.add(SEEN); shown += 1; }
-      else observer.observe(node);
+      if (box.top < (globalThis.innerHeight ?? 0) * 0.92 && box.bottom > 0) {
+        shown += 1;
+        requestAnimationFrame(() => node.classList.add(SEEN));
+      } else observer.observe(node);
     }
   };
 

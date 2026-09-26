@@ -29,7 +29,7 @@ function ReasonStack() {
   const { scrollerRef, active, goTo } = useScrollSteps(reasons.length, { axis: 'y', step: REASON_STEP });
 
   return <section className="why-choose" aria-labelledby="why-choose-title">
-    <div className="section-heading align-center">
+    <div className="section-heading align-center" data-reveal>
       <div>
         <span className="eyebrow" data-cms-path={cms(pagePath('why', 'benefitsEyebrow'))}>{pageText('why', 'benefitsEyebrow', 'Why choose MySOS')}</span>
         <h2 id="why-choose-title" data-cms-path={cms(pagePath('why', 'benefitsTitle'))}>{pageText('why', 'benefitsTitle', 'Everything You Need, Without the Sourcing Headache.')}</h2>
@@ -117,7 +117,7 @@ function ProcessJourney() {
   const last = Math.max(1, steps.length - 1);
 
   return <section className="why-process" aria-labelledby="why-process-title">
-    <div className="section-heading align-center eyebrow-title">
+    <div className="section-heading align-center eyebrow-title" data-reveal>
       <div>
         <h2 id="why-process-title" className="eyebrow" data-cms-path={cms(headingPath('whyProcessHeading'))}>{heading('whyProcessHeading', 'Our process')}</h2>
         <p data-cms-path={cms(pagePath('why', 'processLead'))}>{pageText('why', 'processLead', 'Follow your order from first enquiry to final delivery.')}</p>
@@ -194,7 +194,7 @@ function ClientLoyalty() {
       descriptionPath={pagePath('why', 'loyaltyLead')}
     />
     <ul className="loyalty-grid">
-      {promises.map((promise, index) => <li className="loyalty-card" key={promise.title}>
+      {promises.map((promise, index) => <li className="loyalty-card" key={promise.title} data-reveal style={{ '--reveal-delay': `${index * 70}ms` }}>
         <Icon name={promise.icon} size={42} cmsPath={contentPath('loyalty', index, 'icon')} />
         <h3 data-cms-path={cms(contentPath('loyalty', index, 'title'))}>{promise.title}</h3>
         <p data-cms-path={cms(contentPath('loyalty', index, 'description'))}>{promise.description}</p>
