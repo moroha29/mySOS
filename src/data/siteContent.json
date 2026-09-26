@@ -588,6 +588,36 @@
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today."
     },
+    "product": {
+      "buildTitle": "Build your request",
+      "quantityQuestion": "How many pieces?",
+      "quantityHint": "Minimum {min}",
+      "colourQuestion": "Choose a base colour",
+      "colourHint": "Optional",
+      "methodQuestion": "How would you like to customise it?",
+      "methodHint": "Choose one",
+      "methodHelpTitle": "Help me decide",
+      "methodHelpNote": "We will recommend one",
+      "artworkTitle": "Have artwork or a reference?",
+      "artworkHint": "PNG, JPG or PDF",
+      "addButton": "Add to my request",
+      "askPrefix": "Need something different?",
+      "askLink": "Ask MySOS for help",
+      "estimateLabel": "Indicative price",
+      "estimateNote": "A guide only. Your quote depends on artwork, quantity, sizes, colours, packaging and delivery.",
+      "noPriceNote": "We will quote once we know the artwork, quantity and finishing.",
+      "mockupTitle": "Free visual mockup before production",
+      "mockupNote": "Your logo placement and print size are confirmed before we proceed.",
+      "promises": [
+        "No minimum for enquiry",
+        "Free mockup",
+        "Local support"
+      ],
+      "infoEyebrow": "Product information",
+      "infoTitle": "Everything important, kept simple.",
+      "infoLead": "The final material, sizing and print method are confirmed with you before production. You get a visual mockup and a final quotation first.",
+      "relatedTitle": "More in this category"
+    },
     "request": {
       "breadcrumb": "Get a Quote",
       "heroTitle": "Tell Us What You Need",
@@ -1322,6 +1352,83 @@
       "label": "$35+",
       "title": "Premium gifting and kit-outs",
       "description": "Jackets, full uniform sets and curated welcome packs"
+    }
+  ],
+  "quantityPresets": [
+    20,
+    50,
+    100,
+    250
+  ],
+  "productMinimum": 10,
+  "productFacts": {
+    "default": [
+      {
+        "label": "Material",
+        "value": "Confirmed with you before production"
+      },
+      {
+        "label": "Branding",
+        "value": "Printed or embroidered with your artwork"
+      },
+      {
+        "label": "Quantities",
+        "value": "Small runs to bulk orders"
+      },
+      {
+        "label": "Lead time",
+        "value": "Usually 7 to 14 working days"
+      }
+    ],
+    "tshirts": [
+      {
+        "label": "Material",
+        "value": "Premium combed cotton"
+      },
+      {
+        "label": "Fit",
+        "value": "Unisex regular fit"
+      },
+      {
+        "label": "Sizes",
+        "value": "XS to 5XL"
+      },
+      {
+        "label": "Lead time",
+        "value": "Usually 7 to 14 working days"
+      }
+    ],
+    "polos": [
+      {
+        "label": "Material",
+        "value": "Cotton pique or dri-fit"
+      },
+      {
+        "label": "Fit",
+        "value": "Unisex regular fit"
+      },
+      {
+        "label": "Sizes",
+        "value": "XS to 5XL"
+      },
+      {
+        "label": "Lead time",
+        "value": "Usually 7 to 14 working days"
+      }
+    ]
+  },
+  "productInfoSections": [
+    {
+      "title": "Size guide",
+      "body": "Sizes run from XS to 5XL on most apparel. Send us your size breakdown, or ask for a size set to measure against before you commit."
+    },
+    {
+      "title": "Printing and artwork",
+      "body": "Send artwork as PNG, JPG or PDF, ideally at 300dpi or as a vector file. We check it, advise on the best print method and send a mockup before production."
+    },
+    {
+      "title": "Delivery and quality assurance",
+      "body": "Every order is checked before it leaves us, and verified production errors are replaced or reimbursed. Delivery across Singapore is arranged with your timeline in mind."
     }
   ]
 }

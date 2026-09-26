@@ -75,10 +75,10 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
 
 /* -------------------------------------------------------------------- cards */
 
-// A product card starts a request with that product already in it.
+// A product card opens that product's own page, where the request is built.
 export function ProductCard({ product }) {
   const price = getDisplayPrice(product);
-  return <a className="product-card" href={requestPathFor(product.id)} aria-label={`Ask MySOS for a quote on ${product.public.name}`}>
+  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`}>
     <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
     <h3>{product.public.name}</h3>
     {price && <p className="price">{price}</p>}

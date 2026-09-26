@@ -18,9 +18,14 @@ export const productFor = (productId) => (productId ? catalogue.get(productId) ?
 let lineCounter = 0;
 const nextKey = (prefix) => `${prefix}-${(lineCounter += 1)}`;
 
-/** One row of the request. `details` holds only what the customer set. */
-export function makeLine({ productId = '', name = '', note = '', quantity = 1 } = {}, prefix = 'line') {
+/*
+ * One row of the request. `details` holds only what the customer set — either
+ * here, when they arrive from a product's own page having chosen a colour and a
+ * printing method, or in the row's own panel.
+ */
+export function makeLine({ productId = '', name = '', note = '', quantity = 1, details = {} } = {}, prefix = 'line') {
   const product = productFor(productId);
+  const known = new Set(detailFieldsFor(productId).map((field) => field.id));
   return {
     key: nextKey(prefix),
     productId: product ? productId : '',
@@ -28,7 +33,8 @@ export function makeLine({ productId = '', name = '', note = '', quantity = 1 } 
     catalogueName: product?.public?.name ?? '',
     note: String(note || ''),
     quantity: clampQuantity(quantity),
-    details: {},
+    details: Object.fromEntries(Object.entries(details)
+      .filter(([id, value]) => known.has(id) && String(value ?? '').trim())),
     detailNotes: '',
     files: [],
   };
