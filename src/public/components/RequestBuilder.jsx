@@ -214,6 +214,7 @@ export default function RequestBuilder({
   topic = '',
   useCase = null,
   startWith = [],
+  startNotes = '',
   title = word('packageTitle', 'Your Recommended Team Package'),
   titlePath = wordPath('packageTitle'),
   lead = word('packageLead'),
@@ -228,7 +229,7 @@ export default function RequestBuilder({
   const [sameQuantity, setSameQuantity] = useState(50);
   const [custom, setCustom] = useState('');
   const [neededBy, setNeededBy] = useState('');
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(startNotes);
   const [files, setFiles] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [sent, setSent] = useState(null);

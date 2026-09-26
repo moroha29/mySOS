@@ -82,8 +82,9 @@ describe('an uploaded picture can stand in for an icon', () => {
 describe('icons on the page carry their content path', () => {
   it('on the home page', () => {
     const html = renderAt('/mySOS/', HomePage);
-    expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
-    expect(html).toContain('data-cms-path="[&quot;additionalContent&quot;,&quot;solutions&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
+    // The reasons in the navy band, and the icon on every product tile.
+    expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
+    expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;categories&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
   });
 
   it('on the Why MySOS page', () => {

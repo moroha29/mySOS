@@ -129,7 +129,9 @@ describe('our process: the tracker and its cards', () => {
   });
 
   it('every step shows a real MySOS photo until its own is added', () => {
-    const borrowed = Object.fromEntries([...pageSource.matchAll(/^\s+(\w+): '([\w/-]+)',$/gm)].map((match) => [match[1], match[2]]));
+    // The borrowed photos are shared with the homepage, which shows the same steps.
+    const shared = readFileSync(new URL('../src/public/processPhotos.js', import.meta.url), 'utf8');
+    const borrowed = Object.fromEntries([...shared.matchAll(/^\s+(\w+): '([\w/-]+)',$/gm)].map((match) => [match[1], match[2]]));
     for (const step of siteContent.process) {
       expect(getImage(`process/${step.icon}`) || getImage(borrowed[step.icon]), step.icon).toBeTruthy();
     }
@@ -224,7 +226,7 @@ describe('scrolling, small screens and motion', () => {
   it('choosing a step scrolls its own box to it, never the page', () => {
     const hook = readFileSync(new URL('../src/public/components/useScrollSteps.js', import.meta.url), 'utf8');
     expect(hook).not.toMatch(/window\.scroll(To|By)\(/);
-    expect(hook).toMatch(/scroller\.scrollTo\(\{ left: centreOf\(scroller, item\), behavior: smoothly\(\) \}\)/);
+    expect(hook).toMatch(/scroller\.scrollTo\(\{ left: restFor\(scroller, item, align\), behavior: smoothly\(\) \}\)/);
     expect(hook).toMatch(/scroller\.scrollTo\(\{ top: target \* step, behavior: smoothly\(\) \}\)/);
   });
 

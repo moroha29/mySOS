@@ -16,20 +16,28 @@ const SETTLE_DELAY = 160;
 const NUDGE = 40;
 
 const itemsOf = (scroller) => [...scroller.querySelectorAll('[data-step]')];
-const centreOf = (scroller, item) => item.offsetLeft + item.offsetWidth / 2 - scroller.clientWidth / 2;
+/*
+ * Where the row has to sit for an item to be the step being read. A row of
+ * cards centred on the current one (`align: 'centre'`) measures from the
+ * middle; a row that simply starts at its first card measures from the left,
+ * so nothing has to be scrolled before step one counts as reached.
+ */
+const restFor = (scroller, item, align) => (align === 'start'
+  ? item.offsetLeft - (itemsOf(scroller)[0]?.offsetLeft ?? 0)
+  : item.offsetLeft + item.offsetWidth / 2 - scroller.clientWidth / 2);
 const smoothly = () => (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
-function nearestItem(scroller) {
+function nearestItem(scroller, align) {
   let nearest = 0;
   let distance = Infinity;
   itemsOf(scroller).forEach((item, index) => {
-    const away = Math.abs(centreOf(scroller, item) - scroller.scrollLeft);
+    const away = Math.abs(restFor(scroller, item, align) - scroller.scrollLeft);
     if (away < distance) { distance = away; nearest = index; }
   });
   return nearest;
 }
 
-export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
+export default function useScrollSteps(count, { axis = 'y', step = 150, align = 'centre' } = {}) {
   const scrollerRef = useRef(null);
   const settledRef = useRef(0);
   const [active, setActive] = useState(0);
@@ -39,8 +47,8 @@ export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
     const scroller = scrollerRef.current;
     const item = scroller && itemsOf(scroller)[index];
     settledRef.current = index;
-    if (item) scroller.scrollTo({ left: centreOf(scroller, item), behavior: smoothly() });
-  }, []);
+    if (item) scroller.scrollTo({ left: restFor(scroller, item, align), behavior: smoothly() });
+  }, [align]);
 
   useEffect(() => {
     const scroller = scrollerRef.current;
@@ -57,7 +65,7 @@ export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
         setActive(clamp(Math.round(scroller.scrollTop / step)));
         return;
       }
-      setActive(nearestItem(scroller));
+      setActive(nearestItem(scroller, align));
     };
 
     /*
@@ -70,8 +78,8 @@ export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
       const items = itemsOf(scroller);
       const from = items[settledRef.current];
       if (!from) return;
-      const moved = scroller.scrollLeft - centreOf(scroller, from);
-      const nearest = nearestItem(scroller);
+      const moved = scroller.scrollLeft - restFor(scroller, from, align);
+      const nearest = nearestItem(scroller, align);
       let target = settledRef.current;
       if (nearest !== settledRef.current) target = nearest;
       else if (Math.abs(moved) >= NUDGE) target = clamp(settledRef.current + Math.sign(moved));
@@ -97,7 +105,7 @@ export default function useScrollSteps(count, { axis = 'y', step = 150 } = {}) {
       scroller.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };
-  }, [axis, clamp, count, scrollRowTo, step]);
+  }, [align, axis, clamp, count, scrollRowTo, step]);
 
   // Choosing a step scrolls the box to it, so the box and the marked step agree.
   const goTo = useCallback((index) => {
