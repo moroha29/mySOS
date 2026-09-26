@@ -130,14 +130,32 @@ describe('the way back into it', () => {
   const hook = readFileSync(new URL('../src/public/useSavedRequest.js', import.meta.url), 'utf8');
   const page = readFileSync(new URL('../src/public/pages/RequestPage.jsx', import.meta.url), 'utf8');
 
-  it('says "Get a Quote" until there is one, then offers the way back with a count', () => {
+  it('says "Get a Quote" until there is one, then offers the way back', () => {
     for (const source of [ui, shell]) {
       expect(source).toMatch(/const waiting = useSavedRequest\(\);/);
       expect(source).toMatch(/waiting \? 'returnToQuoteButton' : '(hero|header)QuoteButton'/);
-      expect(source).toMatch(/className="quote-count"/);
     }
-    expect(siteContent.labels.returnToQuoteButton).toMatch(/\S/);
+    expect(siteContent.labels.returnToQuoteButton).toBe('Return to quote');
     expect(siteContent.labels.headerQuoteButton).toMatch(/\S/);
+    // No count on the button: it made it wider than everything beside it.
+    for (const source of [ui, shell]) expect(source).not.toMatch(/quote-count/);
+    expect(readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8')).not.toMatch(/\.quote-count/);
+  });
+
+  it('lets a recommended package join the quote, or take its place', () => {
+    // Someone may already be building a quote when they open a solution page.
+    expect(builder).toMatch(/const addToQuote = \(how\) => \{/);
+    expect(builder).toMatch(/const existing = how === 'replace' \? \[\] : readSavedRequest\(\)\?\.lines \?\? \[\];/);
+    expect(builder).toMatch(/rows\.reduce\(\(kept, row\) => mergeArrival\(kept, row\), existing\)/);
+    expect(builder).toMatch(/globalThis\.location\?\.assign\?\.\(REQUEST_PATH\)/);
+    // Both offered only where there is something to replace.
+    expect(builder).toMatch(/\{waiting > 0 && <button type="button" className="btn btn-outline"/);
+    // And only on a page that recommends a package, not on the quote itself.
+    expect(builder).toMatch(/\{!remember && lines\.length > 0 && <div className="request-to-quote">/);
+    for (const key of ['addToQuoteButton', 'replaceQuoteButton', 'quoteHasItemsNote']) {
+      expect(siteContent.pages.solutionPage[key], key).toMatch(/\S/);
+    }
+    expect(siteContent.pages.solutionPage.quoteHasItemsNote).toContain('{count}');
   });
 
   it('counts only after the page has loaded, so the drawn page matches', () => {
