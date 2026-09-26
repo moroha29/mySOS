@@ -170,6 +170,26 @@ describe('the home banner and the sections under it', () => {
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
   });
 
+  it('sets the page in the typeface the concept uses', () => {
+    // The headlines read differently in Inter; DM Sans is what the design uses.
+    expect(css).toMatch(/fonts\.googleapis\.com\/css2\?family=DM\+Sans/);
+    expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
+  });
+
+  it('gives each promise a mark of its own, not a stray glyph', () => {
+    // The row opened with a drawn infinity sign, which read as a typo.
+    const markup = render(HomePage, '/mySOS/');
+    expect(markup).not.toContain('∞');
+    expect([...markup.matchAll(/class="home-stat-icon"/g)]).toHaveLength(siteContent.homeStats.length);
+    for (const stat of siteContent.homeStats) expect(stat.icon, stat.value).toBeTruthy();
+  });
+
+  it('sets the reviews at a size people can read', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.review-card p \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(16);
+    expect(size(/\.review-summary \.rating-value \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(26);
+  });
+
   it('carries the stats, the reasons, the budget bands and the work', () => {
     const markup = render(HomePage, '/mySOS/');
     for (const stat of siteContent.homeStats) expect(markup).toContain(stat.note);

@@ -73,7 +73,11 @@ describe('choosing a category', () => {
     expect(source).toMatch(/const chooseCategory = \(event, id\) => \{/);
     expect(source).toMatch(/event\.preventDefault\(\);\s*setCategory\(id\);/);
     expect(source).toMatch(/globalThis\.history\?\.pushState\?\.\(\{ category: id \}, '', `\?category=\$\{id\}`\)/);
-    expect(source).toMatch(/onClick=\{\(event\) => chooseCategory\(event, item\.id\)\}/);
+    // The strip itself is shared with the homepage; the products page hands it
+    // the category being shown and what to do when one is chosen.
+    expect(source).toMatch(/<CategoryStrip activeId=\{category\} onChoose=\{chooseCategory\} \/>/);
+    const strip = readFileSync(new URL('../src/public/components/CategoryStrip.jsx', import.meta.url), 'utf8');
+    expect(strip).toMatch(/onClick=\{onChoose \? \(event\) => onChoose\(event, category\.id\) : undefined\}/);
     // Nothing scrolls the page: the reader stays where they were.
     expect(source.slice(source.indexOf('const chooseCategory'), source.indexOf('const toggleShowAll'))).not.toMatch(/scrollIntoView|scrollTo/);
   });

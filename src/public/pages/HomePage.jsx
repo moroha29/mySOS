@@ -7,6 +7,7 @@ import { getStories, REQUEST_PATH } from '../../utils/catalogue';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
 import { Button, heading, label, Photo, Testimonials, useGoogleReviews } from '../components/Ui';
+import CategoryStrip from '../components/CategoryStrip';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
 
@@ -360,19 +361,7 @@ export default function HomePage() {
   const stats = siteContent.homeStats ?? [];
 
   return <main className="home-page">
-    <nav className="home-quicknav" aria-label="Product categories">
-      <div className="home-quicknav-inner">
-        <ul>
-          {siteContent.categories.map((category, index) => <li key={category.id}>
-            <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</a>
-          </li>)}
-        </ul>
-        <a className="text-link" href="/mySOS/products/">
-          <span data-cms-path={cms(labelPath('quickNavAllLabel'))}>{label('quickNavAllLabel', 'View all products')}</span>
-          <Icon name="arrowRight" size={15} className="inline-arrow" />
-        </a>
-      </div>
-    </nav>
+    <CategoryStrip />
 
     <section className="home-hero">
       <div className="home-hero-inner">
@@ -391,8 +380,9 @@ export default function HomePage() {
 
     {stats.length > 0 && <section className="home-stats">
       {stats.map((stat, index) => <div key={stat.value}>
+        {stat.icon && <span className="home-stat-icon"><Icon name={stat.icon} size={22} cmsPath={contentPath('homeStats', index, 'icon')} /></span>}
         <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
-        {stat.label && <span data-cms-path={cms(contentPath('homeStats', index, 'label'))}>{stat.label}</span>}
+        {stat.label && <span className="home-stat-label" data-cms-path={cms(contentPath('homeStats', index, 'label'))}>{stat.label}</span>}
         <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>
       </div>)}
     </section>}

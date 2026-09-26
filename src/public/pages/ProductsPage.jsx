@@ -4,6 +4,7 @@ import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
 import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, enquiryProps, heading, label, PageCTA, Photo, ProductCard, SectionHeading } from '../components/Ui';
 
@@ -136,27 +137,7 @@ export default function ProductsPage() {
   const methods = printData.methods.filter((method) => method.public?.visible);
 
   return <main className="page-paper">
-    {/* The same strip of categories the homepage carries, so the two pages
-        open the same way. */}
-    <nav className="category-strip" aria-label="Product categories">
-      <div className="category-strip-inner">
-        <ul>
-          {siteContent.categories.map((item) => <li key={item.id}>
-            <a
-              className={item.id === category ? 'is-active' : ''}
-              href={`?category=${item.id}`}
-              aria-current={item.id === category ? 'page' : undefined}
-              onClick={(event) => chooseCategory(event, item.id)}
-              data-cms-path={cms(categoryPath(item, 'name'))}
-            >{item.name}</a>
-          </li>)}
-        </ul>
-        <a className="text-link" href={REQUEST_PATH}>
-          <span data-cms-path={cms(labelPath('quickNavAllLabel'))}>{label('quickNavAllLabel', 'Tell us what you need')}</span>
-          <Icon name="arrowRight" size={15} className="inline-arrow" />
-        </a>
-      </div>
-    </nav>
+    <CategoryStrip activeId={category} onChoose={chooseCategory} />
 
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
