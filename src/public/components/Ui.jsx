@@ -5,6 +5,7 @@ import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { enquiryLinkProps, getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
 import Icon from './Icons';
@@ -30,6 +31,22 @@ export function Arrow() {
 
 export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
   return <a className={`btn btn-${variant} ${className}`.trim()} href={href} {...rest}>{children}</a>;
+}
+
+/*
+ * "Get a Quote" — or, once this browser has a request waiting, the way back
+ * into it, with the number of products in it. The count is read after the page
+ * loads (see useSavedRequest), so the drawn page and the first render agree.
+ */
+export function QuoteButton({ variant = 'primary', className = '', showArrow = false, ...rest }) {
+  const waiting = useSavedRequest();
+  const key = waiting ? 'returnToQuoteButton' : 'heroQuoteButton';
+  const text = waiting ? label('returnToQuoteButton', 'Return to my request') : label('heroQuoteButton', 'Get a Quote');
+  return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
+    <span data-cms-path={cms(labelPath(key))}>{text}</span>
+    {waiting ? <span className="quote-count" aria-label={`${waiting} products in your request`}>{waiting}</span> : null}
+    {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}
+  </Button>;
 }
 
 export function TextLink({ href, children, className = '' }) {
@@ -245,9 +262,6 @@ export function PageCTA({
   description = "Let's create something amazing together.",
   titlePath,
   descriptionPath,
-  primaryLabel = label('heroQuoteButton', 'Get a Quote'),
-  primaryPath = labelPath('heroQuoteButton'),
-  primaryHref = REQUEST_PATH,
   showWhatsApp = true,
 }) {
   return <section className="page-cta">
@@ -256,10 +270,8 @@ export function PageCTA({
       <div>
         <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
         <div className="page-cta-actions">
-        {/* The button's wording and where it sends people, together. */}
-        <Button href={primaryHref} {...enquiryLinkProps(primaryHref)}>
-          <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
-        </Button>
+          {/* Says "Get a Quote", or the way back once a request is waiting. */}
+          <QuoteButton />
           {showWhatsApp && <WhatsAppLink />}
         </div>
       </div>

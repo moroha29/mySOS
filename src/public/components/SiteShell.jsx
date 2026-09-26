@@ -5,6 +5,7 @@ import solutions from '../../data/solutions.json';
 import { REQUEST_PATH } from '../../utils/catalogue';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, solutionPath } from '../cms';
 import Icon from './Icons';
+import useSavedRequest from '../useSavedRequest';
 
 const label = (key, fallback) => siteContent.labels?.[key] ?? fallback;
 
@@ -94,10 +95,22 @@ function NavigationItem({ item, index, onNavigate }) {
   </div>;
 }
 
-// "Get a Quote" opens the site's own request page, where a customer says what
-// they need. Never the agents' quotation engine.
-const quoteButtonPaths = cmsAll(labelPath('headerQuoteButton'));
-const quoteLink = { href: REQUEST_PATH };
+/*
+ * "Get a Quote" opens the site's own request page, where a customer says what
+ * they need — never the agents' quotation engine. Once a request is waiting in
+ * this browser, the button offers the way back to it instead, with the number
+ * of products in it. The count is read after the page loads, so the drawn page
+ * and the first render agree.
+ */
+function HeaderQuoteButton({ className }) {
+  const waiting = useSavedRequest();
+  const key = waiting ? 'returnToQuoteButton' : 'headerQuoteButton';
+  const text = waiting ? label('returnToQuoteButton', 'Return to my request') : label('headerQuoteButton', 'Get a Quote');
+  return <a className={className} href={REQUEST_PATH} data-cms-paths={cmsAll(labelPath(key))}>
+    {text}
+    {waiting ? <span className="quote-count" aria-label={`${waiting} products in your request`}>{waiting}</span> : null}
+  </a>;
+}
 
 // Several fields hold "/mySOS/" — the site's base path and the placeholder
 // legal links — so the manager cannot tell them apart from the URL alone.
@@ -114,10 +127,10 @@ export function SiteHeader() {
       </button>
       <nav id="primary-navigation" className={`primary-nav ${open ? 'is-open' : ''}`.trim()} aria-label="Main navigation">
         {siteConfig.navigation.map((item, index) => <NavigationItem key={item.label} item={item} index={index} onNavigate={() => setOpen(false)} />)}
-        <a className="btn btn-primary btn-sm mobile-quote" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <HeaderQuoteButton className="btn btn-primary btn-sm mobile-quote" />
       </nav>
       <div className="header-actions">
-        <a className="btn btn-primary btn-sm" {...quoteLink} data-cms-paths={quoteButtonPaths}>{label('headerQuoteButton', 'Get a Quote')}</a>
+        <HeaderQuoteButton className="btn btn-primary btn-sm" />
         <WhatsAppButton />
       </div>
     </div>
