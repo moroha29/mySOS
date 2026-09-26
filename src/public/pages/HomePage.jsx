@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
 import { hasGoogleReviews } from '../../utils/googleReviews';
@@ -176,11 +177,7 @@ const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
 function CategoryTiles() {
   return <section className="section home-tiles">
     <div className="home-tiles-head">
-      <div>
-        <span className="eyebrow" data-cms-path={cms(headingPath('homeTilesEyebrow'))}>{heading('homeTilesEyebrow', 'Explore products')}</span>
-        <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
-      </div>
-      <p data-cms-path={cms(headingPath('homeTilesLead'))}>{heading('homeTilesLead')}</p>
+      <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
     </div>
     <div className="home-tile-grid">
       {siteContent.categories.map((category, index) => <a
@@ -203,11 +200,7 @@ function WhyBand() {
   return <section className="home-why">
     <div className="home-why-inner">
       <div className="home-why-head">
-        <div>
-          <span className="eyebrow" data-cms-path={cms(headingPath('homeWhyEyebrow'))}>{heading('homeWhyEyebrow', 'Why MySOS')}</span>
-          <h2 data-cms-path={cms(headingPath('homeWhyHeading'))}>{heading('homeWhyHeading', 'One team. Every step handled.')}</h2>
-        </div>
-        <p data-cms-path={cms(headingPath('homeWhyLead'))}>{heading('homeWhyLead')}</p>
+        <h2 data-cms-path={cms(headingPath('benefitsHeading'))}>{heading('benefitsHeading', 'Why choose MySOS?')}</h2>
       </div>
       <ol className="home-why-grid">
         {reasons.map((reason, index) => <li key={reason.icon}>
@@ -276,12 +269,9 @@ function SelectedWork({ stories }) {
   if (!stories.length) return null;
   return <section className="section home-work">
     <div className="home-work-head">
-      <div>
-        <span className="eyebrow" data-cms-path={cms(headingPath('homeWorkEyebrow'))}>{heading('homeWorkEyebrow', 'Selected work')}</span>
-        <h2 data-cms-path={cms(headingPath('homeWorkHeading'))}>{heading('homeWorkHeading', 'Complex orders. Simple solutions.')}</h2>
-      </div>
-      <a className="text-link" href={REQUEST_PATH}>
-        <span data-cms-path={cms(labelPath('workDiscussLabel'))}>{label('workDiscussLabel', 'Discuss your project')}</span>
+      <h2 data-cms-path={cms(headingPath('storiesHeading'))}>{heading('storiesHeading', 'Real projects. Real results.')}</h2>
+      <a className="text-link" href="/mySOS/success-stories/">
+        <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
         <Icon name="arrowRight" size={15} className="inline-arrow" />
       </a>
     </div>
@@ -314,11 +304,7 @@ function ProcessRail() {
 
   return <section className="section home-process">
     <div className="home-process-head">
-      <div>
-        <span className="eyebrow" data-cms-path={cms(headingPath('homeProcessEyebrow'))}>{heading('homeProcessEyebrow', 'How it works')}</span>
-        <h2 data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
-      </div>
-      <p data-cms-path={cms(headingPath('homeProcessLead'))}>{heading('homeProcessLead')}</p>
+      <h2 data-cms-path={cms(headingPath('processHeading'))}>{heading('processHeading', 'How it works')}</h2>
     </div>
     <div className="home-process-card">
       <ol className="home-process-track" style={{ '--reached': reached }}>
@@ -370,10 +356,10 @@ export default function HomePage() {
     <section className="home-hero">
       <div className="home-hero-inner">
         <div className="home-hero-copy">
-          <span className="eyebrow" data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
+          <span className="eyebrow" data-cms-path={cms(configPath('tagline'))}>{siteConfig.tagline}</span>
           <h1>
-            <span data-cms-path={cms(headingPath('heroTitleLead'))}>{heading('heroTitleLead', 'Tell us what you need.')}</span>{' '}
-            <em><span data-cms-path={cms(headingPath('heroTitleAccentLong'))}>{heading('heroTitleAccentLong', "We'll source the rest.")}</span></em>
+            <span data-cms-path={cms(headingPath('heroTitle'))}>{heading('heroTitle', 'Custom Merchandise,')}</span>{' '}
+            <em><span data-cms-path={cms(headingPath('heroTitleAccent'))}>{heading('heroTitleAccent', 'Made Simple.')}</span></em>
           </h1>
           <p className="home-hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
           <HeroSearch />
@@ -386,8 +372,7 @@ export default function HomePage() {
       {stats.map((stat, index) => <div key={stat.value}>
         {stat.icon && <span className="home-stat-icon"><Icon name={stat.icon} size={22} cmsPath={contentPath('homeStats', index, 'icon')} /></span>}
         <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
-        {stat.label && <span className="home-stat-label" data-cms-path={cms(contentPath('homeStats', index, 'label'))}>{stat.label}</span>}
-        <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>
+        {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
       </div>)}
     </section>}
 

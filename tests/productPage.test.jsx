@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import productData from '../src/data/productData.json';
+import siteConfig from '../src/data/siteConfig.json';
 import siteContent from '../src/data/siteContent.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import { makeLine } from '../src/utils/solutionRequest';
@@ -54,7 +55,10 @@ describe('a product has a page of its own', () => {
     }
     // The quantity presets and the facts panel.
     for (const preset of siteContent.quantityPresets) expect(markup).toContain(`>${preset}<`);
-    for (const fact of siteContent.productFacts.tshirts) expect(markup).toContain(fact.value);
+    for (const fact of siteContent.productFacts.default) expect(markup).toContain(fact.value);
+    // The sections below are the questions the client already answers, in
+    // their own words — not specifications we would be inventing for them.
+    expect(siteContent.productInfoSections.map((section) => section.title)).toEqual(siteContent.faq.map((item) => item.question));
     expect(markup).toContain('Home');
     expect(markup).toContain('Apparel');
   });
@@ -151,7 +155,11 @@ describe('the line across the top of every page', () => {
       const strip = markup.indexOf('class="site-announce"');
       expect(strip, pathname).toBeGreaterThan(-1);
       expect(strip, pathname).toBeLessThan(markup.indexOf('class="site-header"'));
-      expect(markup, pathname).toContain(siteContent.announcement);
+      // Their own tagline, rather than a line of ours. (Apostrophes are
+      // escaped in the markup, so the strip is read back out of it.)
+      expect(siteContent.announcement).toBe(siteConfig.tagline);
+      const words = markup.match(/<p class="site-announce"[^>]*>([\s\S]*?)<\/p>/)[1];
+      expect(words.replaceAll('&#x27;', "'"), pathname).toBe(siteContent.announcement);
     }
   });
 
