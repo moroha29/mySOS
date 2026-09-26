@@ -153,10 +153,15 @@ describe('the home banner and the sections under it', () => {
     expect(markup).toContain(siteContent.headings.heroLead);
     expect(markup).not.toContain('Tell us what you need.');
     expect(markup).toContain('class="hero-search"');
+    // The chips fill the search rather than leaving the page, so the products
+    // they match are offered straight away.
     for (const chip of siteContent.heroSearchChips) {
       expect(siteContent.popularSolutions.some((item) => item.name === chip), chip).toBe(true);
-      expect(markup).toContain(`/mySOS/request/?ask=${encodeURIComponent(chip)}`);
+      expect(markup).toContain(chip);
     }
+    expect(home).toMatch(/<button type="button" onClick=\{\(\) => setAsked\(chip\)\}>/);
+    // Anything the catalogue cannot match is still carried to the quote page.
+    expect(home).toMatch(/href=\{askHref\(query\)\}/);
     expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
     expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
   });
@@ -209,6 +214,23 @@ describe('the home banner and the sections under it', () => {
     }
     // The four promises are the ones they list, nothing invented about them.
     expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(siteContent.heroPromises);
+  });
+
+  it('shows what the search found as a picture and a name, and nothing else', () => {
+    // The cards carried a line of description each, which only slowed the list
+    // down; the product's own page has the detail.
+    expect(home).toMatch(/function SearchResults\(\{ query, onAdd, added \}\)/);
+    expect(home).toMatch(/<span className="hero-result-shot"><ProductShot/);
+    expect(home).toMatch(/className="hero-result-name" href=\{`\/mySOS\/products\/\$\{product\.public\.slug\}\/`\}/);
+    expect(home).not.toMatch(/hero-result-(description|note)/);
+    // Adding puts it straight into the quote, without leaving the page.
+    expect(home).toMatch(/writeSavedRequest\(\{ lines: mergeArrival\(saved, \{ productId: product\.id/);
+    expect(home).toMatch(/added\.includes\(product\.id\)/);
+    // A phrase that names no product offers to describe it instead.
+    expect(home).toMatch(/className="hero-results is-empty"/);
+    for (const key of ['heroSuggestTitle', 'addToQuoteLabel', 'addedToQuoteLabel', 'heroSearchEmpty']) {
+      expect(siteContent.labels[key], key).toMatch(/\S/);
+    }
   });
 
   it('sets the page in the typeface the concept uses', () => {

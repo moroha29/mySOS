@@ -1252,8 +1252,25 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .hero-search:focus-within { border-color: var(--green); }
 .hero-search .btn { flex: none; height: 48px; border-radius: 999px; padding: 0 26px; }
 .hero-chips { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
-.hero-chips a { display: inline-block; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 15.5px; font-weight: 600; color: var(--ink); }
-.hero-chips a:hover { border-color: var(--green); color: var(--green-dark); }
+.hero-chips a, .hero-chips button { display: inline-block; padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 15.5px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.hero-chips a:hover, .hero-chips button:hover { border-color: var(--green); color: var(--green-dark); }
+
+/* What the search found: a picture, the product's name, and the way into the
+   quote. No description on the card — the product's own page has the detail. */
+.hero-results { margin-top: 18px; padding: 20px; border: 1px solid var(--line); border-radius: 22px; background: #fff; box-shadow: var(--shadow); }
+.hero-results-title { font-size: 16.5px; font-weight: 700; color: var(--ink); }
+.hero-results ul { margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.hero-results li { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+.hero-result-shot { display: block; height: 108px; border-radius: 12px; background: #fff; overflow: hidden; }
+.hero-result-shot .product-visual { width: 100%; height: 100%; }
+.hero-result-shot .product-visual img { object-fit: cover; }
+.hero-result-name { font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--ink); }
+.hero-result-name:hover { color: var(--green-dark); }
+.hero-results li .btn { margin-top: auto; width: 100%; border-radius: 999px; }
+.hero-results li .btn.is-added { border-color: var(--green); background: #e9f6ef; color: var(--green-dark); }
+.hero-results-all { margin-top: 16px; }
+.hero-results.is-empty { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+.hero-results.is-empty p { font-size: 15.5px; line-height: 1.5; color: var(--muted); }
 
 .hero-card { position: relative; overflow: hidden; min-height: 500px; display: flex; align-items: flex-end; border-radius: 26px; box-shadow: 0 24px 70px rgba(26, 50, 138, .18); }
 .hero-card-slide { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.1s ease; }
@@ -1400,6 +1417,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .hero-search { flex-wrap: wrap; border-radius: 20px; padding: 14px; }
   .hero-search input { flex-basis: 100%; order: 2; }
   .hero-search .btn { order: 3; width: 100%; }
+  .hero-results ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-results { padding: 16px; }
   .home-stats { grid-template-columns: minmax(0, 1fr); padding-inline: 18px; }
   .home-stats > div { padding: 18px; }
   .home-stat-icon { margin-bottom: 12px; }
