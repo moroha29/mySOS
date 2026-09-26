@@ -1,12 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
+import { mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
+import { searchProducts } from '../../utils/solutionRequest';
+import useSavedRequest from '../useSavedRequest';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, heading, label, Photo, Testimonials, useGoogleReviews } from '../components/Ui';
+import { Button, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
+import CategoryStrip from '../components/CategoryStrip';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
 
@@ -79,34 +84,149 @@ function HeroCard({ slides }) {
   </div>;
 }
 
+/*
+ * What the search finds: the products themselves, each a picture and its name,
+ * with a button that puts it straight into the quote. A description on every
+ * card only slowed the list down — the product's own page has the detail.
+ *
+ * Nothing matches every phrase ("Orientation Pack" is a kind of job, not a
+ * product), so an empty result offers to describe it to MySOS instead.
+ */
+function SearchResults({ query, onAdd, added }) {
+  const waiting = useSavedRequest();
+  const results = useMemo(() => searchProducts(query), [query]);
+  if (!results.length) {
+    return <div className="hero-results is-empty">
+      <p data-cms-path={cms(labelPath('heroSearchEmpty'))}>{label('heroSearchEmpty', 'No product goes by that name. Tell us what you are planning and we will find it.')}</p>
+      <a className="btn btn-secondary btn-sm" href={askHref(query)}>
+        <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+      </a>
+    </div>;
+  }
+  return <div className="hero-results">
+    <p className="hero-results-title">
+      <span data-cms-path={cms(labelPath('heroSuggestTitle'))}>{label('heroSuggestTitle', 'Suggested products for')}</span>
+      {` “${query.trim()}”`}
+    </p>
+    <ul>
+      {results.slice(0, 6).map((product) => <li key={product.id}>
+        <span className="hero-result-shot"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
+        <a className="hero-result-name" href={`/mySOS/products/${product.public.slug}/`}>{product.public.name}</a>
+        <button type="button" className={added.includes(product.id) ? 'btn btn-outline btn-sm is-added' : 'btn btn-secondary btn-sm'} onClick={() => onAdd(product)}>
+          {added.includes(product.id)
+            ? <><Icon name="check" size={15} /> <span data-cms-path={cms(labelPath('addedToQuoteLabel'))}>{label('addedToQuoteLabel', 'In your quote')}</span></>
+            : <><Icon name="plus" size={15} /> <span data-cms-path={cms(labelPath('addToQuoteLabel'))}>{label('addToQuoteLabel', 'Add to quote')}</span></>}
+        </button>
+      </li>)}
+    </ul>
+    {/* Only once there is a quote to go back to. */}
+    {waiting > 0 && <a className="text-link hero-results-all" href={REQUEST_PATH}>
+      <span data-cms-path={cms(labelPath('returnToQuoteButton'))}>{label('returnToQuoteButton', 'Return to quote')}</span>
+      <Icon name="arrowRight" size={15} className="inline-arrow" />
+    </a>}
+  </div>;
+}
+
 function HeroSearch() {
   const [asked, setAsked] = useState('');
+  const [added, setAdded] = useState([]);
   const chips = siteContent.heroSearchChips ?? [];
   const href = askHref(asked.trim());
+  const query = asked.trim();
+
+  // Straight into the quote, without leaving the page they are reading.
+  const addProduct = (product) => {
+    const quantity = Number(siteContent.quantityPresets?.[1]) || 50;
+    const saved = readSavedRequest()?.lines ?? [];
+    writeSavedRequest({ lines: mergeArrival(saved, { productId: product.id, name: product.public.name, quantity, details: {} }) });
+    setAdded((current) => (current.includes(product.id) ? current : [...current, product.id]));
+  };
+
   return <>
     <form
       className="hero-search"
+      data-reveal
+      style={{ '--reveal-delay': '320ms' }}
       role="search"
-      onSubmit={(event) => { event.preventDefault(); if (asked.trim()) globalThis.location.assign(href); }}
+      onSubmit={(event) => { event.preventDefault(); if (query) globalThis.location.assign(href); }}
     >
       <Icon name="search" size={20} />
       <input
         type="search"
         aria-label={label('heroSearchPlaceholder', 'Tell us what you need')}
-        placeholder={label('heroSearchPlaceholder', 'Try: 200 event kits under $15 each')}
+        placeholder={label('heroSearchPlaceholder', "Tell us what you're planning")}
         value={asked}
         onChange={(event) => setAsked(event.target.value)}
       />
-      <a className="btn btn-primary" href={asked.trim() ? href : REQUEST_PATH}>
-        <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find it for me')}</span>
+      <a className="btn btn-primary" href={query ? href : REQUEST_PATH}>
+        <span data-cms-path={cms(labelPath('heroSearchButton'))}>{label('heroSearchButton', 'Find My Solution')}</span>
       </a>
     </form>
     <ul className="hero-chips">
       {chips.map((chip, index) => <li key={chip}>
-        <a href={askHref(chip)}><span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span></a>
+        <button type="button" onClick={() => setAsked(chip)}>
+          <span aria-hidden="true">+</span>
+          <span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span>
+        </button>
       </li>)}
+      {/* Artwork and photographs are attached on the quote page, where the
+          message that carries them is put together. */}
+      <li>
+        <a className="hero-chip-upload" href={`${REQUEST_PATH}?upload=1`}>
+          <Icon name="upload" size={15} />
+          <span data-cms-path={cms(labelPath('uploadPhotoChip'))}>{label('uploadPhotoChip', 'Upload product photo')}</span>
+        </a>
+      </li>
     </ul>
+    {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
+}
+
+/*
+ * The figure at the head of the promises: counts up from nothing and settles
+ * on the mark for "endless". The final mark is what the server draws, so it is
+ * what a reader sees with no JavaScript, or one who asked for less motion; the
+ * count only replaces it while it runs.
+ */
+const COUNT_MS = 1400;
+
+function CountToInfinity({ value = '∞' }) {
+  const [shown, setShown] = useState(value);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let frame = 0;
+    let started = 0;
+    const tick = (now) => {
+      started ||= now;
+      const part = Math.min(1, (now - started) / COUNT_MS);
+      // Fast at first, easing into the last few, then the mark itself.
+      const eased = 1 - (1 - part) ** 3;
+      if (part < 1) {
+        setShown(String(Math.round(eased * 99)));
+        frame = requestAnimationFrame(tick);
+      } else {
+        setShown(value);
+        node.classList.add('is-settled');
+      }
+    };
+
+    const watcher = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      watcher.disconnect();
+      setShown('0');
+      frame = requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    watcher.observe(node);
+
+    return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
+  }, [value]);
+
+  return <strong className="home-figure-value" ref={ref} aria-label={value} data-cms-path={cms(contentPath('homeFigure', 'value'))}>{shown}</strong>;
 }
 
 /* ------------------------------------------------------- proof and logos */
@@ -174,7 +294,7 @@ const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
 
 function CategoryTiles() {
   return <section className="section home-tiles">
-    <div className="home-tiles-head">
+    <div className="home-tiles-head" data-reveal>
       <div>
         <span className="eyebrow" data-cms-path={cms(headingPath('homeTilesEyebrow'))}>{heading('homeTilesEyebrow', 'Explore products')}</span>
         <h2 data-cms-path={cms(headingPath('categoriesHeading'))}>{heading('categoriesHeading', 'What can we make for you?')}</h2>
@@ -186,6 +306,8 @@ function CategoryTiles() {
         key={category.id}
         className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}`}
         href={`/mySOS/products/?category=${category.id}`}
+        data-reveal
+        style={{ '--reveal-delay': `${index * 60}ms` }}
       >
         <Icon name={category.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
         <span className="home-tile-body">
@@ -201,7 +323,7 @@ function WhyBand() {
   const reasons = siteContent.benefits.slice(0, 4);
   return <section className="home-why">
     <div className="home-why-inner">
-      <div className="home-why-head">
+      <div className="home-why-head" data-reveal>
         <div>
           <span className="eyebrow" data-cms-path={cms(headingPath('homeWhyEyebrow'))}>{heading('homeWhyEyebrow', 'Why MySOS')}</span>
           <h2 data-cms-path={cms(headingPath('homeWhyHeading'))}>{heading('homeWhyHeading', 'One team. Every step handled.')}</h2>
@@ -209,7 +331,7 @@ function WhyBand() {
         <p data-cms-path={cms(headingPath('homeWhyLead'))}>{heading('homeWhyLead')}</p>
       </div>
       <ol className="home-why-grid">
-        {reasons.map((reason, index) => <li key={reason.icon}>
+        {reasons.map((reason, index) => <li key={reason.icon} data-reveal style={{ '--reveal-delay': `${index * 80}ms` }}>
           <span className="home-why-number">{two(index + 1)}</span>
           <Icon name={reason.cardIcon || reason.icon} size={26} cmsPath={contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon')} />
           <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle || reason.title}</h3>
@@ -235,7 +357,7 @@ function BudgetFinder() {
   const ask = `Hi MySOS, I am planning about ${quantity} pieces at ${band.label} per person. ${band.title}.`;
 
   return <section className="section home-budget">
-    <div className="home-budget-card">
+    <div className="home-budget-card" data-reveal>
       <div className="home-budget-copy">
         <span className="eyebrow" data-cms-path={cms(headingPath('budgetEyebrow'))}>{heading('budgetEyebrow', 'Find by budget')}</span>
         <h2 data-cms-path={cms(headingPath('budgetHeading'))}>{heading('budgetHeading', 'Know the budget, not the product?')}</h2>
@@ -274,7 +396,7 @@ function BudgetFinder() {
 function SelectedWork({ stories }) {
   if (!stories.length) return null;
   return <section className="section home-work">
-    <div className="home-work-head">
+    <div className="home-work-head" data-reveal>
       <div>
         <span className="eyebrow" data-cms-path={cms(headingPath('homeWorkEyebrow'))}>{heading('homeWorkEyebrow', 'Selected work')}</span>
         <h2 data-cms-path={cms(headingPath('homeWorkHeading'))}>{heading('homeWorkHeading', 'Complex orders. Simple solutions.')}</h2>
@@ -285,7 +407,7 @@ function SelectedWork({ stories }) {
       </a>
     </div>
     <div className="home-work-grid">
-      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`}>
+      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`} data-reveal style={{ '--reveal-delay': `${index * 90}ms` }}>
         <span className="home-work-tag">{story.category.replace('-', ' ')}</span>
         <span className="home-work-shot"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/cover`)} label={`${story.title} project`} /></span>
         <h3>{story.title}</h3>
@@ -312,7 +434,7 @@ function ProcessRail() {
   const reached = steps.length > 1 ? active / (steps.length - 1) : 0;
 
   return <section className="section home-process">
-    <div className="home-process-head">
+    <div className="home-process-head" data-reveal>
       <div>
         <span className="eyebrow" data-cms-path={cms(headingPath('homeProcessEyebrow'))}>{heading('homeProcessEyebrow', 'How it works')}</span>
         <h2 data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
@@ -328,7 +450,7 @@ function ProcessRail() {
         </li>)}
       </ol>
       <div className="home-process-rail" ref={scrollerRef} role="region" aria-label="How a MySOS order works, one step per card. Scroll sideways to move between them." tabIndex={0}>
-        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined}>
+        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined} data-reveal style={{ '--reveal-delay': `${index * 60}ms` }}>
           <span className="home-process-shot"><Photo style="studio" image={processPhoto(step)} imagePath={contentPath('process', index, 'image')} label={step.headline || step.title} wide /></span>
           <span className="home-process-label">{two(index + 1)} · <span data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span></span>
           <h3 data-cms-path={cms(contentPath('process', index, 'headline'))}>{step.headline || step.title}</h3>
@@ -341,13 +463,12 @@ function ProcessRail() {
 
 function ClosingBand() {
   return <section className="home-closing">
-    <div className="home-closing-inner">
-      <h2 data-cms-path={cms(headingPath('closingCtaTitle'))}>{heading('closingCtaTitle', 'Have a difficult request? That is our thing.')}</h2>
-      <p data-cms-path={cms(headingPath('closingCtaDescription'))}>{heading('closingCtaDescription')}</p>
-      <Button href={REQUEST_PATH} variant="light">
-        <span data-cms-path={cms(labelPath('heroQuoteButton'))}>{label('heroQuoteButton', 'Get a Quote')}</span>
-        <Icon name="arrowRight" size={16} className="inline-arrow" />
-      </Button>
+    <div className="home-closing-inner" data-reveal>
+      <h2 data-cms-path={cms(headingPath('homeClosingTitle'))}>{heading('homeClosingTitle', "Have a difficult request? That's our thing.")}</h2>
+      <div>
+        <p data-cms-path={cms(headingPath('homeClosingLead'))}>{heading('homeClosingLead')}</p>
+        <div className="home-closing-actions"><QuoteButton labelKey="homeStartButton" showArrow /></div>
+      </div>
     </div>
   </section>;
 }
@@ -358,33 +479,23 @@ export default function HomePage() {
   const featuredStories = useMemo(() => getStories().filter((story) => story.featured).slice(0, 2), []);
   const slides = heroSlides();
   const stats = siteContent.homeStats ?? [];
+  const figure = siteContent.homeFigure ?? null;
 
   return <main className="home-page">
-    <p className="home-announce" data-cms-path={cms(contentPath('announcement'))}>{siteContent.announcement}</p>
-
-    <nav className="home-quicknav" aria-label="Product categories">
-      <div className="home-quicknav-inner">
-        <ul>
-          {siteContent.categories.map((category, index) => <li key={category.id}>
-            <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</a>
-          </li>)}
-        </ul>
-        <a className="text-link" href="/mySOS/products/">
-          <span data-cms-path={cms(labelPath('quickNavAllLabel'))}>{label('quickNavAllLabel', 'View all products')}</span>
-          <Icon name="arrowRight" size={15} className="inline-arrow" />
-        </a>
-      </div>
-    </nav>
+    <CategoryStrip />
 
     <section className="home-hero">
       <div className="home-hero-inner">
         <div className="home-hero-copy">
-          <span className="eyebrow" data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
+          {/* The two halves arrive one after the other. The words inside are not
+              split: the manager rewrites these elements, and a value has to sit
+              in an element of its own. */}
           <h1>
-            <span data-cms-path={cms(headingPath('heroTitleLead'))}>{heading('heroTitleLead', 'Tell us what you need.')}</span>{' '}
-            <em><span data-cms-path={cms(headingPath('heroTitleAccentLong'))}>{heading('heroTitleAccentLong', "We'll source the rest.")}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(headingPath('heroTitleLead'))}>{heading('heroTitleLead', 'Tell us what you need.')}</span>{' '}
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(headingPath('heroTitleAccentLong'))}>{heading('heroTitleAccentLong', "We'll source the rest.")}</span></em>
           </h1>
-          <p className="home-hero-lead" data-cms-path={cms(headingPath('heroLead'))}>{heading('heroLead')}</p>
+          <p className="home-hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(headingPath('heroSearchLead'))}>{heading('heroSearchLead')}</p>
           <HeroSearch />
         </div>
         <HeroCard slides={slides} />
@@ -392,11 +503,18 @@ export default function HomePage() {
     </section>
 
     {stats.length > 0 && <section className="home-stats">
-      {stats.map((stat, index) => <div key={stat.value}>
-        <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
-        {stat.label && <span data-cms-path={cms(contentPath('homeStats', index, 'label'))}>{stat.label}</span>}
-        <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>
-      </div>)}
+      {figure && <div className="home-figure" data-reveal>
+        <CountToInfinity value={figure.value} />
+        <span className="home-figure-label" data-cms-path={cms(contentPath('homeFigure', 'label'))}>{figure.label}</span>
+        {figure.note && <small data-cms-path={cms(contentPath('homeFigure', 'note'))}>{figure.note}</small>}
+      </div>}
+      <ul className="home-stat-list">
+        {stats.map((stat, index) => <li key={stat.value} data-reveal style={{ '--reveal-delay': `${(index + 1) * 80}ms` }}>
+          {stat.icon && <Icon name={stat.icon} size={19} cmsPath={contentPath('homeStats', index, 'icon')} />}
+          <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
+          {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
+        </li>)}
+      </ul>
     </section>}
 
     <TrustStrip />

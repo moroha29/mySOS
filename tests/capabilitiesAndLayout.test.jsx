@@ -20,6 +20,27 @@ const render = (Page, pathname) => {
   return renderToStaticMarkup(<Page />);
 };
 
+/*
+ * Every size that carries words someone reads. The badge and the numbered step
+ * marker are shapes with a character in them, so they are left out.
+ */
+const CHROME = /\.badge|pdp-step-number/;
+
+function readingSizes(css) {
+  let selector = '';
+  const found = [];
+  for (const line of css.split(/\r?\n/)) {
+    const brace = line.indexOf('{');
+    if (brace >= 0) {
+      const head = line.slice(0, brace).trim();
+      if (head && !head.startsWith('@')) selector = head;
+    }
+    if (CHROME.test(selector)) continue;
+    for (const [, size] of line.matchAll(/font-size: ([\d.]+)px/g)) found.push(Number(size));
+  }
+  return found;
+}
+
 const visibleMethods = printData.methods.filter((method) => method.public?.visible);
 
 describe('page order: reviews sit directly under the banner', () => {
@@ -123,14 +144,18 @@ describe('the home banner and the sections under it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('asks what the visitor needs, and sends the answer to the request page', () => {
+  it('carries the concept the client designed, word for word', () => {
     const markup = render(HomePage, '/mySOS/');
-    expect(markup).toContain('Tell us what you need.');
+    // The concept page is the client's own design, so its wording is theirs.
+    expect(markup).toContain(siteContent.headings.heroEyebrow);
+    expect(markup).toContain(siteContent.headings.heroTitleLead);
+    expect(markup).toContain(siteContent.headings.heroTitleAccentLong.replaceAll("'", '&#x27;'));
+    expect(markup).toContain(siteContent.headings.heroSearchLead);
     expect(markup).toContain('class="hero-search"');
-    // Both the button and the suggestion chips open a request, never a chat.
-    expect(markup).toContain('href="/mySOS/request/?ask=Company%20welcome%20packs"');
-    expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
-    expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
+    // The suggestions open with a plus, and one of them opens the upload.
+    for (const chip of siteContent.heroSearchChips) expect(markup).toContain(chip);
+    expect(markup).toContain(`${'/mySOS/request/'}?upload=1`);
+    expect(home).toMatch(/<span aria-hidden="true">\+<\/span>/);
   });
 
   it('runs the banner picture card as a slideshow, starting on one the server drew', () => {
@@ -170,6 +195,73 @@ describe('the home banner and the sections under it', () => {
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
   });
 
+  it('titles every section as the concept does', () => {
+    const markup = render(HomePage, '/mySOS/');
+    for (const key of ['homeTilesEyebrow', 'categoriesHeading', 'homeWhyEyebrow', 'homeWhyHeading',
+      'homeWorkEyebrow', 'homeWorkHeading', 'homeProcessEyebrow', 'homeProcessHeading', 'homeClosingTitle']) {
+      expect(markup, key).toContain(siteContent.headings[key].replaceAll("'", '&#x27;'));
+    }
+    // The four facts it leads with: a figure, then three plain ones.
+    expect(siteContent.homeFigure.value).toBe('∞');
+    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(['Quality assured', 'Within 1 day', 'Free']);
+  });
+
+  it('sets the banner the way the concept sets it: small line, huge headline', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    // Measured off the concept at 1440px: eyebrow 12.5, headline 78.
+    expect(size(/\.home-hero-copy \.eyebrow \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(15);
+    expect(size(/\.home-hero h1 \{ font-size: clamp\([\d.]+px, [\d.]+vw, (\d+)px\)/)).toBeGreaterThanOrEqual(74);
+    expect(size(/\.hero-search input \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(16);
+    expect(size(/\.hero-search \.btn \{[^}]*height: (\d+)px/)).toBeGreaterThanOrEqual(54);
+    // Section headings at the same scale as the concept's.
+    expect(size(/\.home-tiles-head h2 \{[^}]*clamp\([\d.]+px, [\d.]+vw, (\d+)px\)/)).toBeGreaterThanOrEqual(58);
+  });
+
+  it('sets the page in the typeface the concept uses', () => {
+    // The headlines read differently in Inter; DM Sans is what the design uses.
+    expect(css).toMatch(/fonts\.googleapis\.com\/css2\?family=DM\+Sans/);
+    expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
+  });
+
+  it('opens the promises with a figure that counts up, then each with its mark', () => {
+    const markup = render(HomePage, '/mySOS/');
+    // The figure the server draws is the mark itself, so a reader with no
+    // JavaScript — or one who asked for less motion — sees it, not a zero.
+    expect(markup).toContain(`>${siteContent.homeFigure.value}</strong>`);
+    expect(markup).toContain(siteContent.homeFigure.label);
+    expect(home).toMatch(/setShown\(String\(Math\.round\(eased \* 99\)\)\)/);
+    expect(home).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
+    // Each promise keeps its own mark, and the row is a plain divided row now.
+    expect([...markup.matchAll(/class="home-stat-list"/g)]).toHaveLength(1);
+    for (const stat of siteContent.homeStats) {
+      expect(stat.icon, stat.value).toBeTruthy();
+      expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
+    }
+  });
+
+  it('brings sections in as they are reached, and never leaves them hidden', () => {
+    const reveal = readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8');
+    // The hidden state hangs off a class the script adds, so a page whose
+    // JavaScript never runs shows everything.
+    expect(css).toMatch(/html\.has-reveal \[data-reveal\] \{ opacity: 0; transform: translateY\(18px\); \}/);
+    expect(reveal).toMatch(/classList\.add\(HIDE_CLASS\)/);
+    expect(reveal).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return \(\) => \{\};/);
+    // And where the observer never reports, everything is shown anyway.
+    expect(reveal).toMatch(/const safety = setTimeout\(\(\) => \{/);
+    expect(reveal).toMatch(/for \(const node of root\.querySelectorAll\('\[data-reveal\]'\)\) node\.classList\.add\(SEEN\);/);
+    expect(render(HomePage, '/mySOS/')).toMatch(/data-reveal/);
+  });
+
+  it('turns the category pills dark green under the cursor', () => {
+    expect(css).toMatch(/\.category-strip ul a:hover \{ background: var\(--green-dark\); color: #fff; \}/);
+  });
+
+  it('sets the reviews at a size people can read', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.review-card p \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(16);
+    expect(size(/\.review-summary \.rating-value \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(26);
+  });
+
   it('carries the stats, the reasons, the budget bands and the work', () => {
     const markup = render(HomePage, '/mySOS/');
     for (const stat of siteContent.homeStats) expect(markup).toContain(stat.note);
@@ -191,14 +283,17 @@ describe('the type scale: titles carry the page', () => {
   it('sets titles above the text around them', () => {
     expect(sizeOf(/\.hero h1 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(50);
     expect(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(34);
-    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(16);
+    // The lead sits under the headline but is still a comfortable read: the
+    // whole point of the last pass was that 16px was a squint.
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(19);
+    expect(sizeOf(/\.hero-lead \{[^}]*font-size: ([\d.]+)px/))
+      .toBeLessThan(Number(css.match(/\.hero-compact h1 \{ font-size: clamp\((\d+)px/)[1]));
     expect(sizeOf(/\.section-heading p \{[^}]*font-size: ([\d.]+)px/))
       .toBeLessThan(sizeOf(/\.section-heading h2 \{ font-size: ([\d.]+)px/));
   });
 
-  it('never drops text below 12.5px, however small the scale gets', () => {
-    const sizes = [...css.matchAll(/font-size: ([\d.]+)px/g)].map(([, size]) => Number(size));
-    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(12.5);
+  it('never drops readable text below 13.5px, however small the scale gets', () => {
+    expect(Math.min(...readingSizes(css))).toBeGreaterThanOrEqual(13.5);
   });
 
   it('runs the page wider than it used to, halving the side margins', () => {
@@ -243,6 +338,56 @@ describe('how a product should be printed', () => {
     // The other kinds of field are left to the row of buttons as before.
     for (const kind of ['choice', 'select', 'text']) {
       expect(builder).toContain(`{!isPrinting && field.type === '${kind}'`);
+    }
+  });
+});
+
+describe('the page is comfortable to read', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const sizes = readingSizes(css);
+
+  it('sets no text below 13.5px, and the leads at 17px or more', () => {
+    // The type pass had trimmed body text about 6%, which left whole sections
+    // hard to read at arm's length.
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(13.5);
+    for (const lead of [/\.home-hero-lead \{[^}]*font-size: ([\d.]+)px/, /\.pdp-lead \{[^}]*font-size: ([\d.]+)px/, /\.section-heading p \{[^}]*font-size: ([\d.]+)px/]) {
+      expect(Number(css.match(lead)[1]), String(lead)).toBeGreaterThanOrEqual(17);
+    }
+  });
+
+  it('keeps titles clearly above the text they sit over', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    expect(size(/\.home-tiles-head h2 \{[^}]*clamp\(\d+px, [\d.]+vw, (\d+)px\)/))
+      .toBeGreaterThan(size(/\.home-tiles-head p \{ font-size: ([\d.]+)px/));
+  });
+});
+
+describe('the page moves as you read it', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const chrome = readFileSync(new URL('../src/public/chrome.js', import.meta.url), 'utf8');
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+
+  it('fills a line across the top and tightens the header once you scroll', () => {
+    expect(chrome).toMatch(/page\.style\.setProperty\('--scrolled'/);
+    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', scrolled > 24\)/);
+    expect(chrome).toMatch(/addEventListener\('scroll', onScroll, \{ passive: true \}\)/);
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?width: calc\(var\(--scrolled, 0\) \* 100%\)/);
+    expect(css).toMatch(/html\.is-scrolled \.site-header \{ height: 72px;/);
+  });
+
+  it('counts the review total up to itself, from the number the server drew', () => {
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = 1100 \}\)/);
+    expect(ui).toMatch(/const \[shown, setShown\] = useState\(target\);/);
+    expect(ui).toMatch(/<CountUp value=\{data\.totalReviewCount\} \/>/);
+  });
+
+  it('leaves every one of these out for a reader who asked for less motion', () => {
+    for (const source of [chrome, readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8')]) {
+      expect(source).toMatch(/prefers-reduced-motion: reduce/);
+    }
+    const quiet = css.slice(css.lastIndexOf('@media (prefers-reduced-motion: reduce)'));
+    for (const stopped of ['.site-announce::after', '.hero-card-slide', '.wa-bubble::after']) {
+      expect(quiet, stopped).toContain(stopped);
     }
   });
 });

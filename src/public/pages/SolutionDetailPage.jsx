@@ -62,7 +62,7 @@ function Hero({ solution, solutionIndex }) {
   const pictures = heroPictures(solution);
   return <section className="solution-hero">
     <div className="solution-hero-inner">
-      <div className="solution-hero-copy">
+      <div className="solution-hero-copy" data-reveal>
         <nav className="breadcrumb" aria-label="Breadcrumb">
           <a href="/mySOS/" aria-label={word('breadcrumbHome', 'Home')}><Icon name="home" size={15} /></a>
           <span aria-hidden="true">/</span>
@@ -79,7 +79,7 @@ function Hero({ solution, solutionIndex }) {
           <Icon name="arrowRight" size={16} />
         </a>}
       </div>
-      <div className="solution-collage" aria-hidden="true">
+      <div className="solution-collage" aria-hidden="true" data-reveal style={{ '--reveal-delay': '80ms' }}>
         {pictures.map(({ src, index }) => <div className={`solution-collage-tile tile-${index + 1}`} key={index}>
           <Photo style={solution.imageStyle} image={src} imagePath={[...solutionPath(solution, 'page'), 'heroImages', index]} eager={index < 2} />
         </div>)}
@@ -137,7 +137,7 @@ function UseCasePicker({ solution, activeId, onChoose }) {
       <ul className="use-case-track" ref={trackRef}>
         {solution.useCases.map((useCase, index) => {
           const active = useCase.id === activeId;
-          return <li key={useCase.id}>
+          return <li key={useCase.id} data-reveal style={{ '--reveal-delay': `${index * 60}ms` }}>
             <button type="button" className={active ? 'use-case-card is-active' : 'use-case-card'} aria-pressed={active} onClick={() => onChoose(useCase.id)}>
               <span className="use-case-photo"><Photo style={solution.imageStyle} image={pictures[index]} imagePath={[...solutionPath(solution, 'useCases', index), 'image']} /></span>
               {active && <span className="use-case-selected"><Icon name="check" size={14} /><span data-cms-path={wordPath('selectedLabel')}>{word('selectedLabel', 'Selected')}</span></span>}

@@ -4,7 +4,8 @@ import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
-import { enquiryLinkProps, getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import { getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
 import Icon from './Icons';
@@ -30,6 +31,21 @@ export function Arrow() {
 
 export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
   return <a className={`btn btn-${variant} ${className}`.trim()} href={href} {...rest}>{children}</a>;
+}
+
+/*
+ * "Get a Quote" — or, once this browser has a request waiting, the way back
+ * into it, with the number of products in it. The count is read after the page
+ * loads (see useSavedRequest), so the drawn page and the first render agree.
+ */
+export function QuoteButton({ variant = 'primary', className = '', showArrow = false, labelKey = 'heroQuoteButton', ...rest }) {
+  const waiting = useSavedRequest();
+  const key = waiting ? 'returnToQuoteButton' : labelKey;
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label(labelKey, 'Get a Quote');
+  return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
+    <span data-cms-path={cms(labelPath(key))}>{text}</span>
+    {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}
+  </Button>;
 }
 
 export function TextLink({ href, children, className = '' }) {
@@ -75,10 +91,15 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
 
 /* -------------------------------------------------------------------- cards */
 
-// A product card starts a request with that product already in it.
-export function ProductCard({ product }) {
+/*
+ * A product card opens that product's own page, where the request is built.
+ * `reveal` is its place in the row, so a grid of them arrives in order rather
+ * than all at once.
+ */
+export function ProductCard({ product, reveal }) {
   const price = getDisplayPrice(product);
-  return <a className="product-card" href={requestPathFor(product.id)} aria-label={`Ask MySOS for a quote on ${product.public.name}`}>
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 50}ms` } } : {};
+  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`} {...arriving}>
     <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
     <h3>{product.public.name}</h3>
     {price && <p className="price">{price}</p>}
@@ -98,9 +119,10 @@ export function CategoryCard({ category }) {
   </a>;
 }
 
-export function StoryCard({ story, showBadge = true }) {
+export function StoryCard({ story, showBadge = true, reveal }) {
   const href = `/mySOS/success-stories/${story.slug}/`;
-  return <article className="story-card">
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
+  return <article className="story-card" {...arriving}>
     <a className="story-card-media" href={href}>
       <Photo style={story.imageStyle} label={`${story.title} project`} image={picture(story.image, `stories/${story.slug}/cover`)} imagePath={storyPath(story, 'image')} />
       {showBadge && <span className="badge">{story.category.replace('-', ' ')}</span>}
@@ -113,9 +135,10 @@ export function StoryCard({ story, showBadge = true }) {
   </article>;
 }
 
-export function SolutionCard({ solution, active = false }) {
+export function SolutionCard({ solution, active = false, reveal }) {
   const href = `/mySOS/solutions/${solution.id}/`;
-  return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()}>
+  const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
+  return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()} {...arriving}>
     <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} image={picture(solution.image, `solutions/${solution.id}`)} imagePath={solutionPath(solution, 'image')} /></a>
     <div>
       <h3 data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name}</h3>
@@ -146,6 +169,42 @@ export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
       {step.description && <p data-cms-path={path(index, 'description')}>{step.description}</p>}
     </li>)}
   </ol>;
+}
+
+/*
+ * A number that counts up to itself the first time it is reached. The finished
+ * number is what the server draws, so it is what a reader sees with no
+ * JavaScript, or one who asked for less motion.
+ */
+export function CountUp({ value, ms = 1100 }) {
+  const target = Number(value) || 0;
+  const [shown, setShown] = useState(target);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || !target || typeof IntersectionObserver === 'undefined') return undefined;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
+
+    let frame = 0;
+    let started = 0;
+    const tick = (now) => {
+      started ||= now;
+      const part = Math.min(1, (now - started) / ms);
+      setShown(Math.round((1 - (1 - part) ** 3) * target));
+      if (part < 1) frame = requestAnimationFrame(tick);
+    };
+    const watcher = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      watcher.disconnect();
+      setShown(0);
+      frame = requestAnimationFrame(tick);
+    }, { threshold: 0.5 });
+    watcher.observe(node);
+    return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
+  }, [target, ms]);
+
+  return <span ref={ref} className="count-up">{shown}</span>;
 }
 
 /* --------------------------------------------------------- reviews slider */
@@ -205,7 +264,7 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
           <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
           {data.totalReviewCount ? <small>
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
-            {' '}{data.totalReviewCount}{' '}
+            {' '}<CountUp value={data.totalReviewCount} />{' '}
             <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
           </small> : null}
         </>
@@ -245,24 +304,18 @@ export function PageCTA({
   description = "Let's create something amazing together.",
   titlePath,
   descriptionPath,
-  primaryLabel = label('heroQuoteButton', 'Get a Quote'),
-  primaryPath = labelPath('heroQuoteButton'),
-  primaryHref = REQUEST_PATH,
   showWhatsApp = true,
 }) {
-  const bandBg = picture(siteContent.scenes?.ctaBandImage, 'scenes/band-cta');
-  return <section className="page-cta" style={bandBg ? { '--band-bg': `url(${bandBg})` } : undefined}>
-    <div className="page-cta-inner">
+  return <section className="page-cta">
+    <div className="page-cta-inner" data-reveal>
+      <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
       <div>
-        <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>
         <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
-      </div>
-      <div className="page-cta-actions">
-        {/* The button's wording and where it sends people, together. */}
-        <Button href={primaryHref} {...enquiryLinkProps(primaryHref)}>
-          <span data-cms-path={primaryPath && cms(primaryPath)}>{primaryLabel}</span>
-        </Button>
-        {showWhatsApp && <WhatsAppLink />}
+        <div className="page-cta-actions">
+          {/* Says "Get a Quote", or the way back once a request is waiting. */}
+          <QuoteButton />
+          {showWhatsApp && <WhatsAppLink />}
+        </div>
       </div>
     </div>
   </section>;

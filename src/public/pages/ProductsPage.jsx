@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, contentPath, headingPath, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
-import { getPublicProducts } from '../../utils/catalogue';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
-import { Product } from '../components/Visuals';
-import { Button, enquiryProps, heading, PageCTA, Photo, ProductCard, SectionHeading } from '../components/Ui';
+import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
@@ -43,7 +43,7 @@ function Capabilities({ methods }) {
       <span className="capabilities-eyebrow" data-cms-path={cms(pagePath('products', 'methodsEyebrow'))}>{pageText('products', 'methodsEyebrow', 'Our capabilities')}</span>
       <h2 className="capabilities-title" data-cms-path={cms(pagePath('products', 'methodsTitle'))}>{pageText('products', 'methodsTitle', 'How we bring your brand to life')}</h2>
 
-      <div className="capabilities-body">
+      <div className="capabilities-body" data-reveal>
         <div className="capabilities-tabs" role="tablist" aria-orientation="vertical" aria-label="Printing and customisation methods">
           {methods.map((method, index) => <button
             key={method.id}
@@ -135,42 +135,30 @@ export default function ProductsPage() {
   const visible = showAll ? products : products.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
   const methods = printData.methods.filter((method) => method.public?.visible);
-  const heroShot = picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero');
 
-  return <main>
+  return <main className="page-paper">
+    <CategoryStrip activeId={category} onChoose={chooseCategory} />
+
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
+          <span className="eyebrow" data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
           <h1>
             <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
             <em><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
           </h1>
           <p className="hero-lead" data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
         </div>
-        <div className="hero-art" aria-hidden="true">
-          {heroShot ? <img className="hero-shot" src={heroShot} alt="" data-cms-path={cms(scenePath('productsHeroImage'))} /> : <>
-            <Product type="tote" color="sand" mark="YOUR BRAND HERE" className="ha-3" />
-            <Product type="jacket" color="black" className="ha-1" />
-            <Product type="bottle" color="teal" className="ha-4" />
-          </>}
+        <div className="hero-scene">
+          <Photo
+            style="hall"
+            image={picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero')}
+            imagePath={scenePath('productsHeroImage')}
+            label="Merchandise MySOS has made"
+            wide
+            eager
+          />
         </div>
-      </div>
-    </section>
-
-    <section className="section section-tight">
-      <SectionHeading eyebrow={heading('browseCategoryHeading', 'Browse by category')} eyebrowPath={headingPath('browseCategoryHeading')} />
-      <div className="browse-row">
-        {siteContent.categories.map((item) => <a
-          key={item.id}
-          className={item.id === category ? 'is-active' : ''}
-          href={`?category=${item.id}`}
-          aria-current={item.id === category ? 'page' : undefined}
-          onClick={(event) => chooseCategory(event, item.id)}
-        >
-          <Icon name={item.icon} size={26} cmsPath={categoryPath(item, 'icon')} />
-          {/* A plain link to the category, so no dropdown arrow. */}
-          <span className="browse-label"><span data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</span></span>
-        </a>)}
       </div>
     </section>
 
@@ -187,7 +175,7 @@ export default function ProductsPage() {
         >{tab.name}</button>)}
       </div>}
       {visible.length > 0
-        ? <div className="product-grid" id="product-collection-grid">{visible.map((product) => <ProductCard key={product.id} product={product} />)}</div>
+        ? <div className="product-grid" id="product-collection-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}</div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
           <p data-cms-path={cms(pagePath('products', 'emptyDescription'))}>{pageText('products', 'emptyDescription')}</p>
@@ -206,18 +194,18 @@ export default function ProductsPage() {
     <Capabilities methods={methods} />
 
     <section className="promo-band">
-      <div className="promo-copy">
+      <div className="promo-copy" data-reveal>
         <span className="eyebrow" data-cms-path={cms(pagePath('products', 'promoEyebrow'))}>{pageText('products', 'promoEyebrow')}</span>
         <h2 data-cms-path={cms(pagePath('products', 'promoTitle'))}>{pageText('products', 'promoTitle')}</h2>
         <p data-cms-path={cms(pagePath('products', 'promoDescription'))}>{pageText('products', 'promoDescription')}</p>
-        <Button {...enquiryProps}><span data-cms-path={cms(pagePath('products', 'promoButtonLabel'))}>{pageText('products', 'promoButtonLabel')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>
+        <QuoteButton showArrow />
       </div>
       <div className="promo-art" aria-hidden="true"><Photo style="office" image={picture(siteContent.scenes?.productsPromoImage, 'scenes/products-promo')} imagePath={scenePath('productsPromoImage')} /></div>
     </section>
 
     <section className="section" id="faq">
       <SectionHeading eyebrow={heading('faqHeading', 'Frequently asked questions')} eyebrowPath={headingPath('faqHeading')} align="left" />
-      <div className="faq-list">
+      <div className="faq-list" data-reveal>
         {siteContent.faq.map((item, index) => <details key={item.question}>
           <summary><span data-cms-path={cms(contentPath('faq', index, 'question'))}>{item.question}</span><Icon name="plus" size={16} /></summary>
           <p data-cms-path={cms(contentPath('faq', index, 'answer'))}>{item.answer}</p>
