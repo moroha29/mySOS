@@ -144,26 +144,18 @@ describe('the home banner and the sections under it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('keeps the wording the client chose, and sends the answer to the request page', () => {
+  it('carries the concept the client designed, word for word', () => {
     const markup = render(HomePage, '/mySOS/');
-    // The banner is their own headline and lead, not the concept's stand-in
-    // copy, and the search suggestions are their own popular solutions.
-    expect(markup).toContain(siteContent.headings.heroTitle);
-    expect(markup).toContain(siteContent.headings.heroTitleAccent);
-    expect(markup).toContain(siteContent.headings.heroLead);
-    expect(markup).not.toContain('Tell us what you need.');
+    // The concept page is the client's own design, so its wording is theirs.
+    expect(markup).toContain(siteContent.headings.heroEyebrow);
+    expect(markup).toContain(siteContent.headings.heroTitleLead);
+    expect(markup).toContain(siteContent.headings.heroTitleAccentLong.replaceAll("'", '&#x27;'));
+    expect(markup).toContain(siteContent.headings.heroSearchLead);
     expect(markup).toContain('class="hero-search"');
-    // The chips fill the search rather than leaving the page, so the products
-    // they match are offered straight away.
-    for (const chip of siteContent.heroSearchChips) {
-      expect(siteContent.popularSolutions.some((item) => item.name === chip), chip).toBe(true);
-      expect(markup).toContain(chip);
-    }
-    expect(home).toMatch(/<button type="button" onClick=\{\(\) => setAsked\(chip\)\}>/);
-    // Anything the catalogue cannot match is still carried to the quote page.
-    expect(home).toMatch(/href=\{askHref\(query\)\}/);
-    expect(markup).toMatch(/class="btn btn-primary" href="\/mySOS\/request\/"/);
-    expect(home).toMatch(/const askHref = \(text\) => `\$\{REQUEST_PATH\}\?ask=\$\{encodeURIComponent\(text\)\}`/);
+    // The suggestions open with a plus, and one of them opens the upload.
+    for (const chip of siteContent.heroSearchChips) expect(markup).toContain(chip);
+    expect(markup).toContain(`${'/mySOS/request/'}?upload=1`);
+    expect(home).toMatch(/<span aria-hidden="true">\+<\/span>/);
   });
 
   it('runs the banner picture card as a slideshow, starting on one the server drew', () => {
@@ -203,34 +195,26 @@ describe('the home banner and the sections under it', () => {
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
   });
 
-  it('titles every section with the heading the client already wrote', () => {
+  it('titles every section as the concept does', () => {
     const markup = render(HomePage, '/mySOS/');
-    for (const key of ['categoriesHeading', 'benefitsHeading', 'storiesHeading', 'processHeading', 'closingCtaTitle']) {
-      expect(markup, key).toContain(siteContent.headings[key]);
+    for (const key of ['homeTilesEyebrow', 'categoriesHeading', 'homeWhyEyebrow', 'homeWhyHeading',
+      'homeWorkEyebrow', 'homeWorkHeading', 'homeProcessEyebrow', 'homeProcessHeading', 'homeClosingTitle']) {
+      expect(markup, key).toContain(siteContent.headings[key].replaceAll("'", '&#x27;'));
     }
-    // The concept's own headings are gone from the content altogether.
-    for (const key of ['homeWhyHeading', 'homeWorkHeading', 'homeProcessHeading', 'heroTitleLead']) {
-      expect(siteContent.headings, key).not.toHaveProperty(key);
-    }
-    // The four promises are the ones they list, nothing invented about them.
-    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(siteContent.heroPromises);
+    // The four facts it leads with: a figure, then three plain ones.
+    expect(siteContent.homeFigure.value).toBe('∞');
+    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(['Quality assured', 'Within 1 day', 'Free']);
   });
 
-  it('shows what the search found as a picture and a name, and nothing else', () => {
-    // The cards carried a line of description each, which only slowed the list
-    // down; the product's own page has the detail.
-    expect(home).toMatch(/function SearchResults\(\{ query, onAdd, added \}\)/);
-    expect(home).toMatch(/<span className="hero-result-shot"><ProductShot/);
-    expect(home).toMatch(/className="hero-result-name" href=\{`\/mySOS\/products\/\$\{product\.public\.slug\}\/`\}/);
-    expect(home).not.toMatch(/hero-result-(description|note)/);
-    // Adding puts it straight into the quote, without leaving the page.
-    expect(home).toMatch(/writeSavedRequest\(\{ lines: mergeArrival\(saved, \{ productId: product\.id/);
-    expect(home).toMatch(/added\.includes\(product\.id\)/);
-    // A phrase that names no product offers to describe it instead.
-    expect(home).toMatch(/className="hero-results is-empty"/);
-    for (const key of ['heroSuggestTitle', 'addToQuoteLabel', 'addedToQuoteLabel', 'heroSearchEmpty']) {
-      expect(siteContent.labels[key], key).toMatch(/\S/);
-    }
+  it('sets the banner the way the concept sets it: small line, huge headline', () => {
+    const size = (pattern) => Number(css.match(pattern)[1]);
+    // Measured off the concept at 1440px: eyebrow 12.5, headline 78.
+    expect(size(/\.home-hero-copy \.eyebrow \{[^}]*font-size: ([\d.]+)px/)).toBeLessThanOrEqual(15);
+    expect(size(/\.home-hero h1 \{ font-size: clamp\([\d.]+px, [\d.]+vw, (\d+)px\)/)).toBeGreaterThanOrEqual(74);
+    expect(size(/\.hero-search input \{[^}]*font-size: ([\d.]+)px/)).toBeGreaterThanOrEqual(16);
+    expect(size(/\.hero-search \.btn \{[^}]*height: (\d+)px/)).toBeGreaterThanOrEqual(54);
+    // Section headings at the same scale as the concept's.
+    expect(size(/\.home-tiles-head h2 \{[^}]*clamp\([\d.]+px, [\d.]+vw, (\d+)px\)/)).toBeGreaterThanOrEqual(58);
   });
 
   it('sets the page in the typeface the concept uses', () => {

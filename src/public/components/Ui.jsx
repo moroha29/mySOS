@@ -38,10 +38,10 @@ export function Button({ href, children, variant = 'primary', className = '', ..
  * into it, with the number of products in it. The count is read after the page
  * loads (see useSavedRequest), so the drawn page and the first render agree.
  */
-export function QuoteButton({ variant = 'primary', className = '', showArrow = false, ...rest }) {
+export function QuoteButton({ variant = 'primary', className = '', showArrow = false, labelKey = 'heroQuoteButton', ...rest }) {
   const waiting = useSavedRequest();
-  const key = waiting ? 'returnToQuoteButton' : 'heroQuoteButton';
-  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label('heroQuoteButton', 'Get a Quote');
+  const key = waiting ? 'returnToQuoteButton' : labelKey;
+  const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label(labelKey, 'Get a Quote');
   return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
     <span data-cms-path={cms(labelPath(key))}>{text}</span>
     {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}

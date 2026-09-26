@@ -133,7 +133,7 @@ describe('the way back into it', () => {
   it('says "Get a Quote" until there is one, then offers the way back', () => {
     for (const source of [ui, shell]) {
       expect(source).toMatch(/const waiting = useSavedRequest\(\);/);
-      expect(source).toMatch(/waiting \? 'returnToQuoteButton' : '(hero|header)QuoteButton'/);
+      expect(source).toMatch(/waiting \? 'returnToQuoteButton' : (labelKey|'headerQuoteButton')/);
     }
     expect(siteContent.labels.returnToQuoteButton).toBe('Return to quote');
     expect(siteContent.labels.headerQuoteButton).toMatch(/\S/);

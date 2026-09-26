@@ -16,8 +16,8 @@
     "reviewsFallbackLabel": "Reviews from Google",
     "reviewsCountPrefix": "Based on",
     "reviewsCountSuffix": "reviews",
-    "heroSearchPlaceholder": "Tell us what you're planning",
-    "heroSearchButton": "Find My Solution",
+    "heroSearchPlaceholder": "Try: 200 event kits under $15 each",
+    "heroSearchButton": "Find it for me",
     "quickNavAllLabel": "View all products",
     "workDiscussLabel": "Discuss your project",
     "budgetQuantityLabel": "Estimated quantity",
@@ -29,7 +29,9 @@
     "heroSearchEmpty": "No product goes by that name. Tell us what you are planning and we will find it.",
     "heroSearchAskButton": "Tell us about it",
     "addToQuoteLabel": "Add to quote",
-    "addedToQuoteLabel": "In your quote"
+    "addedToQuoteLabel": "In your quote",
+    "homeStartButton": "Start your project",
+    "uploadPhotoChip": "Upload product photo"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -52,7 +54,23 @@
     "whyProcessHeading": "Our process",
     "budgetEyebrow": "Find by budget",
     "budgetHeading": "Know the budget, not the product?",
-    "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size."
+    "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size.",
+    "heroEyebrow": "Custom printing and merchandise solutions in Singapore",
+    "heroTitleLead": "Tell us what you need.",
+    "heroTitleAccentLong": "We'll source the rest.",
+    "heroSearchLead": "Search by product, occasion, budget or deadline. You do not need to know the exact product name.",
+    "homeTilesEyebrow": "Explore products",
+    "homeTilesLead": "Start with a category or describe the project in the search above. We will guide you to the right specifications.",
+    "homeWhyEyebrow": "Why MySOS",
+    "homeWhyHeading": "One team. Every step handled.",
+    "homeWhyLead": "Four things customers should understand immediately about working with MySOS.",
+    "homeWorkEyebrow": "Selected work",
+    "homeWorkHeading": "Complex orders. Simple solutions.",
+    "homeProcessEyebrow": "How it works",
+    "homeProcessHeading": "From brief to delivery.",
+    "homeProcessLead": "Move through each stage to see how your project progresses.",
+    "homeClosingTitle": "Have a difficult request? That's our thing.",
+    "homeClosingLead": "Share what you know. We will help with the rest."
   },
   "footer": {
     "productsHeading": "Products",
@@ -1302,30 +1320,25 @@
   },
   "announcement": "You're One Step Away From Your Solution!",
   "heroSearchChips": [
-    "Orientation Pack",
-    "Welcome Kit",
-    "Graduation Pack"
+    "Company welcome packs",
+    "School camp tees",
+    "Last minute event gifts"
   ],
   "homeStats": [
     {
-      "icon": "supplier",
-      "value": "Small & Bulk Orders",
-      "note": ""
+      "icon": "award",
+      "value": "Quality assured",
+      "note": "Verified production errors replaced or reimbursed"
     },
     {
-      "icon": "expert",
-      "value": "Product Recommendations",
-      "note": ""
+      "icon": "calendar",
+      "value": "Within 1 day",
+      "note": "Response time, excluding Sundays"
     },
     {
-      "icon": "value",
-      "value": "One-Stop Sourcing",
-      "note": ""
-    },
-    {
-      "icon": "delivery",
-      "value": "On-Time Delivery",
-      "note": ""
+      "icon": "design",
+      "value": "Free",
+      "note": "Visual mockups before production"
     }
   ],
   "budgetBands": [
@@ -1406,6 +1419,6 @@
   "homeFigure": {
     "value": "∞",
     "label": "Products",
-    "note": "One supplier, endless possibilities."
+    "note": "One source. Infinite solutions."
   }
 }
