@@ -108,14 +108,34 @@ describe('one look across the pages', () => {
   });
 
   it('shares one strip of categories between the homepage and products', () => {
+    // Literally the same component, so the pills and the spacing cannot drift
+    // apart between the two pages.
     const home = render('/mySOS/');
-    const products = render('/mySOS/products/');
-    expect(home).toContain('class="home-quicknav"');
-    expect(products).toContain('class="category-strip"');
+    const products = render('/mySOS/products/', '?category=bags');
+    for (const markup of [home, products]) expect(markup).toContain('class="category-strip"');
     for (const category of siteContent.categories) {
       expect(home).toContain(`/mySOS/products/?category=${category.id}`);
       expect(products).toContain(`?category=${category.id}`);
     }
+    // Only the products page marks one, because only it is showing a category.
+    expect(products).toMatch(/class="is-active" href="\?category=bags"/);
+    const homeStrip = home.match(/<nav class="category-strip"[\s\S]*?<\/nav>/)[0];
+    expect(homeStrip).not.toContain('is-active');
+  });
+
+  it('puts the arrow beside "View all products", not under it', () => {
+    // The pill rules used to catch the trailing link as well, turning it into a
+    // block and stacking its arrow below the words.
+    expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
+    expect(css).not.toMatch(/\.category-strip a \{ display: inline-block;/);
+    expect(css).toMatch(/\.text-link > \.icon, \.btn > \.icon \{ display: block; align-self: center; \}/);
+    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; \}/);
+  });
+
+  it('scrolls the strip sideways on a phone, with the link out of the way', () => {
+    const phone = css.slice(css.indexOf('@media (max-width: 860px)', css.indexOf('.category-strip {')));
+    expect(phone).toMatch(/\.category-strip-inner > \.text-link \{ display: none; \}/);
+    expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*overflow-x: auto/);
   });
 });
 

@@ -1308,24 +1308,28 @@
   ],
   "homeStats": [
     {
-      "value": "∞",
-      "label": "Products",
-      "note": "One source. Endless solutions."
+      "icon": "supplier",
+      "value": "One source",
+      "label": "",
+      "note": "Every product your organisation needs, from one team."
     },
     {
+      "icon": "award",
       "value": "Quality assured",
       "label": "",
-      "note": "Verified production errors replaced or reimbursed"
+      "note": "Verified production errors replaced or reimbursed."
     },
     {
+      "icon": "calendar",
       "value": "Within 1 day",
       "label": "",
-      "note": "Response time, excluding Sundays"
+      "note": "Response time, excluding Sundays."
     },
     {
-      "value": "Free",
+      "icon": "design",
+      "value": "Free mockups",
       "label": "",
-      "note": "Visual mockups before production"
+      "note": "Visuals to approve before anything is produced."
     }
   ],
   "budgetBands": [
