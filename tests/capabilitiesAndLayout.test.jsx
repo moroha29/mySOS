@@ -181,9 +181,11 @@ describe('the home banner and the sections under it', () => {
     expect(markup).toContain(siteContent.headings.heroTitleAccentLong.replaceAll("'", '&#x27;'));
     expect(markup).toContain(siteContent.headings.heroSearchLead);
     expect(markup).toContain('class="hero-search"');
-    // The suggestions open with a plus, and one of them opens the upload.
+    // The suggestions open with a plus. There is no upload chip beside them:
+    // it opened the quote page with a flag nothing there ever read.
     for (const chip of siteContent.heroSearchChips) expect(markup).toContain(chip);
-    expect(markup).toContain(`${'/mySOS/request/'}?upload=1`);
+    expect(markup).not.toContain('upload=1');
+    expect(siteContent.labels).not.toHaveProperty('uploadPhotoChip');
     expect(home).toMatch(/<span aria-hidden="true">\+<\/span>/);
   });
 

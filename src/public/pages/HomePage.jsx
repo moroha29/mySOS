@@ -169,14 +169,6 @@ function HeroSearch() {
           <span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span>
         </button>
       </li>)}
-      {/* Artwork and photographs are attached on the quote page, where the
-          message that carries them is put together. */}
-      <li>
-        <a className="hero-chip-upload" href={`${REQUEST_PATH}?upload=1`}>
-          <Icon name="upload" size={18} />
-          <span data-cms-path={cms(labelPath('uploadPhotoChip'))}>{label('uploadPhotoChip', 'Upload product photo')}</span>
-        </a>
-      </li>
     </ul>
     {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
