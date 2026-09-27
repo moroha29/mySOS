@@ -24,7 +24,7 @@ const cmsPath = (...path) => `data-cms-path="${JSON.stringify(['homepage', ...pa
 describe('Why MySOS follows its design, top to bottom', () => {
   it('banner, reviews, why choose, our process, why clients come back, closing band', () => {
     const html = render();
-    const order = ['class="hero hero-compact"', 'class="section reviews"', 'class="why-choose"', 'class="why-process"', 'class="section why-loyalty"', 'class="page-cta'];
+    const order = ['class="hero hero-compact"', 'class="section reviews"', 'class="why-choose"', 'class="process-band"', 'class="section why-loyalty"', 'class="page-cta'];
     const positions = order.map((marker) => html.indexOf(marker));
     expect(positions.every((at) => at > -1), JSON.stringify(positions)).toBe(true);
     expect([...positions].sort((a, b) => a - b)).toEqual(positions);
@@ -172,7 +172,7 @@ describe('scrolling, small screens and motion', () => {
   it('settles on a section when a scroll ends near one, without holding it', () => {
     // "proximity" lets a reader scroll straight past; "mandatory" would not.
     expect(whyCss).toMatch(/html\[data-scroll-snap="why"\] \{ scroll-snap-type: y proximity;/);
-    expect(whyCss).toMatch(/\.why-choose, html\[data-scroll-snap="why"\] \.why-process \{ scroll-snap-align: start; \}/);
+    expect(whyCss).toMatch(/\.why-choose, html\[data-scroll-snap="why"\] \.process-band \{ scroll-snap-align: start; \}/);
     // A finger already has its own snapping, and it is off for reduced motion.
     expect(whyCss).toMatch(/@media \(prefers-reduced-motion: reduce\), \(pointer: coarse\) \{\s*html\[data-scroll-snap="why"\] \{ scroll-snap-type: none; \}/);
     const page = readFileSync(new URL('../src/public/pages/WhyPage.jsx', import.meta.url), 'utf8');

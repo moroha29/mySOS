@@ -48,6 +48,14 @@ export function QuoteButton({ variant = 'primary', className = '', showArrow = f
   </Button>;
 }
 
+/* Where a reader is in a set of steps: "03 / 06". */
+export function StepCount({ active, total, className = '' }) {
+  const two = (number) => String(number).padStart(2, '0');
+  return <p className={`step-count ${className}`.trim()} aria-live="polite">
+    <strong>{two(active + 1)}</strong> / {two(total)}
+  </p>;
+}
+
 export function TextLink({ href, children, className = '' }) {
   return <a className={`text-link ${className}`.trim()} href={href}>{children} <Arrow /></a>;
 }
@@ -100,9 +108,16 @@ export function ProductCard({ product, reveal }) {
   const price = getDisplayPrice(product);
   const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 50}ms` } } : {};
   return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`} {...arriving}>
-    <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
+    {/* What the product is, what it costs from and whether MySOS is asked for
+        it often, all on the picture: the card below it is then the name alone,
+        and a grid of them reads as a shelf rather than a list. */}
+    <span className="product-card-shot">
+      <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
+      {product.public.featured && <span className="product-flag" data-cms-path={cms(labelPath('featuredBadge'))}>{label('featuredBadge', 'Most requested')}</span>}
+      {price && <span className="price">{price}</span>}
+    </span>
     <h3>{product.public.name}</h3>
-    {price && <p className="price">{price}</p>}
+    <span className="product-card-go"><Icon name="arrowRight" size={18} /></span>
   </a>;
 }
 

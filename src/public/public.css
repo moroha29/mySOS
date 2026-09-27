@@ -25,7 +25,7 @@
   /* Content runs wide. The margins have been halved twice now: 1180 → 1340 →
      1520, because on a large monitor the page still read as a column floating
      in the middle of the screen. */
-  --content: 1520px;
+  --content: 1760px;
   /* The bar at the top of every page, and anything that has to clear it. */
   --header-h: 88px;
 
@@ -384,42 +384,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .browse-row a.is-active { border-color: var(--navy); background: #f0f4fb; color: var(--navy); }
 .browse-row .browse-label { display: flex; align-items: center; gap: 4px; }
 
-/* ==================================================== 12. printing methods */
-
-/* Printing & customisation methods ("Our capabilities"), after the reference design:
-   a dark dotted band, vertical method tabs, details, and a photo. */
-.capabilities {
-  background-color: #1b1b2f;
-  color: #ecebe6;
-  scroll-margin-top: var(--header-h);
-}
-/* Wider than the site's usual content column, as in the reference: at the
-   standard width the middle column shrank to 330px and the copy wrapped early. */
-.capabilities-inner { max-width: 1328px; margin: 0 auto; padding: 76px 24px 84px; }
-.capabilities-eyebrow { display: block; font-size: 15px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: #4f5bd5; }
-.capabilities-title { max-width: 560px; margin-top: 18px; font-size: 60.5px; font-weight: 700; line-height: 1.08; letter-spacing: -.01em; color: #ecebe6; }
-.capabilities-body { display: grid; grid-template-columns: 220px minmax(0, 1fr) minmax(0, 486px); gap: 48px; align-items: center; margin-top: 58px; }
-/* The tab list starts level with the top of the photo; the details sit centred. */
-.capabilities-tabs { display: grid; gap: 5px; align-self: start; }
-.capabilities-tabs button {
-  display: block; width: 100%; padding: 12px 18px; border: 0; border-radius: 2px;
-  background: transparent; color: #9c9bab; font: inherit; font-size: 17px; font-weight: 600; text-align: left; cursor: pointer;
-  transition: background-color .15s, color .15s;
-}
-.capabilities-tabs button:hover { color: #ecebe6; }
-.capabilities-tabs button[aria-selected="true"] { background: #3f4bc7; color: #fff; }
-.capabilities-tabs button:focus-visible { outline: 2px solid #8b93ef; outline-offset: 2px; }
-.capabilities-panel h3 { font-size: 35px; font-weight: 700; color: #ecebe6; }
-.capabilities-panel p { margin-top: 18px; font-size: 17.5px; line-height: 1.85; color: #b8b7c6; }
-.capabilities-best { display: inline-flex; align-items: center; gap: 12px; margin-top: 26px; padding: 11px 16px; border: 1px solid #373b7a; border-radius: 2px; background: #22244a; }
-.capabilities-best small { font-size: 15px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #5760d6; }
-.capabilities-best span { font-size: 17px; font-weight: 600; color: #fff; }
-.capabilities-photo { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 4px; box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
-.capabilities-photo > * { width: 100%; height: 100%; }
-/* The photo frame supplies the corners; the shared .scene radius would round them further. */
-.capabilities-photo .scene { border-radius: 0; }
-.capabilities-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-
 /* ================================================== 13. promo / CTA panels */
 
 .promo-band { max-width: var(--content); margin: 12px auto; border-radius: var(--radius); overflow: hidden; background: linear-gradient(112deg, var(--navy-deep), var(--navy) 56%, #1b4dad); color: #fff; display: grid; grid-template-columns: 1.15fr .85fr; }
@@ -590,8 +554,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .reason-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
 
 /* our process: the tracker and a row of cards that scrolls sideways */
-.why-process { padding: 50px 0 44px; background: #eef3fa; overflow: hidden; }
-.why-process > .section-heading { margin-bottom: 26px; padding: 0 24px; }
+.process-band { padding: 50px 0 44px; background: #eef3fa; overflow: hidden; }
+.process-band > .section-heading { margin-bottom: 26px; padding: 0 24px; }
 .journey-steps { position: relative; width: min(100% - 48px, 1420px); margin: 0 auto 10px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .journey-steps::before, .journey-steps::after { content: ""; position: absolute; top: 20px; left: calc(100% / 12); height: 3px; border-radius: 3px; }
 .journey-steps::before { right: calc(100% / 12); background: #c3cbd8; }
@@ -682,7 +646,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .reason-card { grid-template-columns: minmax(0, 1fr); padding: 20px; }
   .reason-card-copy { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; }
   .reason-card-icon { width: 44px; height: 44px; }
-  .why-process { padding: 38px 0 30px; }
+  .process-band { padding: 38px 0 30px; }
   /* Six labels do not fit across a phone: two rows of three. */
   .journey-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; }
   .journey-steps::before, .journey-steps::after { display: none; }
@@ -701,7 +665,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
  * held against someone who keeps scrolling.
  */
 html[data-scroll-snap="why"] { scroll-snap-type: y proximity; scroll-padding-top: var(--header-h); }
-html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-process { scroll-snap-align: start; }
+html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-band { scroll-snap-align: start; }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
   html[data-scroll-snap="why"] { scroll-snap-type: none; }
 }
@@ -758,7 +722,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .site-footer { background: var(--navy-deep); color: #cddaf2; }
 .footer-grid { max-width: var(--content); margin: 0 auto; padding: 40px 24px 30px; display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 26px; }
 .footer-grid h3 { margin-bottom: 14px; font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #fff; }
-.footer-grid a { display: block; padding: 4px 0; font-size: 17px; color: #b6c6e4; }
+.footer-grid a { display: block; padding: 10px 0; font-size: 17px; color: #b6c6e4; }
 .footer-grid a:hover { color: #fff; }
 .footer-brand p { margin-top: 10px; max-width: 220px; font-size: 17px; line-height: 1.6; color: #9db0d6; }
 .footer-socials { display: flex; gap: 10px; }
@@ -776,8 +740,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .hero-inner { grid-template-columns: 1fr; }
   .hero-art { min-height: 300px; }
   .benefit-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
-  .capabilities-body { grid-template-columns: 200px minmax(0, 1fr); }
-  .capabilities-photo { grid-column: 1 / -1; width: 100%; max-width: 620px; justify-self: center; }
   .story-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .story-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .product-grid, .product-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -806,12 +768,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 }
 
 @media (max-width: 860px) {
-  .capabilities-inner { padding: 56px 20px 64px; }
-  .capabilities-title { font-size: 44px; }
-  .capabilities-body { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 36px; }
-  .capabilities-tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
-  .capabilities-tabs::-webkit-scrollbar { display: none; }
-  .capabilities-tabs button { flex: none; width: auto; }
   /* The menu itself folds at 1080px (see above); on phones the quote and
      WhatsApp buttons move into it too. */
   .header-actions { display: none; }
@@ -847,8 +803,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .category-card strong { font-size: 18.5px; }
   .hero-art { height: 230px; }
   .benefit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .capabilities-title { font-size: 37px; }
-  .capabilities-panel h3 { font-size: 30px; }
   .popular-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .industry-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .process-steps, .process-icon { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1289,9 +1243,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .hero-card-tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
 .hero-card-tags a { display: inline-block; padding: 6px 13px; border-radius: 999px; background: rgba(255, 255, 255, .18); backdrop-filter: blur(6px); font-size: 16px; font-weight: 600; color: #fff; }
 .hero-card-tags a:hover { background: rgba(255, 255, 255, .32); }
-.hero-card-dots { margin-top: 18px; display: flex; gap: 6px; }
-.hero-card-dots span { width: 18px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .4); transition: background-color .3s, width .3s; }
-.hero-card-dots span.is-active { width: 34px; background: #fff; }
 
 /* the four promises, as plain figures */
 /* The promises, as a plain row rather than four cards: a figure that counts up
@@ -1394,23 +1345,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-work-stats li { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: var(--navy); }
 
 /* how it works */
-.home-process-card { padding: 30px 0 26px; border-radius: 26px; background: #fff; box-shadow: var(--shadow); }
-.home-process-track { position: relative; margin: 0 40px 26px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: center; }
-.home-process-track::before, .home-process-track::after { content: ""; position: absolute; top: 50%; left: 6px; right: 6px; height: 3px; border-radius: 3px; transform: translateY(-50%); }
-.home-process-track::before { background: var(--line); }
-.home-process-track::after { right: auto; width: calc((100% - 12px) * var(--reached)); background: linear-gradient(90deg, var(--navy), var(--green)); transition: width .6s cubic-bezier(.33, 1, .68, 1); }
-.home-process-track li { position: relative; z-index: 1; justify-self: center; }
-.home-process-track button { width: 16px; height: 16px; padding: 0; border: 3px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; transition: border-color .3s, box-shadow .3s; }
-.home-process-track li.is-done button { border-color: var(--green); box-shadow: 0 0 0 5px rgba(0, 166, 81, .14); }
-.home-process-rail { display: flex; gap: 22px; padding: 4px 40px 10px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
-.home-process-rail::-webkit-scrollbar { display: none; }
-@media (pointer: coarse) { .home-process-rail { scroll-snap-type: x proximity; } }
-.home-process-step { flex: none; width: 268px; scroll-snap-align: center; opacity: .55; transition: opacity .35s; }
-.home-process-step[data-active="true"] { opacity: 1; }
-.home-process-shot .scene { height: 150px; border-radius: 16px; }
-.home-process-label { display: block; margin-top: 16px; font-size: 16.5px; font-weight: 700; color: var(--navy); }
-.home-process-step h3 { margin-top: 8px; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
-.home-process-step p { margin-top: 8px; font-size: 17.5px; line-height: 1.6; color: var(--muted); }
 
 /* closing band */
 .home-closing { color: #fff; }
@@ -1448,9 +1382,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .home-why-grid { grid-template-columns: minmax(0, 1fr); }
   .home-why-grid li + li { border-left: 0; }
   .home-budget-bands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home-process-track { margin-inline: 18px; }
-  .home-process-rail { padding-inline: 18px; }
-  .home-process-step { width: 80vw; }
 }
 
 /* ================================================= 21. one product's page
@@ -1607,7 +1538,7 @@ main:not(.home-page) { background: var(--paper); }
 /* Cards, panels and rails, all on the same radius and wash. */
 .product-card, .story-card, .solution-card, .benefit-grid article, .loyalty-card,
 .popular-grid article, .faq-list, .empty-state, .request-layout > *, .use-case-card,
-.journey-card-face, .reason-card, .stories-reviews, .project-tile, .capabilities-photo .scene {
+.journey-card-face, .reason-card, .stories-reviews, .project-tile {
   border-radius: 22px;
 }
 .product-card { padding: 14px; border: 1px solid var(--line); background: #fff; }
@@ -1649,20 +1580,6 @@ main:not(.home-page) { background: var(--paper); }
 
 /* The products page's printing methods: the same navy band as "Why MySOS" on
    the homepage, rather than the near-black panel it used to be. */
-.capabilities { background: var(--navy); }
-.capabilities-eyebrow { color: #9fb8e6; letter-spacing: .16em; }
-.capabilities-title { color: #fff; font-weight: 800; letter-spacing: -.03em; }
-.capabilities-tabs button { color: #c6d3ea; }
-.capabilities-tabs button { border-radius: 999px; }
-.capabilities-tabs button[aria-selected="true"] { background: rgba(255, 255, 255, .14); color: #fff; }
-.capabilities-tabs button:focus-visible { outline-color: var(--green-light); }
-.capabilities-best { border-color: rgba(255, 255, 255, .24); border-radius: 12px; background: rgba(255, 255, 255, .08); }
-.capabilities-photo { border-radius: 22px; box-shadow: 0 24px 60px rgba(9, 28, 72, .45); }
-.capabilities-title { max-width: 620px; }
-.capabilities-panel h3 { color: #fff; }
-.capabilities-panel p { color: #c6d3ea; }
-.capabilities-best small { color: var(--green-light); }
-.capabilities-best span { color: #fff; }
 
 /* Questions, wherever they are asked, look like the product page's. */
 .faq-list { gap: 0; border: 0; background: none; }
@@ -1743,8 +1660,6 @@ html.is-scrolled .wordmark { height: 36px; }
 
 /* the banner picture drifts slowly across its own frame */
 .hero-card-slide { transform: scale(1.04); }
-.hero-card-slide.is-active { animation: hero-pan 9s ease-out forwards; }
-@keyframes hero-pan { from { transform: scale(1.04); } to { transform: scale(1.12); } }
 
 /* pictures lift out of their cards under the cursor */
 .product-card .product-visual, .hero-result-shot .product-visual, .story-card-media .scene, .solution-card .scene, .home-work-shot .scene, .pdp-shot img {
@@ -1778,7 +1693,6 @@ html.is-scrolled .wordmark { height: 36px; }
 @keyframes wa-ring { 70%, 100% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); } }
 
 /* the figures and rails that already move, eased the same way */
-.home-process-step { transition: opacity .45s cubic-bezier(.4, 0, .2, 1); }
 .use-case-card, .journey-arrows button, .carousel-btn { transition: transform .25s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, box-shadow .25s ease; }
 .use-case-card:hover, .carousel-btn:hover, .journey-arrows button:hover:not(:disabled) { transform: translateY(-2px); }
 
@@ -1873,7 +1787,6 @@ html.is-scrolled .wordmark { height: 36px; }
 .promo-copy h2 { font-size: clamp(30px, 3vw, 44px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; }
 .promo-copy p { margin: 14px 0 26px; font-size: 17px; line-height: 1.6; }
 .industry-band .section-heading h2 { color: #fff; }
-.capabilities-inner { padding: 88px 24px 96px; }
 
 @media (max-width: 860px) {
   .section { padding-top: 54px; padding-bottom: 54px; }
@@ -1960,8 +1873,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* Tap targets: a larger touch area without moving anything on screen. */
 /* The banner card's category chips, and the dots on the "how it works" line. */
 .hero-card-tags a { padding-block: 9px; }
-.home-process-track button { position: relative; }
-.home-process-track button::before { content: ""; position: absolute; inset: -14px; }
 .text-link, .stories-reviews-link { padding-block: 8px; margin-block: -8px; }
 .back-link { padding-block: 8px; margin-top: -8px; margin-bottom: 12px; }
 .breadcrumb a { padding-block: 10px; margin-block: -10px; }
@@ -1971,7 +1882,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .footer-socials a, .footer-socials span { width: 36px; height: 36px; }
 .tab-list button { flex: none; min-width: 44px; padding-top: 10px; white-space: nowrap; }
 .story-card-body h3 a, .footer-legal a { display: inline-block; padding-block: 7px; margin-block: -7px; }
-.solution-hero .breadcrumb a:first-child, .request-page .hero .breadcrumb a:first-child { padding-inline: 10px; margin-inline: -10px; }
+.solution-hero .breadcrumb a:first-child, .hero .breadcrumb a:first-child { padding-block: 10px; padding-inline: 10px; margin-inline: -10px; }
 /* The request builder's own small controls, reachable with a thumb. */
 .request-printing-ask { min-height: 34px; }
 .request-details-toggle, .use-case-all { min-height: 34px; padding-block: 8px; }
@@ -2053,7 +1964,13 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   border-radius: 26px; animation: hero-float 7s ease-in-out infinite;
 }
 .hero-scene {
-  aspect-ratio: auto; min-height: 500px; height: 100%;
+  /* A grid, so the picture inside actually fills it: against a box with only
+     a minimum height, the scene's own height: 100% resolves to nothing.
+
+     And a shape of its own, so a square photograph does not decide how tall
+     the banner is — a 636px picture beside 464px of words left a field of
+     nothing under them. */
+  display: grid; aspect-ratio: 4 / 3; min-height: 0; height: auto; max-height: 520px;
   box-shadow: 0 24px 70px rgba(26, 50, 138, .18);
 }
 
@@ -2131,7 +2048,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .hero-stories .hero-inner,
   .solution-hero-inner,
   .story-hero { grid-template-columns: minmax(0, 1fr); }
-  .hero-scene, .story-hero-bg { min-height: 340px; }
+  .story-hero-bg { min-height: 340px; }
   .hero-stories .hero-collage { height: 380px; }
   .solution-collage { min-height: 380px; }
 }
@@ -2144,7 +2061,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .story-hero { padding: 44px 18px 48px; gap: 32px; }
   .story-hero { grid-template-columns: minmax(0, 1fr); }
   .story-hero-bg { min-height: 260px; }
-  .hero-scene { min-height: 300px; }
+
   .hero-stories .hero-collage { height: 340px; gap: 8px; }
   /* The tiles used to run off both edges as clipped slabs; as cards they keep
      the page's gutter like everything else. */
@@ -2209,8 +2126,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 /* Which category these ways of printing are the ways of. */
-.capabilities-for { margin-top: 16px; font-size: 17.5px; line-height: 1.5; color: #b9bdf0; }
-.capabilities-for strong { color: #ecebe6; font-weight: 700; }
 
 /* The ask card stretches across whatever the last row has left, so a category
    of one or two products does not end in half a row of nothing. */
@@ -2312,10 +2227,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
   /* Every method visible at once: there are two to five of them now that each
      category names its own, so they wrap rather than scroll out of sight. */
-  .capabilities-tabs { flex-wrap: wrap; gap: 8px; overflow-x: visible; }
-  .capabilities-tabs button { padding: 11px 16px; border-radius: 999px; }
   /* "Best for" is a label, not a sentence: it was breaking in two. */
-  .capabilities-best small { white-space: nowrap; }
 
   /* The question and its hint, one above the other rather than fighting for
      the same line. */
@@ -2330,4 +2242,174 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .home-tile-body { margin-top: 34px; }
   .home-tile strong { font-size: 17px; }
   .home-tile small { margin-top: 4px; font-size: 15px; line-height: 1.4; }
+}
+
+/* ====================================== 29. the banner picture, not a slideshow
+   It changed picture every six seconds with a second-long fade and a row of
+   dots under it, which is a carousel and read as one. It is now one card that
+   catches the light: the pictures cross-dissolve over two and a half seconds,
+   slowly enough that nothing switches, each drifts the whole time it is up,
+   and a soft sheen passes across the glass now and then. */
+
+.hero-card::after { z-index: 1; }
+.hero-card-copy { z-index: 3; }
+
+/* The light that carries the change. It is drawn only while one picture is
+   becoming another — on a picture that is simply sitting there, there is no
+   sheen at all — so it reads as the light bringing the next photograph in
+   rather than an effect running on a loop. */
+.hero-card::before {
+  content: ""; position: absolute; z-index: 2; top: -60%; bottom: -60%; left: -35%; width: 34%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .3) 36%, rgba(255, 255, 255, .62) 50%, rgba(255, 255, 255, .3) 64%, transparent);
+  filter: blur(9px);
+  transform: rotate(12deg) translateX(-60%);
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-card.is-turning::before { animation: hero-sheen 2.2s cubic-bezier(.4, 0, .45, 1); }
+@keyframes hero-sheen {
+  0% { transform: rotate(12deg) translateX(-60%); opacity: 0; }
+  18% { opacity: 1; }
+  74% { opacity: 1; }
+  100% { transform: rotate(12deg) translateX(520%); opacity: 0; }
+}
+
+/* One picture becoming another, rather than one replacing another. */
+.hero-card-slide { transition: opacity 2.4s cubic-bezier(.45, 0, .3, 1); }
+/* And it never stops moving while it is up, so there is no moment where the
+   card sits still and then jumps. */
+.hero-card-slide.is-active { animation: hero-drift 18s ease-in-out infinite alternate; }
+@keyframes hero-drift {
+  from { transform: scale(1.06) translate3d(0, 0, 0); }
+  to { transform: scale(1.12) translate3d(-1.5%, -1.2%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card.is-turning::before { animation: none; }
+  .hero-card-slide.is-active { animation: none; }
+}
+
+/* On a phone the card is half the size, so the same band covered most of it. */
+@media (max-width: 860px) {
+  .hero-card::before { width: 26%; filter: blur(7px); }
+}
+
+/* The homepage's heading for the process band: the band runs edge to edge, so
+   its head keeps the page's column and gutter. */
+.process-band > .home-process-head { max-width: var(--content); margin: 0 auto 30px; padding: 0 24px; }
+@media (max-width: 860px) {
+  .process-band > .home-process-head { padding-inline: 18px; }
+}
+
+/* ================================ 30. what a category can be printed with
+   This used to be a navy band below the products, with tabs and a photograph,
+   saying the same for every category. It says more in the banner, in a line:
+   the ways MySOS can brand this kind of product, read from the products
+   themselves. The footer's "Materials" link lands here. */
+
+.hero-ways { margin-top: 26px; scroll-margin-top: calc(var(--header-h) + 24px); }
+.hero-ways-label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.hero-ways ul { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-ways li {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font-size: 16.5px; font-weight: 600; color: var(--ink);
+}
+.hero-ways .icon { color: var(--green-dark); }
+
+/* The banner's breadcrumb, where a category page has one. */
+.hero:not(.has-background) .breadcrumb { max-width: none; margin: 0 0 18px; padding: 0; }
+
+@media (max-width: 860px) {
+  .hero-ways { margin-top: 22px; }
+  .hero-ways li { padding: 9px 14px; font-size: 16px; }
+}
+
+/* Across a whole row the ask card was a slab of green with the words at one
+   end and the way in at the other. It keeps the height it needs and the words
+   sit together in the middle of it. */
+.product-grid[data-fill4='4'] .product-ask { padding: 16px 24px; }
+.product-grid[data-fill4='4'] .product-ask-inner { justify-content: center; }
+.product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }
+@media (max-width: 1080px) {
+  .product-grid[data-fill3='3'] .product-ask { padding: 16px 24px; }
+  .product-grid[data-fill3='3'] .product-ask-inner { justify-content: center; }
+  .product-grid[data-fill3='3'] .product-ask-inner small { flex: none; }
+}
+@media (max-width: 620px) {
+  .product-grid[data-fill2='2'] .product-ask { padding: 16px 18px; }
+  .product-grid[data-fill2='2'] .product-ask-inner small { flex: none; }
+}
+
+/* =============================== 31. the collection, as a shelf not a list
+   It opened with the category's name again, under the name in the banner,
+   and then a wall of white cards. It opens with what is in it and how to
+   narrow it down; the cards carry the price and the things MySOS is asked
+   for most, on the picture, so the grid has something to read. */
+
+.collection-bar {
+  margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
+}
+.collection-count { font-size: 17.5px; color: var(--muted); }
+.collection-count strong { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.collection-bar .tab-list { margin: 0; }
+
+/* The picture carries the marks; the card under it is the name alone. */
+.product-card { position: relative; }
+.product-card-shot { position: relative; display: block; }
+.product-flag, .product-card .price {
+  position: absolute; z-index: 1; display: inline-flex; align-items: center;
+  padding: 7px 12px; border-radius: 999px; font-size: 15px; font-weight: 700; line-height: 1;
+  backdrop-filter: blur(6px);
+}
+.product-flag { top: 10px; left: 10px; background: rgba(4, 107, 69, .92); color: #fff; letter-spacing: .02em; white-space: nowrap; }
+.product-card .price { right: 10px; bottom: 10px; margin: 0; background: rgba(255, 255, 255, .92); color: var(--ink); box-shadow: 0 6px 18px rgba(9, 28, 72, .12); }
+
+.product-card h3 { padding-right: 30px; }
+.product-card-go {
+  position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center;
+  width: 30px; height: 30px; border-radius: 50%; background: var(--soft); color: var(--navy);
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1), background-color .2s ease, color .2s ease;
+}
+.product-card:hover .product-card-go, .product-card:focus-visible .product-card-go { opacity: 1; transform: none; background: var(--green-dark); color: #fff; }
+
+/* Room for a fifth column on a wide screen: four cards were 416px across,
+   which is a poster, not a product tile. */
+@media (min-width: 1700px) {
+  .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .product-grid[data-fill5='1'] .product-ask { grid-column: span 1; }
+  .product-grid[data-fill5='2'] .product-ask { grid-column: span 2; }
+  .product-grid[data-fill5='3'] .product-ask { grid-column: span 3; }
+  .product-grid[data-fill5='4'] .product-ask { grid-column: span 4; }
+  .product-grid[data-fill5='5'] .product-ask { grid-column: span 5; padding: 16px 24px; }
+  .product-grid[data-fill5='5'] .product-ask-inner { justify-content: center; }
+  .product-grid[data-fill5='5'] .product-ask-inner small { flex: none; }
+}
+
+@media (max-width: 860px) {
+  .collection-bar { padding-bottom: 14px; margin-bottom: 20px; gap: 12px; }
+  .collection-count strong { font-size: 22px; }
+  .product-flag, .product-card .price { padding: 6px 10px; font-size: 14px; }
+  /* No hover on a phone: the arrow would never be seen. */
+  .product-card-go { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card-go { transition: none; }
+}
+
+/* Filling two or three columns of a row, the ask card took the row's height
+   as well — a tall block of green beside the products. It keeps the height of
+   what is written on it and sits at the top of the row. */
+.product-grid[data-fill4='2'] .product-ask,
+.product-grid[data-fill4='3'] .product-ask { align-self: start; }
+@media (max-width: 1080px) {
+  .product-grid[data-fill3='2'] .product-ask { align-self: start; }
+}
+@media (min-width: 1700px) {
+  .product-grid[data-fill5='2'] .product-ask,
+  .product-grid[data-fill5='3'] .product-ask,
+  .product-grid[data-fill5='4'] .product-ask { align-self: start; }
 }
