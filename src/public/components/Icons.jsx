@@ -90,7 +90,7 @@ export const isIconPicture = (name) => /^(?:\/|https?:\/\/|data:image\/)/i.test(
  * not words to write into the element. (JSON.stringify is cms() from ../cms,
  * inlined: this file is also loaded on its own to build iconLibrary.json.)
  */
-export default function Icon({ name, size = 22, className = '', title, cmsPath }) {
+export default function Icon({ name, size = 25, className = '', title, cmsPath }) {
   const marks = cmsPath ? { 'data-cms-path': JSON.stringify(cmsPath), 'data-cms-icon': 'true' } : {};
   if (isIconPicture(name)) {
     return <img className={`icon icon-picture ${className}`.trim()} src={name} width={size} height={size} alt={title || ''} loading="lazy" decoding="async" {...marks} />;

@@ -58,7 +58,7 @@ function Gallery({ product, category }) {
       </li>)}
     </ul>}
     <p className="pdp-mockup">
-      <Icon name="checkCircle" size={20} />
+      <Icon name="checkCircle" size={24} />
       <span>
         <strong data-cms-path={wordPath('mockupTitle')}>{word('mockupTitle', 'Free visual mockup before production')}</strong>
         <small data-cms-path={wordPath('mockupNote')}>{word('mockupNote')}</small>
@@ -66,7 +66,7 @@ function Gallery({ product, category }) {
     </p>
     <p className="pdp-category-link">
       <a className="text-link" href={`/mySOS/products/?category=${product.public.category}`}>
-        {fill(word('relatedTitle', 'More in this category'), {})} <Icon name="arrowRight" size={15} className="inline-arrow" />
+        {fill(word('relatedTitle', 'More in this category'), {})} <Icon name="arrowRight" size={18} className="inline-arrow" />
       </a>
     </p>
     <span className="sr-only">{`${category?.name ?? product.public.category} product`}</span>
@@ -111,9 +111,9 @@ function BuildPanel({ product }) {
         <small data-cms-path={wordPath('quantityHint')}>{fill(word('quantityHint', 'Minimum {min}'), { min: minimum })}</small>
       </p>
       <div className="pdp-quantity">
-        <button type="button" aria-label="Fewer pieces" onClick={() => step(-10)}><Icon name="minus" size={18} /></button>
+        <button type="button" aria-label="Fewer pieces" onClick={() => step(-10)}><Icon name="minus" size={22} /></button>
         <input id="pdp-quantity" type="number" inputMode="numeric" min={minimum} value={quantity} onChange={(event) => setQuantity(event.target.value)} onBlur={() => setQuantity((current) => Math.max(minimum, clampQuantity(current)))} />
-        <button type="button" aria-label="More pieces" onClick={() => step(10)}><Icon name="plus" size={18} /></button>
+        <button type="button" aria-label="More pieces" onClick={() => step(10)}><Icon name="plus" size={22} /></button>
       </div>
       {presets.length > 0 && <ul className="pdp-presets">
         {presets.map((preset, index) => <li key={preset}>
@@ -179,7 +179,7 @@ function BuildPanel({ product }) {
       </span>
       {/* Files are attached on the request page, where the message that carries
           them is put together. */}
-      <a className="btn btn-outline btn-sm" href={href}><Icon name="upload" size={16} /> <span data-cms-path={wordPath('artworkButton')}>{word('artworkButton', 'Add on the next step')}</span></a>
+      <a className="btn btn-outline btn-sm" href={href}><Icon name="upload" size={19} /> <span data-cms-path={wordPath('artworkButton')}>{word('artworkButton', 'Add on the next step')}</span></a>
     </div>
 
     <div className="pdp-close">
@@ -192,7 +192,7 @@ function BuildPanel({ product }) {
         : null}
       <p className="pdp-price-note" data-cms-path={price ? wordPath('estimateNote') : wordPath('noPriceNote')}>{price ? word('estimateNote') : word('noPriceNote')}</p>
       <a className="btn btn-primary pdp-add" href={href}>
-        <Icon name="plus" size={16} />
+        <Icon name="plus" size={19} />
         <span data-cms-path={wordPath('addButton')}>{word('addButton', 'Add to my request')}</span>
       </a>
       <p className="pdp-ask">
@@ -225,7 +225,7 @@ function InfoSection({ product }) {
       {[{ title: 'Product specifications', body: product.public.description, own: true }, ...sections].map((entry, index) => <div key={entry.title} className={open === index ? 'is-open' : ''}>
         <button type="button" aria-expanded={open === index} onClick={() => setOpen(open === index ? -1 : index)}>
           <span data-cms-path={entry.own ? undefined : cms(contentPath('productInfoSections', index - 1, 'title'))}>{entry.title}</span>
-          <Icon name={open === index ? 'minus' : 'plus'} size={16} />
+          <Icon name={open === index ? 'minus' : 'plus'} size={19} />
         </button>
         {open === index && <p data-cms-path={entry.own ? undefined : cms(contentPath('productInfoSections', index - 1, 'body'))}>{entry.body}</p>}
       </div>)}
@@ -255,7 +255,7 @@ export default function ProductDetailPage({ slug }) {
         <p className="pdp-lead">{product.public.description}</p>
         <ul className="pdp-promises">
           {(siteContent.pages?.product?.promises ?? []).map((promise, index) => <li key={promise}>
-            <Icon name="check" size={15} />
+            <Icon name="check" size={18} />
             <span data-cms-path={cms(pagePath('product', 'promises', index))}>{promise}</span>
           </li>)}
         </ul>

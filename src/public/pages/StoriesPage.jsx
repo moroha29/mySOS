@@ -28,23 +28,23 @@ const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match
  */
 function ReviewStars({ count = 5, muted = false }) {
   return <span className={muted ? 'stars is-muted' : 'stars'} aria-hidden={muted || undefined} aria-label={muted ? undefined : `${count} out of 5 stars`}>
-    {Array.from({ length: count }, (_, i) => <Icon key={i} name="star" size={18} />)}
+    {Array.from({ length: count }, (_, i) => <Icon key={i} name="star" size={22} />)}
   </span>;
 }
 
 function ReviewInvite({ textKey, text, labelKey, label }) {
   return <div className="stories-review is-invite">
     <div className="stories-review-head">
-      <Icon name="google" size={24} />
+      <Icon name="google" size={28} />
       <ReviewStars muted />
     </div>
     <p className="stories-review-text" data-cms-path={cms(pagePath('stories', textKey))}>{pageText('stories', textKey, text)}</p>
     <footer>
-      <span className="stories-review-avatar is-google" aria-hidden="true"><Icon name="google" size={22} /></span>
+      <span className="stories-review-avatar is-google" aria-hidden="true"><Icon name="google" size={25} /></span>
       <span>
         <a className="stories-review-invite-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
           <strong data-cms-path={cms(pagePath('stories', labelKey))}>{pageText('stories', labelKey, label)}</strong>
-          <Icon name="arrowRight" size={14} />
+          <Icon name="arrowRight" size={18} />
         </a>
         <small data-cms-path={cms(pagePath('stories', 'reviewsSourceLabel'))}>{pageText('stories', 'reviewsSourceLabel', 'Google reviews')}</small>
       </span>
@@ -89,15 +89,15 @@ function StoryReviews() {
       {data?.averageRating
         ? <p className="stories-reviews-rating">
           <span className="stories-reviews-score">{formatRating(data.averageRating)}</span>
-          <Icon name="star" size={36} className="stories-reviews-star" />
+          <Icon name="star" size={39} className="stories-reviews-star" />
           <span className="stories-reviews-google">
-            <Icon name="google" size={30} />
+            <Icon name="google" size={35} />
             <span data-cms-path={cms(pagePath('stories', 'reviewsOnGoogleLabel'))}>{pageText('stories', 'reviewsOnGoogleLabel', 'on Google')}</span>
           </span>
         </p>
         : <p className="stories-reviews-rating is-pending">
           <span className="stories-reviews-google">
-            <Icon name="google" size={30} />
+            <Icon name="google" size={35} />
             <span data-cms-path={cms(pagePath('stories', 'reviewsPendingLabel'))}>{pageText('stories', 'reviewsPendingLabel', 'Reviews on Google')}</span>
           </span>
         </p>}
@@ -113,7 +113,7 @@ function StoryReviews() {
       {reviews.length > 0
         ? reviews.map((review) => <blockquote className="stories-review" key={review.id}>
           <div className="stories-review-head">
-            <Icon name="google" size={24} />
+            <Icon name="google" size={28} />
             <ReviewStars count={review.rating} />
           </div>
           <p className="stories-review-text">&ldquo;{review.text}&rdquo;</p>
@@ -145,12 +145,12 @@ function StoryReviews() {
 
     <div className="stories-reviews-actions">
       <div className="stories-reviews-arrows">
-        <button type="button" aria-label="Previous reviews" disabled={!canMove.back} onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={18} /></button>
-        <button type="button" aria-label="Next reviews" disabled={!canMove.on} onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={18} /></button>
+        <button type="button" aria-label="Previous reviews" disabled={!canMove.back} onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={22} /></button>
+        <button type="button" aria-label="Next reviews" disabled={!canMove.on} onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={22} /></button>
       </div>
       <a className="stories-reviews-link" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer">
         <span data-cms-path={cms(pagePath('stories', 'reviewsViewAllLabel'))}>{pageText('stories', 'reviewsViewAllLabel', 'View all Google reviews')}</span>
-        <Icon name="arrowRight" size={15} className="inline-arrow" />
+        <Icon name="arrowRight" size={18} className="inline-arrow" />
       </a>
     </div>
   </section>;
@@ -169,7 +169,7 @@ function ProjectMosaic({ stories, page, pages, onPage }) {
           <span className="project-badge"><i aria-hidden="true" />{categoryName(story.category)}</span>
           <strong data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</strong>
         </span>
-        <span className="project-tile-arrow" aria-hidden="true"><Icon name="chevronRight" size={index === 0 ? 20 : 16} /></span>
+        <span className="project-tile-arrow" aria-hidden="true"><Icon name="chevronRight" size={index === 0 ? 24 : 19} /></span>
       </a>)}
     </div>
 
@@ -220,19 +220,19 @@ function CategoryShowcase({ stories }) {
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
         {highlights.length > 0 && <ul className="project-facts">
           {highlights.map((fact, i) => <li key={`${fact.icon}-${i}`}>
-            <Icon name={fact.icon} size={22} cmsPath={storyPath(story, 'highlights', i, 'icon')} />
+            <Icon name={fact.icon} size={25} cmsPath={storyPath(story, 'highlights', i, 'icon')} />
             <span data-cms-path={cms(storyPath(story, 'highlights', i, 'text'))}>{fact.text}</span>
           </li>)}
         </ul>}
         <a className="project-feature-link" href={storyHref(story)}>
           <span data-cms-path={cms(pagePath('stories', 'readFullStoryLabel'))}>{pageText('stories', 'readFullStoryLabel', 'Read Full Story')}</span>
-          <Icon name="arrowRight" size={17} className="inline-arrow" />
+          <Icon name="arrowRight" size={20} className="inline-arrow" />
         </a>
       </div>
     </article>
 
     <nav className="project-picker" aria-label="Projects in this category">
-      <button className="project-picker-arrow" type="button" aria-label="Previous project" disabled={stories.length < 2} onClick={() => go(index - 1)}><Icon name="chevronLeft" size={18} /></button>
+      <button className="project-picker-arrow" type="button" aria-label="Previous project" disabled={stories.length < 2} onClick={() => go(index - 1)}><Icon name="chevronLeft" size={22} /></button>
       <ol className="project-picker-list">
         {stories.map((item, i) => <li key={item.slug}>
           <button className={i === index ? 'project-picker-item is-active' : 'project-picker-item'} type="button" aria-current={i === index ? 'true' : undefined} onClick={() => setIndex(i)}>
@@ -245,7 +245,7 @@ function CategoryShowcase({ stories }) {
         </li>)}
       </ol>
       <span className="project-picker-hint" data-cms-path={cms(pagePath('stories', 'selectProjectLabel'))}>{pageText('stories', 'selectProjectLabel', 'Select a project')}</span>
-      <button className="project-picker-arrow" type="button" aria-label="Next project" disabled={stories.length < 2} onClick={() => go(index + 1)}><Icon name="chevronRight" size={18} /></button>
+      <button className="project-picker-arrow" type="button" aria-label="Next project" disabled={stories.length < 2} onClick={() => go(index + 1)}><Icon name="chevronRight" size={22} /></button>
     </nav>
   </div>;
 }
@@ -274,7 +274,7 @@ export default function StoriesPage() {
             <QuoteButton showArrow />
             <Button href="/mySOS/products/" variant="ghost">
               <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
-              <Icon name="arrowRight" size={16} className="inline-arrow" />
+              <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
           </div>
         </div>

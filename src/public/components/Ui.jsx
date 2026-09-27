@@ -26,7 +26,7 @@ export const heading = (key, fallback = '') => siteContent.headings?.[key] ?? fa
 /* --------------------------------------------------------------- primitives */
 
 export function Arrow() {
-  return <Icon name="arrowRight" size={16} className="inline-arrow" />;
+  return <Icon name="arrowRight" size={19} className="inline-arrow" />;
 }
 
 export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
@@ -44,7 +44,7 @@ export function QuoteButton({ variant = 'primary', className = '', showArrow = f
   const text = waiting ? label('returnToQuoteButton', 'Return to quote') : label(labelKey, 'Get a Quote');
   return <Button href={REQUEST_PATH} variant={variant} className={className} {...rest}>
     <span data-cms-path={cms(labelPath(key))}>{text}</span>
-    {showArrow && <Icon name="arrowRight" size={16} className="inline-arrow" />}
+    {showArrow && <Icon name="arrowRight" size={19} className="inline-arrow" />}
   </Button>;
 }
 
@@ -164,7 +164,7 @@ export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
   };
   return <ol className={`process-steps process-${variant}`}>
     {steps.map((step, index) => <li key={step.title}>
-      <span className="step-marker">{variant === 'icon' ? <Icon name={step.icon || 'consult'} size={22} /> : String(index + 1).padStart(2, '0')}</span>
+      <span className="step-marker">{variant === 'icon' ? <Icon name={step.icon || 'consult'} size={25} /> : String(index + 1).padStart(2, '0')}</span>
       <h3 data-cms-path={path(index, 'title')}>{step.title}</h3>
       {step.description && <p data-cms-path={path(index, 'description')}>{step.description}</p>}
     </li>)}
@@ -257,11 +257,11 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
     <SectionHeading eyebrow={eyebrow} eyebrowPath={eyebrowPath} />
 
     <div className="review-summary">
-      <Icon name="google" size={26} />
+      <Icon name="google" size={30} />
       {data?.averageRating
         ? <>
           <span className="rating-value">{formatRating(data.averageRating)}</span>
-          <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={14} />)}</span>
+          <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={18} />)}</span>
           {data.totalReviewCount ? <small>
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
             {' '}<CountUp value={data.totalReviewCount} />{' '}
@@ -273,11 +273,11 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
     </div>
 
     {data && <div className="review-rail">
-      <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={16} /></button>
+      <button className="carousel-btn" type="button" aria-label="Previous reviews" onClick={() => scrollByCard(-1)}><Icon name="chevronLeft" size={19} /></button>
       <div className="review-track" ref={trackRef}>
         {data.reviews.map((review) => <blockquote className="review-card" key={review.id}>
           <div className="review-head">
-            <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={13} />)}</span>
+            <span className="stars" aria-label={`${review.rating} out of 5 stars`}>{Array.from({ length: review.rating }, (_, i) => <Icon key={i} name="star" size={18} />)}</span>
             <small className="review-time">{formatReviewDate(review.createTime)}</small>
           </div>
           <p className="review-text">&ldquo;{review.text}&rdquo;</p>
@@ -286,11 +286,11 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
               ? <img className="avatar avatar-photo" src={review.photoUrl} alt="" width="34" height="34" loading="lazy" referrerPolicy="no-referrer" />
               : <span className="avatar" aria-hidden="true">{initials(review.author)}</span>}
             <span className="review-author"><strong>{review.author}</strong></span>
-            <a className="review-source" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" aria-label={`Read ${review.author}'s review on Google`}><Icon name="google" size={16} /></a>
+            <a className="review-source" href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" aria-label={`Read ${review.author}'s review on Google`}><Icon name="google" size={19} /></a>
           </footer>
         </blockquote>)}
       </div>
-      <button className="carousel-btn" type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={16} /></button>
+      <button className="carousel-btn" type="button" aria-label="Next reviews" onClick={() => scrollByCard(1)}><Icon name="chevronRight" size={19} /></button>
     </div>}
 
     {action && <div className="center-action">{action}</div>}
@@ -336,7 +336,7 @@ export function WhatsAppLink({ label: text = label('whatsAppButton', 'WhatsApp U
   const href = whatsapp.enabled && whatsapp.number
     ? `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.defaultMessage)}`
     : null;
-  const content = <><Icon name="whatsapp" size={18} /> <span data-cms-path={textPath && cms(textPath)}>{text}</span></>;
+  const content = <><Icon name="whatsapp" size={22} /> <span data-cms-path={textPath && cms(textPath)}>{text}</span></>;
   return href
     ? <a className="btn btn-ghost" href={href} target="_blank" rel="noreferrer" data-cms-paths={whatsAppDestinationPaths}>{content}</a>
     : <span className="btn btn-ghost is-disabled">{content}</span>;

@@ -32,7 +32,7 @@ const whatsAppPaths = cmsAll(configPath('whatsapp', 'number'), configPath('whats
 
 export function WhatsAppButton({ className = '' }) {
   const href = whatsappHref();
-  const content = <Icon name="whatsapp" size={20} />;
+  const content = <Icon name="whatsapp" size={24} />;
   return href
     ? <a className={`wa-circle ${className}`.trim()} href={href} target="_blank" rel="noreferrer" aria-label="Contact MySOS on WhatsApp" data-cms-paths={whatsAppPaths}>{content}</a>
     : <span className={`wa-circle is-disabled ${className}`.trim()} aria-label="WhatsApp enquiries are currently unavailable">{content}</span>;
@@ -41,7 +41,7 @@ export function WhatsAppButton({ className = '' }) {
 export function WhatsAppBubble() {
   const href = whatsappHref();
   if (!href) return null;
-  return <a className="wa-bubble" href={href} target="_blank" rel="noreferrer" aria-label="Chat with MySOS on WhatsApp" data-cms-paths={whatsAppPaths}><Icon name="whatsapp" size={30} /></a>;
+  return <a className="wa-bubble" href={href} target="_blank" rel="noreferrer" aria-label="Chat with MySOS on WhatsApp" data-cms-paths={whatsAppPaths}><Icon name="whatsapp" size={35} /></a>;
 }
 
 /*
@@ -84,7 +84,7 @@ function NavigationItem({ item, index, onNavigate }) {
   const entry = cmsAll(configPath('navigation', index, 'label'), configPath('navigation', index, 'href'));
   if (!links) return <a className="nav-link" href={item.href} onClick={onNavigate} data-cms-paths={entry}>{item.label}</a>;
   return <div className="nav-group">
-    <a className="nav-link" href={item.href} onClick={onNavigate} data-cms-paths={entry}>{item.label}<Icon name="chevronDown" size={13} className="nav-chevron" /></a>
+    <a className="nav-link" href={item.href} onClick={onNavigate} data-cms-paths={entry}>{item.label}<Icon name="chevronDown" size={18} className="nav-chevron" /></a>
     <div className="nav-dropdown">{links.map((link) => <a
       key={link.label}
       href={link.href}
@@ -170,8 +170,8 @@ export function SiteFooter() {
           {socials.map((social) => {
             const href = socialLinks[social.id];
             return href
-              ? <a key={social.id} href={href} target="_blank" rel="noreferrer" aria-label={social.label} data-cms-paths={cmsAll(configPath('socialLinks', social.id))}><Icon name={social.id} size={18} /></a>
-              : <span key={social.id} aria-label={`${social.label} (coming soon)`} role="img"><Icon name={social.id} size={18} /></span>;
+              ? <a key={social.id} href={href} target="_blank" rel="noreferrer" aria-label={social.label} data-cms-paths={cmsAll(configPath('socialLinks', social.id))}><Icon name={social.id} size={22} /></a>
+              : <span key={social.id} aria-label={`${social.label} (coming soon)`} role="img"><Icon name={social.id} size={22} /></span>;
           })}
         </div>
         {siteConfig.whatsapp.displayNumber && <a className="footer-contact" href={whatsappHref() ?? '#'} data-cms-path={cms(configPath('whatsapp', 'displayNumber'))}>{siteConfig.whatsapp.displayNumber}</a>}

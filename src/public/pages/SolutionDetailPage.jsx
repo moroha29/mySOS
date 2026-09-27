@@ -64,7 +64,7 @@ function Hero({ solution, solutionIndex }) {
     <div className="solution-hero-inner">
       <div className="solution-hero-copy" data-reveal>
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <a href="/mySOS/" aria-label={word('breadcrumbHome', 'Home')}><Icon name="home" size={15} /></a>
+          <a href="/mySOS/" aria-label={word('breadcrumbHome', 'Home')}><Icon name="home" size={18} /></a>
           <span aria-hidden="true">/</span>
           <a href="/mySOS/solutions/" data-cms-path={wordPath('breadcrumbSolutions')}>{word('breadcrumbSolutions', 'Solutions')}</a>
           <span aria-hidden="true">/</span>
@@ -74,9 +74,9 @@ function Hero({ solution, solutionIndex }) {
         <h1 data-cms-path={cms([...solutionPath(solution, 'page'), 'title'])}>{solution.page?.title}</h1>
         <p className="solution-hero-lead" data-cms-path={cms([...solutionPath(solution, 'page'), 'lead'])}>{solution.page?.lead}</p>
         {discussHref && <a className="btn btn-primary btn-whatsapp" href={discussHref} {...enquiryLinkProps(discussHref)}>
-          <Icon name="whatsapp" size={20} />
+          <Icon name="whatsapp" size={24} />
           <span data-cms-path={wordPath('discussButton')}>{word('discussButton', 'Discuss on WhatsApp')}</span>
-          <Icon name="arrowRight" size={16} />
+          <Icon name="arrowRight" size={19} />
         </a>}
       </div>
       <div className="solution-collage" aria-hidden="true" data-reveal style={{ '--reveal-delay': '80ms' }}>
@@ -133,23 +133,23 @@ function UseCasePicker({ solution, activeId, onChoose }) {
       </div>
     </div>
     <div className={showAll ? 'use-case-rail is-all' : 'use-case-rail'}>
-      {!showAll && <button className="use-case-arrow" type="button" aria-label="Previous" disabled={pages.current === 0} onClick={() => move(-1)}><Icon name="chevronLeft" size={20} /></button>}
+      {!showAll && <button className="use-case-arrow" type="button" aria-label="Previous" disabled={pages.current === 0} onClick={() => move(-1)}><Icon name="chevronLeft" size={24} /></button>}
       <ul className="use-case-track" ref={trackRef}>
         {solution.useCases.map((useCase, index) => {
           const active = useCase.id === activeId;
           return <li key={useCase.id} data-reveal style={{ '--reveal-delay': `${index * 60}ms` }}>
             <button type="button" className={active ? 'use-case-card is-active' : 'use-case-card'} aria-pressed={active} onClick={() => onChoose(useCase.id)}>
               <span className="use-case-photo"><Photo style={solution.imageStyle} image={pictures[index]} imagePath={[...solutionPath(solution, 'useCases', index), 'image']} /></span>
-              {active && <span className="use-case-selected"><Icon name="check" size={14} /><span data-cms-path={wordPath('selectedLabel')}>{word('selectedLabel', 'Selected')}</span></span>}
+              {active && <span className="use-case-selected"><Icon name="check" size={18} /><span data-cms-path={wordPath('selectedLabel')}>{word('selectedLabel', 'Selected')}</span></span>}
               <span className="use-case-name">
-                <Icon name={useCase.icon} size={30} cmsPath={[...solutionPath(solution, 'useCases', index), 'icon']} />
+                <Icon name={useCase.icon} size={35} cmsPath={[...solutionPath(solution, 'useCases', index), 'icon']} />
                 <span data-cms-path={cms([...solutionPath(solution, 'useCases', index), 'name'])}>{useCase.name}</span>
               </span>
             </button>
           </li>;
         })}
       </ul>
-      {!showAll && <button className="use-case-arrow" type="button" aria-label="Next" disabled={pages.current >= pages.count - 1} onClick={() => move(1)}><Icon name="chevronRight" size={20} /></button>}
+      {!showAll && <button className="use-case-arrow" type="button" aria-label="Next" disabled={pages.current >= pages.count - 1} onClick={() => move(1)}><Icon name="chevronRight" size={24} /></button>}
     </div>
     <div className="use-case-foot">
       {!showAll && pages.count > 1 ? <div className="use-case-dots">
@@ -159,7 +159,7 @@ function UseCasePicker({ solution, activeId, onChoose }) {
         {showAll
           ? <span data-cms-path={wordPath('showFewerLabel')}>{word('showFewerLabel', 'Show fewer')}</span>
           : <span data-cms-path={wordPath('viewAllLabel')}>{word('viewAllLabel', 'View all solutions')}</span>}
-        <Icon name={showAll ? 'chevronUp' : 'chevronDown'} size={16} />
+        <Icon name={showAll ? 'chevronUp' : 'chevronDown'} size={19} />
       </button>
     </div>
   </section>;

@@ -1,5 +1,6 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import Icon, { iconGlyphs, isIconPicture } from '../src/public/components/Icons';
@@ -95,5 +96,40 @@ describe('icons on the page carry their content path', () => {
 
   it('only where asked: interface icons stay unmarked', () => {
     expect(renderToStaticMarkup(<Icon name="arrowRight" />)).not.toContain('data-cms-icon');
+  });
+});
+
+describe('icons are drawn large enough to read', () => {
+  /*
+   * Every icon on the public site, with where it is drawn. The smallest were
+   * 13–16px — an arrow in a link, the mark beside a promise — and a client on
+   * a laptop could not make them out.
+   */
+  const drawn = () => {
+    const found = [];
+    const walk = (dir) => {
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const full = join(dir, entry.name);
+        if (entry.isDirectory()) { walk(full); continue; }
+        if (!/\.jsx?$/.test(entry.name)) continue;
+        const text = readFileSync(full, 'utf8');
+        for (const [, size] of text.matchAll(/size=\{(\d+(?:\.\d+)?)\}/g)) found.push({ file: entry.name, size: Number(size) });
+        // A size chosen at render time, e.g. the first tile's larger chevron.
+        for (const [, ...sizes] of text.matchAll(/size=\{[^}]*\?\s*(\d+)\s*:\s*(\d+)\}/g)) {
+          for (const size of sizes) found.push({ file: entry.name, size: Number(size) });
+        }
+      }
+    };
+    walk(new URL('../src/public/', import.meta.url).pathname.replace(/^\/(\w:)/, '$1'));
+    return found;
+  };
+
+  it('nowhere smaller than 18px, and 25px where nothing says otherwise', () => {
+    const icons = drawn();
+    expect(icons.length).toBeGreaterThan(50);
+    for (const { file, size } of icons) {
+      expect(size, `${file}: ${size}px`).toBeGreaterThanOrEqual(18);
+    }
+    expect(source).toContain("size = 25");
   });
 });

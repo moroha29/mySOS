@@ -33,7 +33,7 @@ export default function SolutionsPage() {
             <QuoteButton showArrow />
             <Button href="/mySOS/products/" variant="ghost">
               <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
-              <Icon name="arrowRight" size={16} className="inline-arrow" />
+              <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
           </div>
         </div>
@@ -50,7 +50,7 @@ export default function SolutionsPage() {
           href={`/mySOS/solutions/${solution.id}/`}
           aria-current={selected?.id === solution.id ? 'page' : undefined}
         >
-          <Icon name={solution.icon || solution.imageStyle} size={26} cmsPath={solutionPath(solution, 'icon')} />
+          <Icon name={solution.icon || solution.imageStyle} size={30} cmsPath={solutionPath(solution, 'icon')} />
           <span className="browse-label" data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
         </a>)}
       </div>
@@ -75,7 +75,7 @@ export default function SolutionsPage() {
           <h3 data-cms-path={cms(contentPath('popularSolutions', index, 'name'))}>{item.name}</h3>
         </article>)}
       </div>
-      <div className="center-action"><Button href="/mySOS/products/" variant="outline"><span data-cms-path={cms(labelPath('viewAllSolutionsButton'))}>{label('viewAllSolutionsButton', 'View All Solutions')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button></div>
+      <div className="center-action"><Button href="/mySOS/products/" variant="outline"><span data-cms-path={cms(labelPath('viewAllSolutionsButton'))}>{label('viewAllSolutionsButton', 'View All Solutions')}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></Button></div>
     </section>
 
     <section className="promo-band">
