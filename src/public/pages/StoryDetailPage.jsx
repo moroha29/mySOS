@@ -115,8 +115,8 @@ export default function StoryDetailPage({ slug }) {
     </nav>
 
     <section className="story-hero">
-      <div className="story-hero-bg" aria-hidden="true"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/hero`)} imagePath={storyPath(story, 'image')} wide eager /></div>
-      <div className="story-hero-inner">
+      <div className="story-hero-bg" aria-hidden="true" data-reveal><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/hero`)} imagePath={storyPath(story, 'image')} wide eager /></div>
+      <div className="story-hero-inner" data-reveal>
         <a className="back-link" href="/mySOS/success-stories/"><Icon name="chevronLeft" size={14} /> <span data-cms-path={cms(pagePath('story', 'backLabel'))}>{pageText('story', 'backLabel', 'Back to all stories')}</span></a>
         <div><span className="badge">{industry}</span></div>
         <h1 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h1>

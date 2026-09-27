@@ -142,12 +142,19 @@ export default function ProductsPage() {
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
-          <span className="eyebrow" data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
           <h1>
-            <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
-            <em><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
           </h1>
-          <p className="hero-lead" data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+            <QuoteButton showArrow />
+            <Button href="/mySOS/solutions/" variant="ghost">
+              <span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span>
+              <Icon name="arrowRight" size={16} className="inline-arrow" />
+            </Button>
+          </div>
         </div>
         <div className="hero-scene">
           <Photo

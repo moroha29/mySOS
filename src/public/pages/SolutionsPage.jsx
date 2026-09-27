@@ -23,11 +23,19 @@ export default function SolutionsPage() {
     <section {...heroBackground(siteContent.scenes?.solutionsHeroBackgroundImage, scenePath('solutionsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
           <h1>
-            <span data-cms-path={cms(pagePath('solutions', 'heroTitle'))}>{pageText('solutions', 'heroTitle', 'Solutions Designed')}</span>
-            <em><span data-cms-path={cms(pagePath('solutions', 'heroTitleAccent'))}>{pageText('solutions', 'heroTitleAccent', 'Around Your Needs')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('solutions', 'heroTitle'))}>{pageText('solutions', 'heroTitle', 'Solutions Designed')}</span>
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(pagePath('solutions', 'heroTitleAccent'))}>{pageText('solutions', 'heroTitleAccent', 'Around Your Needs')}</span></em>
           </h1>
-          <p className="hero-lead" data-cms-path={cms(pagePath('solutions', 'heroLead'))}>{pageText('solutions', 'heroLead')}</p>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('solutions', 'heroLead'))}>{pageText('solutions', 'heroLead')}</p>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+            <QuoteButton showArrow />
+            <Button href="/mySOS/products/" variant="ghost">
+              <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
+              <Icon name="arrowRight" size={16} className="inline-arrow" />
+            </Button>
+          </div>
         </div>
         <div className="hero-scene"><Photo style="hall" image={picture(siteContent.scenes?.solutionsHeroImage, 'scenes/solutions-hero')} imagePath={scenePath('solutionsHeroImage')} label="Teams we work with" wide eager /></div>
       </div>
