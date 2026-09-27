@@ -4,6 +4,7 @@ import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
 import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
@@ -12,80 +13,30 @@ import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, Secti
 const apparelTabs = siteContent.apparelTabs ?? [];
 
 /*
- * Printing & customisation methods, laid out after the reference design: a
- * vertical list of methods, the chosen method's details, and a photo.
+ * What MySOS can print on this kind of product, named in the banner rather
+ * than in a band of its own further down the page.
  *
- * Which methods exist, and their names, come from printData.json — the pricing
- * workbook's list, which the manager never edits. What is said about each one
- * (description, "best for", photo) lives in siteContent.printingMethods, keyed by
- * method id, so it can be edited. With no photo uploaded the drawn workshop
- * scene stands in.
+ * Every product in the catalogue carries the methods it can be branded with,
+ * so a category's ways of printing are simply the ones its products offer —
+ * MySOS's own data, kept per product in the portal, rather than a list of
+ * categories to keep in step by hand. Names and order come from printData,
+ * the pricing workbook's list.
  */
-function Capabilities({ methods, category }) {
-  const [activeId, setActiveId] = useState(methods[0]?.id);
-  const tabRefs = useRef({});
-  const active = methods.find((method) => method.id === activeId) ?? methods[0];
-  if (!active) return null;
-  const copy = siteContent.printingMethods?.[active.id] ?? {};
+function waysToPrint(products) {
+  const offered = new Set(products.flatMap((product) => product.printingMethods ?? []));
+  return printData.methods.filter((method) => method.public?.visible && offered.has(method.id));
+}
 
-  // Arrow keys move between methods, as in any tab list.
-  const moveFocus = (event, index) => {
-    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
-    if (!step) return;
-    event.preventDefault();
-    const next = methods[(index + step + methods.length) % methods.length];
-    setActiveId(next.id);
-    tabRefs.current[next.id]?.focus();
-  };
-
-  return <section className="capabilities" id="printing">
-    <div className="capabilities-inner">
-      <span className="capabilities-eyebrow" data-cms-path={cms(pagePath('products', 'methodsEyebrow'))}>{pageText('products', 'methodsEyebrow', 'Our capabilities')}</span>
-      <h2 className="capabilities-title" data-cms-path={cms(pagePath('products', 'methodsTitle'))}>{pageText('products', 'methodsTitle', 'How we bring your brand to life')}</h2>
-      {/* Which category these are the ways of doing. The name is the category's
-          own, so it stays right when MySOS renames one. */}
-      {category && <p className="capabilities-for">
-        <span data-cms-path={cms(pagePath('products', 'methodsForLabel'))}>{pageText('products', 'methodsForLabel', 'On')}</span>
-        {' '}
-        <strong data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</strong>
-      </p>}
-
-      <div className="capabilities-body" data-reveal>
-        <div className="capabilities-tabs" role="tablist" aria-orientation="vertical" aria-label="Printing and customisation methods">
-          {methods.map((method, index) => <button
-            key={method.id}
-            ref={(node) => { tabRefs.current[method.id] = node; }}
-            id={`method-tab-${method.id}`}
-            type="button"
-            role="tab"
-            aria-selected={method.id === active.id}
-            aria-controls="method-panel"
-            tabIndex={method.id === active.id ? 0 : -1}
-            onClick={() => setActiveId(method.id)}
-            onKeyDown={(event) => moveFocus(event, index)}
-          >{method.name}</button>)}
-        </div>
-
-        <div className="capabilities-panel" id="method-panel" role="tabpanel" aria-labelledby={`method-tab-${active.id}`}>
-          <h3>{active.name}</h3>
-          <p data-cms-path={cms(contentPath('printingMethods', active.id, 'description'))}>{copy.description || active.public.description}</p>
-          {copy.bestFor && <div className="capabilities-best">
-            <small data-cms-path={cms(pagePath('products', 'methodsBestForLabel'))}>{pageText('products', 'methodsBestForLabel', 'Best for')}</small>
-            <span data-cms-path={cms(contentPath('printingMethods', active.id, 'bestFor'))}>{copy.bestFor}</span>
-          </div>}
-        </div>
-
-        <div className="capabilities-photo">
-          <Photo
-            style="workshop"
-            image={picture(copy.image, `methods/${active.id}`)}
-            imagePath={contentPath('printingMethods', active.id, 'image')}
-            label={`${active.name} printing`}
-          />
-        </div>
-      </div>
-    </div>
-  </section>;
+/* The picture beside the banner: the category's own if one is uploaded, else
+   the first photograph among its products, else the drawn stand-in. */
+function categoryPicture(category, products) {
+  const chosen = String(category?.image ?? '').trim();
+  if (chosen) return { src: chosen, path: categoryPath(category, 'image') };
+  for (const product of products) {
+    const photo = getImage(`products/${product.public.slug}`);
+    if (photo) return { src: photo, path: null };
+  }
+  return { src: picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero'), path: scenePath('productsHeroImage') };
 }
 
 const knownCategory = (id) => (siteContent.categories.some((item) => item.id === id) ? id : 'apparel');
@@ -147,12 +98,10 @@ export default function ProductsPage() {
    * which category is content, so MySOS can correct it; a category that names
    * none is offered all of them.
    */
-  const methods = useMemo(() => {
-    const shown = printData.methods.filter((method) => method.public?.visible);
-    const wanted = activeCategory?.methods ?? [];
-    const kept = shown.filter((method) => wanted.includes(method.id));
-    return kept.length > 0 ? kept : shown;
-  }, [activeCategory]);
+  // Everything in the category, not only what is on screen: the ways of
+  // printing belong to the category, not to the first eight products.
+  const ways = useMemo(() => waysToPrint(getPublicProducts({ category })), [category]);
+  const banner = useMemo(() => categoryPicture(activeCategory, getPublicProducts({ category })), [activeCategory, category]);
 
   return <main className="page-paper">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
@@ -160,12 +109,31 @@ export default function ProductsPage() {
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
-          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
-          <h1>
-            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
-            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
-          </h1>
+          <nav className="breadcrumb" aria-label="Breadcrumb" data-reveal>
+            <a href="/mySOS/" aria-label="Home"><Icon name="home" size={18} /></a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page" data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
+          </nav>
+          {/* The client's line for this page, kept above the category it is
+              showing — the page now says what was chosen in the strip. */}
+          <span className="eyebrow" data-reveal>
+            <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>{' '}
+            <span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span>
+          </span>
+          <h1 data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</h1>
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
+          {ways.length > 0 && <div className="hero-ways" id="printing" data-reveal style={{ '--reveal-delay': '300ms' }}>
+            <span className="hero-ways-label">
+              <span data-cms-path={cms(pagePath('products', 'waysLabel'))}>{pageText('products', 'waysLabel', 'Ways to print on')}</span>{' '}
+              <span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
+            </span>
+            <ul>
+              {ways.map((method) => <li key={method.id}>
+                <Icon name="check" size={18} />
+                <span>{method.name}</span>
+              </li>)}
+            </ul>
+          </div>}
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
             <QuoteButton showArrow />
             <Button href="/mySOS/solutions/" variant="ghost">
@@ -177,9 +145,9 @@ export default function ProductsPage() {
         <div className="hero-scene">
           <Photo
             style="hall"
-            image={picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero')}
-            imagePath={scenePath('productsHeroImage')}
-            label="Merchandise MySOS has made"
+            image={banner.src}
+            imagePath={banner.path}
+            label={`${activeCategory.name} MySOS has made`}
             wide
             eager
           />
@@ -240,8 +208,6 @@ export default function ProductsPage() {
         </Button>
       </div>}
     </section>
-
-    <Capabilities key={category} methods={methods} category={activeCategory} />
 
     <section className="promo-band">
       <div className="promo-copy" data-reveal>

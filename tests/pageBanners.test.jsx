@@ -93,8 +93,10 @@ describe('every page opens with the homepage banner', () => {
 });
 
 describe('every banner says the same things in the same order', () => {
+  // The products banner leads with the category being shown, so the line above
+  // its title is the client's own page headline rather than a heading key; it
+  // has a test of its own.
   const banners = [
-    ['ProductsPage', 'browseCategoryHeading', 'exploreSolutionsLabel'],
     ['SolutionsPage', 'heroEyebrow', 'heroExploreButton'],
     ['StoriesPage', 'heroEyebrow', 'heroExploreButton'],
     ['WhyPage', 'heroEyebrow', 'viewAllStoriesButton'],
@@ -106,6 +108,16 @@ describe('every banner says the same things in the same order', () => {
     expect(source).toContain('<div className="hero-actions" data-reveal');
     expect(source).toContain('<QuoteButton showArrow />');
     expect(source).toContain(`label('${onward}'`);
+  });
+
+  it('ProductsPage: the category leads, with the page headline above it', () => {
+    const source = page('ProductsPage');
+    // The category is the title, so the page says what was chosen in the strip.
+    expect(source).toContain("<h1 data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</h1>");
+    expect(source).toContain('<nav className="breadcrumb" aria-label="Breadcrumb" data-reveal>');
+    expect(source).toContain('<div className="hero-actions" data-reveal');
+    expect(source).toContain('<QuoteButton showArrow />');
+    expect(source).toContain("label('exploreSolutionsLabel'");
   });
 
   it('leaves the quote page without a second way to the quote it already is', () => {

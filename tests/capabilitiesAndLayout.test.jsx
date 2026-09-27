@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import printData from '../src/data/printData.json';
+import productData from '../src/data/productData.json';
 import siteContent from '../src/data/siteContent.json';
 import HomePage from '../src/public/pages/HomePage';
 import ProductsPage from '../src/public/pages/ProductsPage';
@@ -82,90 +83,56 @@ describe('page order: reviews sit directly under the banner', () => {
   });
 });
 
-describe('printing methods: "Our capabilities"', () => {
-  const markup = () => render(ProductsPage, '/mySOS/products/');
+describe('what a category can be printed with', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const markup = (category) => render(ProductsPage, '/mySOS/products/', category ? `?category=${category}` : '');
+  const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
 
-  it('shows the eyebrow and heading from the reference design', () => {
-    const html = markup();
-    expect(html).toContain('Our capabilities');
-    expect(html).toContain('How we bring your brand to life');
-    // The footer's "Printing Guides" link still lands on this section.
-    expect(html).toContain('id="printing"');
-  });
-
-  // What a category is printed with, in the order the price list keeps them.
-  const methodsFor = (id) => {
-    const category = siteContent.categories.find((item) => item.id === id);
-    return visibleMethods.filter((method) => category.methods.includes(method.id));
+  // What a category can be branded with, straight from MySOS's catalogue.
+  const waysFor = (id) => {
+    const offered = new Set(productData.catalogue
+      .filter((item) => item.public?.visible !== false && item.public.category === id)
+      .flatMap((item) => item.printingMethods ?? []));
+    return visibleMethods.filter((method) => offered.has(method.id)).map((method) => method.name);
   };
-  // Scoped to this section: the apparel filter above is a tab list too.
-  const tabsIn = (html) => [...(html.match(/<section class="capabilities".*?<\/section>/s)?.[0] ?? '')
-    .matchAll(/<button[^>]*role="tab"[^>]*aria-selected="(true|false)"[^>]*>([^<]+)<\/button>/g)];
 
-  it('lists the methods that suit the category, first one selected', () => {
+  it('names them in the banner, from the products themselves', () => {
+    // It used to be a navy band below the products, saying the same for every
+    // category, against a list kept by hand. The products carry their own
+    // methods, so the category's are simply the ones its products offer.
     const html = markup();
-    const tabs = tabsIn(html);
-    expect(tabs.map((tab) => tab[2])).toEqual(methodsFor('apparel').map((method) => method.name));
-    expect(tabs.map((tab) => tab[1])).toEqual(methodsFor('apparel').map((_, index) => String(index === 0)));
-    expect(html).toContain('role="tablist"');
-    expect(html).toContain('role="tabpanel"');
-  });
-
-  it('offers another category its own ways of printing, and says which', () => {
-    // A bottle is not embroidered, and the band used to offer it anyway.
-    const html = render(ProductsPage, '/mySOS/products/', '?category=drinkware');
-    const named = tabsIn(html).map((tab) => tab[2]);
-    expect(named).toEqual(methodsFor('drinkware').map((method) => method.name));
-    expect(named).not.toEqual(methodsFor('apparel').map((method) => method.name));
-    expect(html).toMatch(/class="capabilities-for"[\s\S]*?<strong[^>]*>Drinkware<\/strong>/);
-  });
-
-  it('falls back to every method where a category names none', () => {
-    // MySOS edits these lists; an empty one must not empty the band.
+    const named = [...html.matchAll(/<li><svg[^>]*>.*?<\/svg><span>([^<]+)<\/span><\/li>/g)].map(([, name]) => name);
+    expect(named).toEqual(waysFor('apparel'));
+    expect(source).toContain('const offered = new Set(products.flatMap((product) => product.printingMethods ?? []));');
     for (const category of siteContent.categories) {
-      expect(category.methods.length, category.id).toBeGreaterThan(0);
-      for (const id of category.methods) {
-        expect(visibleMethods.some((method) => method.id === id), `${category.id}: ${id}`).toBe(true);
-      }
+      expect(category, category.id).not.toHaveProperty('methods');
     }
-    const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
-    expect(source).toContain('return kept.length > 0 ? kept : shown;');
   });
 
-  it("shows the selected method's details, best-for chip and photo", () => {
+  it('says a different set for a different category', () => {
+    const html = markup('drinkware');
+    const named = [...html.matchAll(/<li><svg[^>]*>.*?<\/svg><span>([^<]+)<\/span><\/li>/g)].map(([, name]) => name);
+    expect(named).toEqual(waysFor('drinkware'));
+    expect(named).not.toEqual(waysFor('apparel'));
+    expect(html).toContain('Ways to print on');
+  });
+
+  it('is where the footer link for materials lands', () => {
+    expect(markup()).toContain('id="printing"');
+    expect(JSON.stringify(siteContent.footer)).toContain('/mySOS/products/#printing');
+  });
+
+  it('leaves no band, and no wording that only the band used', () => {
     const html = markup();
-    const first = visibleMethods[0];
-    const copy = siteContent.printingMethods[first.id];
-    expect(html).toContain(`<h3>${first.name}</h3>`);
-    expect(html).toContain(copy.description);
-    expect(html).toContain('Best for');
-    expect(html).toContain(copy.bestFor);
-    expect(html).toContain('class="capabilities-photo"');
-  });
-
-  it('every method has editable wording, filled from real data', () => {
+    expect(html).not.toContain('class="capabilities');
+    expect(css).not.toContain('.capabilities');
+    for (const key of ['methodsEyebrow', 'methodsTitle', 'methodsBestForLabel', 'methodsForLabel']) {
+      expect(siteContent.pages.products, key).not.toHaveProperty(key);
+    }
+    // What each method suits is still written on every product page.
     for (const method of visibleMethods) {
-      const copy = siteContent.printingMethods[method.id];
-      expect(copy, method.id).toBeTruthy();
-      // The wording is the site's own (edited on the Products page), so it is
-      // only required to be there, not to match the price list's copy.
-      expect(copy.description, method.id).toMatch(/\S/);
-      expect(copy.bestFor, method.id).toMatch(/\S/);
-      expect(copy).toHaveProperty('image');
+      expect(siteContent.printingMethods[method.id].bestFor, method.id).toMatch(/\S/);
     }
-  });
-
-  it('the old icon grid and its "Learn more" link are gone', () => {
-    const html = markup();
-    expect(html).not.toContain('method-grid');
-    expect(siteContent.pages.products).not.toHaveProperty('printingGuideLabel');
-    expect(siteContent.headings).not.toHaveProperty('printingMethodsHeading');
-  });
-
-  it('arrow keys move between methods', () => {
-    const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
-    expect(source).toMatch(/\{ ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 \}\[event\.key\]/);
-    expect(source).toContain('tabRefs.current[next.id]?.focus();');
   });
 });
 
@@ -358,7 +325,7 @@ describe('the bar at the top of every page', () => {
     expect(css).toMatch(/--header-h: 88px;/);
     expect(css).toMatch(/\.site-header \{[^}]*height: var\(--header-h\)/);
     expect(css).not.toMatch(/top: 72px|scroll-(margin|padding)-top: 72px/);
-    for (const rule of [/\.primary-nav \{[\s\S]{0,200}?top: var\(--header-h\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: var\(--header-h\)/]) {
+    for (const rule of [/\.primary-nav \{[\s\S]{0,200}?top: var\(--header-h\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: (?:var|calc)\(var?\(?--header-h/]) {
       expect(css).toMatch(rule);
     }
   });

@@ -106,8 +106,9 @@ describe('one look across the pages', () => {
   it('gives the sections, cards and bands one set of shapes', () => {
     expect(css).toMatch(/\.section-heading h2 \{ font-size: clamp\(\d+px, 3vw, \d+px\)/);
     expect(css).toMatch(/\.product-card, \.story-card, \.solution-card[\s\S]*?border-radius: 22px;/);
-    // The printing methods band matches the homepage's navy one.
-    expect(css).toMatch(/\.capabilities \{ background: var\(--navy\); \}/);
+    // The ways of printing are chips in the products banner now, in the same
+    // pill the category strip and the apparel filter use.
+    expect(css).toMatch(/\.hero-ways li \{[\s\S]{0,160}?border-radius: 999px;/);
     // The closing band is flat green with a navy button, as the concept has it.
     expect(css).toMatch(/\.page-cta, \.home-closing \{ background: #046b45; \}/);
     expect(css).toMatch(/\.page-cta \.btn, \.home-closing \.btn \{[^}]*background: var\(--navy\)/);

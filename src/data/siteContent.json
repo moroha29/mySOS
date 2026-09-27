@@ -221,14 +221,7 @@
       "visual": "tee",
       "colour": "navy",
       "description": "T-Shirts, polos, jerseys & more",
-      "image": "",
-      "methods": [
-        "silkscreen",
-        "dtf",
-        "dtg",
-        "embroidery",
-        "sublimation"
-      ]
+      "image": ""
     },
     {
       "id": "bags",
@@ -237,12 +230,7 @@
       "visual": "tote",
       "colour": "sand",
       "description": "Tote bags, backpacks & more",
-      "image": "",
-      "methods": [
-        "silkscreen",
-        "dtf",
-        "embroidery"
-      ]
+      "image": ""
     },
     {
       "id": "drinkware",
@@ -251,11 +239,7 @@
       "visual": "bottle",
       "colour": "green",
       "description": "Bottles, tumblers, mugs & more",
-      "image": "",
-      "methods": [
-        "uv_printing",
-        "silkscreen"
-      ]
+      "image": ""
     },
     {
       "id": "corporate-gifts",
@@ -264,12 +248,7 @@
       "visual": "gift-set",
       "colour": "navy",
       "description": "Premium gifts for every occasion",
-      "image": "",
-      "methods": [
-        "uv_printing",
-        "embroidery",
-        "silkscreen"
-      ]
+      "image": ""
     },
     {
       "id": "stationery",
@@ -278,11 +257,7 @@
       "visual": "notebook",
       "colour": "navy",
       "description": "Notebooks, pens, desks & more",
-      "image": "",
-      "methods": [
-        "uv_printing",
-        "silkscreen"
-      ]
+      "image": ""
     },
     {
       "id": "event-essentials",
@@ -291,12 +266,7 @@
       "visual": "lanyard",
       "colour": "blue",
       "description": "Lanyards, badges, banners & more",
-      "image": "",
-      "methods": [
-        "sublimation",
-        "silkscreen",
-        "uv_printing"
-      ]
+      "image": ""
     }
   ],
   "benefits": [
@@ -616,9 +586,6 @@
       "collectionSuffix": "collection",
       "viewAllPrefix": "View All",
       "showLessLabel": "Show Less",
-      "methodsEyebrow": "Our capabilities",
-      "methodsTitle": "How we bring your brand to life",
-      "methodsBestForLabel": "Best for",
       "promoEyebrow": "Need help deciding?",
       "promoTitle": "We'll match you to the right product.",
       "promoDescription": "Our experts can recommend the best products, materials and printing methods for your needs.",
@@ -627,7 +594,7 @@
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today.",
-      "methodsForLabel": "On"
+      "waysLabel": "Ways to print on"
     },
     "product": {
       "buildTitle": "Build your request",
