@@ -154,3 +154,15 @@ describe('the collection opens like a shelf', () => {
     expect(css).toMatch(/\.hero-scene \{[\s\S]{0,400}?min-height: 0;/);
   });
 });
+
+describe('the card for what is not on the shelf', () => {
+  it('is outlined, not filled', () => {
+    // Filled green it was a slab among the white product cards, and the wider
+    // it stretched the heavier it looked.
+    const card = css.match(/\.product-ask \{([^}]*)\}/)[1];
+    expect(card).toContain('border: 1.5px dashed');
+    expect(card).toContain('background: #fff');
+    expect(card).not.toContain('#d9efe2');
+    expect(css).toMatch(/\.product-ask:hover \{[^}]*border-color: var\(--green-dark\);/);
+  });
+});
