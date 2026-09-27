@@ -2296,3 +2296,38 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
       linear-gradient(180deg, #e7edf9 0%, var(--paper) 56%);
   }
 }
+
+/* ===================================== 28. the phone, gone through page by page
+   Walked down every page at 390px. Three things did not fit: the section
+   heads that put a sentence beside the title held both columns on a phone and
+   broke the sentence a word at a time; the printing methods ran off the edge
+   of the navy band with the last one cut in half; and the product menu had
+   dropped to one tile a row, where the client asked for two. */
+
+@media (max-width: 860px) {
+  /* Title first, then the sentence about it — not two narrow columns. */
+  .home-tiles-head, .home-why-head { grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+  .home-tiles-head { margin-bottom: 26px; }
+  .home-tiles-head p, .home-why-head p { font-size: 17px; }
+
+  /* Every method visible at once: there are two to five of them now that each
+     category names its own, so they wrap rather than scroll out of sight. */
+  .capabilities-tabs { flex-wrap: wrap; gap: 8px; overflow-x: visible; }
+  .capabilities-tabs button { padding: 11px 16px; border-radius: 999px; }
+  /* "Best for" is a label, not a sentence: it was breaking in two. */
+  .capabilities-best small { white-space: nowrap; }
+
+  /* The question and its hint, one above the other rather than fighting for
+     the same line. */
+  .pdp-step-head { flex-wrap: wrap; gap: 2px 12px; }
+  .pdp-step-head small { flex-basis: 100%; }
+}
+
+/* Two tiles a row, as asked, down to the narrowest phone. */
+@media (max-width: 620px) {
+  .home-tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .home-tile { min-height: 172px; padding: 16px; }
+  .home-tile-body { margin-top: 34px; }
+  .home-tile strong { font-size: 17px; }
+  .home-tile small { margin-top: 4px; font-size: 15px; line-height: 1.4; }
+}

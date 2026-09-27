@@ -71,3 +71,22 @@ describe('the solution pages breadcrumb', () => {
     expect(css).toMatch(/^\.solution-hero \.breadcrumb \{/m);
   });
 });
+
+describe('walked down every page at 390px', () => {
+  it('gives a section head the whole width before its sentence', () => {
+    // Held as two columns, "Four things customers should understand
+    // immediately about working with MySOS." broke a word at a time down a
+    // column a third of the screen wide.
+    const phone = block('max-width: 860px');
+    expect(phone).toMatch(/\.home-tiles-head, \.home-why-head \{ grid-template-columns: minmax\(0, 1fr\);/);
+  });
+
+  it('wraps the printing methods instead of running them off the edge', () => {
+    // Each category names two to five now, so they all fit on the band.
+    expect(block('max-width: 860px')).toMatch(/\.capabilities-tabs \{ flex-wrap: wrap;[^}]*overflow-x: visible; \}/);
+  });
+
+  it('keeps two product tiles to a row, as the client asked', () => {
+    expect(block('max-width: 620px')).toMatch(/\.home-tile-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
+  });
+});
