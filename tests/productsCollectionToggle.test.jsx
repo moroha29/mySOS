@@ -78,8 +78,16 @@ describe('choosing a category', () => {
     expect(source).toMatch(/<CategoryStrip activeId=\{category\} onChoose=\{chooseCategory\} \/>/);
     const strip = readFileSync(new URL('../src/public/components/CategoryStrip.jsx', import.meta.url), 'utf8');
     expect(strip).toMatch(/onClick=\{onChoose \? \(event\) => onChoose\(event, category\.id\) : undefined\}/);
-    // Nothing scrolls the page: the reader stays where they were.
-    expect(source.slice(source.indexOf('const chooseCategory'), source.indexOf('const toggleShowAll'))).not.toMatch(/scrollIntoView|scrollTo/);
+    // Nothing in that handler scrolls the page: the reader stays where they were.
+    expect(source.slice(source.indexOf('const chooseCategory'), source.indexOf('const chooseFromMenu'))).not.toMatch(/scrollIntoView|scrollTo/);
+  });
+
+  it('brings the collection back when the choice is made from the menu below it', () => {
+    // The category menu at the foot of the collection changes products that
+    // are above the reader; staying put would change nothing they can see.
+    expect(source).toMatch(/const chooseFromMenu = \(event, id\) => \{/);
+    expect(source).toMatch(/if \(event\.defaultPrevented\) section\?\.scrollIntoView\(\{ block: 'start', behavior: 'smooth' \}\);/);
+    expect(source).toMatch(/onClick=\{\(event\) => chooseFromMenu\(event, item\.id\)\}/);
   });
 
   it('still has a real address, so it opens in a new tab and steps back', () => {

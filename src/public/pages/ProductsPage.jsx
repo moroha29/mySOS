@@ -8,6 +8,10 @@ import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 
+// The homepage's tile colours, in its order: the category menu is drawn the
+// same wherever it appears.
+const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
+
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
 
@@ -105,6 +109,17 @@ export default function ProductsPage() {
     globalThis.history?.pushState?.({ category: id }, '', `?category=${id}`);
   };
 
+  /*
+   * The same swap, made from the menu at the foot of the collection: what it
+   * changes is above the reader, so the collection is brought back into view
+   * rather than changing out of sight.
+   */
+  const chooseFromMenu = (event, id) => {
+    const section = collectionRef.current;
+    chooseCategory(event, id);
+    if (event.defaultPrevented) section?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  };
+
   useEffect(() => {
     const onPop = () => setCategory(knownCategory(new URLSearchParams(globalThis.location?.search ?? '').get('category') || 'apparel'));
     window.addEventListener('popstate', onPop);
@@ -170,7 +185,12 @@ export default function ProductsPage() {
     </section>
 
     <section className="section products-collection" ref={collectionRef}>
-      <SectionHeading eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`} align="left" />
+      <SectionHeading
+        eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`}
+        align="left"
+        description={activeCategory.description}
+        descriptionPath={categoryPath(activeCategory, 'description')}
+      />
       {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
         {apparelTabs.map((tab) => <button
           key={tab.id}
@@ -181,8 +201,33 @@ export default function ProductsPage() {
           data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
         >{tab.name}</button>)}
       </div>}
+      {/* The fill counts are how many columns are left over on the last row, at
+          each of the three widths this grid is drawn at. The card that asks for
+          what is not listed stretches across them, so no row ends part-drawn. */}
       {visible.length > 0
-        ? <div className="product-grid" id="product-collection-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}</div>
+        ? <div
+          className="product-grid"
+          id="product-collection-grid"
+          data-fill4={4 - (visible.length % 4)}
+          data-fill3={3 - (visible.length % 3)}
+          data-fill2={2 - (visible.length % 2)}
+        >
+          {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
+          {/* Not everything MySOS can make is listed, and a short category used
+              to trail off into white space. This closes the row with the way
+              to ask for what is not there. */}
+          <a className="product-ask" href={REQUEST_PATH} data-reveal style={{ '--reveal-delay': `${(visible.length % 8) * 50}ms` }}>
+            <span className="product-ask-inner">
+              <Icon name="spark" size={26} />
+              <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
+              <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
+              <span className="product-ask-go">
+                <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+                <Icon name="arrowRight" size={16} className="inline-arrow" />
+              </span>
+            </span>
+          </a>
+        </div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
           <p data-cms-path={cms(pagePath('products', 'emptyDescription'))}>{pageText('products', 'emptyDescription')}</p>
@@ -196,6 +241,33 @@ export default function ProductsPage() {
             : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={15} className="inline-arrow" /></>}
         </Button>
       </div>}
+      {/* Bags and drinkware carry two or three products between them, and the
+          collection ended in white space. The category menu closes it, drawn
+          as the homepage draws it, with the one being read marked. */}
+      <div className="collection-more">
+        <SectionHeading
+          eyebrow={heading('categoriesHeading', 'What can we make for you?')}
+          eyebrowPath={headingPath('categoriesHeading')}
+          align="left"
+        />
+        <div className="home-tile-grid">
+          {siteContent.categories.map((item, index) => <a
+            key={item.id}
+            className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}${item.id === category ? ' is-active' : ''}`}
+            href={`?category=${item.id}`}
+            aria-current={item.id === category ? 'page' : undefined}
+            onClick={(event) => chooseFromMenu(event, item.id)}
+            data-reveal
+            style={{ '--reveal-delay': `${index * 60}ms` }}
+          >
+            <Icon name={item.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
+            <span className="home-tile-body">
+              <strong data-cms-path={cms(contentPath('categories', index, 'name'))}>{item.name}</strong>
+              <small data-cms-path={cms(contentPath('categories', index, 'description'))}>{item.description}</small>
+            </span>
+          </a>)}
+        </div>
+      </div>
     </section>
 
     <Capabilities methods={methods} />

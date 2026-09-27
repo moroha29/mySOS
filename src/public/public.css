@@ -2151,3 +2151,90 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 @media (prefers-reduced-motion: reduce) {
   .hero-scene, .hero-stories .hero-collage, .solution-collage { animation: none; }
 }
+
+/* ========================================== 26. a category that looks filled
+   Choosing Bags or Stationery gave a row of mostly white cards: the picture
+   was drawn at its own size in the corner of a card twice as wide, and a
+   category with three products trailed off into nothing. The picture now
+   fills the card, the sub-categories are the menu's own pills, and the row
+   closes with the way to ask for what is not listed. */
+
+/* The picture is the card: square, edge to edge, whatever is in it. */
+.product-card .product-visual { width: 100%; height: auto; aspect-ratio: 1 / 1; background: var(--soft); }
+.product-card .product-visual .garment { width: 100%; height: 100%; }
+/* The whole product, not a crop of it: these are catalogue photographs, and a
+   square cover cut the tops off notebooks and name tents. */
+.product-card .product-visual img { width: 100%; height: 100%; object-fit: contain; }
+/* A catalogue photograph is shot on white; the soft grey tile behind it read
+   as a frame around the picture. The drawn stand-ins keep the grey. */
+.product-card .product-visual.has-photo { background: #fff; }
+
+/* The apparel sub-categories, in the pills the category menu uses. */
+.tab-list { margin-bottom: 26px; justify-content: flex-start; gap: 10px; border-bottom: 0; }
+.tab-list button {
+  padding: 11px 18px; border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font-size: 17px; font-weight: 600; color: var(--ink);
+  transition: background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1), border-color .2s cubic-bezier(.4, 0, .2, 1);
+}
+.tab-list button:hover { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
+.tab-list button[aria-selected='true'] { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
+
+/* The last card in every category: washed, like the homepage's tiles, so a
+   grid of white product cards has somewhere to end. */
+.product-ask {
+  display: flex; padding: 24px; border-radius: 22px;
+  background: #d9efe2; color: #0c3b28;
+  transition: transform .25s cubic-bezier(.22, .61, .36, 1), box-shadow .25s ease;
+}
+.product-ask-inner { display: flex; flex-direction: column; justify-content: center; gap: 10px; width: 100%; }
+.product-ask .icon { color: #046b45; }
+.product-ask strong { margin-top: 4px; font-size: 20px; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+.product-ask small { font-size: 16px; line-height: 1.5; opacity: .82; }
+.product-ask-go { margin-top: 4px; display: inline-flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; }
+.product-ask:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.product-ask:hover .inline-arrow { transform: translateX(5px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .product-ask:hover { transform: none; }
+  .product-ask:hover .inline-arrow { transform: none; }
+}
+
+@media (max-width: 620px) {
+  .product-ask { padding: 18px; }
+  .product-ask strong { font-size: 18px; }
+}
+
+/* The category menu, closing every collection. The tiles are the homepage's,
+   and the one being read is marked the way the strip marks it. */
+.collection-more { margin-top: 60px; }
+.collection-more .section-heading { margin-bottom: 26px; }
+.collection-more .home-tile { min-height: 190px; }
+.collection-more .home-tile.is-active { box-shadow: inset 0 0 0 2px currentColor; }
+.collection-more .home-tile-body { margin-top: 44px; }
+
+/* The ask card stretches across whatever the last row has left, so a category
+   of one or two products does not end in half a row of nothing. */
+.product-grid[data-fill4='1'] .product-ask { grid-column: span 1; }
+.product-grid[data-fill4='2'] .product-ask { grid-column: span 2; }
+.product-grid[data-fill4='3'] .product-ask { grid-column: span 3; }
+.product-grid[data-fill4='4'] .product-ask { grid-column: span 4; }
+@media (max-width: 1080px) {
+  .product-grid[data-fill4] .product-ask { grid-column: span 1; }
+  .product-grid[data-fill3='2'] .product-ask { grid-column: span 2; }
+  .product-grid[data-fill3='3'] .product-ask { grid-column: span 3; }
+}
+@media (max-width: 620px) {
+  .product-grid[data-fill4] .product-ask, .product-grid[data-fill3] .product-ask { grid-column: span 1; }
+  .product-grid[data-fill2='2'] .product-ask { grid-column: span 2; }
+}
+
+/* Stretched across two columns or more it is a band rather than a card: the
+   words sit on one line with the way in at the end of it. The card asks its
+   own width, so this holds however many columns it was given. */
+.product-ask { container-type: inline-size; }
+@container (min-width: 460px) {
+  .product-ask-inner { flex-flow: row wrap; align-items: center; gap: 10px 28px; }
+  .product-ask-inner strong { margin-top: 0; }
+  .product-ask-inner small { flex: 1; min-width: 220px; }
+  .product-ask-inner .product-ask-go { margin: 0; }
+}
