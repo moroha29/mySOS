@@ -48,6 +48,14 @@ export function QuoteButton({ variant = 'primary', className = '', showArrow = f
   </Button>;
 }
 
+/* Where a reader is in a set of steps: "03 / 06". */
+export function StepCount({ active, total, className = '' }) {
+  const two = (number) => String(number).padStart(2, '0');
+  return <p className={`step-count ${className}`.trim()} aria-live="polite">
+    <strong>{two(active + 1)}</strong> / {two(total)}
+  </p>;
+}
+
 export function TextLink({ href, children, className = '' }) {
   return <a className={`text-link ${className}`.trim()} href={href}>{children} <Arrow /></a>;
 }

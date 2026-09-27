@@ -316,7 +316,9 @@ describe('the home banner and the sections under it', () => {
     // in the agents' quotation engine.
     expect(markup).not.toMatch(/\$\d+\.\d\d/);
     expect(markup).toContain('class="home-work-card');
-    expect(markup).toContain('class="home-process-step"');
+    // The process is told with the same journey the Why MySOS page uses.
+    expect(markup).toContain('class="journey-card"');
+    expect(markup).toContain('class="journey-steps"');
   });
 });
 
@@ -498,5 +500,34 @@ describe('the banner picture is one card, not a slideshow', () => {
     const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
     expect(quiet).toContain('.hero-card.is-turning::before');
     expect(quiet).toContain('.hero-card-slide.is-active');
+  });
+});
+
+describe('how it works is told the same way on both pages', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
+  const journey = readFileSync(new URL('../src/public/components/ProcessJourney.jsx', import.meta.url), 'utf8');
+
+  it('gives the homepage the Why MySOS journey, not a row of its own', () => {
+    const markup = render(HomePage, '/mySOS/');
+    expect([...markup.matchAll(/class="journey-card"/g)]).toHaveLength(siteContent.process.length);
+    expect(markup).toContain('class="journey-steps"');
+    expect(markup).toContain('class="process-band"');
+    // Both pages draw it from the one component.
+    expect(home).toContain("import ProcessJourney from '../components/ProcessJourney';");
+    expect(readFileSync(new URL('../src/public/pages/WhyPage.jsx', import.meta.url), 'utf8'))
+      .toContain("import ProcessJourney from '../components/ProcessJourney';");
+  });
+
+  it('lines the row up on the card being read, so the last step is reachable', () => {
+    // The homepage row measured from the left, as if each card had to sit at
+    // the edge: five of six were on screen at once, the row had a few hundred
+    // pixels to scroll, and steps three onwards could not be reached at all.
+    expect(journey).toMatch(/useScrollSteps\(steps\.length, \{ axis: 'x' \}\)/);
+    expect(journey).not.toContain("align: 'start'");
+    for (const gone of ['home-process-rail', 'home-process-step', 'home-process-track', 'home-process-card']) {
+      expect(css, gone).not.toContain(gone);
+      expect(home, gone).not.toContain(gone);
+    }
   });
 });

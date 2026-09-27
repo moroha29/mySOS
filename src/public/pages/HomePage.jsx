@@ -12,8 +12,7 @@ import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
 import { Button, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
-import useScrollSteps from '../components/useScrollSteps';
-import { processPhoto } from '../processPhotos';
+import ProcessJourney from '../components/ProcessJourney';
 
 /*
  * The homepage, laid out after the 2026 concept: a banner that asks what the
@@ -425,41 +424,25 @@ function SelectedWork({ stories }) {
 }
 
 /*
- * How it works: the steps as a row that scrolls sideways, with the line above
- * following whichever card is centred. The page itself is never held —
- * see useScrollSteps.
+ * How it works, told the way Why MySOS tells it: the same tracker and the same
+ * row of cards, one at the front.
+ *
+ * It used to be a row of small cards with a progress line above them. The line
+ * could never fill: five of the six cards were on screen at once, so the row
+ * had only a few hundred pixels to scroll and the last steps could not be
+ * reached at all.
  */
 function ProcessRail() {
-  const steps = siteContent.process;
-  const { scrollerRef, active, goTo } = useScrollSteps(steps.length, { axis: 'x', align: 'start' });
-  const reached = steps.length > 1 ? active / (steps.length - 1) : 0;
-
-  return <section className="section home-process">
-    <div className="home-process-head" data-reveal>
+  return <ProcessJourney
+    labelledBy="home-process-title"
+    head={<div className="home-process-head" data-reveal>
       <div>
         <span className="eyebrow" data-cms-path={cms(headingPath('homeProcessEyebrow'))}>{heading('homeProcessEyebrow', 'How it works')}</span>
-        <h2 data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
+        <h2 id="home-process-title" data-cms-path={cms(headingPath('homeProcessHeading'))}>{heading('homeProcessHeading', 'From brief to delivery.')}</h2>
       </div>
       <p data-cms-path={cms(headingPath('homeProcessLead'))}>{heading('homeProcessLead')}</p>
-    </div>
-    <div className="home-process-card">
-      <ol className="home-process-track" style={{ '--reached': reached }}>
-        {steps.map((step, index) => <li key={step.title} className={index <= active ? 'is-done' : ''}>
-          <button type="button" aria-current={index === active ? 'step' : undefined} onClick={() => goTo(index)}>
-            <span className="sr-only">{`${two(index + 1)} ${step.title}`}</span>
-          </button>
-        </li>)}
-      </ol>
-      <div className="home-process-rail" ref={scrollerRef} role="region" aria-label="How a MySOS order works, one step per card. Scroll sideways to move between them." tabIndex={0}>
-        {steps.map((step, index) => <article className="home-process-step" key={step.title} data-step={index} data-active={index === active ? 'true' : undefined} data-reveal style={{ '--reveal-delay': `${index * 60}ms` }}>
-          <span className="home-process-shot"><Photo style="studio" image={processPhoto(step)} imagePath={contentPath('process', index, 'image')} label={step.headline || step.title} wide /></span>
-          <span className="home-process-label">{two(index + 1)} · <span data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span></span>
-          <h3 data-cms-path={cms(contentPath('process', index, 'headline'))}>{step.headline || step.title}</h3>
-          <p data-cms-path={cms(contentPath('process', index, 'detail'))}>{step.detail || step.description}</p>
-        </article>)}
-      </div>
-    </div>
-  </section>;
+    </div>}
+  />;
 }
 
 function ClosingBand() {

@@ -590,8 +590,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .reason-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
 
 /* our process: the tracker and a row of cards that scrolls sideways */
-.why-process { padding: 50px 0 44px; background: #eef3fa; overflow: hidden; }
-.why-process > .section-heading { margin-bottom: 26px; padding: 0 24px; }
+.process-band { padding: 50px 0 44px; background: #eef3fa; overflow: hidden; }
+.process-band > .section-heading { margin-bottom: 26px; padding: 0 24px; }
 .journey-steps { position: relative; width: min(100% - 48px, 1420px); margin: 0 auto 10px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .journey-steps::before, .journey-steps::after { content: ""; position: absolute; top: 20px; left: calc(100% / 12); height: 3px; border-radius: 3px; }
 .journey-steps::before { right: calc(100% / 12); background: #c3cbd8; }
@@ -682,7 +682,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .reason-card { grid-template-columns: minmax(0, 1fr); padding: 20px; }
   .reason-card-copy { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; }
   .reason-card-icon { width: 44px; height: 44px; }
-  .why-process { padding: 38px 0 30px; }
+  .process-band { padding: 38px 0 30px; }
   /* Six labels do not fit across a phone: two rows of three. */
   .journey-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; }
   .journey-steps::before, .journey-steps::after { display: none; }
@@ -701,7 +701,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
  * held against someone who keeps scrolling.
  */
 html[data-scroll-snap="why"] { scroll-snap-type: y proximity; scroll-padding-top: var(--header-h); }
-html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-process { scroll-snap-align: start; }
+html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-band { scroll-snap-align: start; }
 @media (prefers-reduced-motion: reduce), (pointer: coarse) {
   html[data-scroll-snap="why"] { scroll-snap-type: none; }
 }
@@ -1391,23 +1391,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .home-work-stats li { display: inline-flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 700; color: var(--navy); }
 
 /* how it works */
-.home-process-card { padding: 30px 0 26px; border-radius: 26px; background: #fff; box-shadow: var(--shadow); }
-.home-process-track { position: relative; margin: 0 40px 26px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; align-items: center; }
-.home-process-track::before, .home-process-track::after { content: ""; position: absolute; top: 50%; left: 6px; right: 6px; height: 3px; border-radius: 3px; transform: translateY(-50%); }
-.home-process-track::before { background: var(--line); }
-.home-process-track::after { right: auto; width: calc((100% - 12px) * var(--reached)); background: linear-gradient(90deg, var(--navy), var(--green)); transition: width .6s cubic-bezier(.33, 1, .68, 1); }
-.home-process-track li { position: relative; z-index: 1; justify-self: center; }
-.home-process-track button { width: 16px; height: 16px; padding: 0; border: 3px solid var(--line); border-radius: 50%; background: #fff; cursor: pointer; transition: border-color .3s, box-shadow .3s; }
-.home-process-track li.is-done button { border-color: var(--green); box-shadow: 0 0 0 5px rgba(0, 166, 81, .14); }
-.home-process-rail { display: flex; gap: 22px; padding: 4px 40px 10px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; }
-.home-process-rail::-webkit-scrollbar { display: none; }
-@media (pointer: coarse) { .home-process-rail { scroll-snap-type: x proximity; } }
-.home-process-step { flex: none; width: 268px; scroll-snap-align: center; opacity: .55; transition: opacity .35s; }
-.home-process-step[data-active="true"] { opacity: 1; }
-.home-process-shot .scene { height: 150px; border-radius: 16px; }
-.home-process-label { display: block; margin-top: 16px; font-size: 16.5px; font-weight: 700; color: var(--navy); }
-.home-process-step h3 { margin-top: 8px; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
-.home-process-step p { margin-top: 8px; font-size: 17.5px; line-height: 1.6; color: var(--muted); }
 
 /* closing band */
 .home-closing { color: #fff; }
@@ -1445,9 +1428,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .home-why-grid { grid-template-columns: minmax(0, 1fr); }
   .home-why-grid li + li { border-left: 0; }
   .home-budget-bands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .home-process-track { margin-inline: 18px; }
-  .home-process-rail { padding-inline: 18px; }
-  .home-process-step { width: 80vw; }
 }
 
 /* ================================================= 21. one product's page
@@ -1773,7 +1753,6 @@ html.is-scrolled .wordmark { height: 36px; }
 @keyframes wa-ring { 70%, 100% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); } }
 
 /* the figures and rails that already move, eased the same way */
-.home-process-step { transition: opacity .45s cubic-bezier(.4, 0, .2, 1); }
 .use-case-card, .journey-arrows button, .carousel-btn { transition: transform .25s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, box-shadow .25s ease; }
 .use-case-card:hover, .carousel-btn:hover, .journey-arrows button:hover:not(:disabled) { transform: translateY(-2px); }
 
@@ -1955,8 +1934,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* Tap targets: a larger touch area without moving anything on screen. */
 /* The banner card's category chips, and the dots on the "how it works" line. */
 .hero-card-tags a { padding-block: 9px; }
-.home-process-track button { position: relative; }
-.home-process-track button::before { content: ""; position: absolute; inset: -14px; }
 .text-link, .stories-reviews-link { padding-block: 8px; margin-block: -8px; }
 .back-link { padding-block: 8px; margin-top: -8px; margin-bottom: 12px; }
 .breadcrumb a { padding-block: 10px; margin-block: -10px; }
@@ -2375,4 +2352,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* On a phone the card is half the size, so the same band covered most of it. */
 @media (max-width: 860px) {
   .hero-card::before { width: 26%; filter: blur(7px); }
+}
+
+/* The homepage's heading for the process band: the band runs edge to edge, so
+   its head keeps the page's column and gutter. */
+.process-band > .home-process-head { max-width: var(--content); margin: 0 auto 30px; padding: 0 24px; }
+@media (max-width: 860px) {
+  .process-band > .home-process-head { padding-inline: 18px; }
 }
