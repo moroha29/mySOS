@@ -310,8 +310,9 @@ describe('the type scale: titles carry the page', () => {
   });
 
   it('runs the page wide, so it is not a column adrift on a large screen', () => {
-    // 1180 → 1340 → 1520: the margins have been halved twice.
-    expect(sizeOf(/--content: (\d+)px;/)).toBeGreaterThanOrEqual(1520);
+    // 1180 → 1340 → 1520 → 1760: on a 1920px monitor the page used to keep
+    // 200px of margin either side, which read as a column down the middle.
+    expect(sizeOf(/--content: (\d+)px;/)).toBeGreaterThanOrEqual(1760);
     expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBeGreaterThanOrEqual(1920);
   });
 });
