@@ -463,3 +463,33 @@ describe('the review total is a figure, and it counts', () => {
     expect(ui).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
   });
 });
+
+describe('the banner picture is one card, not a slideshow', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
+
+  it('carries a light across the glass rather than clicking between pictures', () => {
+    expect(css).toMatch(/@keyframes hero-sheen \{/);
+    expect(css).toMatch(/\.hero-card::before \{[\s\S]*?animation: hero-sheen/);
+  });
+
+  it('dissolves slowly and never stops moving, so nothing switches', () => {
+    // A second-long fade between still pictures is what read as a carousel.
+    const fade = Number(css.match(/\.hero-card-slide \{ transition: opacity ([\d.]+)s/)[1]);
+    expect(fade).toBeGreaterThanOrEqual(2);
+    expect(css).toMatch(/\.hero-card-slide\.is-active \{ animation: hero-drift [\d.]+s ease-in-out infinite alternate; \}/);
+    expect(css).not.toMatch(/hero-pan/);
+    expect(Number(home.match(/const SLIDE_SECONDS = (\d+);/)[1])).toBeGreaterThanOrEqual(9);
+  });
+
+  it('has no dots under it any more', () => {
+    expect(home).not.toContain('hero-card-dots');
+    expect(css).not.toContain('hero-card-dots');
+  });
+
+  it('holds still for a reader who asked for less motion', () => {
+    const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
+    expect(quiet).toContain('.hero-card::before');
+    expect(quiet).toContain('.hero-card-slide.is-active');
+  });
+});

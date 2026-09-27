@@ -28,7 +28,7 @@ import { processPhoto } from '../processPhotos';
 
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
 const CARD_WIDTH = 232;   // keep in sync with .trust-logo width in public.css
-const SLIDE_SECONDS = 6;
+const SLIDE_SECONDS = 9;
 
 const two = (number) => String(number).padStart(2, '0');
 // What the visitor typed becomes the opening note of their request.
@@ -77,9 +77,6 @@ function HeroCard({ slides }) {
           <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</a>
         </li>)}
       </ul>
-      {slides.length > 1 && <div className="hero-card-dots" aria-hidden="true">
-        {slides.map(({ src, index }) => <span key={src} className={index === shown ? 'is-active' : ''} />)}
-      </div>}
     </div>
   </div>;
 }

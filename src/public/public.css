@@ -1289,9 +1289,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
 .hero-card-tags { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
 .hero-card-tags a { display: inline-block; padding: 6px 13px; border-radius: 999px; background: rgba(255, 255, 255, .18); backdrop-filter: blur(6px); font-size: 16px; font-weight: 600; color: #fff; }
 .hero-card-tags a:hover { background: rgba(255, 255, 255, .32); }
-.hero-card-dots { margin-top: 18px; display: flex; gap: 6px; }
-.hero-card-dots span { width: 18px; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, .4); transition: background-color .3s, width .3s; }
-.hero-card-dots span.is-active { width: 34px; background: #fff; }
 
 /* the four promises, as plain figures */
 /* The promises, as a plain row rather than four cards: a figure that counts up
@@ -1743,8 +1740,6 @@ html.is-scrolled .wordmark { height: 36px; }
 
 /* the banner picture drifts slowly across its own frame */
 .hero-card-slide { transform: scale(1.04); }
-.hero-card-slide.is-active { animation: hero-pan 9s ease-out forwards; }
-@keyframes hero-pan { from { transform: scale(1.04); } to { transform: scale(1.12); } }
 
 /* pictures lift out of their cards under the cursor */
 .product-card .product-visual, .hero-result-shot .product-visual, .story-card-media .scene, .solution-card .scene, .home-work-shot .scene, .pdp-shot img {
@@ -2330,4 +2325,51 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .home-tile-body { margin-top: 34px; }
   .home-tile strong { font-size: 17px; }
   .home-tile small { margin-top: 4px; font-size: 15px; line-height: 1.4; }
+}
+
+/* ====================================== 29. the banner picture, not a slideshow
+   It changed picture every six seconds with a second-long fade and a row of
+   dots under it, which is a carousel and read as one. It is now one card that
+   catches the light: the pictures cross-dissolve over two and a half seconds,
+   slowly enough that nothing switches, each drifts the whole time it is up,
+   and a soft sheen passes across the glass now and then. */
+
+.hero-card::after { z-index: 1; }
+.hero-card-copy { z-index: 3; }
+
+/* The light passing over it. Travels once every nine seconds, so it reads as
+   a reflection rather than an effect. */
+.hero-card::before {
+  content: ""; position: absolute; z-index: 2; top: -60%; bottom: -60%; left: -35%; width: 34%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .3) 36%, rgba(255, 255, 255, .62) 50%, rgba(255, 255, 255, .3) 64%, transparent);
+  filter: blur(9px);
+  transform: rotate(12deg) translateX(-60%);
+  animation: hero-sheen 9s cubic-bezier(.4, 0, .5, 1) infinite;
+  pointer-events: none;
+}
+@keyframes hero-sheen {
+  0% { transform: rotate(12deg) translateX(-60%); opacity: 0; }
+  12% { opacity: 1; }
+  46% { opacity: 1; }
+  58%, 100% { transform: rotate(12deg) translateX(520%); opacity: 0; }
+}
+
+/* One picture becoming another, rather than one replacing another. */
+.hero-card-slide { transition: opacity 2.4s cubic-bezier(.45, 0, .3, 1); }
+/* And it never stops moving while it is up, so there is no moment where the
+   card sits still and then jumps. */
+.hero-card-slide.is-active { animation: hero-drift 18s ease-in-out infinite alternate; }
+@keyframes hero-drift {
+  from { transform: scale(1.06) translate3d(0, 0, 0); }
+  to { transform: scale(1.12) translate3d(-1.5%, -1.2%, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card::before { animation: none; opacity: 0; }
+  .hero-card-slide.is-active { animation: none; }
+}
+
+/* On a phone the card is half the size, so the same band covered most of it. */
+@media (max-width: 860px) {
+  .hero-card::before { width: 26%; filter: blur(7px); }
 }
