@@ -15,8 +15,8 @@ afterEach(() => {
   else globalThis.location = originalLocation;
 });
 
-const render = (Page, pathname) => {
-  globalThis.location = { pathname, search: '' };
+const render = (Page, pathname, search = '') => {
+  globalThis.location = { pathname, search };
   return renderToStaticMarkup(<Page />);
 };
 
@@ -93,14 +93,43 @@ describe('printing methods: "Our capabilities"', () => {
     expect(html).toContain('id="printing"');
   });
 
-  it('lists every visible method as a tab, first one selected', () => {
-    // Scoped to this section: the apparel filter above is a tab list too.
-    const html = markup().match(/<section class="capabilities".*?<\/section>/s)?.[0] ?? '';
-    const tabs = [...html.matchAll(/<button[^>]*role="tab"[^>]*aria-selected="(true|false)"[^>]*>([^<]+)<\/button>/g)];
-    expect(tabs.map((tab) => tab[2])).toEqual(visibleMethods.map((method) => method.name));
-    expect(tabs.map((tab) => tab[1])).toEqual(visibleMethods.map((_, index) => String(index === 0)));
+  // What a category is printed with, in the order the price list keeps them.
+  const methodsFor = (id) => {
+    const category = siteContent.categories.find((item) => item.id === id);
+    return visibleMethods.filter((method) => category.methods.includes(method.id));
+  };
+  // Scoped to this section: the apparel filter above is a tab list too.
+  const tabsIn = (html) => [...(html.match(/<section class="capabilities".*?<\/section>/s)?.[0] ?? '')
+    .matchAll(/<button[^>]*role="tab"[^>]*aria-selected="(true|false)"[^>]*>([^<]+)<\/button>/g)];
+
+  it('lists the methods that suit the category, first one selected', () => {
+    const html = markup();
+    const tabs = tabsIn(html);
+    expect(tabs.map((tab) => tab[2])).toEqual(methodsFor('apparel').map((method) => method.name));
+    expect(tabs.map((tab) => tab[1])).toEqual(methodsFor('apparel').map((_, index) => String(index === 0)));
     expect(html).toContain('role="tablist"');
     expect(html).toContain('role="tabpanel"');
+  });
+
+  it('offers another category its own ways of printing, and says which', () => {
+    // A bottle is not embroidered, and the band used to offer it anyway.
+    const html = render(ProductsPage, '/mySOS/products/', '?category=drinkware');
+    const named = tabsIn(html).map((tab) => tab[2]);
+    expect(named).toEqual(methodsFor('drinkware').map((method) => method.name));
+    expect(named).not.toEqual(methodsFor('apparel').map((method) => method.name));
+    expect(html).toMatch(/class="capabilities-for"[\s\S]*?<strong[^>]*>Drinkware<\/strong>/);
+  });
+
+  it('falls back to every method where a category names none', () => {
+    // MySOS edits these lists; an empty one must not empty the band.
+    for (const category of siteContent.categories) {
+      expect(category.methods.length, category.id).toBeGreaterThan(0);
+      for (const id of category.methods) {
+        expect(visibleMethods.some((method) => method.id === id), `${category.id}: ${id}`).toBe(true);
+      }
+    }
+    const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+    expect(source).toContain('return kept.length > 0 ? kept : shown;');
   });
 
   it("shows the selected method's details, best-for chip and photo", () => {

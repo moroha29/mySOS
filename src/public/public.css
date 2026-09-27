@@ -2204,13 +2204,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .product-ask strong { font-size: 18px; }
 }
 
-/* The category menu, closing every collection. The tiles are the homepage's,
-   and the one being read is marked the way the strip marks it. */
-.collection-more { margin-top: 60px; }
-.collection-more .section-heading { margin-bottom: 26px; }
-.collection-more .home-tile { min-height: 190px; }
-.collection-more .home-tile.is-active { box-shadow: inset 0 0 0 2px currentColor; }
-.collection-more .home-tile-body { margin-top: 44px; }
+/* Which category these ways of printing are the ways of. */
+.capabilities-for { margin-top: 16px; font-size: 17.5px; line-height: 1.5; color: #b9bdf0; }
+.capabilities-for strong { color: #ecebe6; font-weight: 700; }
 
 /* The ask card stretches across whatever the last row has left, so a category
    of one or two products does not end in half a row of nothing. */

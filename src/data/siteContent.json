@@ -222,7 +222,14 @@
       "visual": "tee",
       "colour": "navy",
       "description": "T-Shirts, polos, jerseys & more",
-      "image": ""
+      "image": "",
+      "methods": [
+        "silkscreen",
+        "dtf",
+        "dtg",
+        "embroidery",
+        "sublimation"
+      ]
     },
     {
       "id": "bags",
@@ -231,7 +238,12 @@
       "visual": "tote",
       "colour": "sand",
       "description": "Tote bags, backpacks & more",
-      "image": ""
+      "image": "",
+      "methods": [
+        "silkscreen",
+        "dtf",
+        "embroidery"
+      ]
     },
     {
       "id": "drinkware",
@@ -240,7 +252,11 @@
       "visual": "bottle",
       "colour": "green",
       "description": "Bottles, tumblers, mugs & more",
-      "image": ""
+      "image": "",
+      "methods": [
+        "uv_printing",
+        "silkscreen"
+      ]
     },
     {
       "id": "corporate-gifts",
@@ -249,7 +265,12 @@
       "visual": "gift-set",
       "colour": "navy",
       "description": "Premium gifts for every occasion",
-      "image": ""
+      "image": "",
+      "methods": [
+        "uv_printing",
+        "embroidery",
+        "silkscreen"
+      ]
     },
     {
       "id": "stationery",
@@ -258,7 +279,11 @@
       "visual": "notebook",
       "colour": "navy",
       "description": "Notebooks, pens, desks & more",
-      "image": ""
+      "image": "",
+      "methods": [
+        "uv_printing",
+        "silkscreen"
+      ]
     },
     {
       "id": "event-essentials",
@@ -267,7 +292,12 @@
       "visual": "lanyard",
       "colour": "blue",
       "description": "Lanyards, badges, banners & more",
-      "image": ""
+      "image": "",
+      "methods": [
+        "sublimation",
+        "silkscreen",
+        "uv_printing"
+      ]
     }
   ],
   "benefits": [
@@ -597,7 +627,8 @@
       "emptyTitle": "No products are published in this category yet.",
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
-      "ctaDescription": "Let's get in touch with us today."
+      "ctaDescription": "Let's get in touch with us today.",
+      "methodsForLabel": "On"
     },
     "product": {
       "buildTitle": "Build your request",

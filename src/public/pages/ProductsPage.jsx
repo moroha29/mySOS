@@ -8,10 +8,6 @@ import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 
-// The homepage's tile colours, in its order: the category menu is drawn the
-// same wherever it appears.
-const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
-
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
 
@@ -25,7 +21,7 @@ const apparelTabs = siteContent.apparelTabs ?? [];
  * method id, so it can be edited. With no photo uploaded the drawn workshop
  * scene stands in.
  */
-function Capabilities({ methods }) {
+function Capabilities({ methods, category }) {
   const [activeId, setActiveId] = useState(methods[0]?.id);
   const tabRefs = useRef({});
   const active = methods.find((method) => method.id === activeId) ?? methods[0];
@@ -46,6 +42,13 @@ function Capabilities({ methods }) {
     <div className="capabilities-inner">
       <span className="capabilities-eyebrow" data-cms-path={cms(pagePath('products', 'methodsEyebrow'))}>{pageText('products', 'methodsEyebrow', 'Our capabilities')}</span>
       <h2 className="capabilities-title" data-cms-path={cms(pagePath('products', 'methodsTitle'))}>{pageText('products', 'methodsTitle', 'How we bring your brand to life')}</h2>
+      {/* Which category these are the ways of doing. The name is the category's
+          own, so it stays right when MySOS renames one. */}
+      {category && <p className="capabilities-for">
+        <span data-cms-path={cms(pagePath('products', 'methodsForLabel'))}>{pageText('products', 'methodsForLabel', 'On')}</span>
+        {' '}
+        <strong data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</strong>
+      </p>}
 
       <div className="capabilities-body" data-reveal>
         <div className="capabilities-tabs" role="tablist" aria-orientation="vertical" aria-label="Printing and customisation methods">
@@ -109,17 +112,6 @@ export default function ProductsPage() {
     globalThis.history?.pushState?.({ category: id }, '', `?category=${id}`);
   };
 
-  /*
-   * The same swap, made from the menu at the foot of the collection: what it
-   * changes is above the reader, so the collection is brought back into view
-   * rather than changing out of sight.
-   */
-  const chooseFromMenu = (event, id) => {
-    const section = collectionRef.current;
-    chooseCategory(event, id);
-    if (event.defaultPrevented) section?.scrollIntoView({ block: 'start', behavior: 'smooth' });
-  };
-
   useEffect(() => {
     const onPop = () => setCategory(knownCategory(new URLSearchParams(globalThis.location?.search ?? '').get('category') || 'apparel'));
     window.addEventListener('popstate', onPop);
@@ -149,7 +141,18 @@ export default function ProductsPage() {
   );
   const visible = showAll ? products : products.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
-  const methods = printData.methods.filter((method) => method.public?.visible);
+  /*
+   * The ways MySOS can put a brand on what is in this category, rather than
+   * the whole list every time: a bottle is not embroidered. Which methods suit
+   * which category is content, so MySOS can correct it; a category that names
+   * none is offered all of them.
+   */
+  const methods = useMemo(() => {
+    const shown = printData.methods.filter((method) => method.public?.visible);
+    const wanted = activeCategory?.methods ?? [];
+    const kept = shown.filter((method) => wanted.includes(method.id));
+    return kept.length > 0 ? kept : shown;
+  }, [activeCategory]);
 
   return <main className="page-paper">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
@@ -185,12 +188,7 @@ export default function ProductsPage() {
     </section>
 
     <section className="section products-collection" ref={collectionRef}>
-      <SectionHeading
-        eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`}
-        align="left"
-        description={activeCategory.description}
-        descriptionPath={categoryPath(activeCategory, 'description')}
-      />
+      <SectionHeading eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`} align="left" />
       {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
         {apparelTabs.map((tab) => <button
           key={tab.id}
@@ -241,36 +239,9 @@ export default function ProductsPage() {
             : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={15} className="inline-arrow" /></>}
         </Button>
       </div>}
-      {/* Bags and drinkware carry two or three products between them, and the
-          collection ended in white space. The category menu closes it, drawn
-          as the homepage draws it, with the one being read marked. */}
-      <div className="collection-more">
-        <SectionHeading
-          eyebrow={heading('categoriesHeading', 'What can we make for you?')}
-          eyebrowPath={headingPath('categoriesHeading')}
-          align="left"
-        />
-        <div className="home-tile-grid">
-          {siteContent.categories.map((item, index) => <a
-            key={item.id}
-            className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}${item.id === category ? ' is-active' : ''}`}
-            href={`?category=${item.id}`}
-            aria-current={item.id === category ? 'page' : undefined}
-            onClick={(event) => chooseFromMenu(event, item.id)}
-            data-reveal
-            style={{ '--reveal-delay': `${index * 60}ms` }}
-          >
-            <Icon name={item.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
-            <span className="home-tile-body">
-              <strong data-cms-path={cms(contentPath('categories', index, 'name'))}>{item.name}</strong>
-              <small data-cms-path={cms(contentPath('categories', index, 'description'))}>{item.description}</small>
-            </span>
-          </a>)}
-        </div>
-      </div>
     </section>
 
-    <Capabilities methods={methods} />
+    <Capabilities key={category} methods={methods} category={activeCategory} />
 
     <section className="promo-band">
       <div className="promo-copy" data-reveal>

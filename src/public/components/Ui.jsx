@@ -53,19 +53,13 @@ export function TextLink({ href, children, className = '' }) {
 }
 
 export function SectionHeading({ eyebrow, title, description, align = 'center', action, eyebrowPath, titlePath, descriptionPath }) {
-  const sentence = description
-    ? <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>
-    : null;
   // Without a title the eyebrow is the section heading, not a kicker above one.
   return <div className={`section-heading align-${align} ${title ? '' : 'eyebrow-title'}`.trim()}>
     <div>
       {eyebrow && <span className="eyebrow" data-cms-path={eyebrowPath && cms(eyebrowPath)}>{eyebrow}</span>}
       {title && <h2 data-cms-path={titlePath && cms(titlePath)}>{title}</h2>}
-      {align !== 'left' && sentence}
+      {description && <p data-cms-path={descriptionPath && cms(descriptionPath)}>{description}</p>}
     </div>
-    {/* Left-aligned, the sentence sits in the second column beside the title,
-        the way the homepage writes its section heads. */}
-    {align === 'left' && sentence}
     {action}
   </div>;
 }

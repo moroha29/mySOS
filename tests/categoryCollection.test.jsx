@@ -71,13 +71,13 @@ describe('the sub-categories and the menu are the ones the header uses', () => {
     expect(css).toMatch(/\.tab-list button\[aria-selected='true'\] \{[^}]*background: var\(--green-dark\); color: #fff; \}/);
   });
 
-  it('closes every collection with the homepage tiles, the one being read marked', () => {
-    expect(source).toContain("const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];");
-    expect(source).toMatch(/className=\{`home-tile tone-\$\{TILE_TONES\[index % TILE_TONES\.length\]\}\$\{item\.id === category \? ' is-active' : ''\}`\}/);
-    expect(source).toMatch(/aria-current=\{item\.id === category \? 'page' : undefined\}/);
-    // On a navy or green tile a green ring is invisible; the tile's own colour
-    // is always legible against it.
-    expect(css).toMatch(/\.collection-more \.home-tile\.is-active \{ box-shadow: inset 0 0 0 2px currentColor; \}/);
+  it('leaves the collection to the products, with no second menu under them', () => {
+    // The strip at the top of the page is the category menu; a second one at
+    // the foot of every collection was one too many.
+    expect(source).not.toContain('collection-more');
+    expect(css).not.toContain('collection-more');
+    // Nor the category's subtitle beside the collection title.
+    expect(source).not.toContain('descriptionPath={categoryPath(activeCategory');
   });
 });
 
