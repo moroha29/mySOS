@@ -181,9 +181,11 @@ describe('the home banner and the sections under it', () => {
     expect(markup).toContain(siteContent.headings.heroTitleAccentLong.replaceAll("'", '&#x27;'));
     expect(markup).toContain(siteContent.headings.heroSearchLead);
     expect(markup).toContain('class="hero-search"');
-    // The suggestions open with a plus, and one of them opens the upload.
+    // The suggestions open with a plus. There is no upload chip beside them:
+    // it opened the quote page with a flag nothing there ever read.
     for (const chip of siteContent.heroSearchChips) expect(markup).toContain(chip);
-    expect(markup).toContain(`${'/mySOS/request/'}?upload=1`);
+    expect(markup).not.toContain('upload=1');
+    expect(siteContent.labels).not.toHaveProperty('uploadPhotoChip');
     expect(home).toMatch(/<span aria-hidden="true">\+<\/span>/);
   });
 
@@ -266,6 +268,19 @@ describe('the home banner and the sections under it', () => {
       expect(stat.icon, stat.value).toBeTruthy();
       expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
     }
+  });
+
+  it('writes the figure at the size of the promises beside it', () => {
+    // "∞ Products" is one line of type with "Quality assured", not a small
+    // number over a large word; it used to be set at 22px and then scaled up
+    // as it landed, which left it in neither size for most of the count.
+    const rule = css.match(/\.home-figure-value,\s*\r?\n\.home-figure-label \{([^}]*)\}/)[1];
+    const promise = css.match(/\.home-stat-list strong \{([^}]*)\}/)[1];
+    for (const property of ['font-size', 'font-weight', 'letter-spacing', 'line-height']) {
+      const of = (text) => text.match(new RegExp(`${property}: ([^;]+);`))[1];
+      expect(of(rule), property).toBe(of(promise));
+    }
+    expect(css).not.toMatch(/\.home-figure-value\.is-settled/);
   });
 
   it('brings sections in as they are reached, and never leaves them hidden', () => {
@@ -406,7 +421,7 @@ describe('the page moves as you read it', () => {
   });
 
   it('counts the review total up to itself, from the number the server drew', () => {
-    expect(ui).toMatch(/export function CountUp\(\{ value, ms = 1100 \}\)/);
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = \d+ \}\)/);
     expect(ui).toMatch(/const \[shown, setShown\] = useState\(target\);/);
     expect(ui).toMatch(/<CountUp value=\{data\.totalReviewCount\} \/>/);
   });
@@ -421,5 +436,30 @@ describe('the page moves as you read it', () => {
       '.nav-link::after', '.request-row', '.hero-results li', '[data-reveal]']) {
       expect(quiet, stopped).toContain(stopped);
     }
+  });
+});
+
+describe('the review total is a figure, and it counts', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('writes the number as a figure beside the score', () => {
+    // It always counted from nothing, but it was set as small grey text, so
+    // nobody saw it happen. Every site that leads with a score writes the
+    // count as a number you can read across the room.
+    expect(ui).toContain('<strong><CountUp value={data.totalReviewCount} /></strong>');
+    const figure = css.match(/\.review-summary \.review-count strong \{([^}]*)\}/)[1];
+    const score = css.match(/\.review-summary \.rating-value \{([^}]*)\}/)[1];
+    expect(figure.match(/font-size: ([\d.]+)px/)[1]).toBe(score.match(/font-size: ([\d.]+)px/)[1]);
+    // Digits of one width, so the line does not twitch as it counts.
+    expect(figure).toContain('font-variant-numeric: tabular-nums');
+  });
+
+  it('starts as the line is reached, and takes long enough to be seen', () => {
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = (\d+) \}\)/);
+    expect(Number(ui.match(/export function CountUp\(\{ value, ms = (\d+) \}\)/)[1])).toBeGreaterThanOrEqual(1400);
+    expect(ui).toMatch(/\}, \{ threshold: 0\.3 \}\);/);
+    // And it is off for a reader who asked for less motion.
+    expect(ui).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
   });
 });

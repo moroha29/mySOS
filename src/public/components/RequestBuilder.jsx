@@ -33,9 +33,9 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
 // `onStep` adds to the latest quantity, so quick clicks each count.
 function Stepper({ value, onSet, onStep, label }) {
   return <span className="qty-stepper">
-    <button type="button" aria-label={`Fewer ${label}`} onClick={() => onStep(-1)} disabled={value <= 1}><Icon name="minus" size={16} /></button>
+    <button type="button" aria-label={`Fewer ${label}`} onClick={() => onStep(-1)} disabled={value <= 1}><Icon name="minus" size={19} /></button>
     <input type="number" inputMode="numeric" min="1" value={value} aria-label={`Quantity of ${label}`} onChange={(event) => onSet(event.target.value)} />
-    <button type="button" aria-label={`More ${label}`} onClick={() => onStep(1)}><Icon name="plus" size={16} /></button>
+    <button type="button" aria-label={`More ${label}`} onClick={() => onStep(1)}><Icon name="plus" size={19} /></button>
   </span>;
 }
 
@@ -110,7 +110,7 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
       <div className="request-field">
         <span className="request-field-label" data-cms-path={wordPath('uploadReferenceLabel')}>{word('uploadReferenceLabel', 'Upload Reference')}</span>
         <FilePicker id={`reference-${index}`} label={`Upload a reference for ${line.name}`} className="request-upload" onFiles={onFiles}>
-          <Icon name="upload" size={20} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
+          <Icon name="upload" size={24} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
         </FilePicker>
       </div>
       <div className="request-field">
@@ -118,7 +118,7 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
         <input id={`notes-${index}`} type="text" placeholder={word('notesPlaceholder', 'Any other requirements?')} value={line.detailNotes} onChange={(event) => onChange({ detailNotes: event.target.value })} />
       </div>
     </div>
-    <p className="request-skip"><Icon name="info" size={16} /> <span data-cms-path={wordPath('skipDetailsHint')}>{word('skipDetailsHint')}</span></p>
+    <p className="request-skip"><Icon name="info" size={19} /> <span data-cms-path={wordPath('skipDetailsHint')}>{word('skipDetailsHint')}</span></p>
   </div>;
 }
 
@@ -128,7 +128,7 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
   return <li className={open ? 'request-row is-open' : 'request-row'}>
     <div className="request-row-main">
       <span className="request-thumb">
-        {product ? <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /> : <Icon name="sample" size={30} />}
+        {product ? <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /> : <Icon name="sample" size={35} />}
       </span>
       <span className="request-name">
         <strong>{line.name}</strong>
@@ -137,7 +137,7 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
         {/* Asked here rather than buried in the details, because how a thing is
             printed is the one choice MySOS cannot guess from the product. */}
         {asking && <button type="button" className="request-printing-ask" onClick={() => onToggle({ focusPrinting: true })}>
-          <Icon name="info" size={15} />
+          <Icon name="info" size={18} />
           <span data-cms-path={wordPath('printingPrompt')}>{word('printingPrompt', 'Choose a printing method')}</span>
         </button>}
       </span>
@@ -150,9 +150,9 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
       <span className="request-row-actions">
         <button type="button" className="request-details-toggle" aria-expanded={open} aria-controls={`request-details-${index}`} onClick={() => onToggle()}>
           <span data-cms-path={wordPath(open ? 'hideDetailsButton' : 'addDetailsButton')}>{open ? word('hideDetailsButton', 'Hide Details') : word('addDetailsButton', 'Add Details')}</span>
-          <Icon name={open ? 'minus' : 'plus'} size={16} />
+          <Icon name={open ? 'minus' : 'plus'} size={19} />
         </button>
-        <button type="button" className="request-remove" aria-label={`Remove ${line.name}`} onClick={onRemove}><Icon name="trash" size={18} /></button>
+        <button type="button" className="request-remove" aria-label={`Remove ${line.name}`} onClick={onRemove}><Icon name="trash" size={22} /></button>
       </span>
     </div>
     {open && <DetailsPanel line={line} index={index} onChange={onChange} onFiles={onFiles} />}
@@ -165,7 +165,7 @@ function ProductCard({ product, onAdd }) {
     <button type="button" onClick={() => onAdd(product)}>
       <span className="request-thumb"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
       <span>{product.public.name}</span>
-      <Icon name="plus" size={16} />
+      <Icon name="plus" size={19} />
     </button>
   </li>;
 }
@@ -179,7 +179,7 @@ function ProductSearch({ chosen, onAdd, onBrowse }) {
   return <div className="request-search">
     <label className="request-search-label" htmlFor="request-search" data-cms-path={wordPath('searchTitle')}>{word('searchTitle', 'Search all products')}</label>
     <div className="request-search-box">
-      <Icon name="search" size={18} />
+      <Icon name="search" size={22} />
       <input
         id="request-search"
         type="search"
@@ -188,7 +188,7 @@ function ProductSearch({ chosen, onAdd, onBrowse }) {
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      {asked && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={16} /></button>}
+      {asked && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={19} /></button>}
     </div>
     {asked && (results.length > 0
       ? <ul className="request-search-results">
@@ -199,7 +199,7 @@ function ProductSearch({ chosen, onAdd, onBrowse }) {
               <strong>{product.public.name}</strong>
               <small>{product.public.category.replace('-', ' ')}</small>
             </span>
-            <Icon name="plus" size={16} />
+            <Icon name="plus" size={19} />
           </button>
         </li>)}
       </ul>
@@ -388,7 +388,7 @@ export default function RequestBuilder({
         </div>
 
         {remember && lines.length > 0 && <p className="request-kept">
-          <Icon name="checkCircle" size={16} />
+          <Icon name="checkCircle" size={19} />
           <span data-cms-path={wordPath('keptNote')}>{word('keptNote', 'Your request is kept on this device, so you can leave and come back to it.')}</span>
           <button type="button" onClick={() => { clearSavedRequest(); setLines([]); setNeededBy(''); setNotes(''); setFiles([]); }}>
             <span data-cms-path={wordPath('startOverButton')}>{word('startOverButton', 'Start a new request')}</span>
@@ -417,9 +417,9 @@ export default function RequestBuilder({
 
         {(suggestions.length > 0 || browse.length > 0) && <div className="request-more">
           <button type="button" className="request-more-toggle" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>
-            <Icon name="plus" size={16} />
+            <Icon name="plus" size={19} />
             <span data-cms-path={wordPath('addMoreTitle')}>{word('addMoreTitle', 'Add More Products')}</span>
-            <Icon name={showMore ? 'chevronUp' : 'chevronDown'} size={16} />
+            <Icon name={showMore ? 'chevronUp' : 'chevronDown'} size={19} />
           </button>
           {showMore && suggestions.length > 0 && <ul className="request-more-list">
             {suggestions.map((product) => <ProductCard key={product.id} product={product} onAdd={() => addLine({ productId: product.id }, 'extra')} />)}
@@ -445,7 +445,7 @@ export default function RequestBuilder({
               addLine({ name: custom.trim() }, 'custom');
               setCustom('');
             }}>
-              <Icon name="plus" size={16} /> <span data-cms-path={wordPath('customButton')}>{word('customButton', 'Add Custom Product')}</span>
+              <Icon name="plus" size={19} /> <span data-cms-path={wordPath('customButton')}>{word('customButton', 'Add Custom Product')}</span>
             </button>
           </div>
         </div>
@@ -455,15 +455,15 @@ export default function RequestBuilder({
           <small data-cms-path={wordPath('filesLead')}>{word('filesLead')}</small>
           <div className="request-files-row">
             <FilePicker id="general-files" label="Upload files for the whole request" className="request-drop" onFiles={(picked) => setFiles((current) => [...current, ...picked.map((file) => ({ file, owner: null }))])}>
-              <Icon name="upload" size={26} />
+              <Icon name="upload" size={30} />
               <span data-cms-path={wordPath('filesDropLabel')}>{word('filesDropLabel', 'Drag and drop files here or Browse Files')}</span>
               <small data-cms-path={wordPath('filesHint')}>{word('filesHint')}</small>
             </FilePicker>
             {generalFiles.length > 0 && <ul className="request-file-list">
               {generalFiles.map((entry) => <li key={`${entry.file.name}-${entry.file.size}`}>
-                <Icon name={/\.pdf$/i.test(entry.file.name) ? 'clipboard' : 'photos'} size={20} />
+                <Icon name={/\.pdf$/i.test(entry.file.name) ? 'clipboard' : 'photos'} size={24} />
                 <span><strong>{entry.file.name}</strong><small>{(entry.file.size / (1024 * 1024)).toFixed(1)} MB</small></span>
-                <button type="button" aria-label={`Remove ${entry.file.name}`} onClick={() => setFiles((current) => current.filter((item) => item !== entry))}><Icon name="close" size={16} /></button>
+                <button type="button" aria-label={`Remove ${entry.file.name}`} onClick={() => setFiles((current) => current.filter((item) => item !== entry))}><Icon name="close" size={19} /></button>
               </li>)}
             </ul>}
           </div>
@@ -478,7 +478,7 @@ export default function RequestBuilder({
             const product = productFor(line.productId);
             const chosen = Object.values(line.details).filter(Boolean).join(' · ');
             return <li key={line.key}>
-              <span className="request-thumb">{product ? <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /> : <Icon name="sample" size={22} />}</span>
+              <span className="request-thumb">{product ? <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /> : <Icon name="sample" size={25} />}</span>
               <span><strong>{line.name}</strong>{chosen && <small>{chosen}</small>}</span>
               <b>{line.quantity}</b>
             </li>;
@@ -486,14 +486,14 @@ export default function RequestBuilder({
         </ul>
 
         {awaitingPrinting.length > 0 && <p className="request-printing-note" role="status">
-          <Icon name="info" size={16} />
+          <Icon name="info" size={19} />
           <span data-cms-path={wordPath('printingSummaryPrompt')}>
             {fill(word('printingSummaryPrompt', 'Tell us how to print {items}, or we will recommend a method.'), { items: awaitingPrinting.map((line) => line.name).join(', ') })}
           </span>
         </p>}
 
         <label className="request-summary-label" htmlFor="needed-by" data-cms-path={wordPath('neededByLabel')}>{word('neededByLabel', 'Needed By')}</label>
-        <span className="request-date"><Icon name="calendar" size={18} /><input id="needed-by" type="date" min={today} value={neededBy} onChange={(event) => setNeededBy(event.target.value)} /></span>
+        <span className="request-date"><Icon name="calendar" size={22} /><input id="needed-by" type="date" min={today} value={neededBy} onChange={(event) => setNeededBy(event.target.value)} /></span>
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
@@ -508,7 +508,7 @@ export default function RequestBuilder({
           </p>}
           <div className="request-to-quote-actions">
             <button type="button" className="btn btn-secondary" onClick={() => addToQuote('add')}>
-              <Icon name="plus" size={16} />
+              <Icon name="plus" size={19} />
               <span data-cms-path={wordPath('addToQuoteButton')}>{word('addToQuoteButton', 'Add to quote')}</span>
             </button>
             {waiting > 0 && <button type="button" className="btn btn-outline" onClick={() => addToQuote('replace')}>
@@ -519,11 +519,11 @@ export default function RequestBuilder({
 
         {href && lines.length > 0
           ? <a className="btn btn-primary btn-whatsapp request-send" href={href} {...enquiryLinkProps(href)} onClick={send}>
-            <Icon name="whatsapp" size={22} />
+            <Icon name="whatsapp" size={25} />
             <span data-cms-path={wordPath('sendButton')}>{word('sendButton', 'Send Request via WhatsApp')}</span>
           </a>
           : <button type="button" className="btn btn-primary btn-whatsapp request-send" disabled>
-            <Icon name="whatsapp" size={22} /><span>{word('sendButton', 'Send Request via WhatsApp')}</span>
+            <Icon name="whatsapp" size={25} /><span>{word('sendButton', 'Send Request via WhatsApp')}</span>
           </button>}
         <p className="request-send-hint" data-cms-path={wordPath('sendHint')}>{word('sendHint')}</p>
         {fileNames.length > 0 && sent !== 'shared' && <p className="request-send-files" role="status">

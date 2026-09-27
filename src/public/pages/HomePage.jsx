@@ -114,15 +114,15 @@ function SearchResults({ query, onAdd, added }) {
         <a className="hero-result-name" href={`/mySOS/products/${product.public.slug}/`}>{product.public.name}</a>
         <button type="button" className={added.includes(product.id) ? 'btn btn-outline btn-sm is-added' : 'btn btn-secondary btn-sm'} onClick={() => onAdd(product)}>
           {added.includes(product.id)
-            ? <><Icon name="check" size={15} /> <span data-cms-path={cms(labelPath('addedToQuoteLabel'))}>{label('addedToQuoteLabel', 'In your quote')}</span></>
-            : <><Icon name="plus" size={15} /> <span data-cms-path={cms(labelPath('addToQuoteLabel'))}>{label('addToQuoteLabel', 'Add to quote')}</span></>}
+            ? <><Icon name="check" size={18} /> <span data-cms-path={cms(labelPath('addedToQuoteLabel'))}>{label('addedToQuoteLabel', 'In your quote')}</span></>
+            : <><Icon name="plus" size={18} /> <span data-cms-path={cms(labelPath('addToQuoteLabel'))}>{label('addToQuoteLabel', 'Add to quote')}</span></>}
         </button>
       </li>)}
     </ul>
     {/* Only once there is a quote to go back to. */}
     {waiting > 0 && <a className="text-link hero-results-all" href={REQUEST_PATH}>
       <span data-cms-path={cms(labelPath('returnToQuoteButton'))}>{label('returnToQuoteButton', 'Return to quote')}</span>
-      <Icon name="arrowRight" size={15} className="inline-arrow" />
+      <Icon name="arrowRight" size={18} className="inline-arrow" />
     </a>}
   </div>;
 }
@@ -150,7 +150,7 @@ function HeroSearch() {
       role="search"
       onSubmit={(event) => { event.preventDefault(); if (query) globalThis.location.assign(href); }}
     >
-      <Icon name="search" size={20} />
+      <Icon name="search" size={24} />
       <input
         type="search"
         aria-label={label('heroSearchPlaceholder', 'Tell us what you need')}
@@ -169,14 +169,6 @@ function HeroSearch() {
           <span data-cms-path={cms(contentPath('heroSearchChips', index))}>{chip}</span>
         </button>
       </li>)}
-      {/* Artwork and photographs are attached on the quote page, where the
-          message that carries them is put together. */}
-      <li>
-        <a className="hero-chip-upload" href={`${REQUEST_PATH}?upload=1`}>
-          <Icon name="upload" size={15} />
-          <span data-cms-path={cms(labelPath('uploadPhotoChip'))}>{label('uploadPhotoChip', 'Upload product photo')}</span>
-        </a>
-      </li>
     </ul>
     {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
@@ -281,7 +273,7 @@ function Reviews() {
       eyebrowPath={headingPath('reviewsHeading')}
       action={<Button href="/mySOS/success-stories/" variant="outline">
         <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
-        <Icon name="arrowRight" size={15} className="inline-arrow" />
+        <Icon name="arrowRight" size={18} className="inline-arrow" />
       </Button>}
     />
   </div>;
@@ -309,7 +301,7 @@ function CategoryTiles() {
         data-reveal
         style={{ '--reveal-delay': `${index * 60}ms` }}
       >
-        <Icon name={category.icon} size={30} cmsPath={contentPath('categories', index, 'icon')} />
+        <Icon name={category.icon} size={35} cmsPath={contentPath('categories', index, 'icon')} />
         <span className="home-tile-body">
           <strong data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</strong>
           <small data-cms-path={cms(contentPath('categories', index, 'description'))}>{category.description}</small>
@@ -333,7 +325,7 @@ function WhyBand() {
       <ol className="home-why-grid">
         {reasons.map((reason, index) => <li key={reason.icon} data-reveal style={{ '--reveal-delay': `${index * 80}ms` }}>
           <span className="home-why-number">{two(index + 1)}</span>
-          <Icon name={reason.cardIcon || reason.icon} size={26} cmsPath={contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon')} />
+          <Icon name={reason.cardIcon || reason.icon} size={30} cmsPath={contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon')} />
           <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle || reason.title}</h3>
           <p data-cms-path={cms(contentPath('benefits', index, 'description'))}>{reason.description}</p>
         </li>)}
@@ -403,7 +395,7 @@ function SelectedWork({ stories }) {
       </div>
       <a className="text-link" href={REQUEST_PATH}>
         <span data-cms-path={cms(labelPath('workDiscussLabel'))}>{label('workDiscussLabel', 'Discuss your project')}</span>
-        <Icon name="arrowRight" size={15} className="inline-arrow" />
+        <Icon name="arrowRight" size={18} className="inline-arrow" />
       </a>
     </div>
     <div className="home-work-grid">
@@ -414,7 +406,7 @@ function SelectedWork({ stories }) {
         <p>{story.summary}</p>
         {story.highlights?.length > 0 && <ul className="home-work-stats">
           {story.highlights.map((highlight) => <li key={highlight.text}>
-            <Icon name={highlight.icon} size={18} />
+            <Icon name={highlight.icon} size={22} />
             <span>{highlight.text}</span>
           </li>)}
         </ul>}
@@ -510,7 +502,7 @@ export default function HomePage() {
       </div>}
       <ul className="home-stat-list">
         {stats.map((stat, index) => <li key={stat.value} data-reveal style={{ '--reveal-delay': `${(index + 1) * 80}ms` }}>
-          {stat.icon && <Icon name={stat.icon} size={19} cmsPath={contentPath('homeStats', index, 'icon')} />}
+          {stat.icon && <Icon name={stat.icon} size={23} cmsPath={contentPath('homeStats', index, 'icon')} />}
           <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
           {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
         </li>)}

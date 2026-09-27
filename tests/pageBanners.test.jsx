@@ -112,3 +112,31 @@ describe('every banner says the same things in the same order', () => {
     expect(page('RequestPage')).not.toContain('hero-actions');
   });
 });
+
+describe('a banner you can see is a banner', () => {
+  /*
+   * The banner carried the same paper as the page under it, so nothing said
+   * where it ended. Sites that lead with one separate it — Stripe with a wash
+   * of colour, Printful with a photograph, Custom Ink with a plain edge. Ours
+   * takes a wash and a hairline.
+   */
+  // The four banners are washed by one rule; a selector spanning lines is
+  // read off the file rather than rebuilt here.
+  const ruleAfter = (marker) => {
+    const at = css.indexOf(marker);
+    expect(at, marker).toBeGreaterThan(-1);
+    return css.slice(at, css.indexOf('}', at));
+  };
+  const wash = ruleAfter('.hero:not(.has-background),');
+
+  it('washes every banner in colour that fades into the page', () => {
+    expect(wash).toContain('radial-gradient');
+    expect(wash).toMatch(/linear-gradient\(180deg, #[0-9a-f]{6} 0%, var\(--paper\)/);
+  });
+
+  it('marks where it stops, and lets the line fade out at both ends', () => {
+    const edge = ruleAfter('.hero:not(.has-background)::before,');
+    expect(edge).toContain('bottom: 0');
+    expect(edge).toMatch(/linear-gradient\(90deg, transparent, var\(--line\)/);
+  });
+});

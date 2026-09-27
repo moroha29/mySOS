@@ -32,7 +32,7 @@ export default function CategoryStrip({ activeId = '', onChoose, action }) {
       </ul>
       <a className="text-link" href={action?.href ?? '/mySOS/products/'}>
         <span data-cms-path={cms(labelPath(action?.labelKey ?? 'quickNavAllLabel'))}>{label(action?.labelKey ?? 'quickNavAllLabel', action?.fallback ?? 'View all products')}</span>
-        <Icon name="arrowRight" size={15} className="inline-arrow" />
+        <Icon name="arrowRight" size={18} className="inline-arrow" />
       </a>
     </div>
   </nav>;

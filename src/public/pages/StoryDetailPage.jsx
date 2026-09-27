@@ -117,15 +117,15 @@ export default function StoryDetailPage({ slug }) {
     <section className="story-hero">
       <div className="story-hero-bg" aria-hidden="true" data-reveal><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/hero`)} imagePath={storyPath(story, 'image')} wide eager /></div>
       <div className="story-hero-inner" data-reveal>
-        <a className="back-link" href="/mySOS/success-stories/"><Icon name="chevronLeft" size={14} /> <span data-cms-path={cms(pagePath('story', 'backLabel'))}>{pageText('story', 'backLabel', 'Back to all stories')}</span></a>
+        <a className="back-link" href="/mySOS/success-stories/"><Icon name="chevronLeft" size={18} /> <span data-cms-path={cms(pagePath('story', 'backLabel'))}>{pageText('story', 'backLabel', 'Back to all stories')}</span></a>
         <div><span className="badge">{industry}</span></div>
         <h1 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h1>
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
         <dl className="story-meta">
-          <div><Icon name="business" size={22} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd>{industry}</dd></span></div>
-          <div><Icon name="shirt" size={22} /><span><dt data-cms-path={cms(pagePath('story', 'productsLabel'))}>{pageText('story', 'productsLabel', 'Products')}</dt><dd>{products.map((item) => item.public.name).join(', ') || '—'}</dd></span></div>
-          <div><Icon name="quantity" size={22} /><span><dt data-cms-path={cms(pagePath('story', 'quantityLabel'))}>{pageText('story', 'quantityLabel', 'Quantity')}</dt><dd><span data-cms-path={cms(storyPath(story, 'quantity'))}>{story.quantity}</span> <span data-cms-path={cms(pagePath('story', 'quantitySuffix'))}>{pageText('story', 'quantitySuffix', 'pcs')}</span></dd></span></div>
-          <div><Icon name="calendar" size={22} /><span><dt data-cms-path={cms(pagePath('story', 'yearLabel'))}>{pageText('story', 'yearLabel', 'Year')}</dt><dd data-cms-path={cms(storyPath(story, 'year'))}>{story.year}</dd></span></div>
+          <div><Icon name="business" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd>{industry}</dd></span></div>
+          <div><Icon name="shirt" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'productsLabel'))}>{pageText('story', 'productsLabel', 'Products')}</dt><dd>{products.map((item) => item.public.name).join(', ') || '—'}</dd></span></div>
+          <div><Icon name="quantity" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'quantityLabel'))}>{pageText('story', 'quantityLabel', 'Quantity')}</dt><dd><span data-cms-path={cms(storyPath(story, 'quantity'))}>{story.quantity}</span> <span data-cms-path={cms(pagePath('story', 'quantitySuffix'))}>{pageText('story', 'quantitySuffix', 'pcs')}</span></dd></span></div>
+          <div><Icon name="calendar" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'yearLabel'))}>{pageText('story', 'yearLabel', 'Year')}</dt><dd data-cms-path={cms(storyPath(story, 'year'))}>{story.year}</dd></span></div>
         </dl>
       </div>
     </section>
@@ -138,7 +138,7 @@ export default function StoryDetailPage({ slug }) {
         className={index === 0 ? 'is-active' : ''}
         label={`${story.title} photo ${index + 1}`}
       />)}
-      <span className="gallery-more"><Icon name="photos" size={20} /><span data-cms-path={cms(pagePath('story', 'galleryLabel'))}>{pageText('story', 'galleryLabel', 'View All Photos')}</span> ({story.gallery.length})</span>
+      <span className="gallery-more"><Icon name="photos" size={24} /><span data-cms-path={cms(pagePath('story', 'galleryLabel'))}>{pageText('story', 'galleryLabel', 'View All Photos')}</span> ({story.gallery.length})</span>
     </div>
 
     <div className="story-body">
@@ -186,7 +186,7 @@ export default function StoryDetailPage({ slug }) {
             <div className="narrative-head"><span>04</span><h2 data-cms-path={cms(sectionPath(sections[3]))}>{sectionLabel(sections[3])}</h2></div>
             <ul className="outcome-list">
               {story.outcomes.map((outcome, index) => <li key={outcome}>
-                <Icon name="check" size={16} />
+                <Icon name="check" size={19} />
                 <span data-cms-path={cms(storyPath(story, 'outcomes', index))}>{outcome}</span>
               </li>)}
             </ul>

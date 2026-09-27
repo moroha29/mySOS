@@ -52,8 +52,8 @@ function ReasonStack() {
           </li>)}
         </ol>
         <span className="scroll-hint" aria-hidden="true">
-          <Icon name="mouse" size={26} />
-          <Icon name="chevronDown" size={14} />
+          <Icon name="mouse" size={30} />
+          <Icon name="chevronDown" size={18} />
         </span>
       </div>
 
@@ -75,12 +75,12 @@ function ReasonStack() {
               const iconPath = contentPath('benefits', index, reason.cardIcon ? 'cardIcon' : 'icon');
               return <li className="reason-card" key={reason.icon} data-state={state} style={{ '--depth': Math.min(depth, 5) }}>
                 <p className="reason-card-tab" aria-hidden="true">
-                  <Icon name={icon} size={22} cmsPath={iconPath} />
+                  <Icon name={icon} size={25} cmsPath={iconPath} />
                   <span>{two(index + 1)}</span>
                   <strong data-cms-path={cms(contentPath('benefits', index, 'stackLabel'))}>{reason.stackLabel || reason.title}</strong>
                 </p>
                 <div className="reason-card-copy">
-                  <Icon name={icon} size={58} className="reason-card-icon" cmsPath={iconPath} />
+                  <Icon name={icon} size={63} className="reason-card-icon" cmsPath={iconPath} />
                   <div>
                     <span className="reason-card-number">{two(index + 1)}</span>
                     <h3 data-cms-path={cms(contentPath('benefits', index, 'shortTitle'))}>{reason.shortTitle}</h3>
@@ -127,7 +127,7 @@ function ProcessJourney() {
     <ol className="journey-steps" style={{ '--reached': active / last }}>
       {steps.map((step, index) => <li key={step.title} className={index < active ? 'is-done' : index === active ? 'is-current' : ''}>
         <button type="button" aria-current={index === active ? 'step' : undefined} onClick={() => goTo(index)}>
-          <span className="journey-node" aria-hidden="true">{index < active && <Icon name="check" size={17} />}</span>
+          <span className="journey-node" aria-hidden="true">{index < active && <Icon name="check" size={20} />}</span>
           <span className="journey-number">{two(index + 1)}</span>
           <span className="journey-label" data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span>
         </button>
@@ -150,7 +150,7 @@ function ProcessJourney() {
               {step.points?.length > 0 && <ul className="journey-points">
                 {step.points.map((point, pointIndex) => <li key={`${point.icon}-${pointIndex}`}>
                   <span className="journey-point-head">
-                    <Icon name={point.icon} size={20} cmsPath={contentPath('process', index, 'points', pointIndex, 'icon')} />
+                    <Icon name={point.icon} size={24} cmsPath={contentPath('process', index, 'points', pointIndex, 'icon')} />
                     <strong data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'label'))}>{point.label}</strong>
                   </span>
                   <small data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'text'))}>{point.text}</small>
@@ -172,8 +172,8 @@ function ProcessJourney() {
 
     <div className="journey-foot">
       <div className="journey-arrows">
-        <button type="button" aria-label="Previous step" disabled={active === 0} onClick={() => goTo(active - 1)}><Icon name="chevronLeft" size={18} /></button>
-        <button type="button" aria-label="Next step" disabled={active === steps.length - 1} onClick={() => goTo(active + 1)}><Icon name="chevronRight" size={18} /></button>
+        <button type="button" aria-label="Previous step" disabled={active === 0} onClick={() => goTo(active - 1)}><Icon name="chevronLeft" size={22} /></button>
+        <button type="button" aria-label="Next step" disabled={active === steps.length - 1} onClick={() => goTo(active + 1)}><Icon name="chevronRight" size={22} /></button>
       </div>
       <StepCount active={active} total={steps.length} className="journey-count" />
     </div>
@@ -195,7 +195,7 @@ function ClientLoyalty() {
     />
     <ul className="loyalty-grid">
       {promises.map((promise, index) => <li className="loyalty-card" key={promise.title} data-reveal style={{ '--reveal-delay': `${index * 70}ms` }}>
-        <Icon name={promise.icon} size={42} cmsPath={contentPath('loyalty', index, 'icon')} />
+        <Icon name={promise.icon} size={45} cmsPath={contentPath('loyalty', index, 'icon')} />
         <h3 data-cms-path={cms(contentPath('loyalty', index, 'title'))}>{promise.title}</h3>
         <p data-cms-path={cms(contentPath('loyalty', index, 'description'))}>{promise.description}</p>
       </li>)}
@@ -222,7 +222,7 @@ export default function WhyPage() {
             <QuoteButton showArrow />
             <Button href="/mySOS/success-stories/" variant="ghost">
               <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
-              <Icon name="arrowRight" size={16} className="inline-arrow" />
+              <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
           </div>
         </div>
@@ -231,7 +231,7 @@ export default function WhyPage() {
     </section>
 
     {/* Reviews sit directly under the banner, as on the other pages. */}
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={15} className="inline-arrow" /></Button>} />
+    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></Button>} />
 
     <ReasonStack />
     <ProcessJourney />

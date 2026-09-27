@@ -170,7 +170,7 @@ export default function ProductsPage() {
             <QuoteButton showArrow />
             <Button href="/mySOS/solutions/" variant="ghost">
               <span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span>
-              <Icon name="arrowRight" size={16} className="inline-arrow" />
+              <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
           </div>
         </div>
@@ -216,12 +216,12 @@ export default function ProductsPage() {
               to ask for what is not there. */}
           <a className="product-ask" href={REQUEST_PATH} data-reveal style={{ '--reveal-delay': `${(visible.length % 8) * 50}ms` }}>
             <span className="product-ask-inner">
-              <Icon name="spark" size={26} />
+              <Icon name="spark" size={30} />
               <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
               <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
               <span className="product-ask-go">
                 <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
-                <Icon name="arrowRight" size={16} className="inline-arrow" />
+                <Icon name="arrowRight" size={19} className="inline-arrow" />
               </span>
             </span>
           </a>
@@ -235,8 +235,8 @@ export default function ProductsPage() {
       {products.length > 8 && <div className="center-action">
         <Button href="#" variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
           {showAll
-            ? <><span data-cms-path={cms(pagePath('products', 'showLessLabel'))}>{pageText('products', 'showLessLabel', 'Show Less')}</span> <Icon name="chevronDown" size={15} className="inline-arrow is-up" /></>
-            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={15} className="inline-arrow" /></>}
+            ? <><span data-cms-path={cms(pagePath('products', 'showLessLabel'))}>{pageText('products', 'showLessLabel', 'Show Less')}</span> <Icon name="chevronDown" size={18} className="inline-arrow is-up" /></>
+            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
         </Button>
       </div>}
     </section>
@@ -257,7 +257,7 @@ export default function ProductsPage() {
       <SectionHeading eyebrow={heading('faqHeading', 'Frequently asked questions')} eyebrowPath={headingPath('faqHeading')} align="left" />
       <div className="faq-list" data-reveal>
         {siteContent.faq.map((item, index) => <details key={item.question}>
-          <summary><span data-cms-path={cms(contentPath('faq', index, 'question'))}>{item.question}</span><Icon name="plus" size={16} /></summary>
+          <summary><span data-cms-path={cms(contentPath('faq', index, 'question'))}>{item.question}</span><Icon name="plus" size={19} /></summary>
           <p data-cms-path={cms(contentPath('faq', index, 'answer'))}>{item.answer}</p>
         </details>)}
       </div>
