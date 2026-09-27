@@ -21,7 +21,7 @@ const apparelTabs = siteContent.apparelTabs ?? [];
  * method id, so it can be edited. With no photo uploaded the drawn workshop
  * scene stands in.
  */
-function Capabilities({ methods }) {
+function Capabilities({ methods, category }) {
   const [activeId, setActiveId] = useState(methods[0]?.id);
   const tabRefs = useRef({});
   const active = methods.find((method) => method.id === activeId) ?? methods[0];
@@ -42,6 +42,13 @@ function Capabilities({ methods }) {
     <div className="capabilities-inner">
       <span className="capabilities-eyebrow" data-cms-path={cms(pagePath('products', 'methodsEyebrow'))}>{pageText('products', 'methodsEyebrow', 'Our capabilities')}</span>
       <h2 className="capabilities-title" data-cms-path={cms(pagePath('products', 'methodsTitle'))}>{pageText('products', 'methodsTitle', 'How we bring your brand to life')}</h2>
+      {/* Which category these are the ways of doing. The name is the category's
+          own, so it stays right when MySOS renames one. */}
+      {category && <p className="capabilities-for">
+        <span data-cms-path={cms(pagePath('products', 'methodsForLabel'))}>{pageText('products', 'methodsForLabel', 'On')}</span>
+        {' '}
+        <strong data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</strong>
+      </p>}
 
       <div className="capabilities-body" data-reveal>
         <div className="capabilities-tabs" role="tablist" aria-orientation="vertical" aria-label="Printing and customisation methods">
@@ -134,7 +141,18 @@ export default function ProductsPage() {
   );
   const visible = showAll ? products : products.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
-  const methods = printData.methods.filter((method) => method.public?.visible);
+  /*
+   * The ways MySOS can put a brand on what is in this category, rather than
+   * the whole list every time: a bottle is not embroidered. Which methods suit
+   * which category is content, so MySOS can correct it; a category that names
+   * none is offered all of them.
+   */
+  const methods = useMemo(() => {
+    const shown = printData.methods.filter((method) => method.public?.visible);
+    const wanted = activeCategory?.methods ?? [];
+    const kept = shown.filter((method) => wanted.includes(method.id));
+    return kept.length > 0 ? kept : shown;
+  }, [activeCategory]);
 
   return <main className="page-paper">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
@@ -142,12 +160,19 @@ export default function ProductsPage() {
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
-          <span className="eyebrow" data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('browseCategoryHeading'))}>{heading('browseCategoryHeading', 'Browse by category')}</span>
           <h1>
-            <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
-            <em><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span></em>
           </h1>
-          <p className="hero-lead" data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+            <QuoteButton showArrow />
+            <Button href="/mySOS/solutions/" variant="ghost">
+              <span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span>
+              <Icon name="arrowRight" size={16} className="inline-arrow" />
+            </Button>
+          </div>
         </div>
         <div className="hero-scene">
           <Photo
@@ -174,8 +199,33 @@ export default function ProductsPage() {
           data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
         >{tab.name}</button>)}
       </div>}
+      {/* The fill counts are how many columns are left over on the last row, at
+          each of the three widths this grid is drawn at. The card that asks for
+          what is not listed stretches across them, so no row ends part-drawn. */}
       {visible.length > 0
-        ? <div className="product-grid" id="product-collection-grid">{visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}</div>
+        ? <div
+          className="product-grid"
+          id="product-collection-grid"
+          data-fill4={4 - (visible.length % 4)}
+          data-fill3={3 - (visible.length % 3)}
+          data-fill2={2 - (visible.length % 2)}
+        >
+          {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
+          {/* Not everything MySOS can make is listed, and a short category used
+              to trail off into white space. This closes the row with the way
+              to ask for what is not there. */}
+          <a className="product-ask" href={REQUEST_PATH} data-reveal style={{ '--reveal-delay': `${(visible.length % 8) * 50}ms` }}>
+            <span className="product-ask-inner">
+              <Icon name="spark" size={26} />
+              <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
+              <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
+              <span className="product-ask-go">
+                <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+                <Icon name="arrowRight" size={16} className="inline-arrow" />
+              </span>
+            </span>
+          </a>
+        </div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
           <p data-cms-path={cms(pagePath('products', 'emptyDescription'))}>{pageText('products', 'emptyDescription')}</p>
@@ -191,7 +241,7 @@ export default function ProductsPage() {
       </div>}
     </section>
 
-    <Capabilities methods={methods} />
+    <Capabilities key={category} methods={methods} category={activeCategory} />
 
     <section className="promo-band">
       <div className="promo-copy" data-reveal>

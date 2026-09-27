@@ -39,6 +39,35 @@ export default function watchReveals(root = globalThis.document) {
     root.documentElement.classList.remove(HIDE_CLASS);
   }, 2500);
 
+  /*
+   * A second pair of eyes. Flinging the page down can outrun the observer:
+   * the section passes through the window between two frames and is never
+   * reported, and it would sit invisible until someone scrolled back to it.
+   * So anything the page has already reached is shown, checked on the scroll
+   * itself and inside a frame.
+   */
+  const pending = new Set();
+  let frame = 0;
+  const sweep = () => {
+    frame = 0;
+    const height = globalThis.innerHeight ?? 0;
+    for (const node of pending) {
+      if (node.classList.contains(SEEN)) { pending.delete(node); continue; }
+      const box = node.getBoundingClientRect();
+      // Reached, or already passed: a fling can carry the page straight over
+      // a section, and it must not be left invisible behind us.
+      if (box.top < height * 0.95 || box.bottom < 0) {
+        node.classList.add(SEEN);
+        shown += 1;
+        observer.unobserve(node);
+        pending.delete(node);
+      }
+    }
+  };
+  const onScroll = () => { if (!frame) frame = requestAnimationFrame(sweep); };
+  globalThis.addEventListener('scroll', onScroll, { passive: true });
+  globalThis.addEventListener('resize', onScroll);
+
   const scan = () => {
     for (const node of root.querySelectorAll(`[data-reveal]:not(.${SEEN})`)) {
       if (watched.has(node)) continue;
@@ -52,7 +81,7 @@ export default function watchReveals(root = globalThis.document) {
       if (box.top < (globalThis.innerHeight ?? 0) * 0.92 && box.bottom > 0) {
         shown += 1;
         requestAnimationFrame(() => node.classList.add(SEEN));
-      } else observer.observe(node);
+      } else { observer.observe(node); pending.add(node); }
     }
   };
 
@@ -63,6 +92,9 @@ export default function watchReveals(root = globalThis.document) {
 
   return () => {
     clearTimeout(safety);
+    if (frame) cancelAnimationFrame(frame);
+    globalThis.removeEventListener('scroll', onScroll);
+    globalThis.removeEventListener('resize', onScroll);
     observer.disconnect();
     mutations.disconnect();
     root.documentElement.classList.remove(HIDE_CLASS);

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import siteContent from '../../data/siteContent.json';
 import { cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
 import Icon from '../components/Icons';
-import { Button, heading, label, PageCTA, Photo, SectionHeading, Testimonials } from '../components/Ui';
+import { Button, heading, label, PageCTA, Photo, QuoteButton, SectionHeading, Testimonials } from '../components/Ui';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
 
@@ -215,8 +215,16 @@ export default function WhyPage() {
     <section {...heroBackground(siteContent.scenes?.whyHeroBackgroundImage, scenePath('whyHeroBackgroundImage'), 'hero hero-compact')}>
       <div className="hero-inner">
         <div>
-          <h1 data-cms-path={cms(pagePath('why', 'heroTitle'))}>{pageText('why', 'heroTitle', 'Why MySOS')}</h1>
-          <p className="hero-lead" data-cms-path={cms(pagePath('why', 'heroLead'))}>{pageText('why', 'heroLead', 'One Supplier. Endless Possibilities.')}</p>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
+          <h1 data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('why', 'heroTitle'))}>{pageText('why', 'heroTitle', 'Why MySOS')}</h1>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('why', 'heroLead'))}>{pageText('why', 'heroLead', 'One Supplier. Endless Possibilities.')}</p>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+            <QuoteButton showArrow />
+            <Button href="/mySOS/success-stories/" variant="ghost">
+              <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
+              <Icon name="arrowRight" size={16} className="inline-arrow" />
+            </Button>
+          </div>
         </div>
         <div className="hero-scene"><Photo style="office" image={picture(siteContent.scenes?.whyHeroImage, 'scenes/why-hero')} imagePath={scenePath('whyHeroImage')} label="The MySOS team at work" wide eager /></div>
       </div>

@@ -4,7 +4,7 @@ import solutions from '../../data/solutions.json';
 import { cms, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
 import { getStories } from '../../utils/catalogue';
 import Icon from '../components/Icons';
-import { heading, label, PageCTA, Photo, useGoogleReviews } from '../components/Ui';
+import { Button, heading, label, PageCTA, Photo, QuoteButton, useGoogleReviews } from '../components/Ui';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
 
 // One large project and four smaller ones per page, as in the design.
@@ -264,11 +264,19 @@ export default function StoriesPage() {
     <section {...heroBackground(siteContent.scenes?.storiesHeroBackgroundImage, scenePath('storiesHeroBackgroundImage'), 'hero hero-compact hero-stories')}>
       <div className="hero-inner">
         <div>
+          <span className="eyebrow" data-reveal data-cms-path={cms(headingPath('heroEyebrow'))}>{heading('heroEyebrow')}</span>
           <h1>
-            <span data-cms-path={cms(pagePath('stories', 'heroTitle'))}>{pageText('stories', 'heroTitle', 'Real Projects.')}</span>
-            <em><span data-cms-path={cms(pagePath('stories', 'heroTitleAccent'))}>{pageText('stories', 'heroTitleAccent', 'Real Results.')}</span></em>
+            <span data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(pagePath('stories', 'heroTitle'))}>{pageText('stories', 'heroTitle', 'Real Projects.')}</span>
+            <em data-reveal style={{ '--reveal-delay': '160ms' }}><span data-cms-path={cms(pagePath('stories', 'heroTitleAccent'))}>{pageText('stories', 'heroTitleAccent', 'Real Results.')}</span></em>
           </h1>
-          <p className="hero-lead" data-cms-path={cms(pagePath('stories', 'heroLead'))}>{pageText('stories', 'heroLead')}</p>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('stories', 'heroLead'))}>{pageText('stories', 'heroLead')}</p>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+            <QuoteButton showArrow />
+            <Button href="/mySOS/products/" variant="ghost">
+              <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
+              <Icon name="arrowRight" size={16} className="inline-arrow" />
+            </Button>
+          </div>
         </div>
         <div className="hero-collage" aria-hidden="true">
           {['field', 'hall', 'office', 'stage', 'outdoor'].map((kind, i) => (

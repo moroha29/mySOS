@@ -7,15 +7,19 @@ import { describe, expect, it } from 'vitest';
  * narrow to read. These hold the fixes in place.
  */
 const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+// Everything written at a width, however many blocks it is written in: a
+// feature keeps its own rules together rather than reaching back up the file.
 const block = (query) => {
-  const start = css.lastIndexOf(`@media (${query}) {`);
-  if (start < 0) return '';
-  let depth = 0;
-  for (let i = css.indexOf('{', start); i < css.length; i += 1) {
-    if (css[i] === '{') depth += 1;
-    if (css[i] === '}') { depth -= 1; if (depth === 0) return css.slice(start, i + 1); }
+  const marker = `@media (${query}) {`;
+  const found = [];
+  for (let start = css.indexOf(marker); start > -1; start = css.indexOf(marker, start + 1)) {
+    let depth = 0;
+    for (let i = css.indexOf('{', start); i < css.length; i += 1) {
+      if (css[i] === '{') depth += 1;
+      if (css[i] === '}') { depth -= 1; if (depth === 0) { found.push(css.slice(start, i + 1)); break; } }
+    }
   }
-  return '';
+  return found.join(' ');
 };
 
 describe('phones', () => {
