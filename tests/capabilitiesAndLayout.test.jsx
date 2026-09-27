@@ -268,6 +268,19 @@ describe('the home banner and the sections under it', () => {
     }
   });
 
+  it('writes the figure at the size of the promises beside it', () => {
+    // "∞ Products" is one line of type with "Quality assured", not a small
+    // number over a large word; it used to be set at 22px and then scaled up
+    // as it landed, which left it in neither size for most of the count.
+    const rule = css.match(/\.home-figure-value,\s*\r?\n\.home-figure-label \{([^}]*)\}/)[1];
+    const promise = css.match(/\.home-stat-list strong \{([^}]*)\}/)[1];
+    for (const property of ['font-size', 'font-weight', 'letter-spacing', 'line-height']) {
+      const of = (text) => text.match(new RegExp(`${property}: ([^;]+);`))[1];
+      expect(of(rule), property).toBe(of(promise));
+    }
+    expect(css).not.toMatch(/\.home-figure-value\.is-settled/);
+  });
+
   it('brings sections in as they are reached, and never leaves them hidden', () => {
     const reveal = readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8');
     // The hidden state hangs off a class the script adds, so a page whose

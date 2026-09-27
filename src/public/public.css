@@ -1298,9 +1298,14 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
    to "endless", then each promise with its mark, divided by hairlines. */
 .home-stats { max-width: var(--content); margin: 0 auto; padding: 10px 24px 60px; display: grid; grid-template-columns: minmax(200px, .8fr) minmax(0, 3fr); gap: 34px; align-items: center; }
 .home-figure { padding-right: 34px; border-right: 1px solid var(--line); }
-.home-figure-value { display: inline-block; font-size: 22px; font-weight: 700; line-height: 1; letter-spacing: -.02em; color: var(--navy); font-variant-numeric: tabular-nums; transform-origin: left bottom; transition: transform .4s cubic-bezier(.34, 1.56, .64, 1); }
-.home-figure-value.is-settled { transform: scale(1.35); }
-.home-figure-label { display: block; margin-top: -4px; font-size: clamp(30px, 3vw, 45px); font-weight: 700; line-height: 1.02; letter-spacing: -.04em; color: var(--navy); }
+/* The figure and what it counts are one line of type, written at the size of
+   the promises beside it — "∞ Products" reads as "Quality assured" does. The
+   count used to be set small and then scaled up as it landed, which left it
+   in neither size for most of the way. */
+.home-figure-value,
+.home-figure-label { font-size: clamp(26px, 2.4vw, 38px); font-weight: 700; line-height: 1.02; letter-spacing: -.04em; color: var(--navy); }
+.home-figure-value { display: inline-block; font-variant-numeric: tabular-nums; }
+.home-figure-label { display: block; }
 .home-figure small { display: block; margin-top: 12px; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .home-stat-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
 .home-stat-list li { padding-left: 20px; border-left: 1px solid var(--line); }
@@ -1437,7 +1442,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .why-proc
   .hero-results ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-results { padding: 16px; }
   .home-stats { padding-inline: 18px; }
-  .home-figure-value { font-size: 20px; }
   .home-tile-grid { grid-template-columns: minmax(0, 1fr); }
   .home-tile { min-height: 0; }
   .home-tile-body { margin-top: 26px; }
