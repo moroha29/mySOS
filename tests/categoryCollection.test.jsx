@@ -95,3 +95,20 @@ describe('the catalogue behind the thin categories', () => {
     }
   });
 });
+
+describe('the banner and the ask card keep the height they need', () => {
+  it('gives the banner picture a shape of its own', () => {
+    // A square photograph made the picture 636px tall beside 464px of words,
+    // and the banner carried the difference as empty space.
+    expect(css).toMatch(/\.hero-scene \{[\s\S]{0,400}?aspect-ratio: 4 \/ 3; min-height: 0; height: auto;/);
+    expect(css).not.toMatch(/\.hero-scene \{[^}]*min-height: 500px/);
+  });
+
+  it('lays the ask card out as a strip when it runs the whole width', () => {
+    // Across four columns it was a slab of green with the words at one end and
+    // the way in at the other.
+    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask { padding: 16px 24px; }");
+    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask-inner { justify-content: center; }");
+    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }");
+  });
+});
