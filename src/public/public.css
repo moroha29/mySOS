@@ -2337,21 +2337,24 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .hero-card::after { z-index: 1; }
 .hero-card-copy { z-index: 3; }
 
-/* The light passing over it. Travels once every nine seconds, so it reads as
-   a reflection rather than an effect. */
+/* The light that carries the change. It is drawn only while one picture is
+   becoming another — on a picture that is simply sitting there, there is no
+   sheen at all — so it reads as the light bringing the next photograph in
+   rather than an effect running on a loop. */
 .hero-card::before {
   content: ""; position: absolute; z-index: 2; top: -60%; bottom: -60%; left: -35%; width: 34%;
   background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .3) 36%, rgba(255, 255, 255, .62) 50%, rgba(255, 255, 255, .3) 64%, transparent);
   filter: blur(9px);
   transform: rotate(12deg) translateX(-60%);
-  animation: hero-sheen 9s cubic-bezier(.4, 0, .5, 1) infinite;
+  opacity: 0;
   pointer-events: none;
 }
+.hero-card.is-turning::before { animation: hero-sheen 2.2s cubic-bezier(.4, 0, .45, 1); }
 @keyframes hero-sheen {
   0% { transform: rotate(12deg) translateX(-60%); opacity: 0; }
-  12% { opacity: 1; }
-  46% { opacity: 1; }
-  58%, 100% { transform: rotate(12deg) translateX(520%); opacity: 0; }
+  18% { opacity: 1; }
+  74% { opacity: 1; }
+  100% { transform: rotate(12deg) translateX(520%); opacity: 0; }
 }
 
 /* One picture becoming another, rather than one replacing another. */
@@ -2365,7 +2368,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-card::before { animation: none; opacity: 0; }
+  .hero-card.is-turning::before { animation: none; }
   .hero-card-slide.is-active { animation: none; }
 }
 

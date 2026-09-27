@@ -189,12 +189,12 @@ describe('the home banner and the sections under it', () => {
     expect(home).toMatch(/<span aria-hidden="true">\+<\/span>/);
   });
 
-  it('runs the banner picture card as a slideshow, starting on one the server drew', () => {
+  it('turns the banner picture card over, starting on one the server drew', () => {
     const markup = render(HomePage, '/mySOS/');
     const slides = [...markup.matchAll(/class="hero-card-slide( is-active)?"/g)];
     expect(slides.length).toBeGreaterThan(1);
     expect(slides.filter(([, active]) => active)).toHaveLength(1);
-    expect(home).toMatch(/setInterval\(\(\) => setShown\(\(current\) => \(current \+ 1\) % slides\.length\)/);
+    expect(home).toMatch(/setShown\(\(current\) => \(current \+ 1\) % slides\.length\);/);
     expect(home).toMatch(/prefers-reduced-motion: reduce/);
     expect(css).toMatch(/\.hero-card-slide \{[^}]*opacity: 0; transition: opacity/);
     // No drawn products anywhere on it: the photograph carries the banner.
@@ -468,9 +468,16 @@ describe('the banner picture is one card, not a slideshow', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
-  it('carries a light across the glass rather than clicking between pictures', () => {
+  it('carries the light across the glass only while the picture is changing', () => {
     expect(css).toMatch(/@keyframes hero-sheen \{/);
-    expect(css).toMatch(/\.hero-card::before \{[\s\S]*?animation: hero-sheen/);
+    // Nothing at all on a picture that is simply sitting there.
+    expect(css).not.toMatch(/\.hero-card::before \{[^}]*animation:/);
+    expect(css).toMatch(/\.hero-card::before \{[^}]*opacity: 0;/);
+    expect(css).toMatch(/\.hero-card\.is-turning::before \{ animation: hero-sheen [\d.]+s/);
+    // The class is held for as long as the light takes to cross, and no longer.
+    expect(home).toMatch(/const SHEEN_MS = \d+;/);
+    expect(home).toMatch(/settle = setTimeout\(\(\) => setTurning\(false\), SHEEN_MS\);/);
+    expect(home).toContain("turning ? 'hero-card is-turning' : 'hero-card'");
   });
 
   it('dissolves slowly and never stops moving, so nothing switches', () => {
@@ -489,7 +496,7 @@ describe('the banner picture is one card, not a slideshow', () => {
 
   it('holds still for a reader who asked for less motion', () => {
     const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
-    expect(quiet).toContain('.hero-card::before');
+    expect(quiet).toContain('.hero-card.is-turning::before');
     expect(quiet).toContain('.hero-card-slide.is-active');
   });
 });

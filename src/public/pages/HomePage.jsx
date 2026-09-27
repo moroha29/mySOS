@@ -29,6 +29,9 @@ import { processPhoto } from '../processPhotos';
 const MARQUEE_SPEED = 34; // px per second — slow enough to read each mark
 const CARD_WIDTH = 232;   // keep in sync with .trust-logo width in public.css
 const SLIDE_SECONDS = 9;
+// How long the light takes to cross the card. It only crosses when the picture
+// behind it is changing, so the class is held for exactly that long.
+const SHEEN_MS = 2300;
 
 const two = (number) => String(number).padStart(2, '0');
 // What the visitor typed becomes the opening note of their request.
@@ -53,15 +56,24 @@ function heroSlides() {
 
 function HeroCard({ slides }) {
   const [shown, setShown] = useState(0);
+  // True only while one picture is becoming another: the light crosses the
+  // card with the change and is not there the rest of the time.
+  const [turning, setTurning] = useState(false);
   useEffect(() => {
     if (slides.length < 2 || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
-    const timer = setInterval(() => setShown((current) => (current + 1) % slides.length), SLIDE_SECONDS * 1000);
-    return () => clearInterval(timer);
+    let settle = 0;
+    const timer = setInterval(() => {
+      setShown((current) => (current + 1) % slides.length);
+      setTurning(true);
+      clearTimeout(settle);
+      settle = setTimeout(() => setTurning(false), SHEEN_MS);
+    }, SLIDE_SECONDS * 1000);
+    return () => { clearInterval(timer); clearTimeout(settle); };
   }, [slides.length]);
 
   const current = slides[shown] ?? slides[0];
   if (!current) return null;
-  return <div className="hero-card">
+  return <div className={turning ? 'hero-card is-turning' : 'hero-card'}>
     {slides.map(({ src, index }) => <div
       key={src}
       className={index === shown ? 'hero-card-slide is-active' : 'hero-card-slide'}
