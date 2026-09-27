@@ -112,3 +112,45 @@ describe('the banner and the ask card keep the height they need', () => {
     expect(css).toContain(".product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }");
   });
 });
+
+describe('the collection opens like a shelf', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+
+  it('counts what is in the category instead of naming it again', () => {
+    // The banner above already says "Apparel"; the section under it used to
+    // say "Apparel collection" and then show a wall of white cards.
+    expect(source).toContain('<div className="collection-bar">');
+    expect(source).toContain('<strong>{products.length}</strong>');
+    expect(source).not.toContain('collectionSuffix');
+    expect(siteContent.pages.products).not.toHaveProperty('collectionSuffix');
+    expect(siteContent.pages.products.countLabel).toBeTruthy();
+    // The filter sits on the same line as the count.
+    const bar = source.slice(source.indexOf('<div className="collection-bar">'), source.indexOf('id="product-collection-grid"'));
+    expect(bar).toContain('className="tab-list"');
+    expect(css).toMatch(/\.collection-bar \{[^}]*border-bottom: 1px solid var\(--line\);/);
+  });
+
+  it('puts the price and what is asked for most on the picture', () => {
+    expect(ui).toContain('<span className="product-card-shot">');
+    expect(ui).toContain("label('featuredBadge', 'Most requested')");
+    expect(css).toMatch(/\.product-flag, \.product-card \.price \{[^}]*position: absolute;/);
+    // One line, whatever the card's width: it wrapped on a phone.
+    expect(css).toMatch(/\.product-flag \{[^}]*white-space: nowrap;/);
+  });
+
+  it('fits a fifth column on a wide screen, and the ask card with it', () => {
+    expect(source).toContain('data-fill5={5 - (visible.length % 5)}');
+    const wide = css.slice(css.indexOf('@media (min-width: 1700px)'));
+    expect(wide).toContain('.product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }');
+    for (const span of [1, 2, 3, 4, 5]) {
+      expect(wide, `span ${span}`).toContain(`.product-grid[data-fill5='${span}'] .product-ask { grid-column: span ${span};`);
+    }
+  });
+
+  it('does not let a minimum height stretch the banner picture sideways', () => {
+    // 4:3 with a 300px floor came out 400px wide on a 390px screen.
+    expect(css).not.toMatch(/\.hero-scene \{ min-height: \d+px/);
+    expect(css).toMatch(/\.hero-scene \{[\s\S]{0,400}?min-height: 0;/);
+  });
+});

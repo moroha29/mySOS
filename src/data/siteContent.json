@@ -583,7 +583,6 @@
       "heroTitle": "Custom Merchandise,",
       "heroTitleAccent": "Made Simple",
       "heroLead": "Explore our wide range of products that can be customised for your organisation, event or business.",
-      "collectionSuffix": "collection",
       "viewAllPrefix": "View All",
       "showLessLabel": "Show Less",
       "promoEyebrow": "Need help deciding?",
@@ -594,7 +593,8 @@
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today.",
-      "waysLabel": "Ways to print on"
+      "waysLabel": "Ways to print on",
+      "countLabel": "products"
     },
     "product": {
       "buildTitle": "Build your request",

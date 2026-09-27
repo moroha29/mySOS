@@ -156,17 +156,24 @@ export default function ProductsPage() {
     </section>
 
     <section className="section products-collection" ref={collectionRef}>
-      <SectionHeading eyebrow={`${activeCategory.name} ${pageText('products', 'collectionSuffix', 'collection')}`} align="left" />
-      {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
-        {apparelTabs.map((tab) => <button
-          key={tab.id}
-          type="button"
-          role="tab"
-          aria-selected={subcategory === tab.id}
-          onClick={() => { setSubcategory(tab.id); setShowAll(false); }}
-          data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
-        >{tab.name}</button>)}
-      </div>}
+      {/* The banner above says which category this is, so the collection opens
+          with what is in it and how to narrow it down, not the name again. */}
+      <div className="collection-bar">
+        <p className="collection-count">
+          <strong>{products.length}</strong>{' '}
+          <span data-cms-path={cms(pagePath('products', 'countLabel'))}>{pageText('products', 'countLabel', 'products')}</span>
+        </p>
+        {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
+          {apparelTabs.map((tab) => <button
+            key={tab.id}
+            type="button"
+            role="tab"
+            aria-selected={subcategory === tab.id}
+            onClick={() => { setSubcategory(tab.id); setShowAll(false); }}
+            data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
+          >{tab.name}</button>)}
+        </div>}
+      </div>
       {/* The fill counts are how many columns are left over on the last row, at
           each of the three widths this grid is drawn at. The card that asks for
           what is not listed stretches across them, so no row ends part-drawn. */}
@@ -177,6 +184,7 @@ export default function ProductsPage() {
           data-fill4={4 - (visible.length % 4)}
           data-fill3={3 - (visible.length % 3)}
           data-fill2={2 - (visible.length % 2)}
+          data-fill5={5 - (visible.length % 5)}
         >
           {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
           {/* Not everything MySOS can make is listed, and a short category used

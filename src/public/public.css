@@ -2048,7 +2048,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .hero-stories .hero-inner,
   .solution-hero-inner,
   .story-hero { grid-template-columns: minmax(0, 1fr); }
-  .hero-scene, .story-hero-bg { min-height: 340px; }
+  .story-hero-bg { min-height: 340px; }
   .hero-stories .hero-collage { height: 380px; }
   .solution-collage { min-height: 380px; }
 }
@@ -2061,7 +2061,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .story-hero { padding: 44px 18px 48px; gap: 32px; }
   .story-hero { grid-template-columns: minmax(0, 1fr); }
   .story-hero-bg { min-height: 260px; }
-  .hero-scene { min-height: 300px; }
+
   .hero-stories .hero-collage { height: 340px; gap: 8px; }
   /* The tiles used to run off both edges as clipped slabs; as cards they keep
      the page's gutter like everything else. */
@@ -2339,4 +2339,77 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 @media (max-width: 620px) {
   .product-grid[data-fill2='2'] .product-ask { padding: 16px 18px; }
   .product-grid[data-fill2='2'] .product-ask-inner small { flex: none; }
+}
+
+/* =============================== 31. the collection, as a shelf not a list
+   It opened with the category's name again, under the name in the banner,
+   and then a wall of white cards. It opens with what is in it and how to
+   narrow it down; the cards carry the price and the things MySOS is asked
+   for most, on the picture, so the grid has something to read. */
+
+.collection-bar {
+  margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
+}
+.collection-count { font-size: 17.5px; color: var(--muted); }
+.collection-count strong { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.collection-bar .tab-list { margin: 0; }
+
+/* The picture carries the marks; the card under it is the name alone. */
+.product-card { position: relative; }
+.product-card-shot { position: relative; display: block; }
+.product-flag, .product-card .price {
+  position: absolute; z-index: 1; display: inline-flex; align-items: center;
+  padding: 7px 12px; border-radius: 999px; font-size: 15px; font-weight: 700; line-height: 1;
+  backdrop-filter: blur(6px);
+}
+.product-flag { top: 10px; left: 10px; background: rgba(4, 107, 69, .92); color: #fff; letter-spacing: .02em; white-space: nowrap; }
+.product-card .price { right: 10px; bottom: 10px; margin: 0; background: rgba(255, 255, 255, .92); color: var(--ink); box-shadow: 0 6px 18px rgba(9, 28, 72, .12); }
+
+.product-card h3 { padding-right: 30px; }
+.product-card-go {
+  position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center;
+  width: 30px; height: 30px; border-radius: 50%; background: var(--soft); color: var(--navy);
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1), background-color .2s ease, color .2s ease;
+}
+.product-card:hover .product-card-go, .product-card:focus-visible .product-card-go { opacity: 1; transform: none; background: var(--green-dark); color: #fff; }
+
+/* Room for a fifth column on a wide screen: four cards were 416px across,
+   which is a poster, not a product tile. */
+@media (min-width: 1700px) {
+  .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .product-grid[data-fill5='1'] .product-ask { grid-column: span 1; }
+  .product-grid[data-fill5='2'] .product-ask { grid-column: span 2; }
+  .product-grid[data-fill5='3'] .product-ask { grid-column: span 3; }
+  .product-grid[data-fill5='4'] .product-ask { grid-column: span 4; }
+  .product-grid[data-fill5='5'] .product-ask { grid-column: span 5; padding: 16px 24px; }
+  .product-grid[data-fill5='5'] .product-ask-inner { justify-content: center; }
+  .product-grid[data-fill5='5'] .product-ask-inner small { flex: none; }
+}
+
+@media (max-width: 860px) {
+  .collection-bar { padding-bottom: 14px; margin-bottom: 20px; gap: 12px; }
+  .collection-count strong { font-size: 22px; }
+  .product-flag, .product-card .price { padding: 6px 10px; font-size: 14px; }
+  /* No hover on a phone: the arrow would never be seen. */
+  .product-card-go { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card-go { transition: none; }
+}
+
+/* Filling two or three columns of a row, the ask card took the row's height
+   as well — a tall block of green beside the products. It keeps the height of
+   what is written on it and sits at the top of the row. */
+.product-grid[data-fill4='2'] .product-ask,
+.product-grid[data-fill4='3'] .product-ask { align-self: start; }
+@media (max-width: 1080px) {
+  .product-grid[data-fill3='2'] .product-ask { align-self: start; }
+}
+@media (min-width: 1700px) {
+  .product-grid[data-fill5='2'] .product-ask,
+  .product-grid[data-fill5='3'] .product-ask,
+  .product-grid[data-fill5='4'] .product-ask { align-self: start; }
 }
