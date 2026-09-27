@@ -296,9 +296,10 @@ describe('the type scale: titles carry the page', () => {
     expect(Math.min(...readingSizes(css))).toBeGreaterThanOrEqual(13.5);
   });
 
-  it('runs the page wider than it used to, halving the side margins', () => {
-    expect(sizeOf(/--content: (\d+)px;/)).toBe(1340);
-    expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBe(1700);
+  it('runs the page wide, so it is not a column adrift on a large screen', () => {
+    // 1180 → 1340 → 1520: the margins have been halved twice.
+    expect(sizeOf(/--content: (\d+)px;/)).toBeGreaterThanOrEqual(1520);
+    expect(sizeOf(/\.site-app \{ width: min\(100%, (\d+)px\)/)).toBeGreaterThanOrEqual(1920);
   });
 });
 
@@ -385,8 +386,10 @@ describe('the page moves as you read it', () => {
     for (const source of [chrome, readFileSync(new URL('../src/public/reveal.js', import.meta.url), 'utf8')]) {
       expect(source).toMatch(/prefers-reduced-motion: reduce/);
     }
-    const quiet = css.slice(css.lastIndexOf('@media (prefers-reduced-motion: reduce)'));
-    for (const stopped of ['.site-announce::after', '.hero-card-slide', '.wa-bubble::after']) {
+    // Every block of motion has its own opt-out; together they name each one.
+    const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
+    for (const stopped of ['.site-announce::after', '.hero-card-slide', '.wa-bubble::after',
+      '.nav-link::after', '.request-row', '.hero-results li', '[data-reveal]']) {
       expect(quiet, stopped).toContain(stopped);
     }
   });

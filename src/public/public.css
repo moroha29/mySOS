@@ -22,9 +22,10 @@
   --radius-lg: 20px;
   --shadow-sm: 0 2px 10px rgba(13, 42, 107, .06);
   --shadow: 0 12px 32px rgba(13, 42, 107, .1);
-  /* Content runs wider than the old 1180px: the side margins were half again
-     as wide as the design, which left every page looking narrow. */
-  --content: 1340px;
+  /* Content runs wide. The margins have been halved twice now: 1180 → 1340 →
+     1520, because on a large monitor the page still read as a column floating
+     in the middle of the screen. */
+  --content: 1520px;
   /* The bar at the top of every page, and anything that has to clear it. */
   --header-h: 88px;
 
@@ -51,7 +52,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* A picture uploaded in place of a drawn icon: fitted inside the icon's square, never stretched or cropped. */
 .icon-picture { object-fit: contain; }
 
-.site-app { width: min(100%, 1700px); margin: 0 auto; min-height: calc(100vh - 44px); background: var(--surface); box-shadow: 0 0 48px rgba(9, 28, 72, .08); position: relative; }
+.site-app { width: min(100%, 1920px); margin: 0 auto; min-height: calc(100vh - 44px); background: var(--surface); box-shadow: 0 0 48px rgba(9, 28, 72, .08); position: relative; }
 /* Everything except the top strip stays inside the column. */
 .site-app > main, .site-app > .site-footer { overflow-x: clip; }
 
@@ -1786,6 +1787,165 @@ html.is-scrolled .wordmark { height: 36px; }
   .home-work-card:hover .home-work-shot .scene, .pdp-shot:hover img,
   .home-tile:hover .icon, .use-case-card:hover, .carousel-btn:hover { transform: none; }
   .hero-results li .btn.is-added, .request-kept { animation: none; }
+}
+
+/* ====================================== 24. the other pages, as the home one
+   The homepage set the pattern: a small spaced line, a very large title, the
+   sentence about it off to the right, washed cards with room to breathe. These
+   rules carry that to every other page, which until now kept the older, tighter
+   look and read as a different site. */
+
+.section { padding-top: 76px; padding-bottom: 76px; }
+.section-tight { padding-top: 48px; padding-bottom: 48px; }
+
+/* Section heads: title left, the line about it right, as on the homepage. */
+.section-heading { margin-bottom: 36px; }
+.section-heading h2,
+.section-heading.eyebrow-title .eyebrow {
+  font-size: clamp(34px, 3.8vw, 56px); font-weight: 800; line-height: 1.02;
+  letter-spacing: -.045em; text-transform: none; color: var(--ink);
+}
+.section-heading:not(.eyebrow-title) .eyebrow { margin-bottom: 14px; font-size: 14px; font-weight: 700; letter-spacing: .15em; color: var(--green-dark); }
+.section-heading p { margin-top: 14px; font-size: 17px; line-height: 1.6; color: var(--muted); }
+.section-heading.align-left { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: end; }
+.section-heading.align-left p { margin-top: 0; }
+.section-heading.align-center p { max-width: 680px; }
+/* An eyebrow draws its own rule when its section arrives, everywhere now. */
+.section-heading .eyebrow::after { content: ""; display: block; height: 2px; width: 0; margin-top: 10px; background: var(--green); transition: width .7s cubic-bezier(.2, .7, .2, 1) .2s; }
+.section-heading.align-center .eyebrow::after { margin-inline: auto; }
+.is-in .section-heading .eyebrow::after, .section-heading.is-in .eyebrow::after { width: 46px; }
+
+/* The rows of categories and industries become washed tiles like the home page's. */
+.browse-row, .industry-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.browse-row a, .industry-nav a {
+  min-height: 132px; padding: 22px; border-radius: 22px; align-items: flex-start; justify-content: flex-end;
+  gap: 14px; font-size: 19px; font-weight: 700; text-align: left;
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s ease, background-color .25s ease, border-color .2s ease;
+}
+/* The same washes the homepage tiles use, so a row of these reads as part of
+   the same site rather than a plain white grid. */
+.browse-row a { border: 0; background: #e9edf8; color: var(--ink); }
+.browse-row a:nth-child(6n+2) { background: var(--navy); color: #fff; }
+.browse-row a:nth-child(6n+3) { background: #046b45; color: #fff; }
+.browse-row a:nth-child(6n+4) { background: #dde6fb; }
+.browse-row a:nth-child(6n+5) { background: #d9efe2; color: #0c3b28; }
+.browse-row a:nth-child(6n+6) { background: #e6e6fa; }
+.industry-nav a:nth-child(6n+1) { background: rgba(255, 255, 255, .16); }
+.industry-nav a:nth-child(6n+4) { background: rgba(255, 255, 255, .12); }
+.browse-row a:hover, .industry-nav a:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.browse-row a.is-active { background: var(--green-dark); color: #fff; box-shadow: var(--shadow); }
+.browse-row .icon, .industry-nav .icon { transition: transform .3s cubic-bezier(.34, 1.56, .64, 1); }
+.browse-row a:hover .icon, .industry-nav a:hover .icon { transform: translateY(-4px); }
+.industry-nav a { min-height: 148px; border-radius: 22px; background: rgba(255, 255, 255, .08); }
+
+/* Cards: the homepage's proportions, so a grid of them reads the same. */
+.product-card { padding: 16px; border-radius: 22px; }
+/* One shape for every card in the grid, whatever the picture inside is: a
+   photograph fills it, the drawn stand-in sits inside it. */
+.product-card .product-visual { aspect-ratio: 1 / 1; }
+.product-card .product-visual.has-photo img { width: 100%; height: 100%; object-fit: cover; }
+.product-card .garment { width: 78%; height: 78%; margin: auto; }
+.product-card h3 { margin-top: 14px; font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+.product-card .price { margin-top: 5px; font-size: 16px; }
+.story-card-body { padding: 20px 22px 24px; }
+.story-card-body h3 { font-size: 21px; letter-spacing: -.02em; }
+.story-card-body p { font-size: 16px; }
+.solution-card > div { padding: 22px; }
+.solution-card h3 { font-size: 22px; letter-spacing: -.02em; }
+.solution-card p { font-size: 16px; }
+.loyalty-card { padding: 28px 26px 30px; border-radius: 22px; }
+.loyalty-card h3 { margin-top: 20px; font-size: 21px; letter-spacing: -.02em; }
+.loyalty-card p { font-size: 16px; }
+.popular-grid article { padding: 18px; border-radius: 22px; background: #fff; border: 1px solid var(--line); }
+.popular-grid h3 { font-size: 17px; }
+
+/* The filters on the stories page, in the same pill shape as the categories. */
+.filter-row button { height: 44px; padding: 0 20px; border-radius: 999px; font-size: 16px; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
+.filter-row button:hover { border-color: var(--green-dark); color: var(--green-dark); }
+.filter-row button.is-active { background: var(--green-dark); border-color: var(--green-dark); color: #fff; }
+
+/* Bands get the room the homepage's have. */
+.promo-band { border-radius: 0; }
+.promo-copy h2 { font-size: clamp(30px, 3vw, 44px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; }
+.promo-copy p { margin: 14px 0 26px; font-size: 17px; line-height: 1.6; }
+.industry-band .section-heading h2 { color: #fff; }
+.capabilities-inner { padding: 88px 24px 96px; }
+
+@media (max-width: 860px) {
+  .section { padding-top: 54px; padding-bottom: 54px; }
+  .section-heading.align-left { grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+  .browse-row, .industry-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .browse-row a, .industry-nav a { min-height: 110px; padding: 16px; font-size: 17px; }
+}
+
+/* ------------------------------------------------- 24b. the rest of the motion
+   Slower, longer arrivals; pictures that grow into place rather than appearing;
+   a rule that draws itself under the menu; panels that tilt a degree under the
+   cursor. Everything here is off for a reader who asked for less motion. */
+
+/* Arrivals: a touch further, a touch slower, so they read as movement. */
+[data-reveal] { transition: opacity .7s cubic-bezier(.22, .61, .36, 1), transform .7s cubic-bezier(.22, .61, .36, 1); }
+html.has-reveal [data-reveal] { transform: translateY(26px); }
+
+/* Pictures grow into place as their section arrives. */
+html.has-reveal [data-reveal] .scene img, html.has-reveal [data-reveal] .scene svg,
+html.has-reveal [data-reveal] .hero-card-slide, html.has-reveal [data-reveal] .crest-img {
+  transform: scale(1.06); transition: transform 1.1s cubic-bezier(.22, .61, .36, 1);
+}
+html.has-reveal [data-reveal].is-in .scene img, html.has-reveal [data-reveal].is-in .scene svg,
+html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reveal].is-in .crest-img { transform: none; }
+
+/* The menu draws its own rule under whatever you are pointing at. */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px;
+  background: var(--green); transform: scaleX(0); transform-origin: left;
+  transition: transform .28s cubic-bezier(.22, .61, .36, 1);
+}
+.nav-group:hover .nav-link::after, .nav-link:hover::after, .nav-link:focus-visible::after { transform: scaleX(1); }
+
+/* Panels tilt a degree towards the cursor. */
+.home-work-card, .home-tile, .pdp-build, .home-budget-card, .use-case-card {
+  transition: transform .35s cubic-bezier(.22, .61, .36, 1), box-shadow .35s ease, border-color .2s ease, background-color .2s ease;
+}
+.home-work-card:hover { transform: translateY(-4px) rotate(-.3deg); }
+.home-tile:hover { transform: translateY(-4px); }
+
+/* Buttons: the arrow leads, the fill follows. */
+.btn .inline-arrow { transition: transform .28s cubic-bezier(.22, .61, .36, 1); }
+.btn:hover .inline-arrow { transform: translateX(5px); }
+.text-link:hover .inline-arrow { transform: translateX(5px); }
+
+/* The quote's rows slide in as they are added. */
+@keyframes row-in { from { opacity: 0; transform: translateY(-6px); } }
+.request-row { animation: row-in .35s cubic-bezier(.22, .61, .36, 1); }
+
+/* Search results arrive one after another. */
+@keyframes result-in { from { opacity: 0; transform: translateY(10px); } }
+.hero-results li { animation: result-in .4s cubic-bezier(.22, .61, .36, 1) backwards; }
+.hero-results li:nth-child(2) { animation-delay: .05s; }
+.hero-results li:nth-child(3) { animation-delay: .1s; }
+.hero-results li:nth-child(4) { animation-delay: .15s; }
+.hero-results li:nth-child(5) { animation-delay: .2s; }
+.hero-results li:nth-child(6) { animation-delay: .25s; }
+
+/* The stories rail and any picture in a card: a slow settle rather than a snap. */
+.stories-review, .review-card, .project-tile { transition: transform .35s cubic-bezier(.22, .61, .36, 1), box-shadow .35s ease; }
+.review-card:hover, .stories-review:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.project-tile:hover { transform: scale(1.01); }
+
+/* The trust marks lift as they pass under the cursor. */
+.trust-logo .crest-img { transition: opacity .25s ease, transform .35s cubic-bezier(.22, .61, .36, 1); }
+.trust-logo:hover .crest-img { transform: translateY(-3px) scale(1.04); }
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-reveal [data-reveal] .scene img, html.has-reveal [data-reveal] .scene svg,
+  html.has-reveal [data-reveal] .hero-card-slide, html.has-reveal [data-reveal] .crest-img { transform: none; }
+  .nav-link::after { display: none; }
+  .home-work-card:hover, .home-tile:hover, .review-card:hover, .stories-review:hover,
+  .project-tile:hover, .trust-logo:hover .crest-img { transform: none; }
+  .request-row, .hero-results li { animation: none; }
+  .btn:hover .inline-arrow, .text-link:hover .inline-arrow { transform: none; }
 }
 
 /* ---------------------------------------------------------- small screens

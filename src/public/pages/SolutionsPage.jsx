@@ -34,7 +34,7 @@ export default function SolutionsPage() {
     </section>
 
     <section className="section section-tight">
-      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} eyebrowPath={headingPath('chooseIndustryHeading')} />
+      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} eyebrowPath={headingPath('chooseIndustryHeading')} align="left" />
       <div className="browse-row">
         {solutions.map((solution) => <a
           key={solution.id}
@@ -60,7 +60,7 @@ export default function SolutionsPage() {
     </section>}
 
     <section className="section">
-      <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} eyebrowPath={headingPath('popularSolutionsHeading')} />
+      <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} eyebrowPath={headingPath('popularSolutionsHeading')} align="left" />
       <div className="popular-grid">
         {siteContent.popularSolutions.map((item, index) => <article key={item.name}>
           <Product type={item.visual} color={item.colour} mark="" />
