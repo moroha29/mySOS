@@ -421,7 +421,7 @@ describe('the page moves as you read it', () => {
   });
 
   it('counts the review total up to itself, from the number the server drew', () => {
-    expect(ui).toMatch(/export function CountUp\(\{ value, ms = 1100 \}\)/);
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = \d+ \}\)/);
     expect(ui).toMatch(/const \[shown, setShown\] = useState\(target\);/);
     expect(ui).toMatch(/<CountUp value=\{data\.totalReviewCount\} \/>/);
   });
@@ -436,5 +436,30 @@ describe('the page moves as you read it', () => {
       '.nav-link::after', '.request-row', '.hero-results li', '[data-reveal]']) {
       expect(quiet, stopped).toContain(stopped);
     }
+  });
+});
+
+describe('the review total is a figure, and it counts', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('writes the number as a figure beside the score', () => {
+    // It always counted from nothing, but it was set as small grey text, so
+    // nobody saw it happen. Every site that leads with a score writes the
+    // count as a number you can read across the room.
+    expect(ui).toContain('<strong><CountUp value={data.totalReviewCount} /></strong>');
+    const figure = css.match(/\.review-summary \.review-count strong \{([^}]*)\}/)[1];
+    const score = css.match(/\.review-summary \.rating-value \{([^}]*)\}/)[1];
+    expect(figure.match(/font-size: ([\d.]+)px/)[1]).toBe(score.match(/font-size: ([\d.]+)px/)[1]);
+    // Digits of one width, so the line does not twitch as it counts.
+    expect(figure).toContain('font-variant-numeric: tabular-nums');
+  });
+
+  it('starts as the line is reached, and takes long enough to be seen', () => {
+    expect(ui).toMatch(/export function CountUp\(\{ value, ms = (\d+) \}\)/);
+    expect(Number(ui.match(/export function CountUp\(\{ value, ms = (\d+) \}\)/)[1])).toBeGreaterThanOrEqual(1400);
+    expect(ui).toMatch(/\}, \{ threshold: 0\.3 \}\);/);
+    // And it is off for a reader who asked for less motion.
+    expect(ui).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
   });
 });

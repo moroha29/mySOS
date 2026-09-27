@@ -176,7 +176,7 @@ export function ProcessSteps({ items, variant = 'numbered', pathAt }) {
  * number is what the server draws, so it is what a reader sees with no
  * JavaScript, or one who asked for less motion.
  */
-export function CountUp({ value, ms = 1100 }) {
+export function CountUp({ value, ms = 1500 }) {
   const target = Number(value) || 0;
   const [shown, setShown] = useState(target);
   const ref = useRef(null);
@@ -199,7 +199,7 @@ export function CountUp({ value, ms = 1100 }) {
       watcher.disconnect();
       setShown(0);
       frame = requestAnimationFrame(tick);
-    }, { threshold: 0.5 });
+    }, { threshold: 0.3 });
     watcher.observe(node);
     return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
   }, [target, ms]);
@@ -262,9 +262,9 @@ export function Testimonials({ eyebrow = heading('reviewsHeading', 'What our cli
         ? <>
           <span className="rating-value">{formatRating(data.averageRating)}</span>
           <span className="stars" aria-label={`${formatRating(data.averageRating)} out of 5`}>{Array.from({ length: 5 }, (_, i) => <Icon key={i} name="star" size={18} />)}</span>
-          {data.totalReviewCount ? <small>
+          {data.totalReviewCount ? <small className="review-count">
             <span data-cms-path={cms(labelPath('reviewsCountPrefix'))}>{label('reviewsCountPrefix', 'Based on')}</span>
-            {' '}<CountUp value={data.totalReviewCount} />{' '}
+            {' '}<strong><CountUp value={data.totalReviewCount} /></strong>{' '}
             <span data-cms-path={cms(labelPath('reviewsCountSuffix'))}>{label('reviewsCountSuffix', 'reviews')}</span>
           </small> : null}
         </>

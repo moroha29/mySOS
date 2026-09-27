@@ -2238,3 +2238,61 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .product-ask-inner small { flex: 1; min-width: 220px; }
   .product-ask-inner .product-ask-go { margin: 0; }
 }
+
+/* =============================== 27. the banner reads as a banner, and the
+                                       review count as a figure
+
+   Two things a client could not see. The banner had the same paper behind it
+   as the page under it, so nothing said where it ended; sites that lead with
+   one — Stripe, Custom Ink, Printful — all separate it, by a wash of colour,
+   a photograph, or a plain edge. Ours takes a wash that lifts towards the
+   picture and a hairline where it stops.
+
+   And the review total counts up from nothing, which it always did — but it
+   was written as small grey text, so nobody saw it happen. The number is now
+   a figure, as it is on every site that leads with a score. */
+
+.hero:not(.has-background),
+.home-hero,
+.solution-hero,
+.story-hero {
+  position: relative;
+  background:
+    radial-gradient(880px 500px at 86% 6%, rgba(0, 166, 81, .17), transparent 62%),
+    radial-gradient(820px 560px at 2% 0%, rgba(26, 50, 138, .15), transparent 66%),
+    linear-gradient(180deg, #e1eaf8 0%, var(--paper) 72%);
+}
+/* Where the banner stops. A line alone read as a rule across the page, so it
+   fades out at both ends. */
+.hero:not(.has-background)::before,
+.home-hero::before,
+.solution-hero::before,
+.story-hero::before {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent);
+}
+/* The story banner is the page's own grid; its edge belongs to the section. */
+.story-hero { max-width: none; padding-inline: max(24px, calc((100% - var(--content)) / 2)); }
+.home-hero, .hero:not(.has-background), .solution-hero { isolation: isolate; }
+
+/* The review total, as a figure rather than a footnote. */
+.review-summary .review-count { display: inline-flex; align-items: baseline; gap: 7px; }
+.review-summary .review-count strong { font-size: 28px; font-weight: 800; line-height: 1; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 860px) {
+  .review-summary .review-count strong { font-size: 24px; }
+}
+
+/* On a phone the wash was drawn at the same size as on a monitor, so it filled
+   the whole banner and turned it muddy. Smaller, and gone by the fold. */
+@media (max-width: 860px) {
+  .hero:not(.has-background),
+  .home-hero,
+  .solution-hero,
+  .story-hero {
+    background:
+      radial-gradient(420px 260px at 94% 0%, rgba(0, 166, 81, .12), transparent 62%),
+      radial-gradient(440px 300px at 0% 0%, rgba(26, 50, 138, .12), transparent 66%),
+      linear-gradient(180deg, #e7edf9 0%, var(--paper) 56%);
+  }
+}
