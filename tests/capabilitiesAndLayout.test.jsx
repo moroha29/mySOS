@@ -83,56 +83,32 @@ describe('page order: reviews sit directly under the banner', () => {
   });
 });
 
-describe('what a category can be printed with', () => {
+describe('the products page, as the design has it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
   const markup = (category) => render(ProductsPage, '/mySOS/products/', category ? `?category=${category}` : '');
   const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
 
-  // What a category can be branded with, straight from MySOS's catalogue.
-  const waysFor = (id) => {
-    const offered = new Set(productData.catalogue
-      .filter((item) => item.public?.visible !== false && item.public.category === id)
-      .flatMap((item) => item.printingMethods ?? []));
-    return visibleMethods.filter((method) => offered.has(method.id)).map((method) => method.name);
-  };
-
-  it('names them in the banner, from the products themselves', () => {
-    // It used to be a navy band below the products, saying the same for every
-    // category, against a list kept by hand. The products carry their own
-    // methods, so the category's are simply the ones its products offer.
+  it('leads with the category and a search that narrows the shelf', () => {
     const html = markup();
-    const named = [...html.matchAll(/<li><svg[^>]*>.*?<\/svg><span>([^<]+)<\/span><\/li>/g)].map(([, name]) => name);
-    expect(named).toEqual(waysFor('apparel'));
-    expect(source).toContain('const offered = new Set(products.flatMap((product) => product.printingMethods ?? []));');
-    for (const category of siteContent.categories) {
-      expect(category, category.id).not.toHaveProperty('methods');
-    }
+    expect(html).toContain('class="hero-search collection-search"');
+    expect(html).toMatch(/<h1[^>]*>\s*<span[^>]*>Custom<\/span> <span[^>]*>Apparel<\/span>/);
+    expect(source).toContain('.toLowerCase().includes(asked)');
   });
 
-  it('says a different set for a different category', () => {
-    const html = markup('drinkware');
-    const named = [...html.matchAll(/<li><svg[^>]*>.*?<\/svg><span>([^<]+)<\/span><\/li>/g)].map(([, name]) => name);
-    expect(named).toEqual(waysFor('drinkware'));
-    expect(named).not.toEqual(waysFor('apparel'));
-    expect(html).toContain('Ways to print on');
-  });
-
-  it('is where the footer link for materials lands', () => {
-    expect(markup()).toContain('id="printing"');
-    expect(JSON.stringify(siteContent.footer)).toContain('/mySOS/products/#printing');
-  });
-
-  it('leaves no band, and no wording that only the band used', () => {
+  it('puts the kinds within a category in a row of their own', () => {
     const html = markup();
-    expect(html).not.toContain('class="capabilities');
-    expect(css).not.toContain('.capabilities');
-    for (const key of ['methodsEyebrow', 'methodsTitle', 'methodsBestForLabel', 'methodsForLabel']) {
-      expect(siteContent.pages.products, key).not.toHaveProperty(key);
-    }
-    // What each method suits is still written on every product page.
-    for (const method of visibleMethods) {
-      expect(siteContent.printingMethods[method.id].bestFor, method.id).toMatch(/\S/);
-    }
+    expect(html).toContain('class="type-row"');
+    expect(html).toContain('Browse by type');
+    expect(html).toContain('Explore all');
+    // Only apparel is divided this way.
+    expect(markup('drinkware')).not.toContain('class="type-row"');
+  });
+
+  it('no longer names the ways of printing on the banner', () => {
+    // They belong to a product, not to a category page.
+    expect(markup()).not.toContain('hero-ways');
+    expect(css).not.toContain('hero-ways');
+    expect(siteContent.pages.products).not.toHaveProperty('waysLabel');
   });
 });
 

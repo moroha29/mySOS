@@ -81,10 +81,9 @@ describe('walked down every page at 390px', () => {
     expect(phone).toMatch(/\.home-tiles-head, \.home-why-head \{ grid-template-columns: minmax\(0, 1fr\);/);
   });
 
-  it('wraps the ways of printing instead of running them off the edge', () => {
-    // They are chips in the banner now — two to six of them, and they wrap.
-    expect(css).toMatch(/\.hero-ways ul \{ display: flex; flex-wrap: wrap;/);
-    expect(block('max-width: 860px')).toMatch(/\.hero-ways li \{[^}]*font-size: 16px; \}/);
+  it('wraps the kinds within a category instead of running them off the edge', () => {
+    expect(css).toMatch(/\.type-row \{[^}]*flex-wrap: wrap;/);
+    expect(block('max-width: 860px')).toMatch(/\.type-row button \{[^}]*font-size: 16px; \}/);
   });
 
   it('keeps two product tiles to a row, as the client asked', () => {

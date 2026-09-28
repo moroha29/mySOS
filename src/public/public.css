@@ -2290,29 +2290,10 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .process-band > .home-process-head { padding-inline: 18px; }
 }
 
-/* ================================ 30. what a category can be printed with
-   This used to be a navy band below the products, with tabs and a photograph,
-   saying the same for every category. It says more in the banner, in a line:
-   the ways MySOS can brand this kind of product, read from the products
-   themselves. The footer's "Materials" link lands here. */
+/* ==================================== 30. a category page's own breadcrumb */
 
-.hero-ways { margin-top: 26px; scroll-margin-top: calc(var(--header-h) + 24px); }
-.hero-ways-label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
-.hero-ways ul { display: flex; flex-wrap: wrap; gap: 10px; }
-.hero-ways li {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px;
-  border: 1px solid var(--line); border-radius: 999px; background: #fff;
-  font-size: 16.5px; font-weight: 600; color: var(--ink);
-}
-.hero-ways .icon { color: var(--green-dark); }
-
-/* The banner's breadcrumb, where a category page has one. */
 .hero:not(.has-background) .breadcrumb { max-width: none; margin: 0 0 18px; padding: 0; }
 
-@media (max-width: 860px) {
-  .hero-ways { margin-top: 22px; }
-  .hero-ways li { padding: 9px 14px; font-size: 16px; }
-}
 
 /* Across a whole row the ask card was a slab of green with the words at one
    end and the way in at the other. It keeps the height it needs and the words
@@ -2473,4 +2454,36 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .add-product-foot-row { flex-direction: column; align-items: stretch; min-width: 0; }
   .add-product-foot-row input { max-width: none; }
   .add-product-foot-row .btn { width: 100%; justify-content: center; }
+}
+
+/* ================================= 34. the products page, as the design has it
+   A search that narrows the shelf below, the kinds within a category in a row
+   of their own, and the shelf under its own heading. The ways of printing have
+   come off the banner: they belong to a product, not to a category page. */
+
+.collection-search { margin-top: 26px; max-width: 560px; }
+.collection-search button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
+.collection-search button:hover { background: var(--soft); color: var(--ink); }
+
+.product-types h2 { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+.type-row { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; }
+.type-row button {
+  display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font: inherit; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s cubic-bezier(.4, 0, .2, 1);
+}
+.type-row button:hover { border-color: var(--green-dark); transform: translateY(-2px); }
+.type-row button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.type-row .product-visual { width: 36px; height: 36px; }
+.type-row .icon { color: var(--navy-soft); }
+.type-row button[aria-selected="true"] .icon { color: #fff; }
+
+.collection-title { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+
+@media (max-width: 860px) {
+  .collection-search { margin-top: 20px; }
+  .type-row { gap: 8px; }
+  .type-row button { padding: 8px 16px 8px 10px; font-size: 16px; }
+  .type-row .product-visual { width: 30px; height: 30px; }
 }

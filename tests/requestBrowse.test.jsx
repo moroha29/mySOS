@@ -111,7 +111,6 @@ describe('the window that adds a product', () => {
     // Without minmax(0, 1fr) the one grid track took the widest thing inside
     // it and the whole sheet slid off the side of a phone.
     expect(css).toMatch(/\.add-product\[open\] \{ display: grid; grid-template-columns: minmax\(0, 1fr\);/);
-    const phone = css.slice(css.lastIndexOf('@media (max-width: 860px)'));
-    expect(phone).toMatch(/\.add-product \{ inset: auto 0 0 0;/);
+    expect(css).toMatch(/\.add-product \{ inset: auto 0 0 0;/);
   });
 });

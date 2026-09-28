@@ -113,7 +113,8 @@ describe('every banner says the same things in the same order', () => {
   it('ProductsPage: the category leads, with the page headline above it', () => {
     const source = page('ProductsPage');
     // The category is the title, so the page says what was chosen in the strip.
-    expect(source).toContain("<h1 data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</h1>");
+    expect(source).toContain("<span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>");
+    expect(source).toContain("label('categoryTitlePrefix', 'Custom')");
     expect(source).toContain('<nav className="breadcrumb" aria-label="Breadcrumb" data-reveal>');
     expect(source).toContain('<div className="hero-actions" data-reveal');
     expect(source).toContain('<QuoteButton showArrow />');
