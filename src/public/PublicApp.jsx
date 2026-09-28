@@ -9,6 +9,9 @@ import StoryDetailPage from './pages/StoryDetailPage';
 import SolutionDetailPage from './pages/SolutionDetailPage';
 import RequestPage from './pages/RequestPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import ResourcesPage from './pages/ResourcesPage';
+import ArticlePage from './pages/ArticlePage';
+import resources from '../data/resources.json';
 import solutions from '../data/solutions.json';
 import productData from '../data/productData.json';
 import watchChrome from './chrome';
@@ -23,6 +26,9 @@ export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '
   if (normalized === '/solutions') return { page: 'solutions' };
   if (normalized === '/why-mysos') return { page: 'why' };
   if (normalized === '/success-stories') return { page: 'stories' };
+  if (normalized === '/resources') return { page: 'resources' };
+  const guideMatch = normalized.match(/^\/resources\/([^/]+)$/);
+  if (guideMatch && resources.articles.some((article) => article.slug === guideMatch[1])) return { page: 'guide', slug: guideMatch[1] };
   const productMatch = normalized.match(/^\/products\/([^/]+)$/);
   if (productMatch && productData.catalogue.some((item) => item.public.visible && item.public.slug === productMatch[1])) {
     return { page: 'product', slug: productMatch[1] };
@@ -53,6 +59,8 @@ export default function PublicApp() {
       : route.page === 'solutions' ? <SolutionsPage />
         : route.page === 'why' ? <WhyPage />
           : route.page === 'stories' ? <StoriesPage />
+            : route.page === 'resources' ? <ResourcesPage />
+            : route.page === 'guide' ? <ArticlePage slug={route.slug} />
             : route.page === 'story' ? <StoryDetailPage slug={route.slug} />
             : route.page === 'solution' ? <SolutionDetailPage solutionId={route.id} />
               : <NotFound />;

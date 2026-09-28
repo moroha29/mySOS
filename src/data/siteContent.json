@@ -80,19 +80,23 @@
     "resourceLinks": [
       {
         "label": "Printing Guides",
-        "href": "/mySOS/products/#faq"
+        "href": "/mySOS/resources/dtf-or-silkscreen/"
       },
       {
         "label": "Materials",
-        "href": "/mySOS/products/#printing"
+        "href": "/mySOS/resources/choosing-t-shirt-fabric/"
       },
       {
-        "label": "Design Tips",
-        "href": "/mySOS/why-mysos/"
+        "label": "Artwork Tips",
+        "href": "/mySOS/resources/prepare-artwork-for-printing/"
       },
       {
         "label": "Buying Guides",
-        "href": "/mySOS/products/"
+        "href": "/mySOS/resources/before-ordering-in-bulk/"
+      },
+      {
+        "label": "All Guides",
+        "href": "/mySOS/resources/"
       }
     ],
     "legalLinks": [
@@ -577,7 +581,8 @@
     ],
     "storiesHeroBackgroundImage": "",
     "requestHeroBackgroundImage": "",
-    "requestHeroImage": ""
+    "requestHeroImage": "",
+    "resourcesHeroImage": ""
   },
   "pages": {
     "products": {

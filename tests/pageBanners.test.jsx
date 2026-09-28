@@ -76,8 +76,9 @@ describe('every page opens with the homepage banner', () => {
   it('drops the picture under the words on a narrow screen', () => {
     // The two-column banner outranked the old mobile rule, and a headline was
     // left a word wide on a phone.
-    const narrow = css.slice(css.lastIndexOf('@media (max-width: 980px)'));
-    const block = narrow.slice(0, narrow.indexOf('\n}'));
+    // The banners' own block, not whichever page added one last.
+    const at = css.indexOf('@media (max-width: 980px)', css.indexOf('25. the same banner'));
+    const block = css.slice(at, css.indexOf('\n}', at));
     for (const selector of ['.hero-compact .hero-inner', '.hero-stories .hero-inner', '.story-hero']) {
       expect(block, selector).toContain(selector);
     }
