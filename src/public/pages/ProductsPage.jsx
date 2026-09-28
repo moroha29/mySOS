@@ -162,10 +162,6 @@ export default function ProductsPage() {
       {/* The banner above says which category this is, so the collection opens
           with what is in it and how to narrow it down, not the name again. */}
       <div className="collection-bar">
-        <p className="collection-count">
-          <strong>{products.length}</strong>{' '}
-          <span data-cms-path={cms(pagePath('products', 'countLabel'))}>{pageText('products', 'countLabel', 'products')}</span>
-        </p>
         {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
           {apparelTabs.map((tab) => <button
             key={tab.id}
@@ -176,6 +172,11 @@ export default function ProductsPage() {
             data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
           >{tab.name}</button>)}
         </div>}
+        {/* What to look at first is the filter; the count is what it left. */}
+        <p className="collection-count">
+          <strong>{products.length}</strong>{' '}
+          <span data-cms-path={cms(pagePath('products', 'countLabel'))}>{pageText('products', 'countLabel', 'products')}</span>
+        </p>
       </div>
       {visible.length > 0
         ? <div className="product-grid" id="product-collection-grid">

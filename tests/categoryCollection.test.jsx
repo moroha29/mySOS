@@ -98,9 +98,13 @@ describe('the collection opens like a shelf', () => {
     expect(source).not.toContain('collectionSuffix');
     expect(siteContent.pages.products).not.toHaveProperty('collectionSuffix');
     expect(siteContent.pages.products.countLabel).toBeTruthy();
-    // The filter sits on the same line as the count.
+    // The filter sits on the same line as the count, and comes first: what to
+    // look at is the filter, the count is what it left.
     const bar = source.slice(source.indexOf('<div className="collection-bar">'), source.indexOf('id="product-collection-grid"'));
     expect(bar).toContain('className="tab-list"');
+    expect(bar.indexOf('className="tab-list"')).toBeLessThan(bar.indexOf('className="collection-count"'));
+    // And the count keeps the right-hand end whether or not a filter is drawn.
+    expect(css).toMatch(/\.collection-count \{ margin-left: auto;/);
     expect(css).toMatch(/\.collection-bar \{[^}]*border-bottom: 1px solid var\(--line\);/);
   });
 

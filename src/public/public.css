@@ -2328,7 +2328,8 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
 }
-.collection-count { font-size: 17.5px; color: var(--muted); }
+/* Always the right-hand end of the bar, with or without a filter beside it. */
+.collection-count { margin-left: auto; font-size: 17.5px; color: var(--muted); }
 .collection-count strong { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
 .collection-bar .tab-list { margin: 0; }
 
