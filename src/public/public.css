@@ -1594,15 +1594,18 @@ main:not(.home-page) { background: var(--paper); }
 .faq-list p { padding: 0 4px 20px; font-size: 17.5px; }
 
 /* The category strip, shared by the homepage and the products page. */
-.category-strip { background: #fff; border-bottom: 1px solid var(--line); }
+/* Navy, with white words: on white it read as part of the banner below it and
+   a reader could not see it was the menu of categories. */
+.category-strip { background: var(--navy); border-bottom: 0; }
 .category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; }
 .category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .category-strip ul::-webkit-scrollbar { display: none; }
 .category-strip li { flex: none; }
-.category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: var(--ink); }
-.category-strip ul a:hover { background: var(--green-dark); color: #fff; }
-.category-strip ul a.is-active { background: var(--green-dark); color: #fff; }
-.category-strip-inner > .text-link { flex: none; white-space: nowrap; }
+.category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: #fff; }
+.category-strip ul a:hover { background: var(--green); color: #fff; }
+.category-strip ul a.is-active { background: var(--green); color: #fff; }
+.category-strip-inner > .text-link { flex: none; white-space: nowrap; color: #fff; }
+.category-strip-inner > .text-link:hover { color: var(--green-light); }
 
 @media (max-width: 860px) {
   /* The row scrolls sideways on a phone, so the trailing link steps aside: it
@@ -2112,15 +2115,15 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    the same card as the products now, outlined rather than filled, so it reads
    as a place to ask rather than a block of colour. */
 .product-ask {
-  display: flex; padding: 22px; border-radius: 22px;
+  margin-top: 26px; display: flex; padding: 18px 24px; border-radius: 22px;
   border: 1.5px dashed #b6d8c6; background: #fff; color: var(--ink);
   transition: border-color .25s ease, background-color .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1);
 }
-.product-ask-inner { display: flex; flex-direction: column; justify-content: center; gap: 8px; width: 100%; }
+.product-ask-inner { display: flex; flex-flow: row wrap; align-items: center; justify-content: center; gap: 8px 22px; width: 100%; }
 .product-ask .icon { color: var(--green-dark); }
-.product-ask strong { margin-top: 2px; font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -.015em; }
+.product-ask strong { font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -.015em; }
 .product-ask small { font-size: 16px; line-height: 1.5; color: var(--muted); }
-.product-ask-go { margin-top: 2px; display: inline-flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
+.product-ask-go { display: inline-flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
 .product-ask:hover { border-color: var(--green-dark); background: #f7fbf9; transform: translateY(-3px); }
 .product-ask:hover .inline-arrow { transform: translateX(5px); }
 
@@ -2130,38 +2133,15 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 @media (max-width: 620px) {
-  .product-ask { padding: 18px; }
-  .product-ask strong { font-size: 18px; }
+  .product-ask { padding: 16px 18px; }
+  .product-ask-inner { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 
 /* Which category these ways of printing are the ways of. */
 
 /* The ask card stretches across whatever the last row has left, so a category
    of one or two products does not end in half a row of nothing. */
-.product-grid[data-fill4='1'] .product-ask { grid-column: span 1; }
-.product-grid[data-fill4='2'] .product-ask { grid-column: span 2; }
-.product-grid[data-fill4='3'] .product-ask { grid-column: span 3; }
-.product-grid[data-fill4='4'] .product-ask { grid-column: span 4; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill4] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill3='2'] .product-ask { grid-column: span 2; }
-  .product-grid[data-fill3='3'] .product-ask { grid-column: span 3; }
-}
-@media (max-width: 620px) {
-  .product-grid[data-fill4] .product-ask, .product-grid[data-fill3] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill2='2'] .product-ask { grid-column: span 2; }
-}
 
-/* Stretched across two columns or more it is a band rather than a card: the
-   words sit on one line with the way in at the end of it. The card asks its
-   own width, so this holds however many columns it was given. */
-.product-ask { container-type: inline-size; }
-@container (min-width: 460px) {
-  .product-ask-inner { flex-flow: row wrap; align-items: center; gap: 10px 28px; }
-  .product-ask-inner strong { margin-top: 0; }
-  .product-ask-inner small { flex: 1; min-width: 220px; }
-  .product-ask-inner .product-ask-go { margin: 0; }
-}
 
 /* =============================== 27. the banner reads as a banner, and the
                                        review count as a figure
@@ -2337,18 +2317,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* Across a whole row the ask card was a slab of green with the words at one
    end and the way in at the other. It keeps the height it needs and the words
    sit together in the middle of it. */
-.product-grid[data-fill4='4'] .product-ask { padding: 16px 24px; }
-.product-grid[data-fill4='4'] .product-ask-inner { justify-content: center; }
-.product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill3='3'] .product-ask { padding: 16px 24px; }
-  .product-grid[data-fill3='3'] .product-ask-inner { justify-content: center; }
-  .product-grid[data-fill3='3'] .product-ask-inner small { flex: none; }
-}
-@media (max-width: 620px) {
-  .product-grid[data-fill2='2'] .product-ask { padding: 16px 18px; }
-  .product-grid[data-fill2='2'] .product-ask-inner small { flex: none; }
-}
 
 /* =============================== 31. the collection, as a shelf not a list
    It opened with the category's name again, under the name in the banner,
@@ -2388,13 +2356,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    which is a poster, not a product tile. */
 @media (min-width: 1700px) {
   .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .product-grid[data-fill5='1'] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill5='2'] .product-ask { grid-column: span 2; }
-  .product-grid[data-fill5='3'] .product-ask { grid-column: span 3; }
-  .product-grid[data-fill5='4'] .product-ask { grid-column: span 4; }
-  .product-grid[data-fill5='5'] .product-ask { grid-column: span 5; padding: 16px 24px; }
-  .product-grid[data-fill5='5'] .product-ask-inner { justify-content: center; }
-  .product-grid[data-fill5='5'] .product-ask-inner small { flex: none; }
 }
 
 @media (max-width: 860px) {
@@ -2409,16 +2370,106 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .product-card-go { transition: none; }
 }
 
-/* Filling two or three columns of a row, the ask card took the row's height
-   as well — a tall block of green beside the products. It keeps the height of
-   what is written on it and sits at the top of the row. */
-.product-grid[data-fill4='2'] .product-ask,
-.product-grid[data-fill4='3'] .product-ask { align-self: start; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill3='2'] .product-ask { align-self: start; }
+
+/* ==================================== 32. the solutions page, one picker only
+   It asked twice who you were — a row of washed tiles and then the cards that
+   say the same thing with a photograph. The cards are the picker now, so they
+   carry more of the picture, and they answer to the cursor. */
+
+.solution-card .scene { height: 210px; }
+.solution-card > div { padding: 20px 22px 24px; }
+.solution-card h3 { font-size: 21px; }
+.solution-card p { min-height: 0; }
+/* Green under the cursor, as the category strip goes green. */
+.solution-card { transition: background-color .25s ease, box-shadow .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1), border-color .2s ease; }
+.solution-card:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.solution-card:hover h3, .solution-card:hover p, .solution-card:hover .text-link { color: #fff; }
+.solution-card:hover .text-link .icon { color: #fff; }
+
+/* The way to the products, under the packs. */
+.solution-products {
+  margin-top: 30px; padding: 22px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px;
+  border: 1px solid var(--line); border-radius: 22px; background: #fff;
 }
-@media (min-width: 1700px) {
-  .product-grid[data-fill5='2'] .product-ask,
-  .product-grid[data-fill5='3'] .product-ask,
-  .product-grid[data-fill5='4'] .product-ask { align-self: start; }
+.solution-products strong { display: block; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.solution-products p { margin-top: 6px; font-size: 17px; line-height: 1.5; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .solution-card .scene { height: 170px; }
+  .solution-products { padding: 18px; }
+}
+
+/* ================================= 33. adding a product, in a window of its own
+   The catalogue used to sit under the request: a search box, an expander of
+   suggestions and an accordion of every category, beneath the rows already
+   chosen. Choosing what to add and reading what you had chosen were the same
+   crowded column. */
+
+.request-add { margin-top: 22px; display: grid; gap: 16px; }
+.request-add-open { justify-self: start; display: inline-flex; align-items: center; gap: 9px; }
+
+.add-product {
+  width: min(880px, calc(100vw - 32px)); max-height: min(86vh, 900px); padding: 0;
+  border: 0; border-radius: 26px; background: #fff; color: var(--ink);
+  box-shadow: 0 40px 90px rgba(9, 28, 72, .28);
+  overflow: hidden;
+}
+.add-product::backdrop { background: rgba(9, 28, 72, .55); backdrop-filter: blur(3px); }
+/* One column that cannot grow past the window: without minmax(0, 1fr) the
+   track takes the widest thing inside it — on a phone the custom-product row
+   pushed it to 459px and the whole dialog slid sideways. */
+.add-product[open] { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto minmax(0, 1fr) auto; }
+
+.add-product-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 26px 26px 0; }
+.add-product-head strong { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.03em; }
+.add-product-head p { margin-top: 6px; font-size: 16.5px; line-height: 1.5; color: var(--muted); }
+.add-product-close { flex: none; width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--muted); cursor: pointer; }
+.add-product-close:hover { border-color: var(--navy); color: var(--navy); }
+
+.add-product-search { margin: 20px 26px 0; display: flex; align-items: center; gap: 12px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.add-product-search .icon { color: var(--muted-light); }
+.add-product-search input { flex: 1; min-width: 0; padding: 15px 0; border: 0; background: none; font: inherit; font-size: 16.5px; }
+.add-product-search input:focus { outline: none; }
+.add-product-search:focus-within { border-color: var(--green); }
+.add-product-search button { border: 0; background: none; color: var(--muted); cursor: pointer; }
+
+.add-product-filters { margin: 18px 26px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.add-product-filters button {
+  padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.add-product-filters button:hover { border-color: var(--green-dark); }
+.add-product-filters button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+.add-product-grid { margin: 20px 0 0; padding: 0 26px 6px; overflow-y: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-content: start; }
+.add-product-grid li { display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+.add-product-shot { display: block; border-radius: 12px; background: var(--soft); overflow: hidden; }
+.add-product-shot .product-visual { width: 100%; aspect-ratio: 1 / 1; }
+.add-product-shot .product-visual img { width: 100%; height: 100%; object-fit: contain; }
+.add-product-grid strong { font-size: 17px; font-weight: 700; line-height: 1.25; }
+.add-product-grid small { font-size: 15.5px; line-height: 1.45; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.add-product-grid .btn { margin-top: auto; width: 100%; justify-content: center; gap: 7px; border-radius: 999px; }
+.add-product-empty { padding: 30px 26px; font-size: 17px; line-height: 1.55; color: var(--muted); }
+
+.add-product-foot { margin-top: 18px; padding: 18px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; border-top: 1px solid var(--line); background: var(--paper); }
+.add-product-foot-copy { display: inline-flex; align-items: center; min-width: 0; gap: 10px; font-size: 17px; font-weight: 700; }
+.add-product-foot-copy .icon { color: var(--green-dark); }
+.add-product-foot-row { display: flex; flex: 1; min-width: min(280px, 100%); justify-content: flex-end; gap: 10px; }
+.add-product-foot-row input { flex: 1; min-width: 0; max-width: 340px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 16px; }
+.add-product-foot-row input:focus { outline: none; border-color: var(--green); }
+
+@media (max-width: 860px) {
+  /* A sheet along the bottom: a dialog centres itself by default, and at full
+     width that pushed half of it off the side of the screen. */
+  .add-product { inset: auto 0 0 0; width: auto; max-width: none; max-height: 92vh; margin: 0; border-radius: 22px 22px 0 0; }
+  .add-product-head, .add-product-search, .add-product-filters, .add-product-grid, .add-product-foot { padding-inline: 18px; }
+  .add-product-search, .add-product-filters { margin-inline: 18px; }
+  .add-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* The field and its button, one above the other: side by side their own
+     widths added up to more than the screen and pushed the sheet sideways. */
+  .add-product-foot { flex-direction: column; align-items: stretch; min-width: 0; }
+  .add-product-foot-row { flex-direction: column; align-items: stretch; min-width: 0; }
+  .add-product-foot-row input { max-width: none; }
+  .add-product-foot-row .btn { width: 100%; justify-content: center; }
 }

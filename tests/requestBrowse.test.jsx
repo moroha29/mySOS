@@ -1,4 +1,5 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import productData from '../src/data/productData.json';
@@ -64,14 +65,53 @@ describe('browsing every product', () => {
 });
 
 describe('the Get a Quote page', () => {
-  it('shows the whole catalogue by category, not only the featured few', () => {
+  it('holds the whole catalogue in the window that adds a product', () => {
     globalThis.location = { pathname: '/mySOS/request/', search: '' };
     const html = renderToStaticMarkup(<PublicApp />);
-    expect(html).toContain('Browse all products');
-    for (const category of browseCategories()) expect(html).toContain(`${category.name} <span>${category.products.length}</span>`);
+    // The catalogue used to sit open under the request, an accordion of every
+    // category beneath the rows already chosen.
+    expect(html).toContain('class="add-product"');
+    expect(html).not.toContain('class="request-browse"');
+    for (const category of browseCategories()) expect(html).toContain(category.name);
     // Products that are not featured used to be reachable only by search.
     const plain = visible.filter((item) => !item.public.featured);
     expect(plain.length).toBeGreaterThan(20);
     for (const product of plain) expect(html).toContain(product.public.name.replace(/&/g, '&amp;'));
+  });
+
+  it('opens that window on a button, and it is shut until then', () => {
+    globalThis.location = { pathname: '/mySOS/request/', search: '' };
+    const html = renderToStaticMarkup(<PublicApp />);
+    expect(html).toContain('class="btn btn-outline request-add-open"');
+    // A <dialog> without the open attribute is closed, and closed is how the
+    // page is drawn.
+    expect(html).not.toMatch(/<dialog[^>]*\sopen/);
+  });
+});
+
+describe('the window that adds a product', () => {
+  const dialog = readFileSync(new URL('../src/public/components/AddProductDialog.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('is a real dialog, so Escape and the backdrop close it', () => {
+    expect(dialog).toContain('<dialog className="add-product"');
+    expect(dialog).toContain('dialog.showModal()');
+    expect(dialog).toMatch(/dialog\.addEventListener\('close', closed\)/);
+  });
+
+  it('searches the catalogue, and steps through it by category', () => {
+    expect(dialog).toContain('searchProducts(query, { exclude: chosen })');
+    expect(dialog).toContain('browseCategories(lines)');
+    // While a search is running the categories stand aside, so what is on
+    // screen is what was searched for.
+    expect(dialog).toContain('{!asked && <div className="add-product-filters"');
+  });
+
+  it('cannot grow wider than the screen it opens on', () => {
+    // Without minmax(0, 1fr) the one grid track took the widest thing inside
+    // it and the whole sheet slid off the side of a phone.
+    expect(css).toMatch(/\.add-product\[open\] \{ display: grid; grid-template-columns: minmax\(0, 1fr\);/);
+    const phone = css.slice(css.lastIndexOf('@media (max-width: 860px)'));
+    expect(phone).toMatch(/\.add-product \{ inset: auto 0 0 0;/);
   });
 });

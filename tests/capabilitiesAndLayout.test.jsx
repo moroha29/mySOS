@@ -263,8 +263,13 @@ describe('the home banner and the sections under it', () => {
     expect(render(HomePage, '/mySOS/')).toMatch(/data-reveal/);
   });
 
-  it('turns the category pills dark green under the cursor', () => {
-    expect(css).toMatch(/\.category-strip ul a:hover \{ background: var\(--green-dark\); color: #fff; \}/);
+  it('sets the category strip in navy, with green under the cursor', () => {
+    // On white it read as part of the banner under it, and a reader could not
+    // see it was the menu of categories.
+    expect(css).toMatch(/\.category-strip \{ background: var\(--navy\);/);
+    expect(css).toMatch(/\.category-strip ul a \{[^}]*color: #fff; \}/);
+    expect(css).toMatch(/\.category-strip ul a:hover \{ background: var\(--green\); color: #fff; \}/);
+    expect(css).toMatch(/\.category-strip ul a\.is-active \{ background: var\(--green\); color: #fff; \}/);
   });
 
   it('sets the reviews at a size people can read', () => {

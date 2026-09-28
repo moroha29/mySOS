@@ -136,7 +136,7 @@ describe('one look across the pages', () => {
     expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
     expect(css).not.toMatch(/\.category-strip a \{ display: inline-block;/);
     expect(css).toMatch(/\.text-link > \.icon, \.btn > \.icon \{ display: block; align-self: center; \}/);
-    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; \}/);
+    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; color: #fff; \}/);
   });
 
   it('scrolls the strip sideways on a phone, with the link out of the way', () => {

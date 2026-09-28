@@ -69,7 +69,7 @@ describe('production route rendering', () => {
 
   it('opens the request page empty, or on the product the visitor came from', () => {
     const blank = renderAt('/mySOS/request/');
-    expect(blank).toContain('Search all products');
+    expect(blank).toContain('Add another product');
     expect(blank).toContain('0 products selected');
     const withProduct = renderAt('/mySOS/request/', '?product=canvas_tote_bag');
     expect(withProduct).toContain('Canvas Tote Bag');

@@ -245,3 +245,27 @@ describe('files are never claimed as sent', () => {
     expect(source).toMatch(/fileNames\.length > 0 && sent !== 'shared'/);
   });
 });
+
+describe('the solutions page picks an industry once', () => {
+  const source = readFileSync(new URL('../src/public/pages/SolutionsPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('asks who you are with the cards, not with a row of tiles as well', () => {
+    expect(source).not.toContain('className="browse-row"');
+    expect(source).toContain("heading('chooseIndustryHeading', 'Find solutions for your industry')");
+    expect(siteContent.headings.chooseIndustryHeading).toBe('Find solutions for your industry');
+    expect(siteContent.pages.solutions.industryLead).toBeTruthy();
+  });
+
+  it('gives those cards more of the picture, and green under the cursor', () => {
+    expect(css).toMatch(/\.solution-card \.scene \{ height: 210px; \}/);
+    expect(css).toMatch(/\.solution-card:hover \{ background: var\(--green-dark\);/);
+    expect(css).toMatch(/\.solution-card:hover h3, \.solution-card:hover p, \.solution-card:hover \.text-link \{ color: #fff; \}/);
+  });
+
+  it('ends the packs with the way to the products, not a button back to itself', () => {
+    expect(source).toContain('className="solution-products"');
+    expect(source).not.toContain("label('viewAllSolutionsButton'");
+    expect(siteContent.pages.solutions.productsBandTitle).toBeTruthy();
+  });
+});

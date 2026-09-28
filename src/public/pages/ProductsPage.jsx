@@ -3,7 +3,7 @@ import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
-import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
@@ -102,6 +102,9 @@ export default function ProductsPage() {
   // printing belong to the category, not to the first eight products.
   const ways = useMemo(() => waysToPrint(getPublicProducts({ category })), [category]);
   const banner = useMemo(() => categoryPicture(activeCategory, getPublicProducts({ category })), [activeCategory, category]);
+  // Asking for what is not listed opens a chat rather than the quote page: it
+  // is a question, not an order, and it names what the reader was looking at.
+  const askHref = useMemo(() => messageHref(`Hi MySOS, I am looking at ${activeCategory.name} and cannot find what I need. Can you help?`, `${activeCategory.name} enquiry`), [activeCategory]);
 
   return <main className="page-paper">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
@@ -174,33 +177,9 @@ export default function ProductsPage() {
           >{tab.name}</button>)}
         </div>}
       </div>
-      {/* The fill counts are how many columns are left over on the last row, at
-          each of the three widths this grid is drawn at. The card that asks for
-          what is not listed stretches across them, so no row ends part-drawn. */}
       {visible.length > 0
-        ? <div
-          className="product-grid"
-          id="product-collection-grid"
-          data-fill4={4 - (visible.length % 4)}
-          data-fill3={3 - (visible.length % 3)}
-          data-fill2={2 - (visible.length % 2)}
-          data-fill5={5 - (visible.length % 5)}
-        >
+        ? <div className="product-grid" id="product-collection-grid">
           {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
-          {/* Not everything MySOS can make is listed, and a short category used
-              to trail off into white space. This closes the row with the way
-              to ask for what is not there. */}
-          <a className="product-ask" href={REQUEST_PATH} data-reveal style={{ '--reveal-delay': `${(visible.length % 8) * 50}ms` }}>
-            <span className="product-ask-inner">
-              <Icon name="spark" size={30} />
-              <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
-              <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
-              <span className="product-ask-go">
-                <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
-                <Icon name="arrowRight" size={19} className="inline-arrow" />
-              </span>
-            </span>
-          </a>
         </div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
@@ -215,6 +194,21 @@ export default function ProductsPage() {
             : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
         </Button>
       </div>}
+
+      {/* Not everything MySOS can make is listed. This closes the products with
+          the way to ask for the rest — a message, rather than a form to fill
+          in first. */}
+      {askHref && <a className="product-ask" href={askHref} {...enquiryLinkProps(askHref)} data-reveal>
+        <span className="product-ask-inner">
+          <Icon name="spark" size={30} />
+          <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
+          <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
+          <span className="product-ask-go">
+            <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+            <Icon name="arrowRight" size={19} className="inline-arrow" />
+          </span>
+        </span>
+      </a>}
     </section>
 
     <section className="promo-band">
