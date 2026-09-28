@@ -343,17 +343,17 @@
         {
           "icon": "consult",
           "label": "Brief",
-          "text": "Your idea and quantities."
+          "text": "Idea and quantities"
         },
         {
           "icon": "calendar",
           "label": "Timeline",
-          "text": "When you need it by."
+          "text": "When you need it"
         },
         {
           "icon": "tag",
           "label": "Budget",
-          "text": "What you would like to spend."
+          "text": "What you can spend"
         }
       ]
     },
@@ -368,17 +368,17 @@
         {
           "icon": "shirt",
           "label": "Products",
-          "text": "Options that suit your use."
+          "text": "Options for your use"
         },
         {
           "icon": "layers",
           "label": "Materials",
-          "text": "Fabrics and finishes."
+          "text": "Fabrics and finishes"
         },
         {
           "icon": "palette",
           "label": "Methods",
-          "text": "The right print or embroidery."
+          "text": "Print or embroidery"
         }
       ]
     },
@@ -393,17 +393,17 @@
         {
           "icon": "sample",
           "label": "Product",
-          "text": "Clear product specifications."
+          "text": "Clear specifications"
         },
         {
           "icon": "tag",
           "label": "Pricing",
-          "text": "A transparent quote."
+          "text": "Transparent pricing"
         },
         {
           "icon": "delivery",
           "label": "Delivery",
-          "text": "Timelines and shipping options."
+          "text": "Timelines and shipping"
         }
       ]
     },
@@ -418,17 +418,17 @@
         {
           "icon": "shirt",
           "label": "Sample",
-          "text": "Check quality, fit and branding."
+          "text": "Quality, fit and branding"
         },
         {
           "icon": "search",
           "label": "Adjust",
-          "text": "Request changes if needed."
+          "text": "Changes if needed"
         },
         {
           "icon": "checkCircle",
           "label": "Finalise",
-          "text": "Approve for full production."
+          "text": "Approve for production"
         }
       ]
     },
@@ -443,17 +443,17 @@
         {
           "icon": "production",
           "label": "Produce",
-          "text": "Oversee manufacturing."
+          "text": "Overseen end to end"
         },
         {
           "icon": "search",
           "label": "Quality",
-          "text": "In-line and final checks."
+          "text": "In-line and final checks"
         },
         {
           "icon": "sample",
           "label": "Pack",
-          "text": "Prepared for safe delivery."
+          "text": "Packed for safe delivery"
         }
       ]
     },
@@ -468,17 +468,17 @@
         {
           "icon": "calendar",
           "label": "Schedule",
-          "text": "Planned around your date."
+          "text": "Around your date"
         },
         {
           "icon": "delivery",
           "label": "Deliver",
-          "text": "Handed over on time."
+          "text": "Handed over on time"
         },
         {
           "icon": "support",
           "label": "Follow-up",
-          "text": "Help after delivery."
+          "text": "Help after delivery"
         }
       ]
     }

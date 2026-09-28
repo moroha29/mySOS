@@ -237,3 +237,27 @@ describe('scrolling, small screens and motion', () => {
     expect(hook).toMatch(/if \(axis === 'x' && !touch\)/);
   });
 });
+
+describe('what each step of the process involves', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('is three plain lines, not three boxes inside the card', () => {
+    // A bordered box inside a bordered card, and in a column that narrow every
+    // one of them broke its words over two lines.
+    const points = css.match(/\.journey-points \{([^}]*)\}/)[1];
+    expect(points).toContain('display: grid');
+    expect(points).not.toContain('repeat(3');
+    expect(css).toMatch(/\.journey-points li \{ display: flex; align-items: baseline;/);
+    expect(css).not.toMatch(/\.journey-points li \{[^}]*border: 1px solid/);
+  });
+
+  it('says each one in a few words', () => {
+    for (const step of siteContent.process) {
+      for (const point of step.points ?? []) {
+        expect(point.text.split(/\s+/).length, `${step.title}: ${point.text}`).toBeLessThanOrEqual(4);
+        // A phrase, not a sentence.
+        expect(point.text, point.text).not.toMatch(/\.$/);
+      }
+    }
+  });
+});
