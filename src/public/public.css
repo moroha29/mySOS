@@ -609,11 +609,16 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .journey-card:not([data-offset="0"]) .journey-card-number { color: #8fcfae; }
 .journey-card h3 { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--navy); }
 .journey-card-copy > p { margin-top: 8px; font-size: 17.5px; line-height: 1.5; color: var(--muted); }
-.journey-points { margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.journey-points li { padding: 10px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
-.journey-point-head { display: flex; align-items: center; gap: 6px; color: var(--navy); }
-.journey-point-head strong { font-size: 16.5px; font-weight: 700; }
-.journey-points small { display: block; margin-top: 5px; font-size: 15px; line-height: 1.4; color: var(--muted); }
+/* Three boxes inside a card is a card inside a card. They are a plain divided
+   row now, as the homepage writes its promises. */
+/* Three boxes inside a card is a card inside a card, and in a column this
+   narrow every one of them broke its words over two lines. They are three
+   plain lines now: what it is, then what it means. */
+.journey-points { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); display: grid; gap: 9px; }
+.journey-points li { display: flex; align-items: baseline; gap: 10px; }
+.journey-point-head { flex: none; min-width: 108px; display: flex; align-items: center; gap: 8px; color: var(--navy); }
+.journey-point-head strong { font-size: 17px; font-weight: 700; }
+.journey-points small { font-size: 15.5px; line-height: 1.45; color: var(--muted); }
 .journey-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
 .journey-foot { position: relative; width: min(683px, 100% - 48px); margin: 4px auto 0; display: flex; justify-content: center; }
 .journey-arrows { display: flex; gap: 14px; }
