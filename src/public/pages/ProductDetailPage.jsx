@@ -197,7 +197,7 @@ function BuildPanel({ product }) {
       </a>
       <p className="pdp-ask">
         <span data-cms-path={wordPath('askPrefix')}>{word('askPrefix', 'Need something different?')}</span>{' '}
-        <a href={REQUEST_PATH}><span data-cms-path={wordPath('askLink')}>{word('askLink', 'Ask MySOS for help')}</span></a>
+        <a href={REQUEST_PATH}><span data-cms-path={wordPath('askLabel')}>{word('askLabel', 'Ask MySOS for help')}</span></a>
       </p>
     </div>
   </div>;

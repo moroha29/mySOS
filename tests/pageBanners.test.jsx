@@ -35,63 +35,73 @@ const rulesFor = (selector) => {
   return found.join(' ');
 };
 
+// A rule written across several selector lines, found from the first of them.
+const ruleFrom = (selector) => {
+  const band = css.indexOf('One band, every page');
+  const at = css.indexOf(selector, band);
+  expect(at, selector).toBeGreaterThan(-1);
+  return css.slice(at, css.indexOf('}', at));
+};
+
 const HOME_TITLE = 'clamp(44px, 5.4vw, 78px)';
 
-describe('every page opens with the homepage banner', () => {
-  it('writes the headline at the homepage size', () => {
+describe('one band at the top of every page', () => {
+  it('writes the headline at the same size everywhere', () => {
     expect(lastRule('.home-hero h1')).toContain(HOME_TITLE);
-    // The compact banner — products, solutions, stories, why, the quote page —
-    // used to top out at 55px, which read as a subheading beside the homepage.
+    // Products, solutions, stories, why and the quote page used to top out at
+    // 55px, which read as a subheading beside the homepage.
     expect(lastRule('.hero-compact h1')).toContain(HOME_TITLE);
     expect(lastRule('.hero-stories h1')).toContain(HOME_TITLE);
     expect(lastRule('.solution-hero-copy h1')).toContain(HOME_TITLE);
   });
 
-  it('sets the picture in the same card as the homepage slideshow', () => {
-    const shadow = rulesFor('.hero-card').match(/box-shadow: ([^;]+);/)[1];
-    for (const picture of ['.hero-scene', '.story-hero-bg']) {
-      expect(rulesFor(picture), picture).toContain(shadow);
-    }
-    // The deep corner is written once, for all the banner pictures together.
-    const shared = '.hero-scene, .hero-stories .hero-collage, .solution-collage';
-    expect(rulesFor(shared)).toContain('border-radius: 26px');
-    expect(rulesFor('.story-hero-bg')).toContain('border-radius: 26px');
+  it('draws one band, in one colour, on every page but the homepage', () => {
+    // The homepage keeps the client's own banner — a wash on paper with the
+    // picture beside it as a card. Everything else is the band from the
+    // category design: flat blue, the picture off the right edge.
+    expect(ruleFrom('.hero:not(.has-background),')).toContain('background: #dcebfa');
+    expect(rulesFor('.story-hero')).toContain('background: #dcebfa');
+    expect(rulesFor('.home-hero')).toContain('radial-gradient');
   });
 
-  it('puts a story on paper rather than behind a navy scrim', () => {
-    // It was the last banner with white type over a darkened photograph.
-    expect(rulesFor('.story-hero')).toContain('background: var(--paper)');
-    // And paper is written after the navy, so it is what a reader is given.
-    expect(css.indexOf('background: var(--paper); color: var(--ink); overflow: visible;'))
-      .toBeGreaterThan(css.indexOf('linear-gradient(103deg'));
-    expect(rulesFor('.story-hero::after')).toContain('display: none');
-    expect(rulesFor('.story-hero-inner')).toContain('order: 1');
-    expect(rulesFor('.story-hero-bg')).toContain('order: 2');
+  it('measures the words from the band, so they line up with the sections', () => {
+    // The category banner padded its own column, which is a share of the band
+    // rather than the band: the words started 24px in where every other page
+    // started at 104px.
+    expect(css).toMatch(/--gutter: max\(24px, calc\(\(100% - var\(--content\)\) \/ 2 \+ 24px\)\);/);
+    const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
+    expect(inner).toContain('padding: 0 0 0 var(--gutter)');
+    expect(rulesFor('.story-hero')).toContain('padding: 0 0 0 var(--gutter)');
   });
 
-  it('reads the quote page breadcrumb on paper, where it had all but vanished', () => {
+  it('lets the words decide how tall the band is, and the picture fill it', () => {
+    // Left in the flow, a tall drawing decided for itself: the stories banner
+    // came out 1065px high against 508 for the others.
+    const picture = rulesFor('.hero-scene, .solution-collage, .story-hero-bg');
+    expect(picture).toContain('position: relative');
+    expect(picture).toContain('height: auto');
+    expect(rulesFor('.hero-scene > .scene, .story-hero-bg > .scene')).toContain('position: absolute');
+    // And no band is thinner than another by much.
+    const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
+    expect(inner).toContain('min-height: 440px');
+  });
+
+  it('reads the quote page breadcrumb on the band', () => {
     expect(lastRule('.request-page .hero:not(.has-background) .breadcrumb')).toContain('color: var(--muted)');
   });
 
   it('drops the picture under the words on a narrow screen', () => {
-    // The two-column banner outranked the old mobile rule, and a headline was
-    // left a word wide on a phone.
-    // The banners' own block, not whichever page added one last.
-    const at = css.indexOf('@media (max-width: 980px)', css.indexOf('25. the same banner'));
+    const at = css.indexOf('@media (max-width: 980px)', css.indexOf('The band on a narrow screen'));
     const block = css.slice(at, css.indexOf('\n}', at));
-    for (const selector of ['.hero-compact .hero-inner', '.hero-stories .hero-inner', '.story-hero']) {
+    for (const selector of ['.hero:not(.has-background) .hero-inner', '.solution-hero-inner', '.story-hero']) {
       expect(block, selector).toContain(selector);
     }
     expect(block).toContain('grid-template-columns: minmax(0, 1fr)');
-  });
-
-  it('holds the banner still for a reader who asked for less motion', () => {
-    const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
-    for (const drifting of ['.hero-scene', '.solution-collage', '.hero-stories .hero-collage']) {
-      expect(quiet, drifting).toContain(drifting);
-    }
+    // The picture needs a height of its own once nothing sits beside it.
+    expect(block).toMatch(/\.hero-scene, \.solution-collage, \.story-hero-bg \{ min-height: \d+px; \}/);
   });
 });
+
 
 describe('every banner says the same things in the same order', () => {
   // The products banner leads with the category being shown, so the line above
@@ -131,26 +141,37 @@ describe('a banner you can see is a banner', () => {
   /*
    * The banner carried the same paper as the page under it, so nothing said
    * where it ended. Sites that lead with one separate it — Stripe with a wash
-   * of colour, Printful with a photograph, Custom Ink with a plain edge. Ours
-   * takes a wash and a hairline.
+   * of colour, Printful with a photograph, Custom Ink with a plain edge. The
+   * homepage takes a wash and a hairline; every other page takes the flat band,
+   * which is its own edge.
    */
-  // The four banners are washed by one rule; a selector spanning lines is
-  // read off the file rather than rebuilt here.
+  // The homepage's own banner, read from the comment that introduces it: the
+  // plain `.home-hero { background: var(--paper) }` written earlier is the one
+  // this replaces.
   const ruleAfter = (marker) => {
-    const at = css.indexOf(marker);
+    const from = css.indexOf("The homepage keeps the client's own banner");
+    expect(from, 'the homepage banner').toBeGreaterThan(-1);
+    const at = css.indexOf(marker, from);
     expect(at, marker).toBeGreaterThan(-1);
     return css.slice(at, css.indexOf('}', at));
   };
-  const wash = ruleAfter('.hero:not(.has-background),');
 
-  it('washes every banner in colour that fades into the page', () => {
+  it('washes the homepage banner in colour that fades into the page', () => {
+    const wash = ruleAfter('.home-hero {');
     expect(wash).toContain('radial-gradient');
     expect(wash).toMatch(/linear-gradient\(180deg, #[0-9a-f]{6} 0%, var\(--paper\)/);
   });
 
   it('marks where it stops, and lets the line fade out at both ends', () => {
-    const edge = ruleAfter('.hero:not(.has-background)::before,');
+    const edge = ruleAfter('.home-hero::before {');
     expect(edge).toContain('bottom: 0');
     expect(edge).toMatch(/linear-gradient\(90deg, transparent, var\(--line\)/);
+  });
+
+  it('leaves the wash and the hairline to the homepage alone', () => {
+    // The inner pages' band is a solid colour against the paper below it, so a
+    // second wash over it only muddied the edge.
+    expect(css).not.toContain('.hero:not(.has-background),\r\n.home-hero,');
+    expect(css).not.toContain('.hero:not(.has-background)::before,\r\n.home-hero::before,');
   });
 });

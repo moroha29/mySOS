@@ -636,7 +636,7 @@
       "artworkHint": "PNG, JPG or PDF",
       "addButton": "Add to my request",
       "askPrefix": "Need something different?",
-      "askLink": "Ask MySOS for help",
+      "askLabel": "Ask MySOS for help",
       "estimateLabel": "Indicative price",
       "estimateNote": "A guide only. Your quote depends on artwork, quantity, sizes, colours, packaging and delivery.",
       "noPriceNote": "We will quote once we know the artwork, quantity and finishing.",

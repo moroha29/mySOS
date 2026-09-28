@@ -492,3 +492,32 @@ describe('how it works is told the same way on both pages', () => {
     }
   });
 });
+
+describe('one column, every page', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('measures every page from the same content width', () => {
+    // The quote builder was centred in 1320px, a solution's uses in 1440 and
+    // the stories grid in 1314, while their own banners started at the page
+    // gutter: at 1920 the column jumped between 80px, 240px and 303px from the
+    // left as you moved down or across the site.
+    for (const [selector, gone] of [
+      ['.request-layout', '1320px'],
+      ['.use-cases', '1440px'],
+      ['.stories-section', '1314px'],
+      ['.use-case-foot', '1260px'],
+    ]) {
+      const at = css.indexOf(`${selector} {`);
+      expect(at, selector).toBeGreaterThan(-1);
+      expect(css.slice(at, css.indexOf('}', at)), selector).not.toContain(gone);
+    }
+  });
+
+  it("fills the rail with a solution's cards rather than centring four of them", () => {
+    // Four 290px cards in a 1760px rail left a third of the row empty.
+    expect(css).toContain('.use-case-track li { flex: 1 0 290px;');
+    // Opened out it is a grid: wrapped, a growing flex row stretched whatever
+    // was left on the last line across the whole width.
+    expect(css).toMatch(/\.use-case-rail\.is-all \.use-case-track \{[^}]*grid-template-columns: repeat\(auto-fill, minmax\(290px, 1fr\)\)/);
+  });
+});
