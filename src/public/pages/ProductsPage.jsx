@@ -82,8 +82,7 @@ export default function ProductsPage() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const toggleShowAll = (event) => {
-    event.preventDefault();
+  const toggleShowAll = () => {
     if (!showAll) {
       setShowAll(true);
       return;
@@ -239,10 +238,10 @@ export default function ProductsPage() {
       {/* One button that expands and collapses. It used to hide itself once the
           list was expanded, leaving no way back to the shorter list. */}
       {products.length > 8 && <div className="center-action">
-        <Button href="#" variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
+        <Button variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
           {showAll
             ? <><span data-cms-path={cms(pagePath('products', 'showLessLabel'))}>{pageText('products', 'showLessLabel', 'Show Less')}</span> <Icon name="chevronDown" size={18} className="inline-arrow is-up" /></>
-            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
+            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span>{' '}<span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
         </Button>
       </div>}
 

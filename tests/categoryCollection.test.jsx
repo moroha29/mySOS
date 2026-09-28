@@ -154,3 +154,16 @@ describe('asking for what is not listed', () => {
     expect(source).not.toContain('href={REQUEST_PATH}');
   });
 });
+
+describe('the controls do what they look like', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+
+  it('draws something that acts on this page as a button, not a link to nowhere', () => {
+    // "View All Apparel" and "Load more guides" were <a href="#">.
+    expect(ui).toContain("if (!href) return <button type=\"button\"");
+    for (const page of ['ProductsPage', 'ResourcesPage']) {
+      const source = readFileSync(new URL(`../src/public/pages/${page}.jsx`, import.meta.url), 'utf8');
+      expect(source, page).not.toContain('href="#"');
+    }
+  });
+});

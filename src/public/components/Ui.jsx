@@ -30,6 +30,9 @@ export function Arrow() {
 }
 
 export function Button({ href, children, variant = 'primary', className = '', ...rest }) {
+  // Something that goes somewhere is a link; something that does something here
+  // is a button. Both are drawn the same.
+  if (!href) return <button type="button" className={`btn btn-${variant} ${className}`.trim()} {...rest}>{children}</button>;
   return <a className={`btn btn-${variant} ${className}`.trim()} href={href} {...rest}>{children}</a>;
 }
 
