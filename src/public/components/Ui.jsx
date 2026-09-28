@@ -4,7 +4,7 @@ import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
 import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
-import { getDisplayPrice, REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
+import { REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
 import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
 import { parseProductVisual, parseSceneVisual } from '../../utils/visuals';
@@ -105,19 +105,15 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
  * than all at once.
  */
 export function ProductCard({ product, reveal }) {
-  const price = getDisplayPrice(product);
   const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 50}ms` } } : {};
   return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`} {...arriving}>
-    {/* What the product is, what it costs from and whether MySOS is asked for
-        it often, all on the picture: the card below it is then the name alone,
-        and a grid of them reads as a shelf rather than a list. */}
+    {/* The product and its name. The design the client chose puts nothing else
+        on the card: the price and what is asked for most are on the product's
+        own page, where a reader is deciding rather than browsing. */}
     <span className="product-card-shot">
       <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
-      {product.public.featured && <span className="product-flag" data-cms-path={cms(labelPath('featuredBadge'))}>{label('featuredBadge', 'Most requested')}</span>}
-      {price && <span className="price">{price}</span>}
     </span>
     <h3>{product.public.name}</h3>
-    <span className="product-card-go"><Icon name="arrowRight" size={18} /></span>
   </a>;
 }
 

@@ -2619,3 +2619,54 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .article-nearby .is-next { text-align: left; }
   .resources-cta { margin-inline: 18px; padding: 24px; }
 }
+
+/* ================================ 36. the category page, to the client's design
+   A flat blue banner with the picture running off the right edge, the kinds
+   within the category as outlined pills, and a shelf of plain cards: the
+   product and its name, nothing else on top of it. */
+
+.products-page .hero:not(.has-background) { background: #dcebfa; }
+.products-page .hero:not(.has-background)::before { display: none; }
+.products-page .hero .hero-inner { max-width: none; padding: 0; gap: 0; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
+/* The words keep the page's column; the picture runs to the edge of the screen. */
+.products-page .hero .hero-inner > div:first-child { padding: 58px 24px 62px max(24px, calc((100% - var(--content)) / 2 + 24px)); align-self: center; }
+.products-page .hero-scene { min-height: 0; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; animation: none; }
+.products-page .hero-scene .scene { border-radius: 0; }
+.products-page .breadcrumb { color: #4a6180; }
+.products-page .hero .eyebrow { color: #4a6180; }
+.products-page .hero-lead { color: #3d5473; }
+
+/* The card: the product and its name. */
+.product-card { border-color: transparent; background: transparent; padding: 0; }
+.product-card:hover { border-color: transparent; box-shadow: none; background: transparent; }
+.product-card .product-visual { border-radius: 14px; background: #f1f4f9; }
+.product-card h3 { margin-top: 12px; padding-right: 0; font-size: 17.5px; font-weight: 700; color: var(--ink); }
+.product-card:hover h3 { color: var(--green-dark); }
+.product-card:hover .product-visual { box-shadow: 0 16px 34px rgba(9, 28, 72, .12); }
+
+/* The row that picks a kind, as outlined pills. */
+.product-types h2 { font-weight: 800; }
+.type-row button { padding: 12px 22px 12px 14px; border-radius: 14px; }
+.type-row .product-visual { width: 34px; height: 34px; }
+
+.collection-sort { display: inline-flex; align-items: center; gap: 10px; font-size: 16.5px; color: var(--muted); }
+.collection-sort select {
+  padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  font: inherit; font-size: 16.5px; color: var(--ink); cursor: pointer;
+}
+.collection-sort select:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+@media (max-width: 980px) {
+  .products-page .hero .hero-inner { grid-template-columns: minmax(0, 1fr); }
+  .products-page .hero .hero-inner > div:first-child { padding: 40px 18px 34px; }
+  .products-page .hero-scene { min-height: 260px; }
+}
+
+@media (max-width: 860px) {
+  .type-row button { padding: 10px 16px 10px 10px; border-radius: 12px; }
+  .collection-sort select { padding: 8px 10px; font-size: 16px; }
+}
+
+/* The picture fills its half of the banner: it used to keep the photograph's
+   own shape and leave a white band above and below it. */
+.products-page .hero-scene, .products-page .hero-scene > .scene { height: 100%; min-height: 100%; }

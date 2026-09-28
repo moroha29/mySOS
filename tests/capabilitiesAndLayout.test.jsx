@@ -98,10 +98,22 @@ describe('the products page, as the design has it', () => {
   it('puts the kinds within a category in a row of their own', () => {
     const html = markup();
     expect(html).toContain('class="type-row"');
-    expect(html).toContain('Browse by type');
+    // The heading is three content values in a row, so it is read as text.
+    const words = (markup) => markup.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
+    expect(words(html)).toContain('Browse apparel types');
     expect(html).toContain('Explore all');
-    // Only apparel is divided this way.
+    // Every category is divided by what its own products are, and the row is
+    // dropped where there is only one kind to choose between.
+    expect(words(markup('bags'))).toContain('Browse bag types');
     expect(markup('drinkware')).not.toContain('class="type-row"');
+  });
+
+  it('reads the kinds from the catalogue, not from a list kept by hand', () => {
+    // The apparel filter named five kinds while the catalogue held seven, so
+    // six caps could be reached only by searching for them.
+    expect(markup()).toContain('Caps');
+    expect(siteContent).not.toHaveProperty('apparelTabs');
+    expect(Object.keys(siteContent.subcategoryNames).length).toBeGreaterThan(15);
   });
 
   it('no longer names the ways of printing on the banner', () => {

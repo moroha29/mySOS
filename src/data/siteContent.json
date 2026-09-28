@@ -226,7 +226,9 @@
       "visual": "tee",
       "colour": "navy",
       "description": "T-Shirts, polos, jerseys & more",
-      "image": ""
+      "image": "",
+      "typeWord": "apparel",
+      "searchPlaceholder": "Search apparel, e.g. oversized tee or jersey"
     },
     {
       "id": "bags",
@@ -235,7 +237,9 @@
       "visual": "tote",
       "colour": "sand",
       "description": "Tote bags, backpacks & more",
-      "image": ""
+      "image": "",
+      "typeWord": "bag",
+      "searchPlaceholder": "Search bags, e.g. canvas tote or drawstring bag"
     },
     {
       "id": "drinkware",
@@ -244,7 +248,9 @@
       "visual": "bottle",
       "colour": "green",
       "description": "Bottles, tumblers, mugs & more",
-      "image": ""
+      "image": "",
+      "typeWord": "drinkware",
+      "searchPlaceholder": "Search drinkware, e.g. insulated bottle or mug"
     },
     {
       "id": "corporate-gifts",
@@ -253,7 +259,9 @@
       "visual": "gift-set",
       "colour": "navy",
       "description": "Premium gifts for every occasion",
-      "image": ""
+      "image": "",
+      "typeWord": "corporate gift",
+      "searchPlaceholder": "Search gifts, e.g. gift sets or desk accessories"
     },
     {
       "id": "stationery",
@@ -262,7 +270,9 @@
       "visual": "notebook",
       "colour": "navy",
       "description": "Notebooks, pens, desks & more",
-      "image": ""
+      "image": "",
+      "typeWord": "stationery",
+      "searchPlaceholder": "Search stationery, e.g. notebooks or pens"
     },
     {
       "id": "event-essentials",
@@ -271,7 +281,9 @@
       "visual": "lanyard",
       "colour": "blue",
       "description": "Lanyards, badges, banners & more",
-      "image": ""
+      "image": "",
+      "typeWord": "event essentials",
+      "searchPlaceholder": "Search event products, e.g. lanyards or stickers"
     }
   ],
   "benefits": [
@@ -599,11 +611,16 @@
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today.",
-      "countLabel": "products",
       "searchPlaceholder": "What are you looking for? Try oversized tees or jerseys",
       "searchLabel": "Search this category",
-      "typesTitle": "Browse by type",
-      "exploreTitle": "Explore all"
+      "exploreTitle": "Explore all",
+      "typesPrefix": "Browse",
+      "typesSuffix": "types",
+      "allTypesLabel": "All",
+      "sortLabel": "Sort by",
+      "sortFeatured": "Featured",
+      "sortName": "Name A–Z",
+      "sortPrice": "Price, low to high"
     },
     "product": {
       "buildTitle": "Build your request",
@@ -795,32 +812,6 @@
       "addDialogAddLabel": "Add product"
     }
   },
-  "apparelTabs": [
-    {
-      "id": "all",
-      "name": "All"
-    },
-    {
-      "id": "tshirts",
-      "name": "T-Shirts"
-    },
-    {
-      "id": "polos",
-      "name": "Polos"
-    },
-    {
-      "id": "jerseys",
-      "name": "Jerseys"
-    },
-    {
-      "id": "hoodies",
-      "name": "Hoodies"
-    },
-    {
-      "id": "jackets",
-      "name": "Jackets"
-    }
-  ],
   "printingMethods": {
     "silkscreen": {
       "description": "Vibrant, durable prints for larger quantities.",
@@ -1429,5 +1420,26 @@
     "value": "∞",
     "label": "Products",
     "note": "One source. Infinite solutions."
+  },
+  "subcategoryNames": {
+    "tshirts": "T-Shirts",
+    "polos": "Polos",
+    "jerseys": "Jerseys",
+    "hoodies": "Hoodies",
+    "jackets": "Jackets",
+    "singlets": "Singlets",
+    "caps": "Caps",
+    "totes": "Tote Bags",
+    "drawstring": "Drawstring Bags",
+    "bottles": "Bottles",
+    "gift-sets": "Gift Sets",
+    "towels": "Towels",
+    "medals": "Medals",
+    "mats": "Mats",
+    "notebooks": "Notebooks",
+    "pens": "Pens",
+    "name-tents": "Name Tents",
+    "lanyards": "Lanyards",
+    "stickers": "Stickers"
   }
 }

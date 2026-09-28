@@ -22,7 +22,7 @@ afterEach(() => {
 describe('production route rendering', () => {
   it.each([
     ['/mySOS/', 'Tell us what you need.'],
-    ['/mySOS/products/', 'Browse by type'],
+    ['/mySOS/products/', 'class="type-row"'],
     ['/mySOS/request/', 'Build Your Request'],
     ['/mySOS/solutions/', 'Solutions Designed'],
     ['/mySOS/why-mysos/', 'Why MySOS'],
