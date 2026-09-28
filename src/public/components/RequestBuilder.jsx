@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import { enquiryLinkProps } from '../../utils/catalogue';
 import {
-  allFileNames, browseCategories, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
-  packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, searchProducts, suggestionsFor,
+  allFileNames, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
+  packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, suggestionsFor,
 } from '../../utils/solutionRequest';
 import { REQUEST_PATH } from '../../utils/catalogue';
 import { clearSavedRequest, mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
@@ -11,6 +11,7 @@ import useSavedRequest from '../useSavedRequest';
 import { cms, pagePath } from '../cms';
 import Icon from './Icons';
 import { ProductShot } from './Ui';
+import AddProductDialog from './AddProductDialog';
 
 /*
  * The customer's own request: which products, how many, how they should be
@@ -170,49 +171,6 @@ function ProductCard({ product, onAdd }) {
   </li>;
 }
 
-/* Anything in the catalogue, not only what MySOS suggested for this use case. */
-function ProductSearch({ chosen, onAdd, onBrowse }) {
-  const [query, setQuery] = useState('');
-  const results = useMemo(() => searchProducts(query, { exclude: chosen }), [query, chosen]);
-  const asked = query.trim().length > 0;
-
-  return <div className="request-search">
-    <label className="request-search-label" htmlFor="request-search" data-cms-path={wordPath('searchTitle')}>{word('searchTitle', 'Search all products')}</label>
-    <div className="request-search-box">
-      <Icon name="search" size={22} />
-      <input
-        id="request-search"
-        type="search"
-        autoComplete="off"
-        placeholder={word('searchPlaceholder', 'Search for a product, e.g. tote bag')}
-        value={query}
-        onChange={(event) => setQuery(event.target.value)}
-      />
-      {asked && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={19} /></button>}
-    </div>
-    {asked && (results.length > 0
-      ? <ul className="request-search-results">
-        {results.map((product) => <li key={product.id}>
-          <button type="button" onClick={() => { onAdd(product); setQuery(''); }}>
-            <span className="request-thumb"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
-            <span className="request-search-name">
-              <strong>{product.public.name}</strong>
-              <small>{product.public.category.replace('-', ' ')}</small>
-            </span>
-            <Icon name="plus" size={19} />
-          </button>
-        </li>)}
-      </ul>
-      : <p className="request-search-empty">
-        <span data-cms-path={wordPath('searchEmpty')}>{word('searchEmpty', 'Nothing matched. Add it as a custom product below and we will source it.')}</span>
-        {/* The word they tried may not be ours: "flask" for a bottle, "hat" for a cap. */}
-        {onBrowse && <button type="button" className="request-inline" onClick={() => { setQuery(''); onBrowse(); }}>
-          <span data-cms-path={wordPath('searchBrowseButton')}>{word('searchBrowseButton', 'Browse all products')}</span>
-        </button>}
-      </p>)}
-  </div>;
-}
-
 export default function RequestBuilder({
   topic = '',
   useCase = null,
@@ -233,7 +191,6 @@ export default function RequestBuilder({
   const [openKey, setOpenKey] = useState(null);
   const [focusPrinting, setFocusPrinting] = useState(false);
   const [sameQuantity, setSameQuantity] = useState(50);
-  const [custom, setCustom] = useState('');
   const [neededBy, setNeededBy] = useState('');
   const [notes, setNotes] = useState(startNotes);
   // Nothing is read from storage while rendering: these pages are drawn ahead
@@ -242,18 +199,9 @@ export default function RequestBuilder({
   // A recommended package is not the customer's quote until they say so.
   const waiting = useSavedRequest();
   const [files, setFiles] = useState([]);
-  const [showMore, setShowMore] = useState(true);
   const [sent, setSent] = useState(null);
-  const [browseAsked, setBrowseAsked] = useState(0);
-  const browseRef = useRef(null);
-  const openBrowse = () => { setShowMore(true); setBrowseAsked((count) => count + 1); };
-
-  // "Browse all products" from a search that found nothing: go to the list once it shows.
-  useEffect(() => {
-    if (!browseAsked) return;
-    browseRef.current?.scrollIntoView?.({ block: 'start', behavior: 'smooth' });
-    browseRef.current?.focus?.({ preventScroll: true });
-  }, [browseAsked]);
+  // Whether the catalogue window is open.
+  const [adding, setAdding] = useState(false);
 
   /*
    * What this browser already had, plus whatever product they arrived on. The
@@ -319,7 +267,6 @@ export default function RequestBuilder({
   };
   const generalFiles = files.filter((entry) => !entry.owner);
   const suggestions = suggestionsFor(useCase, lines);
-  const browse = browseCategories(lines);
   const chosenIds = lines.map((line) => line.productId).filter(Boolean);
   const awaitingPrinting = lines.filter(needsPrintingChoice);
   const fileNames = allFileNames(lines, generalFiles.map((entry) => entry.file.name));
@@ -413,42 +360,25 @@ export default function RequestBuilder({
           </ul>
           : <p className="request-empty" data-cms-path={wordPath('emptyRequest')}>{word('emptyRequest', 'Add at least one product to send a request.')}</p>}
 
-        <ProductSearch chosen={chosenIds} onAdd={(product) => addLine({ productId: product.id }, 'search')} onBrowse={openBrowse} />
-
-        {(suggestions.length > 0 || browse.length > 0) && <div className="request-more">
-          <button type="button" className="request-more-toggle" aria-expanded={showMore} onClick={() => setShowMore((value) => !value)}>
+        {/* Choosing what to add is a window of its own: the rows above stay
+            readable, and the catalogue is somewhere you go and come back from. */}
+        <div className="request-add">
+          <button type="button" className="btn btn-outline request-add-open" onClick={() => setAdding(true)}>
             <Icon name="plus" size={19} />
             <span data-cms-path={wordPath('addMoreTitle')}>{word('addMoreTitle', 'Add More Products')}</span>
-            <Icon name={showMore ? 'chevronUp' : 'chevronDown'} size={19} />
           </button>
-          {showMore && suggestions.length > 0 && <ul className="request-more-list">
+          {suggestions.length > 0 && <ul className="request-more-list">
             {suggestions.map((product) => <ProductCard key={product.id} product={product} onAdd={() => addLine({ productId: product.id }, 'extra')} />)}
           </ul>}
-          {/* The whole catalogue, a category at a time, so nothing is only found by name. */}
-          {showMore && browse.length > 0 && <div className="request-browse" id="request-browse" ref={browseRef} tabIndex={-1}>
-            <p className="request-browse-title" data-cms-path={wordPath('browseTitle')}>{word('browseTitle', 'Browse all products')}</p>
-            {browse.map((category) => <details key={category.id} className="request-browse-group">
-              <summary>{category.name} <span>{category.products.length}</span></summary>
-              <ul className="request-more-list">
-                {category.products.map((product) => <ProductCard key={product.id} product={product} onAdd={() => addLine({ productId: product.id }, 'browse')} />)}
-              </ul>
-            </details>)}
-          </div>}
-        </div>}
-
-        <div className="request-custom">
-          <label htmlFor="custom-product"><strong data-cms-path={wordPath('customTitle')}>{word('customTitle', 'Looking for something else?')}</strong>
-            <small data-cms-path={wordPath('customLead')}>{word('customLead')}</small></label>
-          <div className="request-custom-row">
-            <input id="custom-product" type="text" placeholder={word('customPlaceholder')} value={custom} onChange={(event) => setCustom(event.target.value)} />
-            <button type="button" className="btn btn-outline btn-sm" disabled={!custom.trim()} onClick={() => {
-              addLine({ name: custom.trim() }, 'custom');
-              setCustom('');
-            }}>
-              <Icon name="plus" size={19} /> <span data-cms-path={wordPath('customButton')}>{word('customButton', 'Add Custom Product')}</span>
-            </button>
-          </div>
         </div>
+
+        <AddProductDialog
+          open={adding}
+          lines={lines}
+          onAdd={(product) => { addLine({ productId: product.id }, 'browse'); setAdding(false); }}
+          onCustom={(name) => { addLine({ name }, 'custom'); setAdding(false); }}
+          onClose={() => setAdding(false)}
+        />
 
         <div className="request-files-block">
           <strong data-cms-path={wordPath('filesTitle')}>{word('filesTitle', 'General Event Files')}</strong>

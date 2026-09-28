@@ -30,7 +30,8 @@
     "heroSearchAskButton": "Tell us about it",
     "addToQuoteLabel": "Add to quote",
     "addedToQuoteLabel": "In your quote",
-    "homeStartButton": "Start your project"
+    "homeStartButton": "Start your project",
+    "categoryTitlePrefix": "Custom"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -46,7 +47,7 @@
     "trustedByHeading": "Trusted by organisations across Singapore",
     "closingCtaTitle": "Bring your ideas to life with MySOS.",
     "closingCtaDescription": "We're ready to help.",
-    "chooseIndustryHeading": "Choose your industry",
+    "chooseIndustryHeading": "Find solutions for your industry",
     "popularSolutionsHeading": "Popular solutions",
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
@@ -79,19 +80,23 @@
     "resourceLinks": [
       {
         "label": "Printing Guides",
-        "href": "/mySOS/products/#faq"
+        "href": "/mySOS/resources/dtf-or-silkscreen/"
       },
       {
         "label": "Materials",
-        "href": "/mySOS/products/#printing"
+        "href": "/mySOS/resources/choosing-t-shirt-fabric/"
       },
       {
-        "label": "Design Tips",
-        "href": "/mySOS/why-mysos/"
+        "label": "Artwork Tips",
+        "href": "/mySOS/resources/prepare-artwork-for-printing/"
       },
       {
         "label": "Buying Guides",
-        "href": "/mySOS/products/"
+        "href": "/mySOS/resources/before-ordering-in-bulk/"
+      },
+      {
+        "label": "All Guides",
+        "href": "/mySOS/resources/"
       }
     ],
     "legalLinks": [
@@ -576,7 +581,8 @@
     ],
     "storiesHeroBackgroundImage": "",
     "requestHeroBackgroundImage": "",
-    "requestHeroImage": ""
+    "requestHeroImage": "",
+    "resourcesHeroImage": ""
   },
   "pages": {
     "products": {
@@ -593,8 +599,11 @@
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
       "ctaDescription": "Let's get in touch with us today.",
-      "waysLabel": "Ways to print on",
-      "countLabel": "products"
+      "countLabel": "products",
+      "searchPlaceholder": "What are you looking for? Try oversized tees or jerseys",
+      "searchLabel": "Search this category",
+      "typesTitle": "Browse by type",
+      "exploreTitle": "Explore all"
     },
     "product": {
       "buildTitle": "Build your request",
@@ -642,7 +651,10 @@
       "recommendedPrefix": "Recommended for",
       "promoEyebrow": "Not sure where to start?",
       "promoTitle": "Share your requirements and we'll recommend the best solutions for you.",
-      "promoDescription": "Tell us about your industry, timeline and budget. We will come back with a shortlist that fits."
+      "promoDescription": "Tell us about your industry, timeline and budget. We will come back with a shortlist that fits.",
+      "industryLead": "Choose who you are shopping for to see the ideas that suit them.",
+      "productsBandTitle": "Have a specific product in mind?",
+      "productsBandLead": "Browse the products on their own and build your own combination."
     },
     "stories": {
       "heroTitle": "Real Projects.",
@@ -748,9 +760,7 @@
       "notesPlaceholder": "Any other requirements?",
       "skipDetailsHint": "Skip this section and we'll confirm the details with you on WhatsApp.",
       "addMoreTitle": "Add More Products",
-      "browseTitle": "Browse all products",
       "customTitle": "Looking for something else?",
-      "customLead": "Describe any product you need and we'll help source it.",
       "customPlaceholder": "e.g. Custom umbrella, towel or welcome gift",
       "customButton": "Add Custom Product",
       "filesTitle": "General Event Files",
@@ -766,10 +776,8 @@
       "sendHint": "We'll open WhatsApp with your selected products, quantities and notes already included.",
       "sendFilesHint": "WhatsApp links cannot carry files: after the chat opens, attach {files} there.",
       "emptyRequest": "Add at least one product to send a request.",
-      "searchTitle": "Search all products",
       "searchPlaceholder": "Search for a product, e.g. tote bag",
       "searchEmpty": "Nothing matched. Add it as a custom product below and we will source it.",
-      "searchBrowseButton": "Browse all products",
       "printingPrompt": "Choose a printing method",
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
       "showFewerLabel": "Show fewer",
@@ -780,7 +788,11 @@
       "addToQuoteButton": "Add to quote",
       "replaceQuoteButton": "Replace quote",
       "quoteHasItemsNote": "You already have {count} in your quote.",
-      "addedToQuoteNote": "Added to your quote."
+      "addedToQuoteNote": "Added to your quote.",
+      "addDialogTitle": "Add another product",
+      "addDialogLead": "Search the catalogue, or step through it a category at a time.",
+      "addDialogAllLabel": "All products",
+      "addDialogAddLabel": "Add product"
     }
   },
   "apparelTabs": [

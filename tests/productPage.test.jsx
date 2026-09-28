@@ -106,9 +106,8 @@ describe('one look across the pages', () => {
   it('gives the sections, cards and bands one set of shapes', () => {
     expect(css).toMatch(/\.section-heading h2 \{ font-size: clamp\(\d+px, 3vw, \d+px\)/);
     expect(css).toMatch(/\.product-card, \.story-card, \.solution-card[\s\S]*?border-radius: 22px;/);
-    // The ways of printing are chips in the products banner now, in the same
-    // pill the category strip and the apparel filter use.
-    expect(css).toMatch(/\.hero-ways li \{[\s\S]{0,160}?border-radius: 999px;/);
+    // The kinds within a category are pills, as the category strip is.
+    expect(css).toMatch(/\.type-row button \{[\s\S]{0,240}?border-radius: 999px;/);
     // The closing band is flat green with a navy button, as the concept has it.
     expect(css).toMatch(/\.page-cta, \.home-closing \{ background: #046b45; \}/);
     expect(css).toMatch(/\.page-cta \.btn, \.home-closing \.btn \{[^}]*background: var\(--navy\)/);
@@ -136,7 +135,7 @@ describe('one look across the pages', () => {
     expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
     expect(css).not.toMatch(/\.category-strip a \{ display: inline-block;/);
     expect(css).toMatch(/\.text-link > \.icon, \.btn > \.icon \{ display: block; align-self: center; \}/);
-    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; \}/);
+    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; color: #fff; \}/);
   });
 
   it('scrolls the strip sideways on a phone, with the link out of the way', () => {

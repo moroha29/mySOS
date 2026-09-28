@@ -1594,15 +1594,18 @@ main:not(.home-page) { background: var(--paper); }
 .faq-list p { padding: 0 4px 20px; font-size: 17.5px; }
 
 /* The category strip, shared by the homepage and the products page. */
-.category-strip { background: #fff; border-bottom: 1px solid var(--line); }
+/* Navy, with white words: on white it read as part of the banner below it and
+   a reader could not see it was the menu of categories. */
+.category-strip { background: var(--navy); border-bottom: 0; }
 .category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; }
 .category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .category-strip ul::-webkit-scrollbar { display: none; }
 .category-strip li { flex: none; }
-.category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: var(--ink); }
-.category-strip ul a:hover { background: var(--green-dark); color: #fff; }
-.category-strip ul a.is-active { background: var(--green-dark); color: #fff; }
-.category-strip-inner > .text-link { flex: none; white-space: nowrap; }
+.category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: #fff; }
+.category-strip ul a:hover { background: var(--green); color: #fff; }
+.category-strip ul a.is-active { background: var(--green); color: #fff; }
+.category-strip-inner > .text-link { flex: none; white-space: nowrap; color: #fff; }
+.category-strip-inner > .text-link:hover { color: var(--green-light); }
 
 @media (max-width: 860px) {
   /* The row scrolls sideways on a phone, so the trailing link steps aside: it
@@ -2112,15 +2115,15 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    the same card as the products now, outlined rather than filled, so it reads
    as a place to ask rather than a block of colour. */
 .product-ask {
-  display: flex; padding: 22px; border-radius: 22px;
+  margin-top: 26px; display: flex; padding: 18px 24px; border-radius: 22px;
   border: 1.5px dashed #b6d8c6; background: #fff; color: var(--ink);
   transition: border-color .25s ease, background-color .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1);
 }
-.product-ask-inner { display: flex; flex-direction: column; justify-content: center; gap: 8px; width: 100%; }
+.product-ask-inner { display: flex; flex-flow: row wrap; align-items: center; justify-content: center; gap: 8px 22px; width: 100%; }
 .product-ask .icon { color: var(--green-dark); }
-.product-ask strong { margin-top: 2px; font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -.015em; }
+.product-ask strong { font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -.015em; }
 .product-ask small { font-size: 16px; line-height: 1.5; color: var(--muted); }
-.product-ask-go { margin-top: 2px; display: inline-flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
+.product-ask-go { display: inline-flex; align-items: center; gap: 8px; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
 .product-ask:hover { border-color: var(--green-dark); background: #f7fbf9; transform: translateY(-3px); }
 .product-ask:hover .inline-arrow { transform: translateX(5px); }
 
@@ -2130,38 +2133,15 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 @media (max-width: 620px) {
-  .product-ask { padding: 18px; }
-  .product-ask strong { font-size: 18px; }
+  .product-ask { padding: 16px 18px; }
+  .product-ask-inner { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 
 /* Which category these ways of printing are the ways of. */
 
 /* The ask card stretches across whatever the last row has left, so a category
    of one or two products does not end in half a row of nothing. */
-.product-grid[data-fill4='1'] .product-ask { grid-column: span 1; }
-.product-grid[data-fill4='2'] .product-ask { grid-column: span 2; }
-.product-grid[data-fill4='3'] .product-ask { grid-column: span 3; }
-.product-grid[data-fill4='4'] .product-ask { grid-column: span 4; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill4] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill3='2'] .product-ask { grid-column: span 2; }
-  .product-grid[data-fill3='3'] .product-ask { grid-column: span 3; }
-}
-@media (max-width: 620px) {
-  .product-grid[data-fill4] .product-ask, .product-grid[data-fill3] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill2='2'] .product-ask { grid-column: span 2; }
-}
 
-/* Stretched across two columns or more it is a band rather than a card: the
-   words sit on one line with the way in at the end of it. The card asks its
-   own width, so this holds however many columns it was given. */
-.product-ask { container-type: inline-size; }
-@container (min-width: 460px) {
-  .product-ask-inner { flex-flow: row wrap; align-items: center; gap: 10px 28px; }
-  .product-ask-inner strong { margin-top: 0; }
-  .product-ask-inner small { flex: 1; min-width: 220px; }
-  .product-ask-inner .product-ask-go { margin: 0; }
-}
 
 /* =============================== 27. the banner reads as a banner, and the
                                        review count as a figure
@@ -2310,45 +2290,14 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .process-band > .home-process-head { padding-inline: 18px; }
 }
 
-/* ================================ 30. what a category can be printed with
-   This used to be a navy band below the products, with tabs and a photograph,
-   saying the same for every category. It says more in the banner, in a line:
-   the ways MySOS can brand this kind of product, read from the products
-   themselves. The footer's "Materials" link lands here. */
+/* ==================================== 30. a category page's own breadcrumb */
 
-.hero-ways { margin-top: 26px; scroll-margin-top: calc(var(--header-h) + 24px); }
-.hero-ways-label { display: block; margin-bottom: 10px; font-size: 14px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
-.hero-ways ul { display: flex; flex-wrap: wrap; gap: 10px; }
-.hero-ways li {
-  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px;
-  border: 1px solid var(--line); border-radius: 999px; background: #fff;
-  font-size: 16.5px; font-weight: 600; color: var(--ink);
-}
-.hero-ways .icon { color: var(--green-dark); }
-
-/* The banner's breadcrumb, where a category page has one. */
 .hero:not(.has-background) .breadcrumb { max-width: none; margin: 0 0 18px; padding: 0; }
 
-@media (max-width: 860px) {
-  .hero-ways { margin-top: 22px; }
-  .hero-ways li { padding: 9px 14px; font-size: 16px; }
-}
 
 /* Across a whole row the ask card was a slab of green with the words at one
    end and the way in at the other. It keeps the height it needs and the words
    sit together in the middle of it. */
-.product-grid[data-fill4='4'] .product-ask { padding: 16px 24px; }
-.product-grid[data-fill4='4'] .product-ask-inner { justify-content: center; }
-.product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill3='3'] .product-ask { padding: 16px 24px; }
-  .product-grid[data-fill3='3'] .product-ask-inner { justify-content: center; }
-  .product-grid[data-fill3='3'] .product-ask-inner small { flex: none; }
-}
-@media (max-width: 620px) {
-  .product-grid[data-fill2='2'] .product-ask { padding: 16px 18px; }
-  .product-grid[data-fill2='2'] .product-ask-inner small { flex: none; }
-}
 
 /* =============================== 31. the collection, as a shelf not a list
    It opened with the category's name again, under the name in the banner,
@@ -2360,7 +2309,8 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
 }
-.collection-count { font-size: 17.5px; color: var(--muted); }
+/* Always the right-hand end of the bar, with or without a filter beside it. */
+.collection-count { margin-left: auto; font-size: 17.5px; color: var(--muted); }
 .collection-count strong { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); font-variant-numeric: tabular-nums; }
 .collection-bar .tab-list { margin: 0; }
 
@@ -2388,13 +2338,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    which is a poster, not a product tile. */
 @media (min-width: 1700px) {
   .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .product-grid[data-fill5='1'] .product-ask { grid-column: span 1; }
-  .product-grid[data-fill5='2'] .product-ask { grid-column: span 2; }
-  .product-grid[data-fill5='3'] .product-ask { grid-column: span 3; }
-  .product-grid[data-fill5='4'] .product-ask { grid-column: span 4; }
-  .product-grid[data-fill5='5'] .product-ask { grid-column: span 5; padding: 16px 24px; }
-  .product-grid[data-fill5='5'] .product-ask-inner { justify-content: center; }
-  .product-grid[data-fill5='5'] .product-ask-inner small { flex: none; }
 }
 
 @media (max-width: 860px) {
@@ -2409,16 +2352,270 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .product-card-go { transition: none; }
 }
 
-/* Filling two or three columns of a row, the ask card took the row's height
-   as well — a tall block of green beside the products. It keeps the height of
-   what is written on it and sits at the top of the row. */
-.product-grid[data-fill4='2'] .product-ask,
-.product-grid[data-fill4='3'] .product-ask { align-self: start; }
-@media (max-width: 1080px) {
-  .product-grid[data-fill3='2'] .product-ask { align-self: start; }
+
+/* ==================================== 32. the solutions page, one picker only
+   It asked twice who you were — a row of washed tiles and then the cards that
+   say the same thing with a photograph. The cards are the picker now, so they
+   carry more of the picture, and they answer to the cursor. */
+
+.solution-card .scene { height: 210px; }
+.solution-card > div { padding: 20px 22px 24px; }
+.solution-card h3 { font-size: 21px; }
+.solution-card p { min-height: 0; }
+/* Green under the cursor, as the category strip goes green. */
+.solution-card { transition: background-color .25s ease, box-shadow .25s ease, transform .25s cubic-bezier(.22, .61, .36, 1), border-color .2s ease; }
+.solution-card:hover { background: var(--green-dark); border-color: var(--green-dark); }
+.solution-card:hover h3, .solution-card:hover p, .solution-card:hover .text-link { color: #fff; }
+.solution-card:hover .text-link .icon { color: #fff; }
+
+/* The way to the products, under the packs. */
+.solution-products {
+  margin-top: 30px; padding: 22px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px;
+  border: 1px solid var(--line); border-radius: 22px; background: #fff;
 }
-@media (min-width: 1700px) {
-  .product-grid[data-fill5='2'] .product-ask,
-  .product-grid[data-fill5='3'] .product-ask,
-  .product-grid[data-fill5='4'] .product-ask { align-self: start; }
+.solution-products strong { display: block; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.solution-products p { margin-top: 6px; font-size: 17px; line-height: 1.5; color: var(--muted); }
+
+@media (max-width: 860px) {
+  .solution-card .scene { height: 170px; }
+  .solution-products { padding: 18px; }
+}
+
+/* ================================= 33. adding a product, in a window of its own
+   The catalogue used to sit under the request: a search box, an expander of
+   suggestions and an accordion of every category, beneath the rows already
+   chosen. Choosing what to add and reading what you had chosen were the same
+   crowded column. */
+
+.request-add { margin-top: 22px; display: grid; gap: 16px; }
+.request-add-open { justify-self: start; display: inline-flex; align-items: center; gap: 9px; }
+
+.add-product {
+  width: min(880px, calc(100vw - 32px)); max-height: min(86vh, 900px); padding: 0;
+  border: 0; border-radius: 26px; background: #fff; color: var(--ink);
+  box-shadow: 0 40px 90px rgba(9, 28, 72, .28);
+  overflow: hidden;
+}
+.add-product::backdrop { background: rgba(9, 28, 72, .55); backdrop-filter: blur(3px); }
+/* One column that cannot grow past the window: without minmax(0, 1fr) the
+   track takes the widest thing inside it — on a phone the custom-product row
+   pushed it to 459px and the whole dialog slid sideways. */
+.add-product[open] { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto minmax(0, 1fr) auto; }
+
+.add-product-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 26px 26px 0; }
+.add-product-head strong { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.03em; }
+.add-product-head p { margin-top: 6px; font-size: 16.5px; line-height: 1.5; color: var(--muted); }
+.add-product-close { flex: none; width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--muted); cursor: pointer; }
+.add-product-close:hover { border-color: var(--navy); color: var(--navy); }
+
+.add-product-search { margin: 20px 26px 0; display: flex; align-items: center; gap: 12px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.add-product-search .icon { color: var(--muted-light); }
+.add-product-search input { flex: 1; min-width: 0; padding: 15px 0; border: 0; background: none; font: inherit; font-size: 16.5px; }
+.add-product-search input:focus { outline: none; }
+.add-product-search:focus-within { border-color: var(--green); }
+.add-product-search button { border: 0; background: none; color: var(--muted); cursor: pointer; }
+
+.add-product-filters { margin: 18px 26px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.add-product-filters button {
+  padding: 9px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+.add-product-filters button:hover { border-color: var(--green-dark); }
+.add-product-filters button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+.add-product-grid { margin: 20px 0 0; padding: 0 26px 6px; overflow-y: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-content: start; }
+.add-product-grid li { display: flex; flex-direction: column; gap: 8px; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+.add-product-shot { display: block; border-radius: 12px; background: var(--soft); overflow: hidden; }
+.add-product-shot .product-visual { width: 100%; aspect-ratio: 1 / 1; }
+.add-product-shot .product-visual img { width: 100%; height: 100%; object-fit: contain; }
+.add-product-grid strong { font-size: 17px; font-weight: 700; line-height: 1.25; }
+.add-product-grid small { font-size: 15.5px; line-height: 1.45; color: var(--muted); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.add-product-grid .btn { margin-top: auto; width: 100%; justify-content: center; gap: 7px; border-radius: 999px; }
+.add-product-empty { padding: 30px 26px; font-size: 17px; line-height: 1.55; color: var(--muted); }
+
+.add-product-foot { margin-top: 18px; padding: 18px 26px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; border-top: 1px solid var(--line); background: var(--paper); }
+.add-product-foot-copy { display: inline-flex; align-items: center; min-width: 0; gap: 10px; font-size: 17px; font-weight: 700; }
+.add-product-foot-copy .icon { color: var(--green-dark); }
+.add-product-foot-row { display: flex; flex: 1; min-width: min(280px, 100%); justify-content: flex-end; gap: 10px; }
+.add-product-foot-row input { flex: 1; min-width: 0; max-width: 340px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 16px; }
+.add-product-foot-row input:focus { outline: none; border-color: var(--green); }
+
+@media (max-width: 860px) {
+  /* A sheet along the bottom: a dialog centres itself by default, and at full
+     width that pushed half of it off the side of the screen. */
+  .add-product { inset: auto 0 0 0; width: auto; max-width: none; max-height: 92vh; margin: 0; border-radius: 22px 22px 0 0; }
+  .add-product-head, .add-product-search, .add-product-filters, .add-product-grid, .add-product-foot { padding-inline: 18px; }
+  .add-product-search, .add-product-filters { margin-inline: 18px; }
+  .add-product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* The field and its button, one above the other: side by side their own
+     widths added up to more than the screen and pushed the sheet sideways. */
+  .add-product-foot { flex-direction: column; align-items: stretch; min-width: 0; }
+  .add-product-foot-row { flex-direction: column; align-items: stretch; min-width: 0; }
+  .add-product-foot-row input { max-width: none; }
+  .add-product-foot-row .btn { width: 100%; justify-content: center; }
+}
+
+/* ================================= 34. the products page, as the design has it
+   A search that narrows the shelf below, the kinds within a category in a row
+   of their own, and the shelf under its own heading. The ways of printing have
+   come off the banner: they belong to a product, not to a category page. */
+
+.collection-search { margin-top: 26px; max-width: 560px; }
+.collection-search button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
+.collection-search button:hover { background: var(--soft); color: var(--ink); }
+
+.product-types h2 { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+.type-row { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; }
+.type-row button {
+  display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px;
+  border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font: inherit; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s cubic-bezier(.4, 0, .2, 1);
+}
+.type-row button:hover { border-color: var(--green-dark); transform: translateY(-2px); }
+.type-row button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.type-row .product-visual { width: 36px; height: 36px; }
+.type-row .icon { color: var(--navy-soft); }
+.type-row button[aria-selected="true"] .icon { color: #fff; }
+
+.collection-title { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
+
+@media (max-width: 860px) {
+  .collection-search { margin-top: 20px; }
+  .type-row { gap: 8px; }
+  .type-row button { padding: 8px 16px 8px 10px; font-size: 16px; }
+  .type-row .product-visual { width: 30px; height: 30px; }
+}
+
+/* ====================================== 35. the knowledge hub and its guides
+   A dark banner with the search in it, the topics as a row under it, and the
+   guides as cards: one leading, two beside it, the rest in a grid. A guide
+   itself is a column of text with its contents down the side. */
+
+.resources-hero { position: relative; background: var(--navy-deep); color: #fff; overflow: hidden; }
+.resources-hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(700px 420px at 78% 10%, rgba(47, 208, 127, .18), transparent 68%); pointer-events: none; }
+.resources-hero-inner { position: relative; z-index: 1; max-width: var(--content); margin: 0 auto; padding: 66px 24px 72px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 48px; align-items: center; }
+.resources-hero .eyebrow { display: block; margin-bottom: 16px; font-size: 14px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #9fb8e6; }
+.resources-hero h1 { font-size: clamp(42px, 5vw, 72px); font-weight: 800; line-height: .98; letter-spacing: -.05em; }
+.resources-hero h1 em { font-style: normal; color: var(--green-light); }
+.resources-hero-lead { margin-top: 20px; max-width: 460px; font-size: 18px; line-height: 1.55; color: #cddaf2; }
+.resources-search { margin-top: 28px; max-width: 520px; display: flex; align-items: center; gap: 12px; padding: 0 18px; border-radius: 999px; background: #fff; }
+.resources-search .icon { color: var(--muted-light); }
+.resources-search input { flex: 1; min-width: 0; padding: 17px 0; border: 0; background: none; font: inherit; font-size: 16.5px; color: var(--ink); }
+.resources-search input:focus { outline: none; }
+.resources-search button { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
+.resources-popular { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #9fb8e6; }
+.resources-popular button {
+  padding: 8px 15px; border: 1px solid rgba(255, 255, 255, .28); border-radius: 999px; background: transparent;
+  font: inherit; font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; color: #eaf1ff; cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+.resources-popular button:hover { border-color: var(--green-light); background: rgba(47, 208, 127, .16); }
+.resources-hero-art { border-radius: 26px; overflow: hidden; box-shadow: 0 30px 70px rgba(0, 0, 0, .35); }
+.resources-hero-art .scene { height: 420px; }
+
+.topic-row { max-width: var(--content); margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--line); }
+.topic-row button {
+  padding: 11px 20px; border: 0; border-radius: 999px; background: transparent;
+  font: inherit; font-size: 17px; font-weight: 600; color: var(--muted); cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.topic-row button:hover { color: var(--ink); }
+.topic-row button.is-active { background: #d9efe2; color: var(--green-dark); }
+
+.guide-lead-row { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 26px; }
+.guide-stack { display: grid; gap: 22px; align-content: start; }
+.guide-grid { margin-top: 34px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+
+.guide-card { position: relative; display: block; color: inherit; }
+.guide-card .guide-shot { height: 220px; border-radius: 18px; }
+.guide-card.is-lead .guide-shot { height: 320px; }
+.guide-card h3 { margin-top: 10px; font-size: 21px; font-weight: 800; line-height: 1.22; letter-spacing: -.02em; color: var(--ink); }
+.guide-card.is-lead h3 { font-size: clamp(24px, 2vw, 30px); }
+.guide-card p { margin-top: 8px; font-size: 17px; line-height: 1.55; color: var(--muted); }
+.guide-card:hover h3 { color: var(--green-dark); }
+.guide-go { display: inline-flex; margin-top: 10px; color: var(--green-dark); }
+.guide-card:hover .inline-arrow { transform: translateX(5px); }
+.guide-card.is-side { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: 16px; align-items: start; }
+.guide-card.is-side .guide-shot { height: 110px; }
+.guide-card.is-side h3 { margin-top: 6px; font-size: 19px; }
+.guide-card.is-side p { font-size: 16px; }
+
+.article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.article-topic { color: var(--green-dark); }
+.article-meta.is-loud { font-size: 15px; }
+.resources-empty { font-size: 18px; line-height: 1.6; color: var(--muted); }
+
+/* --------------------------------------------------------------- one guide */
+.article-page > .breadcrumb { padding-top: 22px; }
+.article-layout { max-width: var(--content); margin: 0 auto; padding: 8px 24px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 54px; align-items: start; }
+.article-body { max-width: 760px; }
+.article-body h1 { margin-top: 14px; font-size: clamp(34px, 3.6vw, 52px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; color: var(--ink); }
+.article-lead { margin-top: 16px; font-size: 19px; line-height: 1.6; color: var(--muted); }
+.article-byline { margin-top: 22px; display: flex; align-items: center; gap: 12px; }
+.article-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #d9efe2; color: var(--green-dark); }
+.article-byline strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
+.article-byline small { display: block; margin-top: 2px; font-size: 15.5px; color: var(--muted); }
+.article-figure { margin-top: 26px; }
+.article-figure .scene { height: 360px; border-radius: 20px; }
+.article-figure figcaption { margin-top: 10px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.article-quick { margin-top: 26px; display: flex; gap: 14px; padding: 20px 22px; border-radius: 18px; background: #eaf7f0; }
+.article-quick .icon { flex: none; color: var(--green-dark); }
+.article-quick strong { display: block; font-size: 18px; font-weight: 800; color: var(--ink); }
+.article-quick p { margin-top: 6px; font-size: 17px; line-height: 1.55; color: #24503e; }
+.article-body section { margin-top: 34px; }
+.article-body h2 { font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); scroll-margin-top: calc(var(--header-h) + 24px); }
+.article-body section p { margin-top: 14px; font-size: 17.5px; line-height: 1.7; color: #3b4658; }
+.article-table { margin-top: 30px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.article-table table { width: 100%; border-collapse: collapse; }
+.article-table th, .article-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 16.5px; line-height: 1.5; text-align: left; vertical-align: top; }
+.article-table thead th { background: var(--paper); font-weight: 800; color: var(--ink); }
+.article-table tbody th { font-weight: 700; color: var(--ink); }
+.article-table td { color: var(--muted); }
+.article-table tr:last-child th, .article-table tr:last-child td { border-bottom: 0; }
+.article-closing { margin-top: 26px; font-size: 17.5px; line-height: 1.7; color: #3b4658; }
+.article-nearby { margin-top: 40px; padding-top: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--line); }
+.article-nearby a { display: block; color: inherit; }
+.article-nearby .is-next { text-align: right; }
+.article-nearby small { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.article-nearby strong { display: block; margin-top: 6px; font-size: 17px; font-weight: 700; color: var(--ink); }
+.article-nearby a:hover strong { color: var(--green-dark); }
+
+.article-toc { position: sticky; top: calc(var(--header-h) + 24px); }
+.article-toc > p { font-size: 17px; font-weight: 800; color: var(--ink); }
+.article-toc ol { margin-top: 14px; display: grid; gap: 4px; }
+.article-toc a { display: block; padding: 7px 0 7px 14px; border-left: 2px solid var(--line); font-size: 16.5px; line-height: 1.4; color: var(--muted); }
+.article-toc a:hover { color: var(--ink); }
+.article-toc a.is-active { border-left-color: var(--green); color: var(--green-dark); font-weight: 700; }
+
+.resources-cta {
+  max-width: var(--content); margin: 30px auto 60px; padding: 30px 34px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 30px;
+  border-radius: 26px; background: var(--navy-deep); color: #fff;
+}
+.resources-cta h2 { font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.03em; }
+.resources-cta p { margin-top: 8px; max-width: 520px; font-size: 17px; line-height: 1.55; color: #cddaf2; }
+
+@media (max-width: 1080px) {
+  .article-layout { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .article-toc { position: static; order: -1; }
+  .article-toc ol { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; scrollbar-width: none; }
+  .article-toc a { border-left: 0; border-bottom: 2px solid var(--line); padding: 6px 14px 8px 0; white-space: nowrap; }
+  .article-toc a.is-active { border-left-color: transparent; border-bottom-color: var(--green); }
+}
+
+@media (max-width: 980px) {
+  .resources-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 46px 18px 52px; }
+  .resources-hero-art .scene { height: 260px; }
+  .guide-lead-row { grid-template-columns: minmax(0, 1fr); }
+  .guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .guide-grid { grid-template-columns: minmax(0, 1fr); }
+  .guide-card.is-side { grid-template-columns: minmax(0, 1fr); }
+  .guide-card.is-side .guide-shot { height: 180px; }
+  .article-nearby { grid-template-columns: minmax(0, 1fr); }
+  .article-nearby .is-next { text-align: left; }
+  .resources-cta { margin-inline: 18px; padding: 24px; }
 }

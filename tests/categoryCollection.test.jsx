@@ -33,26 +33,6 @@ describe('a product card is filled by its product', () => {
 });
 
 describe('the row of products is always finished', () => {
-  it('measures what the last row has left at each width', () => {
-    for (const columns of [4, 3, 2]) {
-      expect(source, `fill${columns}`).toContain(`data-fill${columns}={${columns} - (visible.length % ${columns})}`);
-    }
-  });
-
-  it('stretches the card that asks for what is not listed across the gap', () => {
-    for (const span of [1, 2, 3, 4]) {
-      expect(css, `span ${span}`).toContain(`.product-grid[data-fill4='${span}'] .product-ask { grid-column: span ${span}; }`);
-    }
-    // Three columns under 1080px, two under 620px: the same card, measured again.
-    expect(css).toMatch(/@media \(max-width: 1080px\) \{[^@]*\.product-grid\[data-fill3='2'\] \.product-ask \{ grid-column: span 2; \}/);
-    expect(css).toMatch(/@media \(max-width: 620px\) \{[^@]*\.product-grid\[data-fill2='2'\] \.product-ask \{ grid-column: span 2; \}/);
-  });
-
-  it('lays that card out as a band once it is wide, asking its own width', () => {
-    expect(css).toMatch(/\.product-ask \{ container-type: inline-size; \}/);
-    expect(css).toMatch(/@container \(min-width: 460px\) \{\s*\.product-ask-inner \{ flex-flow: row wrap;/);
-  });
-
   it('says it in the words the site already uses for it', () => {
     expect(siteContent.headings.industryHeading).toBeTruthy();
     expect(siteContent.labels.heroSearchAskButton).toBeTruthy();
@@ -104,13 +84,6 @@ describe('the banner and the ask card keep the height they need', () => {
     expect(css).not.toMatch(/\.hero-scene \{[^}]*min-height: 500px/);
   });
 
-  it('lays the ask card out as a strip when it runs the whole width', () => {
-    // Across four columns it was a slab of green with the words at one end and
-    // the way in at the other.
-    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask { padding: 16px 24px; }");
-    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask-inner { justify-content: center; }");
-    expect(css).toContain(".product-grid[data-fill4='4'] .product-ask-inner small { flex: none; }");
-  });
 });
 
 describe('the collection opens like a shelf', () => {
@@ -125,9 +98,12 @@ describe('the collection opens like a shelf', () => {
     expect(source).not.toContain('collectionSuffix');
     expect(siteContent.pages.products).not.toHaveProperty('collectionSuffix');
     expect(siteContent.pages.products.countLabel).toBeTruthy();
-    // The filter sits on the same line as the count.
+    // The shelf is named on the left and counted on the right; the filter has
+    // a row of its own above it.
     const bar = source.slice(source.indexOf('<div className="collection-bar">'), source.indexOf('id="product-collection-grid"'));
-    expect(bar).toContain('className="tab-list"');
+    expect(bar).toContain('className="collection-title"');
+    expect(bar.indexOf('className="collection-title"')).toBeLessThan(bar.indexOf('className="collection-count"'));
+    expect(css).toMatch(/\.collection-count \{ margin-left: auto;/);
     expect(css).toMatch(/\.collection-bar \{[^}]*border-bottom: 1px solid var\(--line\);/);
   });
 
@@ -139,13 +115,9 @@ describe('the collection opens like a shelf', () => {
     expect(css).toMatch(/\.product-flag \{[^}]*white-space: nowrap;/);
   });
 
-  it('fits a fifth column on a wide screen, and the ask card with it', () => {
-    expect(source).toContain('data-fill5={5 - (visible.length % 5)}');
+  it('fits a fifth column on a wide screen', () => {
     const wide = css.slice(css.indexOf('@media (min-width: 1700px)'));
     expect(wide).toContain('.product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }');
-    for (const span of [1, 2, 3, 4, 5]) {
-      expect(wide, `span ${span}`).toContain(`.product-grid[data-fill5='${span}'] .product-ask { grid-column: span ${span};`);
-    }
   });
 
   it('does not let a minimum height stretch the banner picture sideways', () => {
@@ -164,5 +136,21 @@ describe('the card for what is not on the shelf', () => {
     expect(card).toContain('background: #fff');
     expect(card).not.toContain('#d9efe2');
     expect(css).toMatch(/\.product-ask:hover \{[^}]*border-color: var\(--green-dark\);/);
+  });
+});
+
+describe('asking for what is not listed', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+
+  it('sits under the products rather than among them', () => {
+    expect(source).toMatch(/<\/div>\}\s*\n\s*\{\/\* Not everything MySOS can make is listed/);
+    expect(source).not.toMatch(/data-fill\d/);
+  });
+
+  it('opens a message instead of the quote page', () => {
+    // It is a question, not an order, and it names what the reader was looking at.
+    expect(source).toContain('const askHref = useMemo(() => messageHref(');
+    expect(source).toContain('{...enquiryLinkProps(askHref)}');
+    expect(source).not.toContain('href={REQUEST_PATH}');
   });
 });

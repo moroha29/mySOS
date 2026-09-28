@@ -1,0 +1,258 @@
+{
+  "hub": {
+    "eyebrow": "The MySOS knowledge hub",
+    "titleLead": "Make merch",
+    "titleAccent": "make sense.",
+    "lead": "Clear answers to the questions that come up before you print, order or launch.",
+    "searchPlaceholder": "What do you want to learn?",
+    "popularLabel": "Popular searches",
+    "popular": ["DTF vs silkscreen", "Choosing a T-shirt", "Artwork files"],
+    "allLabel": "All articles",
+    "exploreTitle": "Explore the guides",
+    "exploreLead": "Practical answers for your next custom merchandise project.",
+    "moreLabel": "Load more guides",
+    "emptyLabel": "No guide matches that yet. Tell us what you are looking for and we will answer it.",
+    "readSuffix": "min read",
+    "tocTitle": "On this page",
+    "quickAnswerTitle": "Quick answer",
+    "previousLabel": "Previous guide",
+    "nextLabel": "Next guide",
+    "ctaTitle": "Need a hand with your project?",
+    "ctaLead": "Our team in Singapore is here to help with product recommendations, artwork checks and order planning.",
+    "ctaButton": "Ask MySOS"
+  },
+  "topics": [
+    { "id": "product-guides", "name": "Product Guides" },
+    { "id": "printing", "name": "Printing" },
+    { "id": "materials", "name": "Materials & Sizing" },
+    { "id": "artwork", "name": "Artwork" },
+    { "id": "ordering", "name": "Ordering" }
+  ],
+  "articles": [
+    {
+      "slug": "dtf-or-silkscreen",
+      "topic": "printing",
+      "title": "DTF or silkscreen: which should you choose?",
+      "summary": "Both methods create great results, but they work differently. Find out how to choose based on your artwork, quantity and the look you're going for.",
+      "lead": "Both methods can produce great results — here's how to decide which is best for your design, quantity and budget.",
+      "readMinutes": 5,
+      "date": "2026-03-12",
+      "featured": true,
+      "image": "",
+      "imageCaption": "DTF is great for detailed, colourful designs. Silkscreen is ideal for bold, simple artwork in larger quantities.",
+      "quickAnswer": "Choose DTF for colourful designs and smaller runs. Choose silkscreen for simple designs and larger quantities.",
+      "sections": [
+        {
+          "heading": "How each method works",
+          "body": [
+            "DTF (direct to film) printing transfers your design onto the fabric from a printed film. It reproduces detailed artwork and a wide range of colours, which makes it a flexible option for smaller runs and complex designs.",
+            "Silkscreen printing pushes ink through a mesh screen directly onto the garment. Each colour in your design needs its own screen, so it suits simpler artwork — and it gives a durable finish that gets cheaper per piece as the quantity grows."
+          ]
+        },
+        {
+          "heading": "When DTF makes sense",
+          "body": [
+            "DTF is a good choice when your design has many colours, gradients or fine detail, such as a photograph or an illustration. There are no screens to set up, so a smaller order does not carry a large setup cost.",
+            "It is our usual recommendation for caps, t-shirts and polos where the artwork is doing something a screen would struggle with."
+          ]
+        },
+        {
+          "heading": "When silkscreen makes sense",
+          "body": [
+            "Silkscreen is often the better option for bold designs with a few solid colours, especially in larger quantities. The setup costs more, but the cost per piece falls as the order grows.",
+            "It is also known for lasting well: the print stays vibrant through repeated washing, which matters for uniforms and anything worn weekly."
+          ]
+        }
+      ],
+      "table": {
+        "columns": ["Consideration", "DTF", "Silkscreen"],
+        "rows": [
+          ["Best for", "Detailed, colourful designs and smaller runs", "Simple designs and larger quantities"],
+          ["Design colours", "Full colour, gradients and fine details", "Best with fewer, solid colours"],
+          ["Typical order size", "Small to medium runs", "More cost-effective for medium to large runs"]
+        ]
+      },
+      "closing": "Not sure which suits your artwork? Send it over and we will tell you which method we would use, and why."
+    },
+    {
+      "slug": "prepare-artwork-for-printing",
+      "topic": "artwork",
+      "title": "How to prepare artwork for printing",
+      "summary": "A practical guide to file formats, resolution, colours and common artwork issues (and how to fix them).",
+      "lead": "Good artwork is most of a good print. Here is what we need from you, and what we can sort out ourselves.",
+      "readMinutes": 6,
+      "date": "2026-02-26",
+      "image": "",
+      "imageCaption": "Vector artwork can be scaled to any size without losing its edges.",
+      "quickAnswer": "Send vector artwork where you can. High-resolution PNG and PDF files may also work, depending on the print method.",
+      "sections": [
+        {
+          "heading": "The files we prefer",
+          "body": [
+            "Vector artwork — AI, EPS or a vector PDF — is the easiest to work with, because it can be scaled to any size without losing its edges. That matters when the same logo goes on a cap, a tote bag and the back of a jersey.",
+            "High-resolution PNG and PDF files may also be suitable depending on the print method. If a vector file does not exist, send the largest version you have and we will tell you whether it will hold up."
+          ]
+        },
+        {
+          "heading": "Colours",
+          "body": [
+            "Tell us the colours that matter. If your brand has fixed colours, send the references you use; screens and fabric both shift how a colour reads, and we would rather match deliberately than guess.",
+            "Designs with many colours or gradients usually suit DTF or sublimation; designs with a few solid colours suit silkscreen or embroidery."
+          ]
+        },
+        {
+          "heading": "Placement and size",
+          "body": [
+            "Say where the artwork should sit and how large it should be — a chest logo, a full back print, a small sleeve mark. If you are not sure, we can advise on placement as well as on the artwork itself.",
+            "We confirm the final placement on the sample before production begins, so there is a point where you can see it and change your mind."
+          ]
+        }
+      ],
+      "closing": "Send us what you have. If the file is not right for the print method, we will say so and suggest the fix."
+    },
+    {
+      "slug": "choosing-t-shirt-fabric",
+      "topic": "materials",
+      "title": "Choosing the right T-shirt fabric",
+      "summary": "From cotton to performance fabrics, here's how to find the best material for comfort, look and purpose.",
+      "lead": "The fabric decides how a shirt feels, how it photographs and how long it lasts. Here is how we choose between them.",
+      "readMinutes": 5,
+      "date": "2026-02-12",
+      "image": "",
+      "imageCaption": "Cotton, performance and blended fabrics each suit a different kind of day.",
+      "quickAnswer": "Cotton for everyday comfort, performance fabric for sport and heat, a blend when you want some of both.",
+      "sections": [
+        {
+          "heading": "Cotton",
+          "body": [
+            "Soft, breathable and familiar. Cotton suits teams, events and everyday wear, and it takes most print methods well.",
+            "It is the safe answer when a shirt will be worn casually rather than played in."
+          ]
+        },
+        {
+          "heading": "Performance fabric",
+          "body": [
+            "Performance fabrics move moisture away from the skin, which is why they suit active groups and outdoor events in Singapore's climate.",
+            "They pair naturally with sublimation, where the colour becomes part of the fabric rather than sitting on it."
+          ]
+        },
+        {
+          "heading": "Blends",
+          "body": [
+            "A blend sits between the two: more comfortable than pure performance fabric, more forgiving than pure cotton, and usually the middle option on price.",
+            "If your group will wear the same shirt to a meeting and then to a match, a blend is often the one to pick."
+          ]
+        }
+      ],
+      "closing": "Tell us where the shirts will be worn and we will suggest the fabric — and send a sample before anything is produced."
+    },
+    {
+      "slug": "before-ordering-in-bulk",
+      "topic": "ordering",
+      "title": "What to consider before ordering in bulk",
+      "summary": "Key factors like quantity, timelines, storage and sample approval to help you get the best results.",
+      "lead": "A bulk order is mostly decisions made early. These are the ones worth making carefully.",
+      "readMinutes": 5,
+      "date": "2026-01-29",
+      "image": "",
+      "imageCaption": "Quantities, sizes and delivery are easier to settle before production than after it.",
+      "quickAnswer": "Settle quantity, sizes, artwork and delivery date before production starts — and approve a sample first.",
+      "sections": [
+        {
+          "heading": "Quantity and minimums",
+          "body": [
+            "Minimum quantities vary by product and customisation method. Ask early, because the minimum can change which method makes sense for your budget.",
+            "Larger quantities usually bring the cost per piece down, particularly with silkscreen, where the setup is spread across the order."
+          ]
+        },
+        {
+          "heading": "Sizes",
+          "body": [
+            "Collect the size breakdown before you order, not after. A size run that is guessed tends to leave a box of unworn extra-larges behind.",
+            "We can supply a size chart, or a sample garment to try, before you ask your group to choose."
+          ]
+        },
+        {
+          "heading": "Samples and timing",
+          "body": [
+            "Most projects take two to four weeks after artwork and sample approval, and complex custom products may take longer. Work backwards from the date you need them.",
+            "Approving a sample is the step people are tempted to skip when they are in a hurry. It is also the step that catches the wrong shade of navy."
+          ]
+        }
+      ],
+      "closing": "Send us your date first. We will tell you what is possible before you commit to anything."
+    },
+    {
+      "slug": "merch-ideas-for-teams-and-events",
+      "topic": "product-guides",
+      "title": "Merch ideas for teams and events",
+      "summary": "From staff uniforms to event giveaways, explore popular merch options and how to choose what works for your team or audience.",
+      "lead": "What to make depends on who receives it and what they will do with it. Here is what tends to work.",
+      "readMinutes": 4,
+      "date": "2026-01-15",
+      "image": "",
+      "imageCaption": "The best merchandise is the kind that gets used after the day it was given out.",
+      "quickAnswer": "Pick things people already use: something to wear, something to carry, something to drink from.",
+      "sections": [
+        {
+          "heading": "For a team",
+          "body": [
+            "Apparel does the work here — tees, polos or jerseys that make a group recognisable on the day and comfortable enough to wear again afterwards.",
+            "Add one practical item people keep: a bottle, a bag or a lanyard with their name on it."
+          ]
+        },
+        {
+          "heading": "For an event",
+          "body": [
+            "Event essentials — lanyards, badges, stickers, banners — carry the branding, while a giveaway is what the guest takes home.",
+            "Choose giveaways that survive the journey home. A notebook or a bottle outlives a printed leaflet."
+          ]
+        },
+        {
+          "heading": "For a welcome or a thank-you",
+          "body": [
+            "A small set beats a single expensive item: a bag, a bottle and a notebook together feel considered, and each piece is used separately.",
+            "Corporate gifts suit the moments where the recipient is not part of the team — clients, partners and speakers."
+          ]
+        }
+      ],
+      "closing": "Tell us who it is for and how many, and we will put together a few options to choose between."
+    },
+    {
+      "slug": "how-long-does-custom-merch-take",
+      "topic": "ordering",
+      "title": "How long does custom merch take?",
+      "summary": "A guide to typical lead times, what can affect delivery, and how to make sure your order arrives when you need it.",
+      "lead": "The honest answer is that most of the clock runs before production starts. Here is where the time goes.",
+      "readMinutes": 4,
+      "date": "2026-01-08",
+      "image": "",
+      "imageCaption": "Most of a timeline is decisions; production is the predictable part.",
+      "quickAnswer": "Most projects take two to four weeks after artwork and sample approval. Complex custom products may take longer.",
+      "sections": [
+        {
+          "heading": "Before production",
+          "body": [
+            "The first stretch is the enquiry, the recommendation and the quote. It moves at the speed of the decisions: product, quantity, method and budget.",
+            "Then the artwork has to be right, and a sample has to be approved. This is where timelines usually slip, and where they are easiest to protect."
+          ]
+        },
+        {
+          "heading": "Production and delivery",
+          "body": [
+            "Most projects take two to four weeks after artwork and sample approval. Complex custom products — cut and sew, unusual materials — may take longer.",
+            "International delivery can be arranged and is quoted separately, based on destination and order size."
+          ]
+        },
+        {
+          "heading": "If the date is tight",
+          "body": [
+            "Tell us the date at the start rather than at the end. Knowing it changes what we recommend: a method with no setup, a product already in stock, a simpler print.",
+            "There is almost always a version of the idea that fits the deadline. It is easier to find it early."
+          ]
+        }
+      ],
+      "closing": "Send us the date you need them by. We will tell you what is realistic, and what would make it faster."
+    }
+  ]
+}

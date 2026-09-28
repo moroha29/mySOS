@@ -31,6 +31,7 @@ const BASE = '/mySOS';
 const stories = JSON.parse(await readFile(path.join(root, 'src/data/successStories.json'), 'utf8'));
 const solutions = JSON.parse(await readFile(path.join(root, 'src/data/solutions.json'), 'utf8'));
 const productData = JSON.parse(await readFile(path.join(root, 'src/data/productData.json'), 'utf8'));
+const resources = JSON.parse(await readFile(path.join(root, 'src/data/resources.json'), 'utf8'));
 const products = productData.catalogue.filter((item) => item.public.visible);
 const routes = [
   '/',
@@ -42,6 +43,8 @@ const routes = [
   '/why-mysos/',
   '/success-stories/',
   ...stories.map((story) => `/success-stories/${story.slug}/`),
+  '/resources/',
+  ...resources.articles.map((article) => `/resources/${article.slug}/`),
 ];
 
 /*

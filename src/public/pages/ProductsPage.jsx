@@ -3,29 +3,19 @@ import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
-import { getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
+import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
+import { Product } from '../components/Visuals';
+
+// The garment each kind of apparel is drawn as, in the row that picks between
+// them. Anything the drawings do not cover falls back to a plain mark.
+const TYPE_VISUALS = { tshirts: 'tee', polos: 'polo', jerseys: 'jersey', hoodies: 'hoodie', jackets: 'jacket' };
 
 // Tab wording lives in content; the ids are what the filter matches on.
 const apparelTabs = siteContent.apparelTabs ?? [];
-
-/*
- * What MySOS can print on this kind of product, named in the banner rather
- * than in a band of its own further down the page.
- *
- * Every product in the catalogue carries the methods it can be branded with,
- * so a category's ways of printing are simply the ones its products offer —
- * MySOS's own data, kept per product in the portal, rather than a list of
- * categories to keep in step by hand. Names and order come from printData,
- * the pricing workbook's list.
- */
-function waysToPrint(products) {
-  const offered = new Set(products.flatMap((product) => product.printingMethods ?? []));
-  return printData.methods.filter((method) => method.public?.visible && offered.has(method.id));
-}
 
 /* The picture beside the banner: the category's own if one is uploaded, else
    the first photograph among its products, else the drawn stand-in. */
@@ -45,6 +35,7 @@ export default function ProductsPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
   const [category, setCategory] = useState(() => knownCategory(params.get('category') || 'apparel'));
   const [subcategory, setSubcategory] = useState(params.get('subcategory') || 'all');
+  const [query, setQuery] = useState('');
   const [showAll, setShowAll] = useState(false);
   const collectionRef = useRef(null);
 
@@ -86,10 +77,13 @@ export default function ProductsPage() {
     if (scrolledPast) section.scrollIntoView({ block: 'start', behavior: 'instant' });
   };
 
-  const products = useMemo(
-    () => getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined }),
-    [category, subcategory],
-  );
+  const products = useMemo(() => {
+    const inCategory = getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined });
+    const asked = query.trim().toLowerCase();
+    if (!asked) return inCategory;
+    // What the reader typed, against what a product is called and what it is.
+    return inCategory.filter((product) => `${product.public.name} ${product.public.description ?? ''}`.toLowerCase().includes(asked));
+  }, [category, query, subcategory]);
   const visible = showAll ? products : products.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
   /*
@@ -98,10 +92,12 @@ export default function ProductsPage() {
    * which category is content, so MySOS can correct it; a category that names
    * none is offered all of them.
    */
-  // Everything in the category, not only what is on screen: the ways of
-  // printing belong to the category, not to the first eight products.
-  const ways = useMemo(() => waysToPrint(getPublicProducts({ category })), [category]);
+  // The kinds within this category, each with the garment it stands for.
+  const types = useMemo(() => (category === 'apparel' ? apparelTabs.map((tab) => ({ ...tab, visual: TYPE_VISUALS[tab.id] })) : []), [category]);
   const banner = useMemo(() => categoryPicture(activeCategory, getPublicProducts({ category })), [activeCategory, category]);
+  // Asking for what is not listed opens a chat rather than the quote page: it
+  // is a question, not an order, and it names what the reader was looking at.
+  const askHref = useMemo(() => messageHref(`Hi MySOS, I am looking at ${activeCategory.name} and cannot find what I need. Can you help?`, `${activeCategory.name} enquiry`), [activeCategory]);
 
   return <main className="page-paper">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
@@ -120,21 +116,26 @@ export default function ProductsPage() {
             <span data-cms-path={cms(pagePath('products', 'heroTitle'))}>{pageText('products', 'heroTitle', 'Custom Merchandise,')}</span>{' '}
             <span data-cms-path={cms(pagePath('products', 'heroTitleAccent'))}>{pageText('products', 'heroTitleAccent', 'Made Simple')}</span>
           </span>
-          <h1 data-reveal style={{ '--reveal-delay': '70ms' }} data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</h1>
-          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('products', 'heroLead'))}>{pageText('products', 'heroLead')}</p>
-          {ways.length > 0 && <div className="hero-ways" id="printing" data-reveal style={{ '--reveal-delay': '300ms' }}>
-            <span className="hero-ways-label">
-              <span data-cms-path={cms(pagePath('products', 'waysLabel'))}>{pageText('products', 'waysLabel', 'Ways to print on')}</span>{' '}
-              <span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
-            </span>
-            <ul>
-              {ways.map((method) => <li key={method.id}>
-                <Icon name="check" size={18} />
-                <span>{method.name}</span>
-              </li>)}
-            </ul>
-          </div>}
-          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
+          <h1 data-reveal style={{ '--reveal-delay': '70ms' }}>
+            <span data-cms-path={cms(labelPath('categoryTitlePrefix'))}>{label('categoryTitlePrefix', 'Custom')}</span>{' '}
+            <span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
+          </h1>
+          <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(categoryPath(activeCategory, 'description'))}>{activeCategory.description}</p>
+          {/* Searching narrows what is on the shelf below rather than sending
+              the reader to another page for the answer. */}
+          <form className="hero-search collection-search" role="search" data-reveal style={{ '--reveal-delay': '300ms' }} onSubmit={(event) => event.preventDefault()}>
+            <Icon name="search" size={22} />
+            <input
+              type="search"
+              autoComplete="off"
+              aria-label={pageText('products', 'searchLabel', 'Search this category')}
+              placeholder={pageText('products', 'searchPlaceholder')}
+              value={query}
+              onChange={(event) => { setQuery(event.target.value); setShowAll(false); }}
+            />
+            {query && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={19} /></button>}
+          </form>
+          <div className="hero-actions" data-reveal style={{ '--reveal-delay': '360ms' }}>
             <QuoteButton showArrow />
             <Button href="/mySOS/solutions/" variant="ghost">
               <span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span>
@@ -155,52 +156,38 @@ export default function ProductsPage() {
       </div>
     </section>
 
+    {/* The kinds within a category, before the shelf itself. Only apparel is
+        divided this way; the other categories go straight to their products. */}
+    {types.length > 0 && <section className="section section-tight product-types">
+      <h2 data-reveal data-cms-path={cms(pagePath('products', 'typesTitle'))}>{pageText('products', 'typesTitle', 'Browse by type')}</h2>
+      <div className="type-row" role="tablist" aria-label="Apparel subcategories" data-reveal style={{ '--reveal-delay': '80ms' }}>
+        {types.map((tab, index) => <button
+          key={tab.id}
+          type="button"
+          role="tab"
+          aria-selected={subcategory === tab.id}
+          onClick={() => { setSubcategory(tab.id); setShowAll(false); }}
+        >
+          {tab.visual ? <Product type={tab.visual} color="navy" mark="" /> : <Icon name="layers" size={24} />}
+          <span data-cms-path={cms(contentPath('apparelTabs', index, 'name'))}>{tab.name}</span>
+        </button>)}
+      </div>
+    </section>}
+
     <section className="section products-collection" ref={collectionRef}>
-      {/* The banner above says which category this is, so the collection opens
-          with what is in it and how to narrow it down, not the name again. */}
       <div className="collection-bar">
+        <h2 className="collection-title">
+          <span data-cms-path={cms(pagePath('products', 'exploreTitle'))}>{pageText('products', 'exploreTitle', 'Explore all')}</span>{' '}
+          <span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
+        </h2>
         <p className="collection-count">
           <strong>{products.length}</strong>{' '}
           <span data-cms-path={cms(pagePath('products', 'countLabel'))}>{pageText('products', 'countLabel', 'products')}</span>
         </p>
-        {category === 'apparel' && <div className="tab-list" role="tablist" aria-label="Apparel subcategories">
-          {apparelTabs.map((tab) => <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            aria-selected={subcategory === tab.id}
-            onClick={() => { setSubcategory(tab.id); setShowAll(false); }}
-            data-cms-path={cms(contentPath('apparelTabs', apparelTabs.indexOf(tab), 'name'))}
-          >{tab.name}</button>)}
-        </div>}
       </div>
-      {/* The fill counts are how many columns are left over on the last row, at
-          each of the three widths this grid is drawn at. The card that asks for
-          what is not listed stretches across them, so no row ends part-drawn. */}
       {visible.length > 0
-        ? <div
-          className="product-grid"
-          id="product-collection-grid"
-          data-fill4={4 - (visible.length % 4)}
-          data-fill3={3 - (visible.length % 3)}
-          data-fill2={2 - (visible.length % 2)}
-          data-fill5={5 - (visible.length % 5)}
-        >
+        ? <div className="product-grid" id="product-collection-grid">
           {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
-          {/* Not everything MySOS can make is listed, and a short category used
-              to trail off into white space. This closes the row with the way
-              to ask for what is not there. */}
-          <a className="product-ask" href={REQUEST_PATH} data-reveal style={{ '--reveal-delay': `${(visible.length % 8) * 50}ms` }}>
-            <span className="product-ask-inner">
-              <Icon name="spark" size={30} />
-              <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
-              <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
-              <span className="product-ask-go">
-                <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
-                <Icon name="arrowRight" size={19} className="inline-arrow" />
-              </span>
-            </span>
-          </a>
         </div>
         : <div className="empty-state">
           <h3 data-cms-path={cms(pagePath('products', 'emptyTitle'))}>{pageText('products', 'emptyTitle')}</h3>
@@ -215,6 +202,21 @@ export default function ProductsPage() {
             : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
         </Button>
       </div>}
+
+      {/* Not everything MySOS can make is listed. This closes the products with
+          the way to ask for the rest — a message, rather than a form to fill
+          in first. */}
+      {askHref && <a className="product-ask" href={askHref} {...enquiryLinkProps(askHref)} data-reveal>
+        <span className="product-ask-inner">
+          <Icon name="spark" size={30} />
+          <strong data-cms-path={cms(headingPath('industryHeading'))}>{heading('industryHeading', "Don't know what you need?")}</strong>
+          <small data-cms-path={cms(headingPath('industryDescription'))}>{heading('industryDescription')}</small>
+          <span className="product-ask-go">
+            <span data-cms-path={cms(labelPath('heroSearchAskButton'))}>{label('heroSearchAskButton', 'Tell us about it')}</span>
+            <Icon name="arrowRight" size={19} className="inline-arrow" />
+          </span>
+        </span>
+      </a>}
     </section>
 
     <section className="promo-band">

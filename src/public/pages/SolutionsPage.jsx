@@ -42,21 +42,13 @@ export default function SolutionsPage() {
     </section>
 
     <section className="section section-tight">
-      <SectionHeading eyebrow={heading('chooseIndustryHeading', 'Choose your industry')} eyebrowPath={headingPath('chooseIndustryHeading')} align="left" />
-      <div className="browse-row">
-        {solutions.map((solution) => <a
-          key={solution.id}
-          className={selected?.id === solution.id ? 'is-active' : ''}
-          href={`/mySOS/solutions/${solution.id}/`}
-          aria-current={selected?.id === solution.id ? 'page' : undefined}
-        >
-          <Icon name={solution.icon || solution.imageStyle} size={30} cmsPath={solutionPath(solution, 'icon')} />
-          <span className="browse-label" data-cms-path={cms(solutionPath(solution, 'name'))}>{solution.name.replace(' Organisations', '')}</span>
-        </a>)}
-      </div>
-    </section>
-
-    <section className="section section-tight">
+      <SectionHeading
+        eyebrow={heading('chooseIndustryHeading', 'Find solutions for your industry')}
+        eyebrowPath={headingPath('chooseIndustryHeading')}
+        description={pageText('solutions', 'industryLead')}
+        descriptionPath={pagePath('solutions', 'industryLead')}
+        align="left"
+      />
       <div className="solution-grid">
         {solutions.map((solution, index) => <SolutionCard key={solution.id} solution={solution} active={selected?.id === solution.id} reveal={index} />)}
       </div>
@@ -75,7 +67,18 @@ export default function SolutionsPage() {
           <h3 data-cms-path={cms(contentPath('popularSolutions', index, 'name'))}>{item.name}</h3>
         </article>)}
       </div>
-      <div className="center-action"><Button href="/mySOS/products/" variant="outline"><span data-cms-path={cms(labelPath('viewAllSolutionsButton'))}>{label('viewAllSolutionsButton', 'View All Solutions')}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></Button></div>
+      {/* Somewhere to go for a reader who knows the product and not the
+          package — it used to be a button back to the page they were on. */}
+      <div className="solution-products" data-reveal>
+        <div>
+          <strong data-cms-path={cms(pagePath('solutions', 'productsBandTitle'))}>{pageText('solutions', 'productsBandTitle', 'Have a specific product in mind?')}</strong>
+          <p data-cms-path={cms(pagePath('solutions', 'productsBandLead'))}>{pageText('solutions', 'productsBandLead')}</p>
+        </div>
+        <Button href="/mySOS/products/" variant="primary">
+          <span data-cms-path={cms(labelPath('viewAllProductsLabel'))}>{label('viewAllProductsLabel', 'View All Products')}</span>
+          <Icon name="arrowRight" size={18} className="inline-arrow" />
+        </Button>
+      </div>
     </section>
 
     <section className="promo-band">
