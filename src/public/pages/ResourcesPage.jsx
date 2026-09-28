@@ -177,7 +177,7 @@ export default function ResourcesPage() {
           </div>}
 
           {found.length > visible.length && <div className="center-action">
-            <Button href="#" variant="outline" onClick={(event) => { event.preventDefault(); setShown((count) => count + PAGE_SIZE); }}>
+            <Button variant="outline" onClick={() => setShown((count) => count + PAGE_SIZE)}>
               <span data-cms-path={cms(hubPath('moreLabel'))}>{hub('moreLabel')}</span>
               <Icon name="arrowRight" size={18} className="inline-arrow" />
             </Button>

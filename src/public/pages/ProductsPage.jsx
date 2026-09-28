@@ -10,12 +10,33 @@ import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 import { Product } from '../components/Visuals';
 
-// The garment each kind of apparel is drawn as, in the row that picks between
-// them. Anything the drawings do not cover falls back to a plain mark.
-const TYPE_VISUALS = { tshirts: 'tee', polos: 'polo', jerseys: 'jersey', hoodies: 'hoodie', jackets: 'jacket' };
+/*
+ * What each kind of product is drawn as in the row that picks between them.
+ * Anything the drawings do not cover falls back to the category's own mark.
+ */
+const TYPE_VISUALS = {
+  tshirts: 'tee', polos: 'polo', jerseys: 'jersey', hoodies: 'hoodie', jackets: 'jacket',
+  singlets: 'sleeveless', caps: 'cap', totes: 'tote', drawstring: 'bag', bottles: 'bottle',
+  'gift-sets': 'gift-set', notebooks: 'notebook', lanyards: 'lanyard',
+};
 
-// Tab wording lives in content; the ids are what the filter matches on.
-const apparelTabs = siteContent.apparelTabs ?? [];
+const prettyName = (id) => id.replace(/-/g, ' ').replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
+
+/*
+ * The kinds within a category, read from the products themselves rather than
+ * from a list kept by hand: the apparel filter named five while the catalogue
+ * held seven, so six caps could be reached only by searching for them.
+ */
+function typesIn(products, names) {
+  const seen = [];
+  for (const product of products) {
+    const id = product.public.subcategory;
+    if (!id || seen.some((type) => type.id === id)) continue;
+    seen.push({ id, name: names[id] ?? prettyName(id), visual: TYPE_VISUALS[id] });
+  }
+  return seen.length > 1 ? seen : [];
+}
+
 
 /* The picture beside the banner: the category's own if one is uploaded, else
    the first photograph among its products, else the drawn stand-in. */
@@ -36,6 +57,7 @@ export default function ProductsPage() {
   const [category, setCategory] = useState(() => knownCategory(params.get('category') || 'apparel'));
   const [subcategory, setSubcategory] = useState(params.get('subcategory') || 'all');
   const [query, setQuery] = useState('');
+  const [sort, setSort] = useState('featured');
   const [showAll, setShowAll] = useState(false);
   const collectionRef = useRef(null);
 
@@ -60,8 +82,7 @@ export default function ProductsPage() {
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
-  const toggleShowAll = (event) => {
-    event.preventDefault();
+  const toggleShowAll = () => {
     if (!showAll) {
       setShowAll(true);
       return;
@@ -78,13 +99,23 @@ export default function ProductsPage() {
   };
 
   const products = useMemo(() => {
-    const inCategory = getPublicProducts({ category, subcategory: category === 'apparel' && subcategory !== 'all' ? subcategory : undefined });
+    const inCategory = getPublicProducts({ category, subcategory: subcategory === 'all' ? undefined : subcategory });
     const asked = query.trim().toLowerCase();
     if (!asked) return inCategory;
     // What the reader typed, against what a product is called and what it is.
     return inCategory.filter((product) => `${product.public.name} ${product.public.description ?? ''}`.toLowerCase().includes(asked));
   }, [category, query, subcategory]);
-  const visible = showAll ? products : products.slice(0, 8);
+
+  /* What MySOS puts first, or the reader's own order. */
+  const shelf = useMemo(() => {
+    if (sort === 'name') return [...products].sort((a, b) => a.public.name.localeCompare(b.public.name));
+    if (sort === 'price') {
+      const amount = (product) => product.public.displayPricing?.amount ?? Number.POSITIVE_INFINITY;
+      return [...products].sort((a, b) => amount(a) - amount(b));
+    }
+    return products;
+  }, [products, sort]);
+  const visible = showAll ? shelf : shelf.slice(0, 8);
   const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
   /*
    * The ways MySOS can put a brand on what is in this category, rather than
@@ -92,14 +123,14 @@ export default function ProductsPage() {
    * which category is content, so MySOS can correct it; a category that names
    * none is offered all of them.
    */
-  // The kinds within this category, each with the garment it stands for.
-  const types = useMemo(() => (category === 'apparel' ? apparelTabs.map((tab) => ({ ...tab, visual: TYPE_VISUALS[tab.id] })) : []), [category]);
+  // The kinds within this category, each with the thing it stands for.
+  const types = useMemo(() => typesIn(getPublicProducts({ category }), siteContent.subcategoryNames ?? {}), [category]);
   const banner = useMemo(() => categoryPicture(activeCategory, getPublicProducts({ category })), [activeCategory, category]);
   // Asking for what is not listed opens a chat rather than the quote page: it
   // is a question, not an order, and it names what the reader was looking at.
   const askHref = useMemo(() => messageHref(`Hi MySOS, I am looking at ${activeCategory.name} and cannot find what I need. Can you help?`, `${activeCategory.name} enquiry`), [activeCategory]);
 
-  return <main className="page-paper">
+  return <main className="page-paper products-page">
     <CategoryStrip activeId={category} onChoose={chooseCategory} />
 
     <section {...heroBackground(siteContent.scenes?.productsHeroBackgroundImage, scenePath('productsHeroBackgroundImage'), 'hero hero-compact')}>
@@ -129,7 +160,7 @@ export default function ProductsPage() {
               type="search"
               autoComplete="off"
               aria-label={pageText('products', 'searchLabel', 'Search this category')}
-              placeholder={pageText('products', 'searchPlaceholder')}
+              placeholder={activeCategory.searchPlaceholder || pageText('products', 'searchPlaceholder')}
               value={query}
               onChange={(event) => { setQuery(event.target.value); setShowAll(false); }}
             />
@@ -156,20 +187,27 @@ export default function ProductsPage() {
       </div>
     </section>
 
-    {/* The kinds within a category, before the shelf itself. Only apparel is
-        divided this way; the other categories go straight to their products. */}
+    {/* The kinds within a category, before the shelf itself. */}
     {types.length > 0 && <section className="section section-tight product-types">
-      <h2 data-reveal data-cms-path={cms(pagePath('products', 'typesTitle'))}>{pageText('products', 'typesTitle', 'Browse by type')}</h2>
-      <div className="type-row" role="tablist" aria-label="Apparel subcategories" data-reveal style={{ '--reveal-delay': '80ms' }}>
-        {types.map((tab, index) => <button
-          key={tab.id}
+      <h2 data-reveal>
+        <span data-cms-path={cms(pagePath('products', 'typesPrefix'))}>{pageText('products', 'typesPrefix', 'Browse')}</span>{' '}
+        <span data-cms-path={cms(categoryPath(activeCategory, 'typeWord'))}>{activeCategory.typeWord}</span>{' '}
+        <span data-cms-path={cms(pagePath('products', 'typesSuffix'))}>{pageText('products', 'typesSuffix', 'types')}</span>
+      </h2>
+      <div className="type-row" role="tablist" aria-label={`${activeCategory.name} types`} data-reveal style={{ '--reveal-delay': '80ms' }}>
+        <button type="button" role="tab" aria-selected={subcategory === 'all'} onClick={() => { setSubcategory('all'); setShowAll(false); }}>
+          <Icon name={activeCategory.icon} size={26} />
+          <span data-cms-path={cms(pagePath('products', 'allTypesLabel'))}>{pageText('products', 'allTypesLabel', 'All')}</span>
+        </button>
+        {types.map((type) => <button
+          key={type.id}
           type="button"
           role="tab"
-          aria-selected={subcategory === tab.id}
-          onClick={() => { setSubcategory(tab.id); setShowAll(false); }}
+          aria-selected={subcategory === type.id}
+          onClick={() => { setSubcategory(type.id); setShowAll(false); }}
         >
-          {tab.visual ? <Product type={tab.visual} color="navy" mark="" /> : <Icon name="layers" size={24} />}
-          <span data-cms-path={cms(contentPath('apparelTabs', index, 'name'))}>{tab.name}</span>
+          {type.visual ? <Product type={type.visual} color="navy" mark="" /> : <Icon name={activeCategory.icon} size={26} />}
+          <span data-cms-path={cms(contentPath('subcategoryNames', type.id))}>{type.name}</span>
         </button>)}
       </div>
     </section>}
@@ -180,10 +218,14 @@ export default function ProductsPage() {
           <span data-cms-path={cms(pagePath('products', 'exploreTitle'))}>{pageText('products', 'exploreTitle', 'Explore all')}</span>{' '}
           <span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
         </h2>
-        <p className="collection-count">
-          <strong>{products.length}</strong>{' '}
-          <span data-cms-path={cms(pagePath('products', 'countLabel'))}>{pageText('products', 'countLabel', 'products')}</span>
-        </p>
+        <label className="collection-sort">
+          <span data-cms-path={cms(pagePath('products', 'sortLabel'))}>{pageText('products', 'sortLabel', 'Sort by')}</span>
+          <select value={sort} onChange={(event) => setSort(event.target.value)}>
+            <option value="featured">{pageText('products', 'sortFeatured', 'Featured')}</option>
+            <option value="name">{pageText('products', 'sortName', 'Name A–Z')}</option>
+            <option value="price">{pageText('products', 'sortPrice', 'Price, low to high')}</option>
+          </select>
+        </label>
       </div>
       {visible.length > 0
         ? <div className="product-grid" id="product-collection-grid">
@@ -196,10 +238,10 @@ export default function ProductsPage() {
       {/* One button that expands and collapses. It used to hide itself once the
           list was expanded, leaving no way back to the shorter list. */}
       {products.length > 8 && <div className="center-action">
-        <Button href="#" variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
+        <Button variant="outline" aria-expanded={showAll} aria-controls="product-collection-grid" onClick={toggleShowAll}>
           {showAll
             ? <><span data-cms-path={cms(pagePath('products', 'showLessLabel'))}>{pageText('products', 'showLessLabel', 'Show Less')}</span> <Icon name="chevronDown" size={18} className="inline-arrow is-up" /></>
-            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span> {activeCategory.name} <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
+            : <><span data-cms-path={cms(pagePath('products', 'viewAllPrefix'))}>{pageText('products', 'viewAllPrefix', 'View All')}</span>{' '}<span data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></>}
         </Button>
       </div>}
 

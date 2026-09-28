@@ -1101,10 +1101,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-more { margin-top: 14px; border: 1px solid var(--line); border-radius: 10px; }
 .request-more-toggle { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 0; background: none; font-size: 17.5px; font-weight: 700; color: var(--navy); cursor: pointer; }
 .request-more-toggle .icon:last-child { margin-left: auto; }
-.request-more-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 12px 12px; }
-.request-more-list button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 17px; font-weight: 600; color: var(--navy); text-align: left; cursor: pointer; }
-.request-more-list button:hover { border-color: var(--green); }
-.request-more-list button .icon { margin-left: auto; color: var(--green); }
 /* The whole catalogue under the suggestions, one category open at a time. */
 .request-browse { padding: 4px 12px 12px; border-top: 1px solid var(--line); }
 .request-browse:focus { outline: none; }
@@ -1113,7 +1109,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-browse-group + .request-browse-group { margin-top: 8px; }
 .request-browse-group summary { display: flex; align-items: center; gap: 8px; padding: 11px 14px; font-size: 17.5px; font-weight: 600; color: var(--navy); cursor: pointer; }
 .request-browse-group summary span { margin-left: auto; font-size: 15.5px; font-weight: 600; color: var(--muted); }
-.request-browse-group .request-more-list { padding-top: 2px; }
 .request-inline { margin-left: 6px; padding: 0; border: 0; background: none; font: inherit; font-weight: 700; color: var(--green-dark); text-decoration: underline; cursor: pointer; }
 
 .request-custom { margin-top: 16px; }
@@ -1179,7 +1174,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .request-row-main .qty-stepper { grid-column: 1 / -1; justify-self: start; }
   .request-row-actions { grid-column: 1 / -1; min-width: 0; justify-content: space-between; }
   .request-thumb { width: 50px; height: 46px; }
-  .request-details-grid, .request-more-list, .request-files-row, .request-custom-row { grid-template-columns: minmax(0, 1fr); }
+  .request-details-grid, .request-files-row, .request-custom-row { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
   .use-case-card, .request-details-toggle { transition: none; }
@@ -1821,9 +1816,12 @@ html.has-reveal [data-reveal].is-in .scene img, html.has-reveal [data-reveal].is
 html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reveal].is-in .crest-img { transform: none; }
 
 /* The menu draws its own rule under whatever you are pointing at. */
-.nav-link { position: relative; }
+/* A pointer target the size of the words plus the space around them: the
+   links themselves were 24px tall, which is small for a finger on a laptop
+   that has a touchscreen. The rule under them stays against the words. */
+.nav-link { position: relative; padding-block: 10px; }
 .nav-link::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px;
+  content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 2px;
   background: var(--green); transform: scaleX(0); transform-origin: left;
   transition: transform .28s cubic-bezier(.22, .61, .36, 1);
 }
@@ -2567,8 +2565,12 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .article-body section { margin-top: 34px; }
 .article-body h2 { font-size: clamp(24px, 2.2vw, 32px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); scroll-margin-top: calc(var(--header-h) + 24px); }
 .article-body section p { margin-top: 14px; font-size: 17.5px; line-height: 1.7; color: #3b4658; }
-.article-table { margin-top: 30px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
-.article-table table { width: 100%; border-collapse: collapse; }
+/* Three columns of prose will not fit a phone, and a table that cannot shrink
+   drags the whole column of text off the side of the screen with it. It
+   scrolls sideways on its own instead. */
+.article-body { min-width: 0; }
+.article-table { margin-top: 30px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden auto; overflow-x: auto; }
+.article-table table { width: 100%; min-width: 520px; border-collapse: collapse; }
 .article-table th, .article-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 16.5px; line-height: 1.5; text-align: left; vertical-align: top; }
 .article-table thead th { background: var(--paper); font-weight: 800; color: var(--ink); }
 .article-table tbody th { font-weight: 700; color: var(--ink); }
@@ -2598,10 +2600,10 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 @media (max-width: 1080px) {
   .article-layout { grid-template-columns: minmax(0, 1fr); gap: 26px; }
-  .article-toc { position: static; order: -1; }
-  .article-toc ol { grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; scrollbar-width: none; }
-  .article-toc a { border-left: 0; border-bottom: 2px solid var(--line); padding: 6px 14px 8px 0; white-space: nowrap; }
-  .article-toc a.is-active { border-left-color: transparent; border-bottom-color: var(--green); }
+  /* Without a column beside the words the contents list sits above the title,
+     which is a list of a guide the reader has not been told the name of yet.
+     The headings themselves carry the guide on a narrow screen. */
+  .article-toc { display: none; }
 }
 
 @media (max-width: 980px) {
@@ -2619,3 +2621,58 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .article-nearby .is-next { text-align: left; }
   .resources-cta { margin-inline: 18px; padding: 24px; }
 }
+
+/* ================================ 36. the category page, to the client's design
+   A flat blue banner with the picture running off the right edge, the kinds
+   within the category as outlined pills, and a shelf of plain cards: the
+   product and its name, nothing else on top of it. */
+
+.products-page .hero:not(.has-background) { background: #dcebfa; }
+.products-page .hero:not(.has-background)::before { display: none; }
+.products-page .hero .hero-inner { max-width: none; padding: 0; gap: 0; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
+/* The words keep the page's column; the picture runs to the edge of the screen. */
+.products-page .hero .hero-inner > div:first-child { padding: 58px 24px 62px max(24px, calc((100% - var(--content)) / 2 + 24px)); align-self: center; }
+.products-page .hero-scene { min-height: 0; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; animation: none; }
+.products-page .hero-scene .scene { border-radius: 0; }
+.products-page .breadcrumb { color: #4a6180; }
+.products-page .hero .eyebrow { color: #4a6180; }
+.products-page .hero-lead { color: #3d5473; }
+
+/* The card: the product and its name. */
+.product-card { border-color: transparent; background: transparent; padding: 0; }
+.product-card:hover { border-color: transparent; box-shadow: none; background: transparent; }
+.product-card .product-visual { border-radius: 14px; background: #f1f4f9; }
+.product-card h3 { margin-top: 12px; padding-right: 0; font-size: 17.5px; font-weight: 700; color: var(--ink); }
+.product-card:hover h3 { color: var(--green-dark); }
+.product-card:hover .product-visual { box-shadow: 0 16px 34px rgba(9, 28, 72, .12); }
+
+/* The row that picks a kind, as outlined pills. */
+.product-types h2 { font-weight: 800; }
+.type-row button { padding: 12px 22px 12px 14px; border-radius: 14px; }
+.type-row .product-visual { width: 34px; height: 34px; }
+
+.collection-sort { display: inline-flex; align-items: center; gap: 10px; font-size: 16.5px; color: var(--muted); }
+.collection-sort select {
+  padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff;
+  font: inherit; font-size: 16.5px; color: var(--ink); cursor: pointer;
+}
+.collection-sort select:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+@media (max-width: 980px) {
+  .products-page .hero .hero-inner { grid-template-columns: minmax(0, 1fr); }
+  .products-page .hero .hero-inner > div:first-child { padding: 40px 18px 34px; }
+  .products-page .hero-scene { min-height: 260px; }
+}
+
+@media (max-width: 860px) {
+  .type-row button { padding: 10px 16px 10px 10px; border-radius: 12px; }
+  .collection-sort select { padding: 8px 10px; font-size: 16px; }
+}
+
+/* The picture fills its half of the banner: it used to keep the photograph's
+   own shape and leave a white band above and below it. */
+.products-page .hero-scene, .products-page .hero-scene > .scene { height: 100%; min-height: 100%; }
+
+/* The dots beside the reasons are 12px of paint; the thing you press is the
+   space around them, as it is on the process tracker. */
+.step-dots button::before { content: ""; position: absolute; inset: -16px; }

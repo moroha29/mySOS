@@ -3,7 +3,7 @@ import siteContent from '../../data/siteContent.json';
 import { enquiryLinkProps } from '../../utils/catalogue';
 import {
   allFileNames, buildRequestMessage, clampQuantity, detailFieldsFor, makeLine, needsPrintingChoice, OTHER_PRINTING,
-  packageLines, printingFieldFor, productFor, recommendedDetails, requestHref, suggestionsFor,
+  packageLines, printingFieldFor, productFor, recommendedDetails, requestHref,
 } from '../../utils/solutionRequest';
 import { REQUEST_PATH } from '../../utils/catalogue';
 import { clearSavedRequest, mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
@@ -160,17 +160,6 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
   </li>;
 }
 
-/* A product the customer can add with one tap. */
-function ProductCard({ product, onAdd }) {
-  return <li>
-    <button type="button" onClick={() => onAdd(product)}>
-      <span className="request-thumb"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
-      <span>{product.public.name}</span>
-      <Icon name="plus" size={19} />
-    </button>
-  </li>;
-}
-
 export default function RequestBuilder({
   topic = '',
   useCase = null,
@@ -266,7 +255,6 @@ export default function RequestBuilder({
     setLines((current) => current.map((line) => (line.key === key ? { ...line, files: [...new Set([...line.files, ...picked.map((file) => file.name)])] } : line)));
   };
   const generalFiles = files.filter((entry) => !entry.owner);
-  const suggestions = suggestionsFor(useCase, lines);
   const chosenIds = lines.map((line) => line.productId).filter(Boolean);
   const awaitingPrinting = lines.filter(needsPrintingChoice);
   const fileNames = allFileNames(lines, generalFiles.map((entry) => entry.file.name));
@@ -367,9 +355,6 @@ export default function RequestBuilder({
             <Icon name="plus" size={19} />
             <span data-cms-path={wordPath('addMoreTitle')}>{word('addMoreTitle', 'Add More Products')}</span>
           </button>
-          {suggestions.length > 0 && <ul className="request-more-list">
-            {suggestions.map((product) => <ProductCard key={product.id} product={product} onAdd={() => addLine({ productId: product.id }, 'extra')} />)}
-          </ul>}
         </div>
 
         <AddProductDialog

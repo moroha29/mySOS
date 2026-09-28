@@ -132,3 +132,20 @@ describe('one guide', () => {
     }
   });
 });
+
+describe('a guide on a narrow screen', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('lets a wide table scroll instead of dragging the page sideways', () => {
+    // Three columns of prose cannot fit a phone, and a table that will not
+    // shrink takes the whole column of text off the side of the screen.
+    expect(css).toMatch(/\.article-table \{[^}]*overflow-x: auto;/);
+    expect(css).toMatch(/\.article-table table \{[^}]*min-width: \d+px;/);
+    expect(css).toMatch(/\.article-body \{ min-width: 0; \}/);
+  });
+
+  it('leaves out the contents list where there is no column for it', () => {
+    const narrow = css.slice(css.indexOf('@media (max-width: 1080px)', css.indexOf('35. the knowledge hub')));
+    expect(narrow.slice(0, narrow.indexOf('\n}'))).toContain('.article-toc { display: none; }');
+  });
+});

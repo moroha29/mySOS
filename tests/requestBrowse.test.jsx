@@ -114,3 +114,14 @@ describe('the window that adds a product', () => {
     expect(css).toMatch(/\.add-product \{ inset: auto 0 0 0;/);
   });
 });
+
+describe('the request itself', () => {
+  const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
+
+  it('lists no products under the button that opens the catalogue', () => {
+    // A list of suggestions under it put the catalogue back beneath the
+    // request it had just been taken out of.
+    expect(builder).not.toContain('suggestionsFor');
+    expect(builder).not.toContain('request-more-list');
+  });
+});

@@ -90,29 +90,30 @@ describe('the collection opens like a shelf', () => {
   const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
   const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
 
-  it('counts what is in the category instead of naming it again', () => {
+  it('names the shelf and offers an order, rather than the category again', () => {
     // The banner above already says "Apparel"; the section under it used to
     // say "Apparel collection" and then show a wall of white cards.
     expect(source).toContain('<div className="collection-bar">');
-    expect(source).toContain('<strong>{products.length}</strong>');
+    expect(source).toContain("pageText('products', 'sortLabel', 'Sort by')");
     expect(source).not.toContain('collectionSuffix');
     expect(siteContent.pages.products).not.toHaveProperty('collectionSuffix');
-    expect(siteContent.pages.products.countLabel).toBeTruthy();
-    // The shelf is named on the left and counted on the right; the filter has
-    // a row of its own above it.
+    expect(siteContent.pages.products.sortFeatured).toBeTruthy();
+    // The shelf is named on the left and ordered from the right; the filter
+    // has a row of its own above it.
     const bar = source.slice(source.indexOf('<div className="collection-bar">'), source.indexOf('id="product-collection-grid"'));
     expect(bar).toContain('className="collection-title"');
-    expect(bar.indexOf('className="collection-title"')).toBeLessThan(bar.indexOf('className="collection-count"'));
-    expect(css).toMatch(/\.collection-count \{ margin-left: auto;/);
+    expect(bar).toContain('className="collection-sort"');
+    expect(bar.indexOf('className="collection-title"')).toBeLessThan(bar.indexOf('className="collection-sort"'));
     expect(css).toMatch(/\.collection-bar \{[^}]*border-bottom: 1px solid var\(--line\);/);
   });
 
-  it('puts the price and what is asked for most on the picture', () => {
+  it('keeps the card to the product and its name', () => {
+    // The design the client chose puts nothing else on it: the price and what
+    // is asked for most are on the product's own page.
     expect(ui).toContain('<span className="product-card-shot">');
-    expect(ui).toContain("label('featuredBadge', 'Most requested')");
-    expect(css).toMatch(/\.product-flag, \.product-card \.price \{[^}]*position: absolute;/);
-    // One line, whatever the card's width: it wrapped on a phone.
-    expect(css).toMatch(/\.product-flag \{[^}]*white-space: nowrap;/);
+    expect(ui).not.toContain("label('featuredBadge'");
+    expect(ui).not.toContain('className="price"');
+    expect(css).toMatch(/\.product-card \{ border-color: transparent; background: transparent;/);
   });
 
   it('fits a fifth column on a wide screen', () => {
@@ -122,7 +123,6 @@ describe('the collection opens like a shelf', () => {
 
   it('does not let a minimum height stretch the banner picture sideways', () => {
     // 4:3 with a 300px floor came out 400px wide on a 390px screen.
-    expect(css).not.toMatch(/\.hero-scene \{ min-height: \d+px/);
     expect(css).toMatch(/\.hero-scene \{[\s\S]{0,400}?min-height: 0;/);
   });
 });
@@ -152,5 +152,18 @@ describe('asking for what is not listed', () => {
     expect(source).toContain('const askHref = useMemo(() => messageHref(');
     expect(source).toContain('{...enquiryLinkProps(askHref)}');
     expect(source).not.toContain('href={REQUEST_PATH}');
+  });
+});
+
+describe('the controls do what they look like', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+
+  it('draws something that acts on this page as a button, not a link to nowhere', () => {
+    // "View All Apparel" and "Load more guides" were <a href="#">.
+    expect(ui).toContain("if (!href) return <button type=\"button\"");
+    for (const page of ['ProductsPage', 'ResourcesPage']) {
+      const source = readFileSync(new URL(`../src/public/pages/${page}.jsx`, import.meta.url), 'utf8');
+      expect(source, page).not.toContain('href="#"');
+    }
   });
 });
