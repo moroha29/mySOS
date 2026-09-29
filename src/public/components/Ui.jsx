@@ -120,6 +120,20 @@ export function ProductCard({ product, reveal }) {
   </a>;
 }
 
+/*
+ * A category's mark: the drawn product the type row already uses, in the one
+ * colour the pill or tile it sits on can carry. Every place a category is
+ * named now shows the same drawing, rather than a thin outline glyph here and
+ * a solid silhouette there.
+ *
+ * Always the drawing, never the category's photograph: at 36px a photograph
+ * is a smudge, and the point of the mark is that it reads at a glance. The
+ * photograph still leads the category's card and its banner.
+ */
+export function CategoryMark({ category, tone = 'navy', className = 'category-mark' }) {
+  return <Product type={category.visual} color={tone} mark="" className={className} />;
+}
+
 export function CategoryCard({ category }) {
   const src = picture(category.image, `products/category-${category.id}`);
   return <a className="category-card" href={`/mySOS/products/?category=${category.id}`}>

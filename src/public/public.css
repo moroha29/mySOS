@@ -1287,6 +1287,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-tile strong { display: block; font-size: 21px; font-weight: 800; letter-spacing: -.02em; }
 .home-tile small { display: block; margin-top: 6px; font-size: 17px; line-height: 1.5; opacity: .82; }
 .home-tile-body { margin-top: 70px; }
+/* The tile's mark is the category's own drawing, at the size the old outline
+   glyph sat at. */
+.home-tile .category-mark { width: 52px; height: 52px; }
 .home-tile.tone-soft { background: #e9edf8; color: var(--ink); }
 .home-tile.tone-navy { background: var(--navy); color: #fff; }
 .home-tile.tone-green { background: #046b45; color: #fff; }
@@ -2497,8 +2500,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .type-row button:hover { border-color: var(--green-dark); transform: translateY(-2px); }
 .type-row button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
 .type-row .product-visual { width: 36px; height: 36px; }
-.type-row .icon { color: var(--navy-soft); }
-.type-row button[aria-selected="true"] .icon { color: #fff; }
+/* The "All" pill carries the category's own mark, the same drawing as the
+   types beside it; it used to be the one outline glyph in the row. */
+.type-row .category-mark { width: 36px; height: 36px; }
 
 .collection-title { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
 

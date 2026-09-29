@@ -172,3 +172,61 @@ describe('the controls do what they look like', () => {
     }
   });
 });
+
+describe('one mark for a category, wherever it is named', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+  const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
+  const products = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+  const visuals = readFileSync(new URL('../src/public/components/Visuals.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('draws the category rather than reaching for an outline glyph', () => {
+    // The type row used the drawn products; the homepage tiles used thin
+    // outline icons of the same six things, so a t-shirt was two drawings
+    // depending on which page you were on.
+    expect(ui).toContain('export function CategoryMark({ category, tone');
+    expect(ui).toMatch(/return <Product type=\{category\.visual\} color=\{tone\} mark="" /);
+    expect(home).toContain('<CategoryMark category={category}');
+    expect(home).not.toContain('<Icon name={category.icon}');
+    // Every category has something to draw.
+    for (const category of siteContent.categories) expect(category.visual, category.id).toMatch(/\S/);
+  });
+
+  it('turns the mark white while the pill or tile under it is dark', () => {
+    // A navy drawing on the navy pill it had just been selected on was no
+    // drawing at all.
+    expect(products).toContain("tone={subcategory === 'all' ? 'white' : 'navy'}");
+    expect(products).toContain("color={subcategory === type.id ? 'white' : 'navy'}");
+    expect(home).toContain("const DARK_TONES = new Set(['navy', 'green']);");
+    expect(home).toMatch(/tone=\{DARK_TONES\.has\(TILE_TONES\[index % TILE_TONES\.length\]\) \? 'white' : 'navy'\}/);
+  });
+
+  it('leaves the lettering off a bag drawn at mark size', () => {
+    // The tote was drawn with "YOUR BRAND HERE" across it whatever it was
+    // asked for, so the words turned to mush inside a 36px icon.
+    // The tote is now one of the drawings that is handed the mark, so an empty
+    // one reaches it and it draws nothing.
+    expect(visuals).toMatch(/const marked = \{[^}]*tote: Tote/);
+    expect(visuals).toContain('<Marked color={color} mark={mark} />');
+    expect(visuals).toContain('{mark ? <>');
+  });
+
+  it('draws every kind the catalogue sells', () => {
+    // Towels, medals, mats, pens, name tents and stickers had no drawing, so a
+    // whole type row fell back to the category's own mark: five identical gift
+    // boxes in a row that was meant to tell them apart.
+    const products = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+    const map = products.slice(products.indexOf('const TYPE_VISUALS'), products.indexOf('};', products.indexOf('const TYPE_VISUALS')));
+    for (const id of Object.keys(siteContent.subcategoryNames)) {
+      expect(map, id).toContain(`${/^[a-z]+$/.test(id) ? id : `'${id}'`}: `);
+    }
+    for (const drawing of ['Towel', 'Medal', 'Mat', 'Pen', 'NameTent', 'Sticker']) {
+      expect(visuals, drawing).toContain(`function ${drawing}({ color`);
+    }
+  });
+
+  it('gives the mark a size in each place it sits', () => {
+    expect(css).toContain('.type-row .category-mark { width: 36px; height: 36px; }');
+    expect(css).toContain('.home-tile .category-mark { width: 52px; height: 52px; }');
+  });
+});

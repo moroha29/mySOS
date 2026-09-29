@@ -10,7 +10,7 @@ import { searchProducts } from '../../utils/solutionRequest';
 import useSavedRequest from '../useSavedRequest';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
-import { Button, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
+import { Button, CategoryMark, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
 import ProcessJourney from '../components/ProcessJourney';
 
@@ -291,6 +291,8 @@ function Reviews() {
 
 // The tiles alternate through a fixed set of washes, as the design has them.
 const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
+/* Two of the six tiles are dark, and a navy mark on navy is no mark at all. */
+const DARK_TONES = new Set(['navy', 'green']);
 
 function CategoryTiles() {
   return <section className="section home-tiles">
@@ -309,7 +311,7 @@ function CategoryTiles() {
         data-reveal
         style={{ '--reveal-delay': `${index * 60}ms` }}
       >
-        <Icon name={category.icon} size={35} cmsPath={contentPath('categories', index, 'icon')} />
+        <CategoryMark category={category} tone={DARK_TONES.has(TILE_TONES[index % TILE_TONES.length]) ? 'white' : 'navy'} className="category-mark tile-mark" />
         <span className="home-tile-body">
           <strong data-cms-path={cms(contentPath('categories', index, 'name'))}>{category.name}</strong>
           <small data-cms-path={cms(contentPath('categories', index, 'description'))}>{category.description}</small>
