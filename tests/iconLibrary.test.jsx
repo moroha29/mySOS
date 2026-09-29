@@ -45,7 +45,6 @@ describe('the icon library', () => {
       ...siteContent.benefits.flatMap((item) => [item.icon, item.cardIcon]),
       ...siteContent.categories.map((item) => item.icon),
       ...(siteContent.loyalty ?? []).map((item) => item.icon),
-      ...siteContent.process.flatMap((step) => (step.points ?? []).map((point) => point.icon)),
       ...solutions.flatMap((solution) => [solution.icon, ...solution.useCases.map((useCase) => useCase.icon)]),
       ...successStories.flatMap((story) => (story.highlights ?? []).map((fact) => fact.icon)),
     ].filter(Boolean);
@@ -91,7 +90,7 @@ describe('icons on the page carry their content path', () => {
   it('on the Why MySOS page', () => {
     const html = renderAt('/mySOS/why-mysos/', WhyPage);
     expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
-    expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;process&quot;,0,&quot;points&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
+    expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;loyalty&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
   });
 
   it('only where asked: interface icons stay unmarked', () => {

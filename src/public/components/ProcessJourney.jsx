@@ -50,15 +50,6 @@ export default function ProcessJourney({ head, labelledBy }) {
               <span className="journey-card-number">{two(index + 1)}</span>
               <h3 data-cms-path={cms(contentPath('process', index, 'headline'))}>{step.headline || step.title}</h3>
               <p data-cms-path={cms(contentPath('process', index, 'detail'))}>{step.detail || step.description}</p>
-              {step.points?.length > 0 && <ul className="journey-points">
-                {step.points.map((point, pointIndex) => <li key={`${point.icon}-${pointIndex}`}>
-                  <span className="journey-point-head">
-                    <Icon name={point.icon} size={24} cmsPath={contentPath('process', index, 'points', pointIndex, 'icon')} />
-                    <strong data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'label'))}>{point.label}</strong>
-                  </span>
-                  <small data-cms-path={cms(contentPath('process', index, 'points', pointIndex, 'text'))}>{point.text}</small>
-                </li>)}
-              </ul>}
             </div>
             <Photo
               style="studio"

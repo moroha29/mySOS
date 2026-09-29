@@ -355,24 +355,7 @@
       "description": "Tell us what you need.",
       "headline": "Tell Us What You Need",
       "detail": "Share your idea, quantities, timeline and budget, and we take it from there.",
-      "image": "",
-      "points": [
-        {
-          "icon": "consult",
-          "label": "Brief",
-          "text": "Idea and quantities"
-        },
-        {
-          "icon": "calendar",
-          "label": "Timeline",
-          "text": "When you need it"
-        },
-        {
-          "icon": "tag",
-          "label": "Budget",
-          "text": "What you can spend"
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Recommend",
@@ -380,24 +363,7 @@
       "description": "We recommend the best solutions.",
       "headline": "Expert Recommendations",
       "detail": "We suggest the right products, materials and printing methods for your goals.",
-      "image": "",
-      "points": [
-        {
-          "icon": "shirt",
-          "label": "Products",
-          "text": "Options for your use"
-        },
-        {
-          "icon": "layers",
-          "label": "Materials",
-          "text": "Fabrics and finishes"
-        },
-        {
-          "icon": "palette",
-          "label": "Methods",
-          "text": "Print or embroidery"
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Quote",
@@ -405,24 +371,7 @@
       "description": "You receive a clear quotation.",
       "headline": "A Clear, Detailed Quote",
       "detail": "We break down the product, customisation and delivery so you know exactly what you are paying for.",
-      "image": "",
-      "points": [
-        {
-          "icon": "sample",
-          "label": "Product",
-          "text": "Clear specifications"
-        },
-        {
-          "icon": "tag",
-          "label": "Pricing",
-          "text": "Transparent pricing"
-        },
-        {
-          "icon": "delivery",
-          "label": "Delivery",
-          "text": "Timelines and shipping"
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Sample",
@@ -430,24 +379,7 @@
       "description": "We provide a sample for your approval.",
       "headline": "Approve Your Sample",
       "detail": "Check the quality, fit, materials and branding before full production.",
-      "image": "",
-      "points": [
-        {
-          "icon": "shirt",
-          "label": "Sample",
-          "text": "Quality, fit and branding"
-        },
-        {
-          "icon": "search",
-          "label": "Adjust",
-          "text": "Changes if needed"
-        },
-        {
-          "icon": "checkCircle",
-          "label": "Finalise",
-          "text": "Approve for production"
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Produce",
@@ -455,24 +387,7 @@
       "description": "We produce with quality and care.",
       "headline": "Production & Quality Check",
       "detail": "We manage production and run quality checks to ensure everything meets your standards.",
-      "image": "",
-      "points": [
-        {
-          "icon": "production",
-          "label": "Produce",
-          "text": "Overseen end to end"
-        },
-        {
-          "icon": "search",
-          "label": "Quality",
-          "text": "In-line and final checks"
-        },
-        {
-          "icon": "sample",
-          "label": "Pack",
-          "text": "Packed for safe delivery"
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Deliver",
@@ -480,24 +395,7 @@
       "description": "We deliver on time, every time.",
       "headline": "Delivered On Time",
       "detail": "We deliver your order on schedule, and stay on hand after it arrives.",
-      "image": "",
-      "points": [
-        {
-          "icon": "calendar",
-          "label": "Schedule",
-          "text": "Around your date"
-        },
-        {
-          "icon": "delivery",
-          "label": "Deliver",
-          "text": "Handed over on time"
-        },
-        {
-          "icon": "support",
-          "label": "Follow-up",
-          "text": "Help after delivery"
-        }
-      ]
+      "image": ""
     }
   ],
   "popularSolutions": [

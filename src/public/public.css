@@ -579,7 +579,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @media (pointer: coarse) { .journey-cards { scroll-snap-type: x mandatory; } }
 .journey-cards::-webkit-scrollbar { display: none; }
 /* The card is the snap target and never transforms; its face does. */
-.journey-card { position: relative; z-index: 1; flex: none; width: 683px; height: 347px; margin: 0 -8px; scroll-snap-align: center; }
+.journey-card { position: relative; z-index: 1; flex: none; width: 683px; height: 318px; margin: 0 -8px; scroll-snap-align: center; }
 .journey-card[data-offset="0"] { z-index: 3; }
 .journey-card-face {
   height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 283px; gap: 14px; padding: 10px 10px 10px 30px;
@@ -601,7 +601,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .journey-card[data-offset="-1"] .journey-card-face { transform: translateX(230px) scale(.84); }
   .journey-card[data-offset="-2"] .journey-card-face { transform: translateX(460px) scale(.84); }
 }
-.journey-card-copy { display: flex; flex-direction: column; padding: 14px 0 6px; min-width: 0; }
+/* Without the three lines under it the copy is a number, a headline and a
+   sentence, so it sits against the middle of the picture rather than at the
+   top of a mostly empty column. */
+.journey-card-copy { display: flex; flex-direction: column; justify-content: center; padding: 14px 0 6px; min-width: 0; }
 .journey-card-number { font-size: 58px; font-weight: 800; line-height: 1; color: var(--green); }
 .journey-card:not([data-offset="0"]) .journey-card-number { color: #8fcfae; }
 .journey-card h3 { margin-top: 12px; font-size: 28px; font-weight: 800; color: var(--navy); }
@@ -611,11 +614,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* Three boxes inside a card is a card inside a card, and in a column this
    narrow every one of them broke its words over two lines. They are three
    plain lines now: what it is, then what it means. */
-.journey-points { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); display: grid; gap: 9px; }
-.journey-points li { display: flex; align-items: baseline; gap: 10px; }
-.journey-point-head { flex: none; min-width: 108px; display: flex; align-items: center; gap: 8px; color: var(--navy); }
-.journey-point-head strong { font-size: 17px; font-weight: 700; }
-.journey-points small { font-size: 15.5px; line-height: 1.45; color: var(--muted); }
 .journey-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
 .journey-foot { position: relative; width: min(683px, 100% - 48px); margin: 4px auto 0; display: flex; justify-content: center; }
 .journey-arrows { display: flex; gap: 14px; }
@@ -656,7 +654,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .journey-card { width: 86vw; height: auto; margin: 0 -4px; }
   .journey-card-face { grid-template-columns: minmax(0, 1fr); padding: 18px; transform: scale(.94); }
   .journey-card[data-offset="0"] .journey-card-face { transform: none; }
-  .journey-points { grid-template-columns: minmax(0, 1fr); }
   .journey-card-photo.scene { height: 200px; }
   .loyalty-grid { grid-template-columns: minmax(0, 1fr); }
 }

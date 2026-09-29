@@ -104,17 +104,11 @@ describe('our process: the tracker and its cards', () => {
     expect(html).toMatch(/<button type="button" aria-label="Next step">/);
   });
 
-  it('every step has a headline, a line of detail and three points, all editable', () => {
+  it('every step is a headline, a line of detail and a picture, all editable', () => {
     const html = render();
     for (const [index, step] of siteContent.process.entries()) {
       expect(step.headline, step.title).toMatch(/\S/);
       expect(step.detail, step.title).toMatch(/\S/);
-      expect(step.points, step.title).toHaveLength(3);
-      for (const [pointIndex, point] of step.points.entries()) {
-        expect(hasIcon(point.icon), `${step.title}: ${point.icon}`).toBe(true);
-        expect(html).toContain(cmsPath('process', index, 'points', pointIndex, 'label'));
-        expect(html).toContain(cmsPath('process', index, 'points', pointIndex, 'text'));
-      }
       for (const key of ['headline', 'detail', 'image']) expect(html).toContain(cmsPath('process', index, key));
     }
   });
@@ -124,7 +118,6 @@ describe('our process: the tracker and its cards', () => {
     expect(byTitle.Quote.headline).toBe('A Clear, Detailed Quote');
     expect(byTitle.Sample.headline).toBe('Approve Your Sample');
     expect(byTitle.Sample.detail).toBe('Check the quality, fit, materials and branding before full production.');
-    expect(byTitle.Sample.points.map((point) => point.label)).toEqual(['Sample', 'Adjust', 'Finalise']);
     expect(byTitle.Produce.headline).toBe('Production & Quality Check');
   });
 
@@ -241,23 +234,20 @@ describe('scrolling, small screens and motion', () => {
 describe('what each step of the process involves', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
 
-  it('is three plain lines, not three boxes inside the card', () => {
-    // A bordered box inside a bordered card, and in a column that narrow every
-    // one of them broke its words over two lines.
-    const points = css.match(/\.journey-points \{([^}]*)\}/)[1];
-    expect(points).toContain('display: grid');
-    expect(points).not.toContain('repeat(3');
-    expect(css).toMatch(/\.journey-points li \{ display: flex; align-items: baseline;/);
-    expect(css).not.toMatch(/\.journey-points li \{[^}]*border: 1px solid/);
+  it('is the step itself, with nothing listed under it', () => {
+    // Each card carried three more lines - "Brief / Idea and quantities",
+    // "Timeline / When you need it", "Budget / What you can spend" - which
+    // said again, in note form, what the sentence above them already said.
+    for (const step of siteContent.process) expect(step.points, step.title).toBeUndefined();
+    for (const gone of ['journey-points', 'journey-point-head']) expect(css, gone).not.toContain(gone);
+    expect(readFileSync(new URL('../src/public/components/ProcessJourney.jsx', import.meta.url), 'utf8'))
+      .not.toContain('points');
   });
 
-  it('says each one in a few words', () => {
-    for (const step of siteContent.process) {
-      for (const point of step.points ?? []) {
-        expect(point.text.split(/\s+/).length, `${step.title}: ${point.text}`).toBeLessThanOrEqual(4);
-        // A phrase, not a sentence.
-        expect(point.text, point.text).not.toMatch(/\.$/);
-      }
-    }
+  it('sets the copy against the middle of the picture', () => {
+    // Three lines gone, the copy was a headline and a sentence at the top of a
+    // mostly empty column.
+    const copy = css.slice(css.indexOf('.journey-card-copy {'));
+    expect(copy.slice(0, copy.indexOf('}'))).toContain('justify-content: center');
   });
 });
