@@ -95,7 +95,10 @@ export default function ArticlePage({ slug }) {
               {article.table.rows.map((row, row_index) => <tr key={row[0]}>
                 {row.map((cell, cell_index) => (cell_index === 0
                   ? <th key={cell} scope="row" data-cms-path={cms(articlePath(index, 'table', 'rows', row_index, cell_index))}>{cell}</th>
-                  : <td key={cell} data-cms-path={cms(articlePath(index, 'table', 'rows', row_index, cell_index))}>{cell}</td>))}
+                  /* The column's name travels with the cell: on a phone the
+                     table stacks and the heading row is gone, so each value
+                     has to say which column it came from. */
+                  : <td key={cell} data-label={article.table.columns[cell_index]} data-cms-path={cms(articlePath(index, 'table', 'rows', row_index, cell_index))}>{cell}</td>))}
               </tr>)}
             </tbody>
           </table>
