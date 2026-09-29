@@ -2654,26 +2654,29 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    within the category as outlined pills, and a shelf of plain cards: the
    product and its name, nothing else on top of it. */
 
-/* One band, every page. The words sit in the page's own column and the picture
-   runs off the right edge of the screen; the gutter is measured from the band
-   itself, so it lines up with the sections below it. */
+/* One band, every page — and the same column the homepage keeps. The colour
+   runs the full width of the screen; the words and the picture inside it sit
+   in the page's own column, so both edges line up with the sections below and
+   with the home banner above them. The picture used to run off the right edge
+   of the screen, which left the page with a margin on one side only. */
 .hero:not(.has-background),
 .solution-hero { background: #dcebfa; }
 .hero:not(.has-background)::before,
 .solution-hero::before { display: none; }
 .hero:not(.has-background) .hero-inner,
 .solution-hero-inner {
-  max-width: none; padding: 0 0 0 var(--gutter); gap: 0; min-height: 440px;
+  max-width: var(--content); margin: 0 auto; padding: 44px 24px 48px; gap: 44px; min-height: 440px;
   grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch;
 }
 .hero:not(.has-background) .hero-inner > div:first-child,
-.solution-hero-copy { padding: 58px 24px 62px 0; align-self: center; }
+.solution-hero-copy { padding: 14px 0; align-self: center; }
 /* The words decide how tall the band is; the picture fills whatever that comes
-   to. Left in the flow, a tall drawing decided for itself — the stories banner
-   came out 1065px high, twice the others. */
+   to, as the card beside the home banner does. Left in the flow, a tall drawing
+   decided for itself — the stories banner came out 1065px high, twice the
+   others. */
 .hero-scene, .solution-collage, .story-hero-bg {
   position: relative; min-height: 0; height: auto; aspect-ratio: auto; max-height: none;
-  border-radius: 0; box-shadow: none; animation: none;
+  border-radius: 26px; overflow: hidden; box-shadow: 0 24px 70px rgba(26, 50, 138, .18); animation: none;
 }
 .hero-scene > .scene, .story-hero-bg > .scene { position: absolute; inset: 0; border-radius: 0; }
 /* A solution's four pictures, as a mosaic filling the band rather than four
@@ -2689,8 +2692,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .hero-lead, .solution-hero-lead { color: #3d5473; }
 
 /* A story's banner is the same band, with its own picture beside it. */
-.story-hero { max-width: none; padding: 0 0 0 var(--gutter); gap: 0; min-height: 440px; background: #dcebfa; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
-.story-hero-inner { padding: 58px 24px 62px 0; align-self: center; }
+/* A story's banner is the band and the grid in one element, so its column is
+   made of padding rather than a width: the colour has to keep running the
+   full width of the screen. */
+.story-hero { max-width: none; margin: 0; padding: 44px var(--gutter) 48px; gap: 44px; min-height: 440px; background: #dcebfa; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
+.story-hero-inner { padding: 14px 0; align-self: center; }
 
 .story-hero .back-link, .story-hero .story-meta dt { color: #4a6180; }
 .story-hero > .story-hero-inner > p { color: #3d5473; }
@@ -2729,16 +2735,17 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .step-dots button::before { content: ""; position: absolute; inset: -16px; }
 
 /* The band on a narrow screen: the words take the width with a gutter on both
-   sides, and the picture is a row of its own under them. It needs a height of
-   its own there — filling the band works only while it sits beside something. */
+   sides, and the picture is a row of its own under them, keeping the same
+   gutter. It needs a height of its own there — filling the band works only
+   while it sits beside something. */
 @media (max-width: 980px) {
   .hero:not(.has-background) .hero-inner,
   .solution-hero-inner,
   .story-hero {
-    grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0;
+    grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0 18px 26px; gap: 22px;
   }
   .hero:not(.has-background) .hero-inner > div:first-child,
   .solution-hero-copy,
-  .story-hero-inner { padding: 34px 18px 30px; }
-  .hero-scene, .solution-collage, .story-hero-bg { min-height: 280px; }
+  .story-hero-inner { padding: 30px 0 0; }
+  .hero-scene, .solution-collage, .story-hero-bg { min-height: 280px; border-radius: 20px; }
 }

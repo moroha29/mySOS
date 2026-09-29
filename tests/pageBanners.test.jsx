@@ -64,14 +64,24 @@ describe('one band at the top of every page', () => {
     expect(rulesFor('.home-hero')).toContain('radial-gradient');
   });
 
-  it('measures the words from the band, so they line up with the sections', () => {
-    // The category banner padded its own column, which is a share of the band
-    // rather than the band: the words started 24px in where every other page
-    // started at 104px.
+  it('keeps the same column on both sides, the one the homepage keeps', () => {
+    // The words used to be measured from the band and the picture ran off the
+    // right of the screen, so a page had a margin on one side only.
     expect(css).toMatch(/--gutter: max\(24px, calc\(\(100% - var\(--content\)\) \/ 2 \+ 24px\)\);/);
     const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
-    expect(inner).toContain('padding: 0 0 0 var(--gutter)');
-    expect(rulesFor('.story-hero')).toContain('padding: 0 0 0 var(--gutter)');
+    expect(inner).toContain('max-width: var(--content)');
+    expect(inner).toContain('margin: 0 auto');
+    expect(inner).toContain('padding: 44px 24px 48px');
+    // A story's banner is the band and the grid in one, so its column is made
+    // of padding: the colour still has to reach both edges of the screen.
+    expect(rulesFor('.story-hero')).toContain('padding: 44px var(--gutter) 48px');
+  });
+
+  it('draws the picture as the card the homepage draws', () => {
+    const picture = rulesFor('.hero-scene, .solution-collage, .story-hero-bg');
+    expect(picture).toContain('border-radius: 26px');
+    expect(picture).toContain('overflow: hidden');
+    expect(rulesFor('.hero-card')).toContain('border-radius: 26px');
   });
 
   it('lets the words decide how tall the band is, and the picture fill it', () => {
@@ -97,8 +107,10 @@ describe('one band at the top of every page', () => {
       expect(block, selector).toContain(selector);
     }
     expect(block).toContain('grid-template-columns: minmax(0, 1fr)');
-    // The picture needs a height of its own once nothing sits beside it.
-    expect(block).toMatch(/\.hero-scene, \.solution-collage, \.story-hero-bg \{ min-height: \d+px; \}/);
+    // The picture needs a height of its own once nothing sits beside it, and
+    // the same gutter the words keep.
+    expect(block).toMatch(/\.hero-scene, \.solution-collage, \.story-hero-bg \{ min-height: \d+px; border-radius: \d+px; \}/);
+    expect(block).toContain('padding: 0 18px 26px');
   });
 });
 
