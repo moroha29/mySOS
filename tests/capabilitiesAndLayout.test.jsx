@@ -521,3 +521,54 @@ describe('one column, every page', () => {
     expect(css).toMatch(/\.use-case-rail\.is-all \.use-case-track \{[^}]*grid-template-columns: repeat\(auto-fill, minmax\(290px, 1fr\)\)/);
   });
 });
+
+describe('the rest of the site moves too, not only the homepage', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const products = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
+  const hub = readFileSync(new URL('../src/public/pages/ResourcesPage.jsx', import.meta.url), 'utf8');
+  const stories = readFileSync(new URL('../src/public/pages/StoriesPage.jsx', import.meta.url), 'utf8');
+
+  it('never lets the banner picture sit perfectly still', () => {
+    // The homepage card has drifted since it was built; every other page's
+    // band was a photograph nailed to the wall.
+    expect(css).toMatch(/@keyframes band-drift \{/);
+    expect(css).toMatch(/\.hero-scene > \.scene,[\s\S]{0,160}animation: band-drift [\d.]+s/);
+    // On its own frame, not on the picture: the arrival already animates the
+    // picture and the two would fight over the same property.
+    expect(css).not.toMatch(/\.hero-scene \.scene img \{[^}]*animation: band-drift/);
+    // And the frame clips it, so nothing grows past the band.
+    expect(css).toMatch(/\.hero-scene, \.story-hero-bg, \.solution-collage-tile \{ overflow: hidden; \}/);
+    // Four pictures at once start at four points in the drift.
+    for (const tile of ['tile-2', 'tile-3', 'tile-4']) {
+      const at = css.indexOf(`.solution-collage-tile.${tile} > .scene {`);
+      expect(at, tile).toBeGreaterThan(-1);
+      expect(css.slice(at, css.indexOf('}', at)), tile).toContain('animation-delay: -');
+    }
+  });
+
+  it('deals the cards again when you change what they are showing', () => {
+    // Filtering used to swap the cards in place, which read as the page
+    // twitching. A new key remounts the list, so it arrives as it first did.
+    expect(products).toContain('key={`${activeCategory.id}-${subcategory}-${sort}-${showAll}`}');
+    // Not the search box, though: re-dealing on every letter is a flicker.
+    expect(products).not.toMatch(/key=\{`[^`]*\$\{query\}/);
+    expect(hub).toContain('key={`lead-${topic}`}');
+    expect(hub).toContain('key={`grid-${topic}`}');
+    expect(stories).toContain('key={`page-${current}`}');
+  });
+
+  it('lets the closing band catch the light, and gives under a finger', () => {
+    expect(css).toMatch(/@keyframes band-sheen \{/);
+    expect(css).toMatch(/\.page-cta::after, \.home-closing::after \{/);
+    // It rests for most of its cycle rather than sweeping continuously.
+    expect(css).toMatch(/0%, 6\d% \{ left: -40%; opacity: 0; \}/);
+    expect(css).toMatch(/\.btn:active, [\s\S]{0,200}transform: translateY\(1px\) scale\(\.985\)/);
+  });
+
+  it('holds all of it still for a reader who asked for less motion', () => {
+    const quiet = css.split('@media (prefers-reduced-motion: reduce)').slice(1).join(' ');
+    for (const stopped of ['band-drift', 'band-sheen', '.btn:active', '.benefit-grid article:hover .icon']) {
+      expect(quiet, stopped).toContain(stopped);
+    }
+  });
+});

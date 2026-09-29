@@ -314,7 +314,7 @@ export default function StoriesPage() {
           <p data-cms-path={cms(pagePath('stories', 'emptyDescription'))}>{pageText('stories', 'emptyDescription')}</p>
         </div>
         : category === 'all'
-          ? <ProjectMosaic stories={stories} page={current} pages={pages} onPage={setPage} />
+          ? <ProjectMosaic key={`page-${current}`} stories={stories} page={current} pages={pages} onPage={setPage} />
           : <CategoryShowcase key={category} stories={stories} />}
     </section>
 

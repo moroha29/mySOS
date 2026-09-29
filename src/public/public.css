@@ -1869,6 +1869,69 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .btn:hover .inline-arrow, .text-link:hover .inline-arrow { transform: none; }
 }
 
+/* ------------------------------------------------- 24c. the last of the motion
+   The homepage moved and the pages behind it did not. Their banner picture now
+   breathes the way the home card does, the closing band catches the light, and
+   anything you press gives under the finger. Off, like the rest of the motion,
+   for a reader who asked for less.
+
+   The drift is on the picture's own frame rather than the picture inside it,
+   because the arrival already animates the picture and the two would fight. */
+.hero-scene, .story-hero-bg, .solution-collage-tile { overflow: hidden; }
+.hero-scene > .scene,
+.story-hero-bg > .scene,
+.solution-collage-tile > .scene { animation: band-drift 26s ease-in-out infinite alternate; }
+/* A solution shows four at once, so they start at four points in the drift and
+   the mosaic does not pulse as one thing. */
+.solution-collage-tile.tile-2 > .scene { animation-delay: -6.5s; }
+.solution-collage-tile.tile-3 > .scene { animation-delay: -13s; }
+.solution-collage-tile.tile-4 > .scene { animation-delay: -19.5s; }
+@keyframes band-drift {
+  from { transform: scale(1.03); }
+  to { transform: scale(1.09) translate3d(-1.1%, -.9%, 0); }
+}
+
+/* The closing band, catching the light every so often. */
+.page-cta::after, .home-closing::after {
+  content: ""; position: absolute; top: -60%; bottom: -60%; width: 26%; left: -40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .13) 45%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .13) 55%, transparent);
+  transform: rotate(9deg); pointer-events: none;
+  animation: band-sheen 11s cubic-bezier(.5, 0, .5, 1) infinite;
+}
+.home-closing { position: relative; overflow: hidden; }
+.page-cta-inner, .home-closing-inner { position: relative; z-index: 1; }
+@keyframes band-sheen {
+  0%, 62% { left: -40%; opacity: 0; }
+  66% { opacity: 1; }
+  96% { left: 118%; opacity: 0; }
+  100% { left: 118%; opacity: 0; }
+}
+
+/* A card's mark rises with the card, the way a tile's already does. */
+.benefit-grid article .icon, .loyalty-card .icon, .use-case-card .icon,
+.home-why-grid li .icon, .promise-list .icon {
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+}
+.benefit-grid article:hover .icon, .loyalty-card:hover .icon, .use-case-card:hover .icon,
+.home-why-grid li:hover .icon, .promise-list li:hover .icon { transform: translateY(-4px); }
+
+/* Anything you press gives a little. A button that only changed colour on the
+   way down read as a picture of a button on a touch screen. */
+.btn:active, .type-row button:active, .category-strip ul a:active,
+.tab-list button:active, .use-case-card:active, .carousel-btn:active,
+.journey-arrows button:active:not(:disabled) { transform: translateY(1px) scale(.985); }
+.btn, .type-row button, .tab-list button { transition-property: background-color, color, border-color, transform, box-shadow; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-scene > .scene, .story-hero-bg > .scene, .solution-collage-tile > .scene { animation: none; }
+  .page-cta::after, .home-closing::after { animation: none; opacity: 0; }
+  .btn:active, .type-row button:active, .category-strip ul a:active,
+  .tab-list button:active, .use-case-card:active, .carousel-btn:active,
+  .journey-arrows button:active:not(:disabled) { transform: none; }
+  .benefit-grid article:hover .icon, .loyalty-card:hover .icon, .use-case-card:hover .icon,
+  .home-why-grid li:hover .icon, .promise-list li:hover .icon { transform: none; }
+}
+
 /* ---------------------------------------------------------- small screens
    From an audit of every page at 360, 390, 768 and 1024px wide: nothing
    scrolled sideways, but some tap targets were tiny and some columns were too
