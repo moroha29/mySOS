@@ -228,7 +228,11 @@ export default function ProductsPage() {
         </label>
       </div>
       {visible.length > 0
-        ? <div className="product-grid" id="product-collection-grid">
+        /* A new key remounts the shelf, so the cards deal themselves out again
+           rather than swapping in place when you change what is on it. The
+           search box is left out of it: re-dealing on every letter typed is
+           a flicker, not an arrival. */
+        ? <div className="product-grid" id="product-collection-grid" key={`${activeCategory.id}-${subcategory}-${sort}-${showAll}`}>
           {visible.map((product, index) => <ProductCard key={product.id} product={product} reveal={index % 8} />)}
         </div>
         : <div className="empty-state">

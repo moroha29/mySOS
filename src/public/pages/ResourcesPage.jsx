@@ -133,7 +133,9 @@ export default function ResourcesPage() {
       {visible.length === 0
         ? <p className="resources-empty" data-cms-path={cms(hubPath('emptyLabel'))}>{hub('emptyLabel')}</p>
         : <>
-          <div className="guide-lead-row">
+          {/* Keyed on the topic, so changing it deals the guides again rather
+              than swapping them in place. */}
+          <div className="guide-lead-row" key={`lead-${topic}`}>
             <a className="guide-card is-lead" href={articleHref(lead)} data-reveal>
               <ArticleShot article={lead} index={resources.articles.indexOf(lead)} className="guide-shot" />
               <ArticleMeta article={lead} />
@@ -160,7 +162,7 @@ export default function ResourcesPage() {
             </div>
           </div>
 
-          {rest.length > 2 && <div className="guide-grid">
+          {rest.length > 2 && <div className="guide-grid" key={`grid-${topic}`}>
             {rest.slice(2).map((article, index) => <a
               className="guide-card"
               key={article.slug}
