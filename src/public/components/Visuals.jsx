@@ -87,8 +87,12 @@ function Tote({ color = 'sand', mark = 'YOUR BRAND HERE' }) {
       <path d="M74 62 C74 34 126 34 126 62" fill="none" stroke={p.shade} strokeWidth="9" strokeLinecap="round" />
       <rect x="52" y="58" width="96" height="118" rx="4" fill={p.base} stroke={p.shade} strokeWidth="1.5" />
       <path d="M52 58 H148 V72 H52 Z" fill="rgba(0,0,0,.06)" />
-      <text x="100" y="118" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.8" fill="rgba(13,42,107,.6)" fontFamily="Inter, sans-serif">{mark.split(' ')[0]}</text>
-      <text x="100" y="134" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.8" fill="rgba(13,42,107,.6)" fontFamily="Inter, sans-serif">{mark.split(' ').slice(1).join(' ')}</text>
+      {/* At mark size the words are a smudge, so a bag drawn as a mark carries
+          no lettering at all. */}
+      {mark ? <>
+        <text x="100" y="118" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.8" fill="rgba(13,42,107,.6)" fontFamily="Inter, sans-serif">{mark.split(' ')[0]}</text>
+        <text x="100" y="134" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.8" fill="rgba(13,42,107,.6)" fontFamily="Inter, sans-serif">{mark.split(' ').slice(1).join(' ')}</text>
+      </> : null}
     </svg>
   );
 }
@@ -145,17 +149,107 @@ function Lanyard({ color = 'blue' }) {
   );
 }
 
+/*
+ * The rest of the catalogue, drawn in the same hand as the garments above: a
+ * filled body in the category's colour, one lighter face for depth and a green
+ * accent where the eye should land. Without these, a whole type row fell back
+ * to the category's own mark and showed five identical gift boxes.
+ */
+
+function Towel({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="46 36 108 126" className="garment" role="presentation" aria-hidden="true">
+      <rect x="56" y="76" width="88" height="80" rx="9" fill={p.base} />
+      <rect x="56" y="76" width="88" height="16" rx="8" fill={p.light} />
+      <rect x="70" y="106" width="60" height="9" rx="4.5" fill="#0f9a55" />
+      <rect x="70" y="126" width="60" height="7" rx="3.5" fill="rgba(255,255,255,.24)" />
+      <ellipse cx="100" cy="62" rx="44" ry="22" fill={p.shade} />
+      <ellipse cx="100" cy="62" rx="18" ry="9" fill={p.light} />
+    </svg>
+  );
+}
+
+function Medal({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="52 20 96 158" className="garment" role="presentation" aria-hidden="true">
+      <path d="M70 26 L100 96 L130 26" fill="none" stroke={p.light} strokeWidth="14" strokeLinecap="round" />
+      <circle cx="100" cy="130" r="42" fill={p.base} stroke={p.shade} strokeWidth="5" />
+      <circle cx="100" cy="130" r="26" fill="none" stroke="rgba(255,255,255,.34)" strokeWidth="4" />
+      <path d="M100 112 l6 13 14 1 -11 9 4 14 -13 -8 -13 8 4 -14 -11 -9 14 -1 z" fill="#0f9a55" />
+    </svg>
+  );
+}
+
+function Mat({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="56 36 88 130" className="garment" role="presentation" aria-hidden="true">
+      <rect x="66" y="62" width="68" height="98" rx="10" fill={p.base} />
+      <rect x="66" y="112" width="68" height="9" fill="rgba(255,255,255,.2)" />
+      <ellipse cx="100" cy="62" rx="34" ry="16" fill={p.shade} />
+      <ellipse cx="100" cy="62" rx="15" ry="7" fill={p.light} />
+      <circle cx="100" cy="62" r="5" fill="#0f9a55" />
+    </svg>
+  );
+}
+
+function Pen({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="66 18 68 164" className="garment" role="presentation" aria-hidden="true">
+      <rect x="76" y="24" width="48" height="26" rx="6" fill={p.shade} />
+      <rect x="76" y="46" width="48" height="94" fill={p.base} />
+      <rect x="114" y="34" width="9" height="56" rx="4.5" fill="#0f9a55" />
+      <rect x="76" y="132" width="48" height="12" fill={p.light} />
+      <path d="M76 144 L100 176 L124 144 Z" fill={p.base} />
+      <path d="M92 164 L100 176 L108 164 Z" fill="rgba(255,255,255,.55)" />
+    </svg>
+  );
+}
+
+function NameTent({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="26 58 148 84" className="garment" role="presentation" aria-hidden="true">
+      <path d="M100 64 L166 130 L100 130 Z" fill={p.shade} />
+      <path d="M100 64 L34 130 L100 130 Z" fill={p.base} />
+      <rect x="54" y="98" width="42" height="8" rx="4" fill="rgba(255,255,255,.6)" />
+      <rect x="54" y="112" width="30" height="6" rx="3" fill="rgba(255,255,255,.32)" />
+      <rect x="28" y="130" width="144" height="8" rx="4" fill="#0f9a55" />
+    </svg>
+  );
+}
+
+function Sticker({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="38 38 124 124" className="garment" role="presentation" aria-hidden="true">
+      <path d="M50 44 h100 a6 6 0 0 1 6 6 v76 l-30 30 h-76 a6 6 0 0 1 -6 -6 v-100 a6 6 0 0 1 6 -6 z" fill={p.base} />
+      <path d="M156 126 l-30 30 v-24 a6 6 0 0 1 6 -6 z" fill={p.light} />
+      <circle cx="100" cy="92" r="28" fill="none" stroke="rgba(255,255,255,.4)" strokeWidth="6" />
+      <path d="M87 92 l10 10 19 -22" fill="none" stroke="#0f9a55" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const garmentTypes = new Set(['tee', 'polo', 'jersey', 'hoodie', 'jacket', 'windbreaker', 'bomber', 'long-sleeve', 'sleeveless']);
 
+/* A drawing per kind. The chain of ternaries this replaced had grown to
+   thirteen branches and its indentation no longer said which was which. */
+const marked = { cap: Cap, bucket: Cap, tote: Tote, bag: Tote, bottle: Bottle };
+const plain = {
+  'gift-set': GiftSet, notebook: Notebook, lanyard: Lanyard, towel: Towel,
+  medal: Medal, mat: Mat, pen: Pen, 'name-tent': NameTent, sticker: Sticker,
+};
+
 export function Product({ type = 'tee', color = 'navy', mark = 'MySOS', className = '' }) {
-  const art = type === 'cap' || type === 'bucket' ? <Cap color={color} mark={mark} />
-    : type === 'tote' || type === 'bag' ? <Tote color={color} />
-      : type === 'bottle' ? <Bottle color={color} mark={mark} />
-        : type === 'gift-set' ? <GiftSet color={color} />
-          : type === 'notebook' ? <Notebook color={color} />
-            : type === 'lanyard' ? <Lanyard color={color} />
-              : garmentTypes.has(type) ? <Garment type={type} color={color} mark={mark} />
-                : <Garment type="tee" color={color} mark={mark} />;
+  const Marked = marked[type];
+  const Plain = plain[type];
+  const art = Marked ? <Marked color={color} mark={mark} />
+    : Plain ? <Plain color={color} />
+      : <Garment type={garmentTypes.has(type) ? type : 'tee'} color={color} mark={mark} />;
   return <div className={`product-visual ${className}`.trim()}>{art}</div>;
 }
 /* ------------------------------------------------------------------ scenes */

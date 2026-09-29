@@ -7,7 +7,7 @@ import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/ca
 import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
-import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
+import { Button, CategoryMark, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 import { Product } from '../components/Visuals';
 
 /*
@@ -18,6 +18,8 @@ const TYPE_VISUALS = {
   tshirts: 'tee', polos: 'polo', jerseys: 'jersey', hoodies: 'hoodie', jackets: 'jacket',
   singlets: 'sleeveless', caps: 'cap', totes: 'tote', drawstring: 'bag', bottles: 'bottle',
   'gift-sets': 'gift-set', notebooks: 'notebook', lanyards: 'lanyard',
+  towels: 'towel', medals: 'medal', mats: 'mat', pens: 'pen',
+  'name-tents': 'name-tent', stickers: 'sticker',
 };
 
 const prettyName = (id) => id.replace(/-/g, ' ').replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
@@ -196,7 +198,8 @@ export default function ProductsPage() {
       </h2>
       <div className="type-row" role="tablist" aria-label={`${activeCategory.name} types`} data-reveal style={{ '--reveal-delay': '80ms' }}>
         <button type="button" role="tab" aria-selected={subcategory === 'all'} onClick={() => { setSubcategory('all'); setShowAll(false); }}>
-          <Icon name={activeCategory.icon} size={26} />
+          {/* The category's own mark, in white while the pill is navy. */}
+          <CategoryMark category={activeCategory} tone={subcategory === 'all' ? 'white' : 'navy'} />
           <span data-cms-path={cms(pagePath('products', 'allTypesLabel'))}>{pageText('products', 'allTypesLabel', 'All')}</span>
         </button>
         {types.map((type) => <button
@@ -206,7 +209,7 @@ export default function ProductsPage() {
           aria-selected={subcategory === type.id}
           onClick={() => { setSubcategory(type.id); setShowAll(false); }}
         >
-          {type.visual ? <Product type={type.visual} color="navy" mark="" /> : <Icon name={activeCategory.icon} size={26} />}
+          <Product type={type.visual || activeCategory.visual} color={subcategory === type.id ? 'white' : 'navy'} mark="" />
           <span data-cms-path={cms(contentPath('subcategoryNames', type.id))}>{type.name}</span>
         </button>)}
       </div>
