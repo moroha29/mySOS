@@ -90,3 +90,35 @@ describe('walked down every page at 390px', () => {
     expect(block('max-width: 620px')).toMatch(/\.home-tile-grid \{ grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/);
   });
 });
+
+describe('a second pass on a phone, at 320 as well as 390', () => {
+  const article = readFileSync(new URL('../src/public/pages/ArticlePage.jsx', import.meta.url), 'utf8');
+
+  it('stacks a guide’s table rather than hiding a column off the side of it', () => {
+    // Three columns is 520px of table in a 342px column, so it scrolled inside
+    // its own box with nothing to say so: the guide comparing DTF with
+    // silkscreen showed DTF and hid silkscreen completely.
+    expect(article).toContain('data-label={article.table.columns[cell_index]}');
+    const narrow = block('max-width: 620px');
+    expect(narrow).toContain('.article-table table { min-width: 0; }');
+    expect(narrow).toMatch(/\.article-table thead \{[^}]*clip-path: inset\(50%\)/);
+    expect(narrow).toMatch(/\.article-table td::before \{[\s\S]*?content: attr\(data-label\)/);
+    // And it is still a table on a screen with room for one.
+    expect(css).toContain('.article-table table { width: 100%; min-width: 520px;');
+  });
+
+  it('keeps the menu button a fingertip wide however narrow the screen is', () => {
+    // The header's row shrank it: at 320px the one control every page depends
+    // on measured 24px across.
+    const rule = css.slice(css.indexOf('.menu-toggle {'), css.indexOf('}', css.indexOf('.menu-toggle {')));
+    expect(rule).toContain('flex: none');
+    expect(rule).toContain('width: 44px');
+    expect(rule).toContain('height: 44px');
+  });
+
+  it('fits the words inside the button on a suggested product', () => {
+    // In a 153px card "Add to quote" was 7px wider than the button holding it.
+    const narrow = block('max-width: 620px');
+    expect(narrow).toMatch(/\.hero-results li \.btn \{[^}]*padding-inline: 10px/);
+  });
+});
