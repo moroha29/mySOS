@@ -77,11 +77,16 @@ describe('the catalogue behind the thin categories', () => {
 });
 
 describe('the banner and the ask card keep the height they need', () => {
-  it('gives the banner picture a shape of its own', () => {
-    // A square photograph made the picture 636px tall beside 464px of words,
-    // and the banner carried the difference as empty space.
-    expect(css).toMatch(/\.hero-scene \{[\s\S]{0,400}?aspect-ratio: 4 \/ 3; min-height: 0; height: auto;/);
-    expect(css).not.toMatch(/\.hero-scene \{[^}]*min-height: 500px/);
+  it('lets the words set the height and the picture fill it', () => {
+    // The picture used to carry a shape of its own, so a tall drawing decided
+    // how deep the banner was: 1065px on the stories page against 508 on the
+    // rest. It is placed over the band's own column instead.
+    const at = css.indexOf('.hero-scene, .solution-collage, .story-hero-bg {');
+    expect(at, 'the banner picture').toBeGreaterThan(-1);
+    const picture = css.slice(at, css.indexOf('}', at));
+    expect(picture).toContain('height: auto');
+    expect(picture).toContain('aspect-ratio: auto');
+    expect(css).toContain('.hero-scene > .scene, .story-hero-bg > .scene { position: absolute');
   });
 
 });

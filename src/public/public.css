@@ -26,6 +26,9 @@
      1520, because on a large monitor the page still read as a column floating
      in the middle of the screen. */
   --content: 1760px;
+  /* What the page keeps either side of its column, so a full-bleed band and a
+     section line up with each other. */
+  --gutter: max(24px, calc((100% - var(--content)) / 2 + 24px));
   /* The bar at the top of every page, and anything that has to clear it. */
   --header-h: 88px;
 
@@ -217,7 +220,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-stories .hero-inner { padding-top: 28px; padding-bottom: 20px; }
 .hero-stories h1 { font-size: 46.5px; }
 .hero-stories .hero-lead { font-size: 18.5px; }
-.hero-stories .hero-collage { height: 212px; }
 
 /* hero product arrangement — children are laid out in DOM order ha-3, ha-1, ha-2, ha-4, ha-5 */
 .hero-art { min-width: 0; height: 330px; display: flex; align-items: center; justify-content: center; }
@@ -231,11 +233,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* hero with a scene photo on the right */
 .hero-scene { position: relative; min-height: 260px; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 44px rgba(0,0,0,.3); }
 .hero-scene .scene { height: 100%; }
-.hero-collage { display: flex; gap: 7px; height: 280px; transform: skewX(-9deg); }
-.hero-collage .scene { flex: 1 1 0; height: 100%; border-radius: 5px; }
-.hero-collage .scene:nth-child(2) { flex-grow: 1.35; }
-.hero-collage .scene:nth-child(4) { flex-grow: 1.2; }
-.hero-collage .scene svg { transform: skewX(9deg) scale(1.32); transform-origin: center; }
 
 /* ========================================================== 5. media atoms */
 
@@ -821,7 +818,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 /* ----------------------------------------------------- success stories page */
 /* Wider than the usual content column, as in the design: at 1180px the review
    cards, small tile titles and the facts row all wrapped early. */
-.stories-section { max-width: 1314px; padding-top: 30px; }
+.stories-section { padding-top: 30px; }
 
 /* Reviews row: heading and rating | review cards | arrows and link */
 .stories-reviews { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 34px; margin-bottom: 30px; }
@@ -993,7 +990,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .solution-collage-tile.tile-4 { right: 0; bottom: 0; width: 42%; height: 46%; clip-path: polygon(16% 0, 100% 0, 100% 100%, 0 100%); }
 
 /* use cases */
-.use-cases { max-width: 1440px; margin: 0 auto; padding: 26px 24px 20px; }
+.use-cases { max-width: var(--content); margin: 0 auto; padding: 26px 24px 20px; }
 .use-cases .section-heading { margin-bottom: 22px; }
 .use-case-rail { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 14px; }
 .use-case-rail.is-all { grid-template-columns: minmax(0, 1fr); }
@@ -1001,17 +998,22 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .use-case-arrow:disabled { opacity: .4; cursor: default; }
 .use-case-track { display: flex; gap: 20px; padding: 6px 4px 10px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
 .use-case-track::-webkit-scrollbar { display: none; }
-.use-case-rail.is-all .use-case-track { flex-wrap: wrap; justify-content: center; overflow: visible; }
-.use-case-track li { flex: 0 0 290px; scroll-snap-align: start; }
+/* Opened out, the rail becomes a grid: wrapped, a growing flex row stretched
+   whatever was left on the last line across the whole width. */
+.use-case-rail.is-all .use-case-track { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); overflow: visible; }
+/* The cards share the rail rather than sitting 290px wide in the middle of
+   it: four of them used to leave a third of the row empty. More than fit
+   still scroll. */
+.use-case-track li { flex: 1 0 290px; scroll-snap-align: start; }
 .use-case-card { position: relative; width: 100%; display: flex; flex-direction: column; padding: 8px 8px 0; border: 1.5px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-sm); text-align: left; cursor: pointer; transition: border-color .2s, background-color .2s, box-shadow .2s; }
 .use-case-card:hover { border-color: #b6c6e3; }
 .use-case-card.is-active { border-color: var(--green); background: #effaf4; box-shadow: 0 0 0 3px rgba(0, 166, 81, .12); }
-.use-case-photo { display: block; height: 152px; overflow: hidden; border-radius: 9px; background: var(--soft); }
+.use-case-photo { display: block; aspect-ratio: 16 / 9; height: auto; overflow: hidden; border-radius: 9px; background: var(--soft); }
 .use-case-photo .scene, .use-case-photo .scene img { height: 100%; }
 .use-case-selected { position: absolute; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; background: var(--green); color: #fff; font-size: 15.5px; font-weight: 700; }
 .use-case-name { display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 8px 10px; font-size: 18px; font-weight: 700; line-height: 1.25; color: var(--navy); }
 .use-case-card.is-active .use-case-name .icon { color: var(--green); }
-.use-case-foot { max-width: 1260px; margin: 10px auto 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+.use-case-foot { max-width: none; margin: 10px 0 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
 .use-case-dots { grid-column: 2; display: flex; gap: 12px; }
 .use-case-dots button { width: 12px; height: 12px; padding: 0; border: 1.5px solid var(--navy-soft); border-radius: 50%; background: #fff; cursor: pointer; }
 .use-case-dots button.is-active { background: var(--navy-soft); }
@@ -1020,7 +1022,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 /* the request builder */
 .request-builder { padding: 34px 24px 54px; background: linear-gradient(180deg, #f3f7fd, #eaf1fb); }
 .request-builder .section-heading { margin-bottom: 24px; }
-.request-layout { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 26px; align-items: start; }
+.request-layout { max-width: var(--content); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 26px; align-items: start; }
 .request-main, .request-summary { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow-sm); }
 .request-main { padding: 20px 22px 24px; }
 .request-main > h3, .request-summary > h3 { font-size: 30px; font-weight: 800; color: var(--navy); }
@@ -1521,7 +1523,6 @@ main:not(.home-page) { background: var(--paper); }
 .hero:not(.has-background) .btn-ghost:hover { border-color: var(--navy); background: #fff; }
 .hero:not(.has-background) .back-link { color: var(--muted); }
 /* The banner picture sits in the same rounded card the homepage uses. */
-.hero-scene, .hero-collage .scene, .hero-art .scene { border-radius: 22px; }
 /* The picture keeps one shape whatever is in it: a photograph fills it, and
    the drawn stand-in no longer leaves a white band under itself. */
 .hero-scene { aspect-ratio: 16 / 10; min-height: 0; box-shadow: 0 24px 70px rgba(26, 50, 138, .16); }
@@ -1964,42 +1965,16 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .request-page .hero:not(.has-background) .breadcrumb a:hover { color: var(--navy); }
 .request-page .hero:not(.has-background) .breadcrumb span[aria-current] { color: var(--navy); font-weight: 600; }
 
-/* The picture, as the homepage's card: tall, deeply rounded, and drifting a
-   few pixels the way the home one does. */
-.hero-scene, .hero-stories .hero-collage, .solution-collage {
-  border-radius: 26px; animation: hero-float 7s ease-in-out infinite;
-}
-.hero-scene {
-  /* A grid, so the picture inside actually fills it: against a box with only
-     a minimum height, the scene's own height: 100% resolves to nothing.
-
-     And a shape of its own, so a square photograph does not decide how tall
-     the banner is — a 636px picture beside 464px of words left a field of
-     nothing under them. */
-  display: grid; aspect-ratio: 4 / 3; min-height: 0; height: auto; max-height: 520px;
-  box-shadow: 0 24px 70px rgba(26, 50, 138, .18);
-}
-
-/* The stories banner had a skewed strip of five pictures, which belonged to
-   nothing else on the site. The same five now sit as a mosaic of cards. */
-.hero-stories .hero-collage {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr);
-  gap: 12px; height: 500px; transform: none; box-shadow: none;
-}
-.hero-stories .hero-collage .scene {
-  flex: none; height: 100%; border-radius: 18px; box-shadow: 0 18px 40px rgba(26, 50, 138, .12);
-}
-.hero-stories .hero-collage .scene:first-child { grid-column: span 2; }
-.hero-stories .hero-collage .scene svg { transform: none; }
-.hero-stories .hero-inner { padding: 68px 24px 76px; }
+/* The picture's own box. What it is filled with, and how tall it comes out, is
+   the band's business — see "one band, every page". */
+.hero-scene { display: grid; }
 .hero-stories h1 { font-size: clamp(44px, 5.4vw, 78px); }
 .hero-stories .hero-lead { font-size: 17.5px; }
 
-/* A solution's banner: the same paper, the same headline, and its four
-   pictures as cards rather than clipped slabs. */
-.solution-hero { background: var(--paper); }
+/* A solution's banner reads as every other one: the same headline, the same
+   line under it, its own pictures beside them. */
 .solution-hero-inner {
-  max-width: var(--content); min-height: 0; gap: 54px; padding: 68px 24px 76px;
+  min-height: 0;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
 }
 .solution-hero .breadcrumb { margin-bottom: 22px; }
@@ -2055,7 +2030,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .solution-hero-inner,
   .story-hero { grid-template-columns: minmax(0, 1fr); }
   .story-hero-bg { min-height: 340px; }
-  .hero-stories .hero-collage { height: 380px; }
   .solution-collage { min-height: 380px; }
 }
 
@@ -2068,7 +2042,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .story-hero { grid-template-columns: minmax(0, 1fr); }
   .story-hero-bg { min-height: 260px; }
 
-  .hero-stories .hero-collage { height: 340px; gap: 8px; }
   /* The tiles used to run off both edges as clipped slabs; as cards they keep
      the page's gutter like everything else. */
   .solution-collage { min-height: 320px; gap: 8px; margin-inline: 0; }
@@ -2076,7 +2049,6 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-scene, .hero-stories .hero-collage, .solution-collage { animation: none; }
 }
 
 /* ========================================== 26. a category that looks filled
@@ -2154,10 +2126,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    was written as small grey text, so nobody saw it happen. The number is now
    a figure, as it is on every site that leads with a score. */
 
-.hero:not(.has-background),
-.home-hero,
-.solution-hero,
-.story-hero {
+/* The homepage keeps the client's own banner: a wash on paper, with the
+   picture beside it as a card. Every other page takes the band. */
+.home-hero {
   position: relative;
   background:
     radial-gradient(880px 500px at 86% 6%, rgba(0, 166, 81, .17), transparent 62%),
@@ -2166,15 +2137,10 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 /* Where the banner stops. A line alone read as a rule across the page, so it
    fades out at both ends. */
-.hero:not(.has-background)::before,
-.home-hero::before,
-.solution-hero::before,
-.story-hero::before {
+.home-hero::before {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none;
   background: linear-gradient(90deg, transparent, var(--line) 12%, var(--line) 88%, transparent);
 }
-/* The story banner is the page's own grid; its edge belongs to the section. */
-.story-hero { max-width: none; padding-inline: max(24px, calc((100% - var(--content)) / 2)); }
 .home-hero, .hero:not(.has-background), .solution-hero { isolation: isolate; }
 
 /* The review total, as a figure rather than a footnote. */
@@ -2188,10 +2154,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* On a phone the wash was drawn at the same size as on a monitor, so it filled
    the whole banner and turned it muddy. Smaller, and gone by the fold. */
 @media (max-width: 860px) {
-  .hero:not(.has-background),
-  .home-hero,
-  .solution-hero,
-  .story-hero {
+  .home-hero {
     background:
       radial-gradient(420px 260px at 94% 0%, rgba(0, 166, 81, .12), transparent 62%),
       radial-gradient(440px 300px at 0% 0%, rgba(26, 50, 138, .12), transparent 66%),
@@ -2627,16 +2590,48 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    within the category as outlined pills, and a shelf of plain cards: the
    product and its name, nothing else on top of it. */
 
-.products-page .hero:not(.has-background) { background: #dcebfa; }
-.products-page .hero:not(.has-background)::before { display: none; }
-.products-page .hero .hero-inner { max-width: none; padding: 0; gap: 0; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
-/* The words keep the page's column; the picture runs to the edge of the screen. */
-.products-page .hero .hero-inner > div:first-child { padding: 58px 24px 62px max(24px, calc((100% - var(--content)) / 2 + 24px)); align-self: center; }
-.products-page .hero-scene { min-height: 0; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; animation: none; }
-.products-page .hero-scene .scene { border-radius: 0; }
-.products-page .breadcrumb { color: #4a6180; }
-.products-page .hero .eyebrow { color: #4a6180; }
-.products-page .hero-lead { color: #3d5473; }
+/* One band, every page. The words sit in the page's own column and the picture
+   runs off the right edge of the screen; the gutter is measured from the band
+   itself, so it lines up with the sections below it. */
+.hero:not(.has-background),
+.solution-hero { background: #dcebfa; }
+.hero:not(.has-background)::before,
+.solution-hero::before { display: none; }
+.hero:not(.has-background) .hero-inner,
+.solution-hero-inner {
+  max-width: none; padding: 0 0 0 var(--gutter); gap: 0; min-height: 440px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch;
+}
+.hero:not(.has-background) .hero-inner > div:first-child,
+.solution-hero-copy { padding: 58px 24px 62px 0; align-self: center; }
+/* The words decide how tall the band is; the picture fills whatever that comes
+   to. Left in the flow, a tall drawing decided for itself — the stories banner
+   came out 1065px high, twice the others. */
+.hero-scene, .solution-collage, .story-hero-bg {
+  position: relative; min-height: 0; height: auto; aspect-ratio: auto; max-height: none;
+  border-radius: 0; box-shadow: none; animation: none;
+}
+.hero-scene > .scene, .story-hero-bg > .scene { position: absolute; inset: 0; border-radius: 0; }
+/* A solution's four pictures, as a mosaic filling the band rather than four
+   clipped slabs — and absolute, so they do not decide how tall it is. */
+.solution-hero .solution-collage-tile { position: absolute; width: 50%; height: 50%; border-radius: 0; box-shadow: none; }
+.solution-hero .solution-collage-tile.tile-1 { left: 0; top: 0; }
+.solution-hero .solution-collage-tile.tile-2 { right: 0; top: 0; }
+.solution-hero .solution-collage-tile.tile-3 { left: 0; bottom: 0; }
+.solution-hero .solution-collage-tile.tile-4 { right: 0; bottom: 0; }
+.hero-scene > .scene .scene, .story-hero-bg .scene { border-radius: 0; }
+.hero:not(.has-background) .breadcrumb, .solution-hero .breadcrumb { color: #4a6180; }
+.hero:not(.has-background) .eyebrow, .solution-hero-copy .eyebrow { color: #4a6180; }
+.hero-lead, .solution-hero-lead { color: #3d5473; }
+
+/* A story's banner is the same band, with its own picture beside it. */
+.story-hero { max-width: none; padding: 0 0 0 var(--gutter); gap: 0; min-height: 440px; background: #dcebfa; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
+.story-hero-inner { padding: 58px 24px 62px 0; align-self: center; }
+
+.story-hero .back-link, .story-hero .story-meta dt { color: #4a6180; }
+.story-hero > .story-hero-inner > p { color: #3d5473; }
+
+
 
 /* The card: the product and its name. */
 .product-card { border-color: transparent; background: transparent; padding: 0; }
@@ -2658,21 +2653,28 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 .collection-sort select:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
-@media (max-width: 980px) {
-  .products-page .hero .hero-inner { grid-template-columns: minmax(0, 1fr); }
-  .products-page .hero .hero-inner > div:first-child { padding: 40px 18px 34px; }
-  .products-page .hero-scene { min-height: 260px; }
-}
 
 @media (max-width: 860px) {
   .type-row button { padding: 10px 16px 10px 10px; border-radius: 12px; }
   .collection-sort select { padding: 8px 10px; font-size: 16px; }
 }
 
-/* The picture fills its half of the banner: it used to keep the photograph's
-   own shape and leave a white band above and below it. */
-.products-page .hero-scene, .products-page .hero-scene > .scene { height: 100%; min-height: 100%; }
 
 /* The dots beside the reasons are 12px of paint; the thing you press is the
    space around them, as it is on the process tracker. */
 .step-dots button::before { content: ""; position: absolute; inset: -16px; }
+
+/* The band on a narrow screen: the words take the width with a gutter on both
+   sides, and the picture is a row of its own under them. It needs a height of
+   its own there — filling the band works only while it sits beside something. */
+@media (max-width: 980px) {
+  .hero:not(.has-background) .hero-inner,
+  .solution-hero-inner,
+  .story-hero {
+    grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0;
+  }
+  .hero:not(.has-background) .hero-inner > div:first-child,
+  .solution-hero-copy,
+  .story-hero-inner { padding: 34px 18px 30px; }
+  .hero-scene, .solution-collage, .story-hero-bg { min-height: 280px; }
+}

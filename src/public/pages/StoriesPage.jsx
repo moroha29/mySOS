@@ -278,16 +278,17 @@ export default function StoriesPage() {
             </Button>
           </div>
         </div>
-        <div className="hero-collage" aria-hidden="true">
-          {['field', 'hall', 'office', 'stage', 'outdoor'].map((kind, i) => (
-            <Photo
-              key={kind}
-              style={kind}
-              image={picture(siteContent.scenes?.storiesHeroImages?.[i], `scenes/stories-hero-${i + 1}`)}
-              imagePath={scenePath('storiesHeroImages', i)}
-              eager
-            />
-          ))}
+        {/* One picture, as every other banner has: the five-photo mosaic was
+            this page's alone, and it decided how tall the banner was. */}
+        <div className="hero-scene">
+          <Photo
+            style="field"
+            image={picture(siteContent.scenes?.storiesHeroImages?.[0], 'scenes/stories-hero-1')}
+            imagePath={scenePath('storiesHeroImages', 0)}
+            label="Projects MySOS has delivered"
+            wide
+            eager
+          />
         </div>
       </div>
     </section>
