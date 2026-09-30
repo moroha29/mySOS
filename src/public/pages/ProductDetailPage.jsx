@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
@@ -33,6 +33,96 @@ function coloursFor(product) {
 /** The facts panel: this subcategory's, else the shared set. */
 const factsFor = (product) => siteContent.productFacts?.[product.public.subcategory] ?? siteContent.productFacts?.default ?? [];
 
+/** The specifications table under the picture, and the chart behind it. */
+const specsFor = (product) => siteContent.productSpecs?.[product.public.subcategory] ?? siteContent.productSpecs?.default ?? [];
+const chartFor = (product) => siteContent.sizeCharts?.[product.public.subcategory] ?? null;
+
+/* The swatch a colour name is drawn as. A name with no swatch is still offered,
+   as a word: "Other (tell us in the notes)" is a real answer and has no ink. */
+const swatchFor = (name) => siteContent.colourSwatches?.[String(name).trim()] ?? null;
+
+/* A mark for each way of printing. The card leaves room for a picture, and
+   until MySOS uploads one this is what sits in it. */
+const METHOD_ICONS = {
+  dtf: 'transfer', dtg: 'droplet', silkscreen: 'layers', embroidery: 'thread',
+  sublimation: 'sun', uv_printing: 'palette',
+};
+const methodIcon = (id) => siteContent.printingMethods?.[id]?.icon ?? METHOD_ICONS[id] ?? 'palette';
+
+/*
+ * What the product is, under its picture: the description, a table of its
+ * specifications and the way to the size chart. It used to be an accordion at
+ * the foot of the page, a screen and a half below the picture it described.
+ */
+function ProductDetails({ product, onChart }) {
+  const specs = specsFor(product);
+  const [open, setOpen] = useState(false);
+  const shown = open ? specs : specs.slice(0, 5);
+  const key = siteContent.productSpecs?.[product.public.subcategory] ? product.public.subcategory : 'default';
+  if (specs.length === 0) return null;
+
+  return <section className="pdp-details">
+    <h2 data-cms-path={wordPath('specsTitle')}>{word('specsTitle', 'Product details')}</h2>
+    <p className="pdp-details-lead">{product.public.description}</p>
+    <dl className="pdp-specs">
+      {shown.map((row, index) => <div key={row.label}>
+        <dt data-cms-path={cms(contentPath('productSpecs', key, index, 'label'))}>{row.label}</dt>
+        <dd data-cms-path={cms(contentPath('productSpecs', key, index, 'value'))}>{row.value}</dd>
+      </div>)}
+    </dl>
+    <div className="pdp-details-actions">
+      {onChart && <button type="button" className="btn btn-outline btn-sm" onClick={onChart}>
+        <Icon name="design" size={19} />
+        <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
+      </button>}
+      {specs.length > 5 && <button type="button" className="pdp-specs-more" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <span data-cms-path={open ? wordPath('specsLessLabel') : wordPath('specsMoreLabel')}>{open ? word('specsLessLabel', 'Hide full specifications') : word('specsMoreLabel', 'View full specifications')}</span>
+        <Icon name={open ? 'chevronUp' : 'chevronDown'} size={18} />
+      </button>}
+    </div>
+  </section>;
+}
+
+/* The chart itself, in a window rather than another page: the reader is in the
+   middle of choosing sizes and should come back to where they were. */
+function SizeChart({ product, open, onClose }) {
+  const chart = chartFor(product);
+  const ref = useRef(null);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    if (open && !node.open) node.showModal();
+    if (!open && node.open) node.close();
+    return undefined;
+  }, [open]);
+  if (!chart) return null;
+
+  return <dialog className="size-chart" ref={ref} onClose={onClose} onClick={(event) => { if (event.target === ref.current) onClose(); }}>
+    <div className="size-chart-head">
+      <h2 data-cms-path={wordPath('sizeChartTitle')}>{word('sizeChartTitle', 'Size chart')}</h2>
+      <p>{product.public.name}</p>
+      <button type="button" className="size-chart-close" aria-label="Close" onClick={onClose}><Icon name="close" size={22} /></button>
+    </div>
+    <div className="size-chart-table">
+      <table>
+        <thead><tr>{chart.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+        <tbody>
+          {chart.rows.map((row) => <tr key={row[0]}>
+            {row.map((cell, index) => (index === 0
+              ? <th key={cell} scope="row">{cell}</th>
+              : <td key={`${row[0]}-${chart.columns[index]}`} data-label={chart.columns[index]}>{cell}</td>))}
+          </tr>)}
+        </tbody>
+      </table>
+    </div>
+    {chart.note && <p className="size-chart-note">{chart.note}</p>}
+    <button type="button" className="btn btn-primary size-chart-back" onClick={onClose}>
+      <Icon name="arrowRight" size={19} className="inline-arrow is-back" />
+      <span data-cms-path={wordPath('sizeChartClose')}>{word('sizeChartClose', 'Back to my request')}</span>
+    </button>
+  </dialog>;
+}
+
 function Gallery({ product, category }) {
   const photos = useMemo(() => {
     const own = picture('', `products/${product.public.slug}`);
@@ -57,18 +147,6 @@ function Gallery({ product, category }) {
         <a href={`/mySOS/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
       </li>)}
     </ul>}
-    <p className="pdp-mockup">
-      <Icon name="checkCircle" size={24} />
-      <span>
-        <strong data-cms-path={wordPath('mockupTitle')}>{word('mockupTitle', 'Free visual mockup before production')}</strong>
-        <small data-cms-path={wordPath('mockupNote')}>{word('mockupNote')}</small>
-      </span>
-    </p>
-    <p className="pdp-category-link">
-      <a className="text-link" href={`/mySOS/products/?category=${product.public.category}`}>
-        {fill(word('relatedTitle', 'More in this category'), {})} <Icon name="arrowRight" size={18} className="inline-arrow" />
-      </a>
-    </p>
     <span className="sr-only">{`${category?.name ?? product.public.category} product`}</span>
   </div>;
 }
@@ -77,16 +155,29 @@ function Gallery({ product, category }) {
  * The request builder for one product. Every answer is carried to the request
  * page in the address, so the customer never retypes what they chose here.
  */
-function BuildPanel({ product }) {
+function BuildPanel({ product, onChart }) {
   const minimum = Number(siteContent.productMinimum ?? 1) || 1;
   const presets = siteContent.quantityPresets ?? [];
   const colours = coloursFor(product);
   const printing = printingFieldFor(product.id);
   const methods = (product.printingMethods ?? []).map((id) => ({ id, name: methodName(id), note: methodNote(id) }));
+  // A product asked for by size gets the size step; a bottle does not.
+  const sizeField = detailFieldsFor(product.id).find((item) => /size/i.test(item.id));
+  const sizeRun = sizeField ? (siteContent.sizeRun ?? []) : [];
 
   const [quantity, setQuantity] = useState(presets[1] ?? minimum);
   const [colour, setColour] = useState('');
   const [method, setMethod] = useState('');
+  // "later" until the customer says otherwise: most people asking for a quote
+  // do not have the breakdown yet, and being told that is a relief.
+  const [sizing, setSizing] = useState('later');
+  const [breakdown, setBreakdown] = useState({});
+  const sizesLine = useMemo(() => sizeRun
+    .map((size) => [size, Number(breakdown[size]) || 0])
+    .filter(([, count]) => count > 0)
+    .map(([size, count]) => `${count} ${size}`)
+    .join(', '), [breakdown, sizeRun]);
+  const sizesTotal = useMemo(() => sizeRun.reduce((sum, size) => sum + (Number(breakdown[size]) || 0), 0), [breakdown, sizeRun]);
   const price = getDisplayPrice(product);
   const amount = product.public.displayPricing?.show ? Number(product.public.displayPricing.amount) : null;
 
@@ -94,8 +185,9 @@ function BuildPanel({ product }) {
     const params = new URLSearchParams({ product: product.id, qty: String(clampQuantity(quantity)) });
     if (colour) params.set('colour', colour);
     if (method) params.set('printing', method);
+    if (sizing === 'enter' && sizesLine) params.set('sizes', sizesLine);
     return `${REQUEST_PATH}?${params}`;
-  }, [product.id, quantity, colour, method]);
+  }, [product.id, quantity, colour, method, sizing, sizesLine]);
 
   const step = (by) => setQuantity((current) => clampQuantity(Math.max(minimum, Number(current) + by)));
 
@@ -122,28 +214,87 @@ function BuildPanel({ product }) {
       </ul>}
     </section>
 
-    {colours.length > 0 && <section className="pdp-step">
+    {sizeRun.length > 0 && <section className="pdp-step">
       <p className="pdp-step-head">
         <span className="pdp-step-number" aria-hidden="true">2</span>
-        <span id="pdp-colour" data-cms-path={wordPath('colourQuestion')}>{word('colourQuestion', 'Choose a base colour')}</span>
+        <span id="pdp-sizes" data-cms-path={wordPath('sizesQuestion')}>{word('sizesQuestion', 'Choose sizes')}</span>
+      </p>
+      {/* "Not confirmed yet" is the honest default: most people asking for a
+          quote do not have the breakdown, and being told that is fine is worth
+          more than an empty grid of boxes. */}
+      <div className="pdp-sizing" role="radiogroup" aria-labelledby="pdp-sizes">
+        <button type="button" role="radio" aria-checked={sizing === 'enter'} className={sizing === 'enter' ? 'is-chosen' : ''} onClick={() => setSizing('enter')}>
+          <span data-cms-path={wordPath('sizesEnterLabel')}>{word('sizesEnterLabel', 'Enter size breakdown')}</span>
+        </button>
+        <button type="button" role="radio" aria-checked={sizing === 'later'} className={sizing === 'later' ? 'is-chosen' : ''} onClick={() => setSizing('later')}>
+          {sizing === 'later' && <Icon name="check" size={18} />}
+          <span data-cms-path={wordPath('sizesLaterLabel')}>{word('sizesLaterLabel', 'Sizes not confirmed yet')}</span>
+        </button>
+      </div>
+      {sizing === 'later'
+        ? <p className="pdp-sizes-later">
+          <Icon name="checkCircle" size={22} />
+          <span>
+            <strong data-cms-path={wordPath('sizesLaterTitle')}>{word('sizesLaterTitle')}</strong>
+            <small data-cms-path={wordPath('sizesLaterNote')}>{word('sizesLaterNote')}</small>
+          </span>
+        </p>
+        : <>
+          <ul className="pdp-size-run">
+            {sizeRun.map((size, index) => <li key={size}>
+              <label htmlFor={'pdp-size-' + size} data-cms-path={cms(contentPath('sizeRun', index))}>{size}</label>
+              <input
+                id={'pdp-size-' + size}
+                type="number"
+                inputMode="numeric"
+                min="0"
+                placeholder="0"
+                value={breakdown[size] ?? ''}
+                onChange={(event) => setBreakdown({ ...breakdown, [size]: event.target.value })}
+              />
+            </li>)}
+          </ul>
+          {sizesTotal > 0 && <p className="pdp-size-total">
+            <strong>{sizesTotal}</strong>{' '}
+            <span data-cms-path={wordPath('sizesTotalLabel')}>{word('sizesTotalLabel', 'pieces across the sizes')}</span>
+          </p>}
+        </>}
+      {chartFor(product) && <button type="button" className="pdp-chart-link" onClick={onChart}>
+        <Icon name="design" size={19} />
+        <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
+      </button>}
+    </section>}
+
+    {colours.length > 0 && <section className="pdp-step">
+      <p className="pdp-step-head">
+        <span className="pdp-step-number" aria-hidden="true">{sizeRun.length > 0 ? 3 : 2}</span>
+        <span id="pdp-colour" data-cms-path={wordPath('colourQuestion')}>{word('colourQuestion', 'Choose a product colour')}</span>
         <small>{colour || word('colourHint', 'Optional')}</small>
       </p>
+      {/* The colour itself rather than its name in a box. The name is still
+          carried, for anyone who hovers and for a reader who cannot see it. */}
       <div className="pdp-colours" role="radiogroup" aria-labelledby="pdp-colour">
-        {colours.map((option) => <button
-          key={option}
-          type="button"
-          role="radio"
-          aria-checked={colour === option}
-          className={colour === option ? 'is-chosen' : ''}
-          onClick={() => setColour(colour === option ? '' : option)}
-        >{option}</button>)}
+        {colours.map((option) => {
+          const ink = swatchFor(option);
+          return <button
+            key={option}
+            type="button"
+            role="radio"
+            title={option}
+            aria-label={option}
+            aria-checked={colour === option}
+            className={[ink ? 'is-swatch' : 'is-word', colour === option ? 'is-chosen' : ''].filter(Boolean).join(' ')}
+            style={ink ? { '--ink': ink } : undefined}
+            onClick={() => setColour(colour === option ? '' : option)}
+          >{ink ? <em aria-hidden="true" /> : option}</button>;
+        })}
       </div>
     </section>}
 
     {methods.length > 0 && <section className="pdp-step">
       <p className="pdp-step-head">
-        <span className="pdp-step-number" aria-hidden="true">{colours.length > 0 ? 3 : 2}</span>
-        <span id="pdp-method" data-cms-path={wordPath('methodQuestion')}>{word('methodQuestion', 'How would you like to customise it?')}</span>
+        <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0)}</span>
+        <span id="pdp-method" data-cms-path={wordPath('methodQuestion')}>{word('methodQuestion', 'Choose a customisation option')}</span>
         <small data-cms-path={wordPath('methodHint')}>{word('methodHint', 'Choose one')}</small>
       </p>
       <div className="pdp-methods" role="radiogroup" aria-labelledby="pdp-method">
@@ -155,6 +306,9 @@ function BuildPanel({ product }) {
           className={method === item.name ? 'is-chosen' : ''}
           onClick={() => setMethod(item.name)}
         >
+          {/* Room for a picture of the method; the mark stands in until MySOS
+              uploads one. */}
+          <span className="pdp-method-shot"><Icon name={methodIcon(item.id)} size={30} cmsPath={contentPath('printingMethods', item.id, 'icon')} /></span>
           <strong>{item.name}</strong>
           {item.note && <small data-cms-path={cms(contentPath('printingMethods', item.id, 'bestFor'))}>{item.note}</small>}
         </button>)}
@@ -166,6 +320,7 @@ function BuildPanel({ product }) {
           className={method === LET_MYSOS_CHOOSE ? 'is-chosen' : ''}
           onClick={() => setMethod(LET_MYSOS_CHOOSE)}
         >
+          <span className="pdp-method-shot"><Icon name="spark" size={30} /></span>
           <strong data-cms-path={wordPath('methodHelpTitle')}>{word('methodHelpTitle', 'Help me decide')}</strong>
           <small data-cms-path={wordPath('methodHelpNote')}>{word('methodHelpNote')}</small>
         </button>}
@@ -173,6 +328,7 @@ function BuildPanel({ product }) {
     </section>}
 
     <div className="pdp-artwork">
+      <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0) + (methods.length > 0 ? 1 : 0)}</span>
       <span>
         <strong data-cms-path={wordPath('artworkTitle')}>{word('artworkTitle', 'Have artwork or a reference?')}</strong>
         <small data-cms-path={wordPath('artworkHint')}>{word('artworkHint', 'PNG, JPG or PDF')}</small>
@@ -221,13 +377,12 @@ function InfoSection({ product }) {
       </ul>
     </div>
     <div className="pdp-accordion">
-      {/* The product's own description leads, then the shared sections. */}
-      {[{ title: 'Product specifications', body: product.public.description, own: true }, ...sections].map((entry, index) => <div key={entry.title} className={open === index ? 'is-open' : ''}>
+      {sections.map((entry, index) => <div key={entry.title} className={open === index ? 'is-open' : ''}>
         <button type="button" aria-expanded={open === index} onClick={() => setOpen(open === index ? -1 : index)}>
-          <span data-cms-path={entry.own ? undefined : cms(contentPath('productInfoSections', index - 1, 'title'))}>{entry.title}</span>
+          <span data-cms-path={cms(contentPath('productInfoSections', index, 'title'))}>{entry.title}</span>
           <Icon name={open === index ? 'minus' : 'plus'} size={19} />
         </button>
-        {open === index && <p data-cms-path={entry.own ? undefined : cms(contentPath('productInfoSections', index - 1, 'body'))}>{entry.body}</p>}
+        {open === index && <p data-cms-path={cms(contentPath('productInfoSections', index, 'body'))}>{entry.body}</p>}
       </div>)}
     </div>
   </section>;
@@ -235,6 +390,7 @@ function InfoSection({ product }) {
 
 export default function ProductDetailPage({ slug }) {
   const product = getPublicProducts().find((item) => item.public.slug === slug);
+  const [chart, setChart] = useState(false);
   if (!product) return null;
   const category = siteContent.categories.find((item) => item.id === product.public.category);
 
@@ -248,7 +404,22 @@ export default function ProductDetailPage({ slug }) {
     </nav>
 
     <div className="pdp-top">
-      <Gallery product={product} category={category} />
+      <div className="pdp-left">
+        <Gallery product={product} category={category} />
+        <ProductDetails product={product} onChart={chartFor(product) ? () => setChart(true) : null} />
+        <p className="pdp-mockup">
+          <Icon name="checkCircle" size={24} />
+          <span>
+            <strong data-cms-path={wordPath('mockupTitle')}>{word('mockupTitle', 'Free visual mockup before production')}</strong>
+            <small data-cms-path={wordPath('mockupNote')}>{word('mockupNote')}</small>
+          </span>
+        </p>
+        <p className="pdp-category-link">
+          <a className="text-link" href={`/mySOS/products/?category=${product.public.category}`}>
+            {fill(word('relatedTitle', 'More in this category'), {})} <Icon name="arrowRight" size={18} className="inline-arrow" />
+          </a>
+        </p>
+      </div>
       <div className="pdp-copy" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <span className="eyebrow">{category?.name ?? product.public.category}</span>
         <h1>{product.public.name}</h1>
@@ -259,10 +430,11 @@ export default function ProductDetailPage({ slug }) {
             <span data-cms-path={cms(pagePath('product', 'promises', index))}>{promise}</span>
           </li>)}
         </ul>
-        <BuildPanel product={product} />
+        <BuildPanel product={product} onChart={() => setChart(true)} />
       </div>
     </div>
 
     <InfoSection product={product} />
+    <SizeChart product={product} open={chart} onClose={() => setChart(false)} />
   </main>;
 }
