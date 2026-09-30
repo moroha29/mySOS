@@ -513,9 +513,9 @@
       "buildTitle": "Build your request",
       "quantityQuestion": "How many pieces?",
       "quantityHint": "Minimum {min}",
-      "colourQuestion": "Choose a base colour",
+      "colourQuestion": "Choose a product colour",
       "colourHint": "Optional",
-      "methodQuestion": "How would you like to customise it?",
+      "methodQuestion": "Choose a customisation option",
       "methodHint": "Choose one",
       "methodHelpTitle": "Help me decide",
       "methodHelpNote": "We will recommend one",
@@ -538,7 +538,19 @@
       "infoTitle": "Everything important, kept simple.",
       "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
       "relatedTitle": "More in this category",
-      "addedButton": "In your request"
+      "addedButton": "In your request",
+      "specsTitle": "Product details",
+      "specsMoreLabel": "View full specifications",
+      "specsLessLabel": "Hide full specifications",
+      "sizeChartLabel": "View size chart",
+      "sizesQuestion": "Choose sizes",
+      "sizesEnterLabel": "Enter size breakdown",
+      "sizesLaterLabel": "Sizes not confirmed yet",
+      "sizesLaterTitle": "No worries, you can share your size breakdown later.",
+      "sizesLaterNote": "We will confirm sizes before production.",
+      "sizesTotalLabel": "pieces across the sizes",
+      "sizeChartTitle": "Size chart",
+      "sizeChartClose": "Back to my request"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -1328,5 +1340,384 @@
     "name-tents": "Name Tents",
     "lanyards": "Lanyards",
     "stickers": "Stickers"
-  }
+  },
+  "colourSwatches": {
+    "White": "#ffffff",
+    "Black": "#2b2f36",
+    "Grey": "#c9ced6",
+    "Navy": "#1f3b6e",
+    "Red": "#d13b3b",
+    "Blue": "#1a6fe0",
+    "Green": "#0f7a4d",
+    "Sand": "#e5dcc8",
+    "Maroon": "#7a2230",
+    "Yellow": "#f2b722",
+    "Pink": "#e87fa8"
+  },
+  "productSpecs": {
+    "tshirts": [
+      {
+        "label": "Material",
+        "value": "Cotton"
+      },
+      {
+        "label": "Fit",
+        "value": "Regular and oversized"
+      },
+      {
+        "label": "Fabric weight",
+        "value": "Varies by selected tee"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      },
+      {
+        "label": "Sizes",
+        "value": "See size chart"
+      }
+    ],
+    "polos": [
+      {
+        "label": "Material",
+        "value": "Cotton pique"
+      },
+      {
+        "label": "Fit",
+        "value": "Regular"
+      },
+      {
+        "label": "Customisation",
+        "value": "Embroidery or printing"
+      },
+      {
+        "label": "Sizes",
+        "value": "See size chart"
+      }
+    ],
+    "totes": [
+      {
+        "label": "Material",
+        "value": "Canvas"
+      },
+      {
+        "label": "Fabric weight",
+        "value": "8 oz, 10 oz and 12 oz"
+      },
+      {
+        "label": "Bag size",
+        "value": "Standard sizes or custom dimensions"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      }
+    ],
+    "default": [
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      },
+      {
+        "label": "Quantities",
+        "value": "Small runs to bulk orders"
+      },
+      {
+        "label": "Mockup",
+        "value": "Sent for approval before production"
+      }
+    ]
+  },
+  "sizeCharts": {
+    "tshirts": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    },
+    "polos": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    },
+    "hoodies": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    },
+    "jerseys": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    },
+    "singlets": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    },
+    "jackets": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ]
+    }
+  },
+  "sizeRun": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL"
+  ]
 }

@@ -23,6 +23,8 @@ export default function RequestPage() {
     quantity: params.get('qty'),
     colour: params.get('colour') ?? '',
     printing: params.get('printing') ?? '',
+    // The breakdown typed on the product's page, as "10 S, 20 M".
+    sizes: (params.get('sizes') ?? '').slice(0, 200),
   };
   // What someone typed into the homepage's search arrives here as their note.
   const asked = (params.get('ask') ?? '').slice(0, 500);
@@ -53,7 +55,7 @@ export default function RequestPage() {
 
     <RequestBuilder
       remember
-      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, details: { colour: chosen.colour, printing: chosen.printing } }] : []}
+      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, details: { colour: chosen.colour, printing: chosen.printing, sizes: chosen.sizes } }] : []}
       startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}
       titlePath={cms(pagePath('request', 'builderTitle'))}

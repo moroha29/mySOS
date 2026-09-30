@@ -172,3 +172,67 @@ describe('the line across the top of every page', () => {
     expect(css).not.toMatch(/\.site-announce \{[^}]*100vw/);
   });
 });
+
+describe('the product page, as the client marked it up', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const request = readFileSync(new URL('../src/public/pages/RequestPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('says what the product is under its picture, not a screen below it', () => {
+    // The specifications were the first entry of an accordion at the foot of
+    // the page, a screen and a half under the picture they described.
+    expect(source).toContain('function ProductDetails({ product, onChart })');
+    expect(source).toContain('<ProductDetails product={product}');
+    expect(source).toContain('className="pdp-specs"');
+    expect(siteContent.productSpecs.default.length).toBeGreaterThan(0);
+    for (const kind of ['tshirts', 'totes']) {
+      expect(siteContent.productSpecs[kind], kind).toBeTruthy();
+    }
+  });
+
+  it('asks for sizes, and says it is fine not to know them', () => {
+    expect(source).toContain("const [sizing, setSizing] = useState('later')");
+    expect(source).toContain("word('sizesEnterLabel'");
+    expect(source).toContain("word('sizesLaterLabel'");
+    expect(source).toContain('className="pdp-size-run"');
+    expect(siteContent.sizeRun.length).toBeGreaterThan(3);
+    // And the breakdown reaches the quote rather than stopping at the page.
+    expect(source).toContain("params.set('sizes', sizesLine)");
+    expect(request).toContain("sizes: (params.get('sizes') ?? '')");
+    expect(request).toContain('sizes: chosen.sizes');
+  });
+
+  it('draws a colour as the colour, with its name for anyone who cannot see it', () => {
+    expect(source).toContain('const ink = swatchFor(option);');
+    expect(source).toContain('title={option}');
+    expect(source).toContain('aria-label={option}');
+    // A name with no swatch is still offered, as a word.
+    expect(source).toContain("ink ? 'is-swatch' : 'is-word'");
+    expect(css).toContain('.pdp-colours button.is-swatch em');
+    for (const name of ['Navy', 'Black', 'White', 'Red']) {
+      expect(siteContent.colourSwatches[name], name).toMatch(/^#[0-9a-f]{6}$/i);
+    }
+  });
+
+  it('leaves room on each method for a picture of it', () => {
+    expect(source).toContain('className="pdp-method-shot"');
+    expect(source).toContain('const methodIcon = (id)');
+    const rule = css.slice(css.indexOf('.pdp-method-shot {'), css.indexOf('}', css.indexOf('.pdp-method-shot {')));
+    expect(rule).toContain('height: 54px');
+  });
+
+  it('leaves the foot of the page to the questions people ask', () => {
+    // The specifications used to be repeated there as the first accordion row.
+    expect(source).not.toContain("title: 'Product specifications'");
+    expect(source).toContain('{sections.map((entry, index) =>');
+  });
+
+  it('opens the size chart in a window rather than another page', () => {
+    expect(source).toContain('function SizeChart({ product, open, onClose })');
+    expect(source).toContain('node.showModal()');
+    expect(siteContent.sizeCharts.tshirts.rows.length).toBeGreaterThan(3);
+    // On a phone it stacks, so no column hides off the side of it.
+    const narrow = css.slice(css.indexOf('@media (max-width: 620px)', css.indexOf('.size-chart {')));
+    expect(narrow).toContain('.size-chart-table td::before');
+  });
+});
