@@ -76,7 +76,7 @@
     "productsHeading": "Products",
     "solutionsHeading": "Solutions",
     "resourcesHeading": "Resources",
-    "connectHeading": "Connect with us",
+    "connectHeading": "Get in touch",
     "resourceLinks": [
       {
         "label": "Printing Guides",
@@ -99,20 +99,9 @@
         "href": "/mySOS/resources/"
       }
     ],
-    "legalLinks": [
-      {
-        "label": "Privacy Policy",
-        "href": "/mySOS/"
-      },
-      {
-        "label": "Terms & Conditions",
-        "href": "/mySOS/"
-      },
-      {
-        "label": "Refund Policy",
-        "href": "/mySOS/"
-      }
-    ]
+    "tagline": "One source. Infinite solutions.",
+    "taglineNote": "Custom merchandise made simple.",
+    "whatsappLabel": "WhatsApp us"
   },
   "heroPromises": [
     "Small & Bulk Orders",
