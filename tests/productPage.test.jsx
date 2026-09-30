@@ -238,3 +238,32 @@ describe('the product page, as the client marked it up', () => {
     expect(narrow).toContain('.size-chart-table td::before');
   });
 });
+
+describe('the rest of the category, as a rail', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('offers the whole category rather than the first three of it', () => {
+    expect(source).toContain('.slice(0, 12)');
+    expect(source).toContain('className="pdp-thumbs" ref={railRef}');
+    const rail = css.slice(css.indexOf('.pdp-thumbs {'), css.indexOf('}', css.indexOf('.pdp-thumbs {')));
+    expect(rail).toContain('overflow-x: auto');
+    expect(rail).toContain('scroll-snap-type: x proximity');
+  });
+
+  it('shows the way on only while there is something past the edge', () => {
+    // Measured rather than counted: how many fit depends on the column width.
+    expect(source).toContain('const room = rail.scrollWidth - rail.clientWidth;');
+    expect(source).toContain('setReach({ prev: rail.scrollLeft > 4');
+    expect(source).toContain('disabled={!reach.prev}');
+    expect(source).toContain('disabled={!reach.next}');
+    expect(css).toContain('.pdp-thumb-arrow:disabled { opacity: 0; pointer-events: none; }');
+    // And the edge fades, so the rail says so without a scrollbar.
+    expect(css).toContain('.pdp-thumb-rail.has-more::after');
+  });
+
+  it('fits four to a view, and a shade under three on a phone', () => {
+    expect(css).toContain('.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }');
+    expect(css).toMatch(/\.pdp-thumbs li \{ flex-basis: 37%; \}/);
+  });
+});
