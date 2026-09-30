@@ -52,7 +52,7 @@ describe('touch targets', () => {
   it('grow without moving anything', () => {
     expect(css).toMatch(/\.text-link, \.stories-reviews-link \{ padding-block: 8px; margin-block: -8px; \}/);
     expect(css).toMatch(/\.breadcrumb a \{ padding-block: 10px; margin-block: -10px; \}/);
-    expect(css).toMatch(/\.story-card-body h3 a, \.footer-legal a \{ display: inline-block; padding-block: 7px; margin-block: -7px; \}/);
+    expect(css).toMatch(/\.story-card-body h3 a \{ display: inline-block; padding-block: 7px; margin-block: -7px; \}/);
     expect(css).toMatch(/\.review-source \{ width: 36px; height: 36px; margin: -10px; \}/);
   });
 

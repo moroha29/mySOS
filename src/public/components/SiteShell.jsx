@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
@@ -55,7 +55,6 @@ export function WhatsAppBubble() {
 const footer = siteContent.footer ?? {};
 const footerText = (key, fallback) => footer[key] ?? fallback;
 const resourceLinks = footer.resourceLinks ?? [];
-const legalLinks = footer.legalLinks ?? [];
 
 // `path` is the draft location of a dropdown entry's wording, where that
 // wording is content. The Resources list is written here, so it has none.
@@ -142,11 +141,13 @@ const socials = [
 
 export function SiteFooter() {
   const { socialLinks = {} } = siteConfig;
+  const whatsapp = whatsappHref();
   return <footer className="site-footer">
     <div className="footer-grid">
       <div className="footer-brand">
-        <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home" data-cms-paths={logoPaths}><Wordmark variant="light" /></a>
-        <p data-cms-path={cms(configPath('tagline'))}>{siteConfig.tagline}</p>
+        <a className="site-logo" href={siteConfig.basePath} aria-label="MySOS home" data-cms-paths={logoPaths}><Wordmark /></a>
+        <strong data-cms-path={cms(contentPath('footer', 'tagline'))}>{footerText('tagline', 'One source. Infinite solutions.')}</strong>
+        <p data-cms-path={cms(contentPath('footer', 'taglineNote'))}>{footerText('taglineNote', 'Custom merchandise made simple.')}</p>
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'productsHeading'))}>{footerText('productsHeading', 'Products')}</h3>
@@ -164,8 +165,23 @@ export function SiteFooter() {
           data-cms-paths={cmsAll(contentPath('footer', 'resourceLinks', index, 'label'), contentPath('footer', 'resourceLinks', index, 'href'))}
         >{item.label}</a>)}
       </div>
-      <div>
-        <h3 data-cms-path={cms(contentPath('footer', 'connectHeading'))}>{footerText('connectHeading', 'Connect with us')}</h3>
+      {/* Every way to reach MySOS in one column: the number, the address, the
+          chat and the accounts. It used to be two plain lines of text under a
+          row of social marks. */}
+      <div className="footer-reach">
+        <h3 data-cms-path={cms(contentPath('footer', 'connectHeading'))}>{footerText('connectHeading', 'Get in touch')}</h3>
+        {siteConfig.whatsapp.displayNumber && <a className="footer-contact" href={`tel:${String(siteConfig.whatsapp.displayNumber).replace(/[^+\d]/g, '')}`}>
+          <Icon name="phone" size={21} />
+          <span data-cms-path={cms(configPath('whatsapp', 'displayNumber'))}>{siteConfig.whatsapp.displayNumber}</span>
+        </a>}
+        {siteConfig.email && <a className="footer-contact" href={`mailto:${siteConfig.email}`}>
+          <Icon name="mail" size={21} />
+          <span data-cms-path={cms(configPath('email'))}>{siteConfig.email}</span>
+        </a>}
+        {whatsapp && <a className="btn btn-primary footer-whatsapp" href={whatsapp} target="_blank" rel="noreferrer" data-cms-paths={whatsAppPaths}>
+          <Icon name="whatsapp" size={22} />
+          <span data-cms-path={cms(contentPath('footer', 'whatsappLabel'))}>{footerText('whatsappLabel', 'WhatsApp us')}</span>
+        </a>}
         <div className="footer-socials">
           {socials.map((social) => {
             const href = socialLinks[social.id];
@@ -174,23 +190,12 @@ export function SiteFooter() {
               : <span key={social.id} aria-label={`${social.label} (coming soon)`} role="img"><Icon name={social.id} size={22} /></span>;
           })}
         </div>
-        {siteConfig.whatsapp.displayNumber && <a className="footer-contact" href={whatsappHref() ?? '#'} data-cms-path={cms(configPath('whatsapp', 'displayNumber'))}>{siteConfig.whatsapp.displayNumber}</a>}
-        {siteConfig.email && <a className="footer-contact" href={`mailto:${siteConfig.email}`} data-cms-path={cms(configPath('email'))}>{siteConfig.email}</a>}
       </div>
     </div>
     <div className="footer-bottom">
       <span>
         © 2026 <span data-cms-path={cms(configPath('legalName'))}>{siteConfig.legalName ?? 'MySOS'}</span>. All rights reserved.
         {siteConfig.companyRegistration ? <> Company Registration No. <span data-cms-path={cms(configPath('companyRegistration'))}>{siteConfig.companyRegistration}</span></> : ''}
-      </span>
-      <span className="footer-legal">
-        {legalLinks.map((item, index) => <Fragment key={item.label}>
-          {index > 0 && <i aria-hidden="true">|</i>}
-          <a
-            href={item.href}
-            data-cms-paths={cmsAll(contentPath('footer', 'legalLinks', index, 'label'), contentPath('footer', 'legalLinks', index, 'href'))}
-          >{item.label}</a>
-        </Fragment>)}
       </span>
     </div>
   </footer>;

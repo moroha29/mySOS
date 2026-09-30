@@ -572,3 +572,41 @@ describe('the rest of the site moves too, not only the homepage', () => {
     }
   });
 });
+
+describe('the footer the client drew', () => {
+  const shell = readFileSync(new URL('../src/public/components/SiteShell.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('stands on the page’s own paper rather than a navy slab', () => {
+    // Not the `.site-app > .site-footer` clip rule earlier in the file.
+    const at = css.indexOf('.site-footer { background');
+    const rule = css.slice(at, css.indexOf('}', at));
+    expect(rule).toContain('background: var(--paper)');
+    expect(rule).toContain('border-top: 1px solid var(--line)');
+  });
+
+  it('gathers every way to reach MySOS in the last column', () => {
+    expect(shell).toContain('className="footer-reach"');
+    expect(shell).toContain('href={`tel:');
+    expect(shell).toContain('href={`mailto:${siteConfig.email}`}');
+    expect(shell).toContain('className="btn btn-primary footer-whatsapp"');
+    // Written against `.footer-grid a`, which makes every footer link a block:
+    // unscoped, the marks sat on one line and their words on the next.
+    expect(css).toContain('.footer-grid .footer-contact {');
+    expect(css).toContain('.footer-grid .footer-whatsapp {');
+  });
+
+  it('drops the three links that all went to the home page', () => {
+    // Privacy Policy, Terms & Conditions and Refund Policy each pointed at
+    // "/mySOS/", so all three were dead. The design has no room for them.
+    expect(shell).not.toContain('legalLinks');
+    expect(JSON.stringify(siteContent.footer)).not.toContain('legalLinks');
+  });
+
+  it('says what MySOS is under the wordmark', () => {
+    expect(shell).toContain("footerText('tagline'");
+    expect(shell).toContain("footerText('taglineNote'");
+    expect(siteContent.footer.tagline).toMatch(/\S/);
+    expect(siteContent.footer.taglineNote).toMatch(/\S/);
+  });
+});
