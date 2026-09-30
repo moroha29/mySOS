@@ -217,8 +217,10 @@ describe('the product page, as the client marked it up', () => {
   it('leaves room on each method for a picture of it', () => {
     expect(source).toContain('className="pdp-method-shot"');
     expect(source).toContain('const methodIcon = (id)');
-    const rule = css.slice(css.indexOf('.pdp-method-shot {'), css.indexOf('}', css.indexOf('.pdp-method-shot {')));
-    expect(rule).toContain('height: 54px');
+    // The band's own rule, not the shorter one a phone overrides it with.
+    const at = css.indexOf('.pdp-method-shot { display: grid');
+    expect(at, 'the picture band').toBeGreaterThan(-1);
+    expect(css.slice(at, css.indexOf('}', at))).toContain('height: 54px');
   });
 
   it('leaves the foot of the page to the questions people ask', () => {

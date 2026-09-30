@@ -1511,7 +1511,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-breadcrumb { padding-inline: 18px; }
   .pdp-top { padding: 8px 18px 36px; }
   .pdp-shot { border-radius: 20px; }
-  .pdp-methods { grid-template-columns: minmax(0, 1fr); }
+  .pdp-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .pdp-methods button { padding: 10px 10px 12px; }
+  .pdp-method-shot { height: 44px; }
+  .pdp-methods strong { font-size: 16.5px; }
+  .pdp-methods small { font-size: 15px; }
   .pdp-facts { grid-template-columns: minmax(0, 1fr); }
   .pdp-build-head, .pdp-step, .pdp-close { padding-inline: 18px; }
   .pdp-artwork { margin-inline: 18px; }
@@ -1969,7 +1973,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-specs > div { display: grid; grid-template-columns: minmax(0, 132px) minmax(0, 1fr); gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line-soft); }
 .pdp-specs > div:last-child { border-bottom: 0; }
 .pdp-specs dt { font-size: 16.5px; font-weight: 700; color: var(--ink); }
-.pdp-specs dd { font-size: 16.5px; line-height: 1.5; color: var(--muted); }
+.pdp-specs dd { margin: 0; font-size: 16.5px; line-height: 1.5; color: var(--muted); }
 .pdp-details-actions { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
 .pdp-specs-more { display: inline-flex; align-items: center; gap: 7px; padding: 8px 0; border: 0; background: none; font-size: 16.5px; font-weight: 700; color: var(--navy); cursor: pointer; }
 
