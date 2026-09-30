@@ -491,7 +491,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .solution-card h3 { font-size: 18px; font-weight: 800; }
 .solution-card p { margin: 8px 0 12px; min-height: 36px; font-size: 17px; line-height: 1.6; color: var(--muted); }
 
-.popular-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.popular-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
 .popular-grid article { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); text-align: center; }
 .popular-grid .product-visual { height: 92px; border-radius: 8px; background: var(--soft); }
 .popular-grid h3 { margin-top: 10px; font-size: 16px; font-weight: 700; }
@@ -2601,13 +2601,18 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .collection-search button:hover { background: var(--soft); color: var(--ink); }
 
 .product-types h2 { font-size: clamp(26px, 2.4vw, 38px); font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
-.type-row { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 12px; }
+/* The row runs the whole width, a button per kind and every one the same
+   size, as the client drew it. It used to be pills that wrapped to a
+   ragged second line. */
+.type-row { margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
 .type-row button {
-  display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px;
-  border: 1px solid var(--line); border-radius: 999px; background: #fff;
-  font: inherit; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer;
+  min-height: 64px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 14px; background: #fff;
+  font: inherit; font-size: 16.5px; font-weight: 600; line-height: 1.25; color: var(--ink); text-align: left; cursor: pointer;
   transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s cubic-bezier(.4, 0, .2, 1);
 }
+.type-row button .icon { flex: none; color: var(--navy); }
+.type-row button[aria-selected="true"] .icon { color: #fff; }
 .type-row button:hover { border-color: var(--green-dark); transform: translateY(-2px); }
 .type-row button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
 .type-row .product-visual { width: 36px; height: 36px; }
@@ -2620,8 +2625,8 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 @media (max-width: 860px) {
   .collection-search { margin-top: 20px; }
   .type-row { gap: 8px; }
-  .type-row button { padding: 8px 16px 8px 10px; font-size: 16px; }
-  .type-row .product-visual { width: 30px; height: 30px; }
+  .type-row button { min-height: 58px; padding: 10px 12px; font-size: 16px; }
+  .type-row .product-visual { width: 26px; height: 26px; }
 }
 
 /* ====================================== 35. the knowledge hub and its guides
@@ -2841,10 +2846,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .product-card:hover h3 { color: var(--green-dark); }
 .product-card:hover .product-visual { box-shadow: 0 16px 34px rgba(9, 28, 72, .12); }
 
-/* The row that picks a kind, as outlined pills. */
+/* The row that picks a kind. */
 .product-types h2 { font-weight: 800; }
-.type-row button { padding: 12px 22px 12px 14px; border-radius: 14px; }
-.type-row .product-visual { width: 34px; height: 34px; }
+.type-row .product-visual { width: 30px; height: 30px; }
 
 .collection-sort { display: inline-flex; align-items: center; gap: 10px; font-size: 16.5px; color: var(--muted); }
 .collection-sort select {

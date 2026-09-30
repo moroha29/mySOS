@@ -107,7 +107,7 @@ describe('one look across the pages', () => {
     expect(css).toMatch(/\.section-heading h2 \{ font-size: clamp\(\d+px, 3vw, \d+px\)/);
     expect(css).toMatch(/\.product-card, \.story-card, \.solution-card[\s\S]*?border-radius: 22px;/);
     // The kinds within a category are pills, as the category strip is.
-    expect(css).toMatch(/\.type-row button \{[\s\S]{0,240}?border-radius: 999px;/);
+    expect(css).toMatch(/\.type-row button \{[\s\S]{0,260}?border-radius: 14px;/);
     // The closing band is flat green with a navy button, as the concept has it.
     expect(css).toMatch(/\.page-cta, \.home-closing \{ background: #046b45; \}/);
     expect(css).toMatch(/\.page-cta \.btn, \.home-closing \.btn \{[^}]*background: var\(--navy\)/);
