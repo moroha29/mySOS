@@ -1419,8 +1419,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-shot .product-visual { width: 70%; }
 .pdp-badge { position: absolute; top: 18px; left: 18px; padding: 7px 14px; border-radius: 999px; background: #fff; box-shadow: var(--shadow-sm); font-size: 16px; font-weight: 700; color: var(--navy); }
 .pdp-thumbs-label { margin-top: 20px; font-size: 16px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.pdp-thumbs { margin-top: 10px; display: flex; gap: 12px; }
-.pdp-thumbs a { display: block; width: 84px; height: 84px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+/* Always thirds, however many there are: with auto-fit a lone thumbnail
+   stretched to the width of the picture above it. */
+.pdp-thumbs { margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pdp-thumbs a { display: block; aspect-ratio: 1 / 1; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
 .pdp-thumbs a:hover { border-color: var(--green); }
 .pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
 .pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
@@ -2850,8 +2852,12 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .product-card:hover h3 { color: var(--green-dark); }
 .product-card:hover .product-visual { box-shadow: 0 16px 34px rgba(9, 28, 72, .12); }
 
-/* The row that picks a kind. */
+/* The row that picks a kind, and the shelf it filters directly under it:
+   48px of section padding met 76px more and left 124px of nothing between
+   the buttons and the words they act on. */
 .product-types h2 { font-weight: 800; }
+.product-types { padding-bottom: 10px; }
+.product-types + .products-collection { padding-top: 34px; }
 .type-row .product-visual { width: 30px; height: 30px; }
 
 .collection-sort { display: inline-flex; align-items: center; gap: 10px; font-size: 16.5px; color: var(--muted); }
