@@ -126,13 +126,39 @@ function SizeChart({ product, open, onClose }) {
 function Gallery({ product, category }) {
   const photos = useMemo(() => {
     const own = picture('', `products/${product.public.slug}`);
+    // Everything else in the category, not the first three: the row scrolls,
+    // so there is room for all of them.
     const others = getPublicProducts({ category: product.public.category })
       .filter((item) => item.id !== product.id)
       .map((item) => ({ slug: item.public.slug, src: picture('', `products/${item.public.slug}`), name: item.public.name }))
       .filter((item) => item.src)
-      .slice(0, 3);
+      .slice(0, 12);
     return { own, others };
   }, [product]);
+
+  const railRef = useRef(null);
+  const [reach, setReach] = useState({ prev: false, next: false });
+  // Which way there is still something to scroll to. Measured rather than
+  // counted, because how many fit depends on how wide the column is.
+  const measure = () => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const room = rail.scrollWidth - rail.clientWidth;
+    setReach({ prev: rail.scrollLeft > 4, next: room > 4 && rail.scrollLeft < room - 4 });
+  };
+  useEffect(() => {
+    measure();
+    const rail = railRef.current;
+    if (!rail) return undefined;
+    globalThis.addEventListener('resize', measure);
+    return () => globalThis.removeEventListener('resize', measure);
+  }, [photos.others.length]);
+  const nudge = (by) => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const step = rail.firstElementChild?.getBoundingClientRect().width ?? 160;
+    rail.scrollBy({ left: by * (step + 12) * 2, behavior: 'smooth' });
+  };
 
   return <div className="pdp-gallery" data-reveal>
     <div className="pdp-shot">
@@ -142,11 +168,21 @@ function Gallery({ product, category }) {
         : <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />}
     </div>
     {photos.others.length > 0 && <p className="pdp-thumbs-label">{`More ${(category?.name ?? '').toLowerCase()}`.trim()}</p>}
-    {photos.others.length > 0 && <ul className="pdp-thumbs">
-      {photos.others.map((other) => <li key={other.slug}>
-        <a href={`/mySOS/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
-      </li>)}
-    </ul>}
+    {photos.others.length > 0 && <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
+      <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
+        {photos.others.map((other) => <li key={other.slug}>
+          <a href={`/mySOS/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
+        </li>)}
+      </ul>
+      {(reach.prev || reach.next) && <>
+        <button type="button" className="pdp-thumb-arrow is-prev" aria-label="Previous products" disabled={!reach.prev} onClick={() => nudge(-1)}>
+          <Icon name="chevronLeft" size={20} />
+        </button>
+        <button type="button" className="pdp-thumb-arrow is-next" aria-label="More products" disabled={!reach.next} onClick={() => nudge(1)}>
+          <Icon name="chevronRight" size={20} />
+        </button>
+      </>}
+    </div>}
     <span className="sr-only">{`${category?.name ?? product.public.category} product`}</span>
   </div>;
 }

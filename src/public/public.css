@@ -1419,10 +1419,34 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-shot .product-visual { width: 70%; }
 .pdp-badge { position: absolute; top: 18px; left: 18px; padding: 7px 14px; border-radius: 999px; background: #fff; box-shadow: var(--shadow-sm); font-size: 16px; font-weight: 700; color: var(--navy); }
 .pdp-thumbs-label { margin-top: 20px; font-size: 16px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-/* Always thirds, however many there are: with auto-fit a lone thumbnail
-   stretched to the width of the picture above it. */
-.pdp-thumbs { margin-top: 12px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.pdp-thumbs a { display: block; aspect-ratio: 1 / 1; padding: 10px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+/* The rest of the category, as a rail: four to a view, and the ones past the
+   edge reached with a nudge either way rather than left off the page. */
+.pdp-thumb-rail { position: relative; margin-top: 12px; }
+.pdp-thumbs {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity;
+  scrollbar-width: none; scroll-padding: 0 4px;
+}
+.pdp-thumbs::-webkit-scrollbar { display: none; }
+.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
+.pdp-thumbs a { display: block; aspect-ratio: 1 / 1; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+/* The edge fades where there is more to come, so the rail says so without a
+   scrollbar. */
+.pdp-thumb-rail.has-more::after {
+  content: ""; position: absolute; top: 0; bottom: 0; right: 0; width: 46px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--paper));
+}
+.pdp-thumb-arrow {
+  position: absolute; top: 50%; width: 36px; height: 36px; margin-top: -18px; z-index: 1;
+  display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%;
+  background: #fff; color: var(--navy); box-shadow: var(--shadow-sm); cursor: pointer;
+}
+/* The circle is 36px so it sits over a thumbnail without covering it; the
+   area a thumb has to hit is larger than the circle drawn. */
+.pdp-thumb-arrow::before { content: ""; position: absolute; inset: -5px; border-radius: 50%; }
+.pdp-thumb-arrow.is-prev { left: -8px; }
+.pdp-thumb-arrow.is-next { right: -8px; }
+.pdp-thumb-arrow:disabled { opacity: 0; pointer-events: none; }
+.pdp-thumb-arrow:hover:not(:disabled) { border-color: var(--navy); }
 .pdp-thumbs a:hover { border-color: var(--green); }
 .pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
 .pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
@@ -1513,6 +1537,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-breadcrumb { padding-inline: 18px; }
   .pdp-top { padding: 8px 18px 36px; }
   .pdp-shot { border-radius: 20px; }
+  /* A shade under three to a view, so the one peeking past the edge says the
+     rail scrolls. */
+  .pdp-thumbs li { flex-basis: 37%; }
+  .pdp-thumb-arrow.is-prev { left: -4px; }
+  .pdp-thumb-arrow.is-next { right: -4px; }
   .pdp-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .pdp-methods button { padding: 10px 10px 12px; }
   .pdp-method-shot { height: 44px; }
