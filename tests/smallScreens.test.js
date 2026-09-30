@@ -82,7 +82,9 @@ describe('walked down every page at 390px', () => {
   });
 
   it('wraps the kinds within a category instead of running them off the edge', () => {
-    expect(css).toMatch(/\.type-row \{[^}]*flex-wrap: wrap;/);
+    // A grid that fits as many even columns as the width allows, rather than
+    // pills wrapping to a ragged second line.
+    expect(css).toMatch(/\.type-row \{[^}]*repeat\(auto-fit, minmax\(150px, 1fr\)\)/);
     expect(block('max-width: 860px')).toMatch(/\.type-row button \{[^}]*font-size: 16px; \}/);
   });
 

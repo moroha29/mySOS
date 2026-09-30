@@ -195,7 +195,8 @@ describe('one mark for a category, wherever it is named', () => {
   it('turns the mark white while the pill or tile under it is dark', () => {
     // A navy drawing on the navy pill it had just been selected on was no
     // drawing at all.
-    expect(products).toContain("tone={subcategory === 'all' ? 'white' : 'navy'}");
+    // The type row carries the client's own outline marks now, so only the
+    // fallback row - a category they did not draw - still tints a solid one.
     expect(products).toContain("color={subcategory === type.id ? 'white' : 'navy'}");
     expect(home).toContain("const DARK_TONES = new Set(['navy', 'green']);");
     expect(home).toMatch(/tone=\{DARK_TONES\.has\(TILE_TONES\[index % TILE_TONES\.length\]\) \? 'white' : 'navy'\}/);

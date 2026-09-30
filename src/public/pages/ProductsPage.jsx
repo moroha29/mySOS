@@ -7,7 +7,7 @@ import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/ca
 import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
-import { Button, CategoryMark, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
+import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 import { Product } from '../components/Visuals';
 
 /*
@@ -37,6 +37,18 @@ function typesIn(products, names) {
     seen.push({ id, name: names[id] ?? prettyName(id), visual: TYPE_VISUALS[id] });
   }
   return seen.length > 1 ? seen : [];
+}
+
+/*
+ * The kinds a category is browsed by. Where the client drew the row it is
+ * theirs, name for name and mark for mark, including kinds the catalogue has
+ * nothing under yet: the row says what MySOS makes, not what happens to be
+ * loaded. Anywhere they did not draw one, it is still read from the products.
+ */
+function typeRowFor(category, products, names) {
+  const drawn = siteContent.categoryTypes?.[category.id];
+  if (drawn?.length) return drawn.map((type) => ({ ...type, visual: TYPE_VISUALS[type.id] }));
+  return typesIn(products, names);
 }
 
 
@@ -126,7 +138,7 @@ export default function ProductsPage() {
    * none is offered all of them.
    */
   // The kinds within this category, each with the thing it stands for.
-  const types = useMemo(() => typesIn(getPublicProducts({ category }), siteContent.subcategoryNames ?? {}), [category]);
+  const types = useMemo(() => typeRowFor(activeCategory, getPublicProducts({ category }), siteContent.subcategoryNames ?? {}), [activeCategory, category]);
   const banner = useMemo(() => categoryPicture(activeCategory, getPublicProducts({ category })), [activeCategory, category]);
   // Asking for what is not listed opens a chat rather than the quote page: it
   // is a question, not an order, and it names what the reader was looking at.
@@ -196,21 +208,24 @@ export default function ProductsPage() {
         <span data-cms-path={cms(categoryPath(activeCategory, 'typeWord'))}>{activeCategory.typeWord}</span>{' '}
         <span data-cms-path={cms(pagePath('products', 'typesSuffix'))}>{pageText('products', 'typesSuffix', 'types')}</span>
       </h2>
+      {/* One button per kind, each with its own mark, filling the row. Picking
+          the kind already chosen clears it, which is how the reader gets back
+          to everything without an "All" button the design does not have. */}
       <div className="type-row" role="tablist" aria-label={`${activeCategory.name} types`} data-reveal style={{ '--reveal-delay': '80ms' }}>
-        <button type="button" role="tab" aria-selected={subcategory === 'all'} onClick={() => { setSubcategory('all'); setShowAll(false); }}>
-          {/* The category's own mark, in white while the pill is navy. */}
-          <CategoryMark category={activeCategory} tone={subcategory === 'all' ? 'white' : 'navy'} />
-          <span data-cms-path={cms(pagePath('products', 'allTypesLabel'))}>{pageText('products', 'allTypesLabel', 'All')}</span>
-        </button>
-        {types.map((type) => <button
+        {types.map((type, index) => <button
           key={type.id}
           type="button"
           role="tab"
           aria-selected={subcategory === type.id}
-          onClick={() => { setSubcategory(type.id); setShowAll(false); }}
+          onClick={() => { setSubcategory(subcategory === type.id ? 'all' : type.id); setShowAll(false); }}
         >
-          <Product type={type.visual || activeCategory.visual} color={subcategory === type.id ? 'white' : 'navy'} mark="" />
-          <span data-cms-path={cms(contentPath('subcategoryNames', type.id))}>{type.name}</span>
+          {type.icon
+            ? <Icon name={type.icon} size={26} cmsPath={contentPath('categoryTypes', activeCategory.id, index, 'icon')} />
+            : <Product type={type.visual || activeCategory.visual} color={subcategory === type.id ? 'white' : 'navy'} mark="" />}
+          <span data-cms-path={type.icon
+            ? cms(contentPath('categoryTypes', activeCategory.id, index, 'name'))
+            : cms(contentPath('subcategoryNames', type.id))}
+          >{type.name}</span>
         </button>)}
       </div>
     </section>}

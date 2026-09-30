@@ -102,10 +102,12 @@ describe('the products page, as the design has it', () => {
     const words = (markup) => markup.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ');
     expect(words(html)).toContain('Browse apparel types');
     expect(html).toContain('Explore all');
-    // Every category is divided by what its own products are, and the row is
-    // dropped where there is only one kind to choose between.
+    // The row is the category's shape, not a report on what the catalogue
+    // happens to hold: drinkware has one product and still offers the six
+    // kinds MySOS makes.
     expect(words(markup('bags'))).toContain('Browse bag types');
-    expect(markup('drinkware')).not.toContain('class="type-row"');
+    expect(markup('drinkware')).toContain('class="type-row"');
+    expect(words(markup('drinkware'))).toContain('Water Bottles');
   });
 
   it('reads the kinds from the catalogue, not from a list kept by hand', () => {

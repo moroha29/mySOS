@@ -1719,5 +1719,167 @@
     "L",
     "XL",
     "2XL"
-  ]
+  ],
+  "categoryTypes": {
+    "bags": [
+      {
+        "id": "totes",
+        "name": "Tote Bags",
+        "icon": "tote"
+      },
+      {
+        "id": "drawstring",
+        "name": "Drawstring Bags",
+        "icon": "drawstring"
+      },
+      {
+        "id": "backpacks",
+        "name": "Backpacks",
+        "icon": "backpack"
+      },
+      {
+        "id": "pouches",
+        "name": "Pouches",
+        "icon": "pouch"
+      },
+      {
+        "id": "laptop-bags",
+        "name": "Laptop Bags",
+        "icon": "laptopBag"
+      },
+      {
+        "id": "cooler-bags",
+        "name": "Cooler Bags",
+        "icon": "coolerBag"
+      }
+    ],
+    "stationery": [
+      {
+        "id": "notebooks",
+        "name": "Notebooks",
+        "icon": "book"
+      },
+      {
+        "id": "pens",
+        "name": "Pens",
+        "icon": "pen"
+      },
+      {
+        "id": "planners",
+        "name": "Planners",
+        "icon": "calendar"
+      },
+      {
+        "id": "sticky-notes",
+        "name": "Sticky Notes",
+        "icon": "stickyNote"
+      },
+      {
+        "id": "folders",
+        "name": "Folders",
+        "icon": "folder"
+      },
+      {
+        "id": "desk-supplies",
+        "name": "Desk Supplies",
+        "icon": "paperclip"
+      }
+    ],
+    "corporate-gifts": [
+      {
+        "id": "gift-sets",
+        "name": "Gift Sets",
+        "icon": "gift"
+      },
+      {
+        "id": "tech-gifts",
+        "name": "Tech Gifts",
+        "icon": "headphones"
+      },
+      {
+        "id": "desk-accessories",
+        "name": "Desk Accessories",
+        "icon": "deskLamp"
+      },
+      {
+        "id": "lifestyle-gifts",
+        "name": "Lifestyle Gifts",
+        "icon": "leaf"
+      },
+      {
+        "id": "eco-gifts",
+        "name": "Eco Gifts",
+        "icon": "eco"
+      },
+      {
+        "id": "premium-gifts",
+        "name": "Premium Gifts",
+        "icon": "starOutline"
+      }
+    ],
+    "drinkware": [
+      {
+        "id": "bottles",
+        "name": "Water Bottles",
+        "icon": "bottle"
+      },
+      {
+        "id": "tumblers",
+        "name": "Tumblers",
+        "icon": "tumbler"
+      },
+      {
+        "id": "mugs",
+        "name": "Mugs",
+        "icon": "mug"
+      },
+      {
+        "id": "travel-cups",
+        "name": "Travel Cups",
+        "icon": "travelCup"
+      },
+      {
+        "id": "glassware",
+        "name": "Glassware",
+        "icon": "glassware"
+      },
+      {
+        "id": "flasks",
+        "name": "Flasks",
+        "icon": "flask"
+      }
+    ],
+    "event-essentials": [
+      {
+        "id": "lanyards",
+        "name": "Lanyards",
+        "icon": "lanyard"
+      },
+      {
+        "id": "badges",
+        "name": "Badges",
+        "icon": "badge"
+      },
+      {
+        "id": "wristbands",
+        "name": "Wristbands",
+        "icon": "wristband"
+      },
+      {
+        "id": "tote-bags",
+        "name": "Tote Bags",
+        "icon": "tote"
+      },
+      {
+        "id": "signage",
+        "name": "Signage",
+        "icon": "signage"
+      },
+      {
+        "id": "welcome-packs",
+        "name": "Welcome Packs",
+        "icon": "welcomePack"
+      }
+    ]
+  }
 }
