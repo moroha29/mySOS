@@ -36,7 +36,7 @@ export default function RequestPage() {
       <div className="hero-inner">
         <div data-reveal>
           <nav className="breadcrumb" aria-label="Breadcrumb">
-            <a href="/mySOS/" aria-label="Home"><Icon name="home" size={18} /></a>
+            <a href="/" aria-label="Home"><Icon name="home" size={18} /></a>
             <span aria-hidden="true">/</span>
             <span aria-current="page" data-cms-path={cms(pagePath('request', 'breadcrumb'))}>{pageText('request', 'breadcrumb', 'Get a Quote')}</span>
           </nav>

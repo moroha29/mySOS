@@ -14,27 +14,27 @@ const hero = { page: 'homepage', selector: "[data-cms-path='[\"homepage\",\"head
 
 describe('which page a style belongs to', () => {
   it('a style names its exact page when it has one', () => {
-    const schools = { ...hero, page: 'solutions', route: '/mySOS/solutions/schools/' };
-    expect(stylesForPage([schools], '/mySOS/solutions/schools/')).toEqual([schools]);
-    expect(stylesForPage([schools], '/mySOS/solutions/schools')).toEqual([schools]);
-    expect(stylesForPage([schools], '/mySOS/solutions/')).toEqual([]);
-    expect(stylesForPage([schools], '/mySOS/solutions/churches/')).toEqual([]);
+    const schools = { ...hero, page: 'solutions', route: '/solutions/schools/' };
+    expect(stylesForPage([schools], '/solutions/schools/')).toEqual([schools]);
+    expect(stylesForPage([schools], '/solutions/schools')).toEqual([schools]);
+    expect(stylesForPage([schools], '/solutions/')).toEqual([]);
+    expect(stylesForPage([schools], '/solutions/churches/')).toEqual([]);
   });
 
   it('an older style without one belongs to its named page', () => {
-    expect(stylesForPage([hero], '/mySOS/')).toEqual([hero]);
+    expect(stylesForPage([hero], '/')).toEqual([hero]);
     expect(stylesForPage([hero], '/mySOS')).toEqual([hero]);
-    expect(stylesForPage([hero], '/mySOS/products/')).toEqual([]);
+    expect(stylesForPage([hero], '/products/')).toEqual([]);
     const why = { ...hero, page: 'why-mysos' };
-    expect(stylesForPage([why], '/mySOS/why-mysos/')).toEqual([why]);
+    expect(stylesForPage([why], '/why-mysos/')).toEqual([why]);
   });
 
   it('nothing set, nothing applied', () => {
     // null, not undefined: undefined means "the site's own styles", which are
     // whatever was last published, so the test broke the first time one was.
-    expect(stylesForPage(null, '/mySOS/')).toEqual([]);
-    expect(stylesForPage([], '/mySOS/')).toEqual([]);
-    expect(stylesForPage([null, { page: 'homepage' }], '/mySOS/')).toEqual([]);
+    expect(stylesForPage(null, '/')).toEqual([]);
+    expect(stylesForPage([], '/')).toEqual([]);
+    expect(stylesForPage([null, { page: 'homepage' }], '/')).toEqual([]);
   });
 });
 

@@ -50,7 +50,7 @@ export default function App() {
 
   return <>
     <main>
-      <header className="page-heading"><a className="quote-brand" href="/mySOS/" aria-label="Back to MySOS website">MySOS</a><h1>{isDemo ? 'Quotation demo' : 'Agent quotation'}</h1></header>
+      <header className="page-heading"><a className="quote-brand" href="/" aria-label="Back to MySOS website">MySOS</a><h1>{isDemo ? 'Quotation demo' : 'Agent quotation'}</h1></header>
       {isDemo && <section className="demo-notice" aria-label="Demo information"><strong>Try the quotation engine</strong><p>All products, costs, prices, and margins in this demo are fictional. Explore the form and download a sample Excel quote. Nothing is submitted or ordered.</p></section>}
       <nav className="step-nav" aria-label="Quotation sections">{schema.sections.filter(section => section.visible !== false && !section.showWhen).map(section => <a key={section.id} href={`#${section.id}-0`}>{section.title}</a>)}<a href="#preview">Quotation total</a></nav>
       <div className="workspace"><QuotationForm schema={schema} value={form} onChange={setForm} errors={shownErrors} quote={quote} /><QuotationPreview quote={quote} errors={attempted ? allErrors : {}} onDownload={handleDownload} downloading={downloading} /></div>

@@ -85,7 +85,7 @@ function HeroCard({ slides }) {
       <p className="hero-card-title" data-cms-path={cms(solutionPath(current.solution, 'description'))}>{current.solution?.description}</p>
       <ul className="hero-card-tags">
         {siteContent.categories.slice(0, 5).map((category) => <li key={category.id}>
-          <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</a>
+          <a href={`/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</a>
         </li>)}
       </ul>
     </div>
@@ -119,7 +119,7 @@ function SearchResults({ query, onAdd, added }) {
     <ul>
       {results.slice(0, 6).map((product) => <li key={product.id}>
         <span className="hero-result-shot"><ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} /></span>
-        <a className="hero-result-name" href={`/mySOS/products/${product.public.slug}/`}>{product.public.name}</a>
+        <a className="hero-result-name" href={`/products/${product.public.slug}/`}>{product.public.name}</a>
         <button type="button" className={added.includes(product.id) ? 'btn btn-outline btn-sm is-added' : 'btn btn-secondary btn-sm'} onClick={() => onAdd(product)}>
           {added.includes(product.id)
             ? <><Icon name="check" size={18} /> <span data-cms-path={cms(labelPath('addedToQuoteLabel'))}>{label('addedToQuoteLabel', 'In your quote')}</span></>
@@ -279,7 +279,7 @@ function Reviews() {
     <Testimonials
       eyebrow={heading('reviewsHeading', 'What our clients say')}
       eyebrowPath={headingPath('reviewsHeading')}
-      action={<Button href="/mySOS/success-stories/" variant="outline">
+      action={<Button href="/success-stories/" variant="outline">
         <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
         <Icon name="arrowRight" size={18} className="inline-arrow" />
       </Button>}
@@ -307,7 +307,7 @@ function CategoryTiles() {
       {siteContent.categories.map((category, index) => <a
         key={category.id}
         className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}`}
-        href={`/mySOS/products/?category=${category.id}`}
+        href={`/products/?category=${category.id}`}
         data-reveal
         style={{ '--reveal-delay': `${index * 60}ms` }}
       >
@@ -409,7 +409,7 @@ function SelectedWork({ stories }) {
       </a>
     </div>
     <div className="home-work-grid">
-      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/mySOS/success-stories/${story.slug}/`} data-reveal style={{ '--reveal-delay': `${index * 90}ms` }}>
+      {stories.map((story, index) => <a className={`home-work-card tone-${index % 2 ? 'mint' : 'blue'}`} key={story.slug} href={`/success-stories/${story.slug}/`} data-reveal style={{ '--reveal-delay': `${index * 90}ms` }}>
         <span className="home-work-tag">{story.category.replace('-', ' ')}</span>
         <span className="home-work-shot"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/cover`)} label={`${story.title} project`} /></span>
         <h3>{story.title}</h3>

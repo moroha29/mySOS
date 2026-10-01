@@ -25,7 +25,7 @@ export function getDisplayPrice(product) {
  * quotation engine is MySOS's pricing tool for its agents; visitors never go
  * there, and the public site does not carry its address.
  */
-export const REQUEST_PATH = '/mySOS/request/';
+export const REQUEST_PATH = '/request/';
 export const requestPathFor = (productId) => (productId ? `${REQUEST_PATH}?product=${encodeURIComponent(productId)}` : REQUEST_PATH);
 
 /*

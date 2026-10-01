@@ -109,7 +109,7 @@ export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }
  */
 export function ProductCard({ product, reveal }) {
   const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 50}ms` } } : {};
-  return <a className="product-card" href={`/mySOS/products/${product.public.slug}/`} {...arriving}>
+  return <a className="product-card" href={`/products/${product.public.slug}/`} {...arriving}>
     {/* The product and its name. The design the client chose puts nothing else
         on the card: the price and what is asked for most are on the product's
         own page, where a reader is deciding rather than browsing. */}
@@ -136,7 +136,7 @@ export function CategoryMark({ category, tone = 'navy', className = 'category-ma
 
 export function CategoryCard({ category }) {
   const src = picture(category.image, `products/category-${category.id}`);
-  return <a className="category-card" href={`/mySOS/products/?category=${category.id}`}>
+  return <a className="category-card" href={`/products/?category=${category.id}`}>
     {src
       ? <div className="product-visual category-thumb has-photo"><img src={src} alt="" loading="lazy" data-cms-path={cms(categoryPath(category, 'image'))} /></div>
       : <Product type={category.visual} color={category.colour} mark="" className="category-thumb" />}
@@ -148,7 +148,7 @@ export function CategoryCard({ category }) {
 }
 
 export function StoryCard({ story, showBadge = true, reveal }) {
-  const href = `/mySOS/success-stories/${story.slug}/`;
+  const href = `/success-stories/${story.slug}/`;
   const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
   return <article className="story-card" {...arriving}>
     <a className="story-card-media" href={href}>
@@ -164,7 +164,7 @@ export function StoryCard({ story, showBadge = true, reveal }) {
 }
 
 export function SolutionCard({ solution, active = false, reveal }) {
-  const href = `/mySOS/solutions/${solution.id}/`;
+  const href = `/solutions/${solution.id}/`;
   const arriving = Number.isFinite(reveal) ? { 'data-reveal': true, style: { '--reveal-delay': `${reveal * 60}ms` } } : {};
   return <article className={`solution-card ${active ? 'is-active' : ''}`.trim()} {...arriving}>
     <a href={href}><Photo style={solution.id} label={`${solution.name} solutions`} image={picture(solution.image, `solutions/${solution.id}`)} imagePath={solutionPath(solution, 'image')} /></a>

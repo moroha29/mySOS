@@ -104,7 +104,7 @@ const paths = {
 /*
  * A picture uploaded through the website manager in place of a drawn icon. The
  * manager stores it the way it stores every picture, as a path such as
- * "/mySOS/assets/uploads/award-3f9c2a11.png".
+ * "/assets/uploads/award-3f9c2a11.png".
  */
 export const isIconPicture = (name) => /^(?:\/|https?:\/\/|data:image\/)/i.test(String(name ?? ''))
   || /\.(?:png|jpe?g|webp|gif|avif)$/i.test(String(name ?? ''));

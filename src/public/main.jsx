@@ -8,7 +8,7 @@ if (route) {
   const query = new URLSearchParams(globalThis.location.search);
   query.delete('route');
   const suffix = query.toString() ? `?${query}` : '';
-  globalThis.history.replaceState(null, '', `/mySOS/${route.replace(/^\/+/, '')}${suffix}`);
+  globalThis.history.replaceState(null, '', `/${route.replace(/^\/+/, '')}${suffix}`);
 }
 
 const container = document.getElementById('root');

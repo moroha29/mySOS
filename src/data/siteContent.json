@@ -80,23 +80,23 @@
     "resourceLinks": [
       {
         "label": "Printing Guides",
-        "href": "/mySOS/resources/dtf-or-silkscreen/"
+        "href": "/resources/dtf-or-silkscreen/"
       },
       {
         "label": "Materials",
-        "href": "/mySOS/resources/choosing-t-shirt-fabric/"
+        "href": "/resources/choosing-t-shirt-fabric/"
       },
       {
         "label": "Artwork Tips",
-        "href": "/mySOS/resources/prepare-artwork-for-printing/"
+        "href": "/resources/prepare-artwork-for-printing/"
       },
       {
         "label": "Buying Guides",
-        "href": "/mySOS/resources/before-ordering-in-bulk/"
+        "href": "/resources/before-ordering-in-bulk/"
       },
       {
         "label": "All Guides",
-        "href": "/mySOS/resources/"
+        "href": "/resources/"
       }
     ],
     "tagline": "One source. Infinite solutions.",
@@ -393,42 +393,42 @@
       "icon": "school",
       "visual": "tee",
       "colour": "navy",
-      "href": "/mySOS/solutions/schools/"
+      "href": "/solutions/schools/"
     },
     {
       "name": "Welcome Kit",
       "icon": "bag",
       "visual": "tote",
       "colour": "sand",
-      "href": "/mySOS/solutions/businesses/"
+      "href": "/solutions/businesses/"
     },
     {
       "name": "Graduation Pack",
       "icon": "school",
       "visual": "bottle",
       "colour": "teal",
-      "href": "/mySOS/solutions/schools/"
+      "href": "/solutions/schools/"
     },
     {
       "name": "Sports Pack",
       "icon": "sports",
       "visual": "jersey",
       "colour": "green",
-      "href": "/mySOS/solutions/sports-teams/"
+      "href": "/solutions/sports-teams/"
     },
     {
       "name": "Event Pack",
       "icon": "lanyard",
       "visual": "lanyard",
       "colour": "blue",
-      "href": "/mySOS/solutions/events/"
+      "href": "/solutions/events/"
     },
     {
       "name": "Corporate Gifts",
       "icon": "gift",
       "visual": "gift-set",
       "colour": "black",
-      "href": "/mySOS/products/?category=corporate-gifts"
+      "href": "/products/?category=corporate-gifts"
     }
   ],
   "faq": [

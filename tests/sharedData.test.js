@@ -96,14 +96,14 @@ describe('public and quotation integration', () => {
 
   it('resolves static public routes and story slugs', () => {
     expect([
-      ['/mySOS/', 'home'],
-      ['/mySOS/products/', 'products'],
-      ['/mySOS/solutions/', 'solutions'],
-      ['/mySOS/why-mysos/', 'why'],
-      ['/mySOS/success-stories/', 'stories'],
+      ['/', 'home'],
+      ['/products/', 'products'],
+      ['/solutions/', 'solutions'],
+      ['/why-mysos/', 'why'],
+      ['/success-stories/', 'stories'],
     ].map(([path, page]) => resolvePublicRoute(path).page === page)).toEqual([true, true, true, true, true]);
-    expect(resolvePublicRoute('/mySOS/success-stories/ntu-cca-jerseys-2024/')).toEqual({ page: 'story', slug: 'ntu-cca-jerseys-2024' });
-    expect(resolvePublicRoute('/mySOS/not-a-page/')).toEqual({ page: 'not-found' });
+    expect(resolvePublicRoute('/success-stories/ntu-cca-jerseys-2024/')).toEqual({ page: 'story', slug: 'ntu-cca-jerseys-2024' });
+    expect(resolvePublicRoute('/not-a-page/')).toEqual({ page: 'not-found' });
     expect(getStoryBySlug('ntu-cca-jerseys-2024')?.quantity).toBe(320);
   });
 

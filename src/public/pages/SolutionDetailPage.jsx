@@ -64,9 +64,9 @@ function Hero({ solution, solutionIndex }) {
     <div className="solution-hero-inner">
       <div className="solution-hero-copy" data-reveal>
         <nav className="breadcrumb" aria-label="Breadcrumb">
-          <a href="/mySOS/" aria-label={word('breadcrumbHome', 'Home')}><Icon name="home" size={18} /></a>
+          <a href="/" aria-label={word('breadcrumbHome', 'Home')}><Icon name="home" size={18} /></a>
           <span aria-hidden="true">/</span>
-          <a href="/mySOS/solutions/" data-cms-path={wordPath('breadcrumbSolutions')}>{word('breadcrumbSolutions', 'Solutions')}</a>
+          <a href="/solutions/" data-cms-path={wordPath('breadcrumbSolutions')}>{word('breadcrumbSolutions', 'Solutions')}</a>
           <span aria-hidden="true">/</span>
           <span aria-current="page" data-cms-path={cms(solutionPath(solution, 'name'))}>{shortName(solution)}</span>
         </nav>

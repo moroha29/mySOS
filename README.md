@@ -2,8 +2,8 @@
 
 A fully static React site for MySOS. The public website and agent quotation engine are built together and deployed to GitHub Pages with no backend.
 
-- Public website: `https://moroha29.github.io/mySOS/`
-- Agent quotation engine: `https://moroha29.github.io/mySOS/quotation_engine/`
+- Public website: `https://mysourceofsolutions.com/`
+- Agent quotation engine: `https://mysourceofsolutions.com/quotation_engine/`
 
 The public catalogue and quotation engine share the same structured product data. Public starting prices are intentionally separate from internal base costs and exact quotation calculations.
 
@@ -28,7 +28,7 @@ Create the complete GitHub Pages artifact:
 npm run build
 ```
 
-The deployable files are written to `dist/`. The root `index.html` is the public site; `dist/quotation_engine/index.html` is the existing agent tool. Vite uses the exact case-sensitive base path `/mySOS/`.
+The deployable files are written to `dist/`. The root `index.html` is the public site; `dist/quotation_engine/index.html` is the existing agent tool. Vite uses the exact case-sensitive base path `/`.
 
 ## Content and pricing files
 
@@ -65,7 +65,7 @@ Printing method 2 is an optional second decoration or placement on the same prod
 
 1. Add an object to `catalogue` in `src/data/productData.json`.
 2. Give it a unique `id` and public `slug`.
-3. Fill in the `public` section: name, category, subcategory, description, visibility, featured state, image and display pricing. Use a root-relative path such as `/mySOS/assets/products/example.webp`. When no production image is available, `imageStyle` provides the built-in visual fallback.
+3. Fill in the `public` section: name, category, subcategory, description, visibility, featured state, image and display pricing. Use a root-relative path such as `/assets/products/example.webp`. When no production image is available, `imageStyle` provides the built-in visual fallback.
 4. Fill in the `quotation` section. Use the existing `productId` values (`tee`, `polo`, `cap`, `jersey_sublimation`, or `custom_cutsew`) so the quotation form knows which configuration fields to show.
 5. List compatible `printingMethods`.
 6. Run `npm test` and `npm run build` before committing.
@@ -107,11 +107,11 @@ Open `src/data/tierData.json`. Each tier has an inclusive `minQty` and `maxQty`,
 
 1. Add one object to `src/data/successStories.json`.
 2. Use a unique URL-safe `slug`.
-3. Add the category, summary, product IDs, quantity, year, challenge, solution, process, outcomes and testimonial. Gallery values may be `/mySOS/assets/...` image paths; style tokens remain available as fallbacks.
+3. Add the category, summary, product IDs, quantity, year, challenge, solution, process, outcomes and testimonial. Gallery values may be `/assets/...` image paths; style tokens remain available as fallbacks.
 4. Set `featured` to `true` to make the story eligible for the homepage.
 5. Commit. The listing, category filters and detail route are generated from the entry automatically.
 
-GitHub Pages uses `public/404.html` to restore nested public routes such as `/mySOS/success-stories/example/` after a direct refresh. No separate HTML file is required when a story is added.
+GitHub Pages uses `public/404.html` to restore nested public routes such as `/success-stories/example/` after a direct refresh. No separate HTML file is required when a story is added.
 
 ## WhatsApp configuration
 
@@ -154,12 +154,12 @@ The public website displays only `public.displayPricing`. It never renders quota
 
 Push to `main` or manually run the GitHub Actions workflow. It uses Node.js 22, runs `npm ci`, `npm test`, and `npm run build`, then uploads `dist/` as the GitHub Pages artifact.
 
-In the repository settings, configure Pages to use **GitHub Actions**. The expected deployment URL is `https://moroha29.github.io/mySOS/`.
+In the repository settings, configure Pages to use **GitHub Actions**. The expected deployment URL is `https://mysourceofsolutions.com/`.
 
 ## Public quotation demo
 
-`/mySOS/mock_quotation_engine/` is a public demonstration using synthetic pricing.
-The real engine remains at `/mySOS/quotation_engine/`. Both compile the same
+`/mock_quotation_engine/` is a public demonstration using synthetic pricing.
+The real engine remains at `/quotation_engine/`. Both compile the same
 `src/App.jsx`, form components, calculation engines and Excel generator.
 
 `npm run build` builds the production site, prerenders its marketing pages, then

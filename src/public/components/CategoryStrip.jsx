@@ -22,7 +22,7 @@ export default function CategoryStrip({ activeId = '', onChoose, action }) {
           return <li key={category.id}>
             <a
               className={active ? 'is-active' : undefined}
-              href={onChoose ? `?category=${category.id}` : `/mySOS/products/?category=${category.id}`}
+              href={onChoose ? `?category=${category.id}` : `/products/?category=${category.id}`}
               aria-current={active ? 'page' : undefined}
               onClick={onChoose ? (event) => onChoose(event, category.id) : undefined}
               data-cms-path={cms(categoryPath(category, 'name'))}
@@ -30,7 +30,7 @@ export default function CategoryStrip({ activeId = '', onChoose, action }) {
           </li>;
         })}
       </ul>
-      <a className="text-link" href={action?.href ?? '/mySOS/products/'}>
+      <a className="text-link" href={action?.href ?? '/products/'}>
         <span data-cms-path={cms(labelPath(action?.labelKey ?? 'quickNavAllLabel'))}>{label(action?.labelKey ?? 'quickNavAllLabel', action?.fallback ?? 'View all products')}</span>
         <Icon name="arrowRight" size={18} className="inline-arrow" />
       </a>

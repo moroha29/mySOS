@@ -11,7 +11,7 @@ export const hub = (key, fallback = '') => resources.hub?.[key] ?? fallback;
 export const hubPath = (key) => ['homepage', 'resources', 'hub', key];
 export const articlePath = (index, ...rest) => ['homepage', 'resources', 'articles', index, ...rest];
 export const topicName = (id) => resources.topics.find((topic) => topic.id === id)?.name ?? id;
-export const articleHref = (article) => `/mySOS/resources/${article.slug}/`;
+export const articleHref = (article) => `/resources/${article.slug}/`;
 
 /*
  * The picture on a guide: the manager's upload, else a drawn stand-in. Each

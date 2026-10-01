@@ -151,7 +151,7 @@ export default function ProductsPage() {
       <div className="hero-inner">
         <div>
           <nav className="breadcrumb" aria-label="Breadcrumb" data-reveal>
-            <a href="/mySOS/" aria-label="Home"><Icon name="home" size={18} /></a>
+            <a href="/" aria-label="Home"><Icon name="home" size={18} /></a>
             <span aria-hidden="true">/</span>
             <span aria-current="page" data-cms-path={cms(categoryPath(activeCategory, 'name'))}>{activeCategory.name}</span>
           </nav>
@@ -182,7 +182,7 @@ export default function ProductsPage() {
           </form>
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '360ms' }}>
             <QuoteButton showArrow />
-            <Button href="/mySOS/solutions/" variant="ghost">
+            <Button href="/solutions/" variant="ghost">
               <span data-cms-path={cms(labelPath('exploreSolutionsLabel'))}>{label('exploreSolutionsLabel', 'Explore Solutions')}</span>
               <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
