@@ -91,9 +91,14 @@ describe('one band at the top of every page', () => {
     expect(picture).toContain('position: relative');
     expect(picture).toContain('height: auto');
     expect(rulesFor('.hero-scene > .scene, .story-hero-bg > .scene')).toContain('position: absolute');
-    // And no band is thinner than another by much.
+    // A floor the words usually clear on their own: at 440 the shorter banners
+    // were taller than what was in them, so the words floated in the middle of
+    // the picture instead of starting level with it.
     const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
-    expect(inner).toContain('min-height: 440px');
+    expect(inner).toContain('min-height: 360px');
+    // The words bring no padding of their own, so the picture's edges sit
+    // level with the first line and the last rather than proud of them.
+    expect(ruleFrom('.hero:not(.has-background) .hero-inner > div:first-child,')).toContain('padding: 0;');
   });
 
   it('reads the quote page breadcrumb on the band', () => {

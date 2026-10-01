@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: !mock,
       copyPublicDir: !mock,
       manifest: !mock,
+      // Every asset stays a file. Inlined under its default 4KB limit, a small
+      // picture drops out of the manifest, and the prerender resolves what a
+      // page references against exactly that.
+      assetsInlineLimit: 0,
       assetsDir: mock ? 'mock-assets' : 'assets',
       rollupOptions: {
         input: mock ? { mock_quotation_engine: resolve(import.meta.dirname, 'mock_quotation_engine/index.html') } : {
