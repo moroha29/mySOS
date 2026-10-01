@@ -74,15 +74,18 @@ describe('one band at the top of every page', () => {
     const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
     expect(inner).toContain('max-width: var(--content)');
     expect(inner).toContain('margin: 0 auto');
-    expect(inner).toContain('padding: 44px var(--pad) 48px');
+    expect(inner).toContain('padding: 26px var(--pad) 44px');
     // A story's banner is the band and the grid in one, so its column is made
     // of padding: the colour still has to reach both edges of the screen.
-    expect(rulesFor('.story-hero')).toContain('padding: 44px var(--gutter) 48px');
+    expect(rulesFor('.story-hero')).toContain('padding: 26px var(--gutter) 44px');
   });
 
   it('draws the picture as the card the homepage draws', () => {
     const picture = rulesFor('.hero-scene, .solution-collage, .story-hero-bg');
     expect(picture).toContain('border-radius: 26px');
+    // Down by the leading above the first line: level with the words' box,
+    // the picture's hard edge reads as higher than the words themselves.
+    expect(picture).toContain('margin-top: 7px');
     expect(picture).toContain('overflow: hidden');
     expect(rulesFor('.hero-card')).toContain('border-radius: 26px');
   });
@@ -98,7 +101,7 @@ describe('one band at the top of every page', () => {
     // were taller than what was in them, so the words floated in the middle of
     // the picture instead of starting level with it.
     const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
-    expect(inner).toContain('min-height: 360px');
+    expect(inner).toContain('min-height: 340px');
     // The words bring no padding of their own, so the picture's edges sit
     // level with the first line and the last rather than proud of them.
     expect(ruleFrom('.hero:not(.has-background) .hero-inner > div:first-child,')).toContain('padding: 0;');

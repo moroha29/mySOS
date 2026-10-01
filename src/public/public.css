@@ -2847,7 +2847,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .solution-hero::before { display: none; }
 .hero:not(.has-background) .hero-inner,
 .solution-hero-inner {
-  max-width: var(--content); margin: 0 auto; padding: 44px var(--pad) 48px; gap: 44px; min-height: 360px;
+  max-width: var(--content); margin: 0 auto; padding: 26px var(--pad) 44px; gap: 44px; min-height: 340px;
   grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch;
 }
 /* No padding of its own: 14px above and below the words made the picture's
@@ -2863,6 +2863,10 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .hero-scene, .solution-collage, .story-hero-bg {
   position: relative; min-height: 0; height: auto; aspect-ratio: auto; max-height: none;
   border-radius: 26px; overflow: hidden; box-shadow: 0 24px 70px rgba(26, 50, 138, .18); animation: none;
+  /* Down by the leading above the first line: the words' box starts where the
+     picture does, but the ink inside it starts lower, so a hard edge level with
+     the box reads as higher than the words. */
+  margin-top: 7px;
 }
 .hero-scene > .scene, .story-hero-bg > .scene { position: absolute; inset: 0; border-radius: 0; }
 /* A solution's four pictures, as a mosaic filling the band rather than four
@@ -2881,7 +2885,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* A story's banner is the band and the grid in one element, so its column is
    made of padding rather than a width: the colour has to keep running the
    full width of the screen. */
-.story-hero { max-width: none; margin: 0; padding: 44px var(--gutter) 48px; gap: 44px; min-height: 360px; background: #dcebfa; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
+.story-hero { max-width: none; margin: 0; padding: 26px var(--gutter) 44px; gap: 44px; min-height: 360px; background: #dcebfa; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch; }
 .story-hero-inner { padding: 0; align-self: center; }
 
 .story-hero .back-link, .story-hero .story-meta dt { color: #4a6180; }
