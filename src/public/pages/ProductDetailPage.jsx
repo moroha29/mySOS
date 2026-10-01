@@ -6,6 +6,7 @@ import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } fr
 import { cms, contentPath, pagePath, pageText, picture } from '../cms';
 import Icon from '../components/Icons';
 import { ProductShot } from '../components/Ui';
+import { MeasureGarment } from '../components/Visuals';
 
 /*
  * One product, as the 2026 concept draws it: the photograph on the left, and on
@@ -83,41 +84,97 @@ function ProductDetails({ product, onChart }) {
   </section>;
 }
 
-/* The chart itself, in a window rather than another page: the reader is in the
-   middle of choosing sizes and should come back to where they were. */
+/* Centimetres as inches, to one place: the chart is kept in one unit and the
+   other is worked out, so the two can never disagree. */
+const asInches = (value) => {
+  const number = Number(String(value).replace(/[^\d.]/g, ''));
+  if (!Number.isFinite(number) || !number) return value;
+  return (Math.round((number / 2.54) * 10) / 10).toFixed(1);
+};
+
+function ChartTable({ chart, unit }) {
+  return <div className="size-chart-table">
+    <table>
+      <thead><tr>{chart.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+      <tbody>
+        {chart.rows.map((row) => <tr key={row[0]}>
+          {row.map((cell, index) => (index === 0
+            ? <th key={cell} scope="row">{cell}</th>
+            : <td key={`${row[0]}-${chart.columns[index]}`} data-label={chart.columns[index]}>{unit === 'inch' ? asInches(cell) : cell}</td>))}
+        </tr>)}
+      </tbody>
+    </table>
+  </div>;
+}
+
+/*
+ * The size guide, in a window rather than another page: the reader is in the
+ * middle of choosing and should come back to where they were.
+ *
+ * Three ways of answering the same question — where to hold the tape, and the
+ * numbers in either unit — rather than a table and nothing else.
+ */
 function SizeChart({ product, open, onClose }) {
   const chart = chartFor(product);
   const ref = useRef(null);
+  const [tab, setTab] = useState('measure');
   useEffect(() => {
     const node = ref.current;
     if (!node) return undefined;
-    if (open && !node.open) node.showModal();
+    if (open && !node.open) { setTab('measure'); node.showModal(); }
     if (!open && node.open) node.close();
     return undefined;
   }, [open]);
   if (!chart) return null;
 
+  const tabs = [
+    ['measure', word('measureTab', 'Measurement guide')],
+    ['cm', word('chartCmTab', 'Size chart (cm)')],
+    ['inch', word('chartInchTab', 'Size chart (inch)')],
+  ];
+
   return <dialog className="size-chart" ref={ref} onClose={onClose} onClick={(event) => { if (event.target === ref.current) onClose(); }}>
     <div className="size-chart-head">
-      <h2 data-cms-path={wordPath('sizeChartTitle')}>{word('sizeChartTitle', 'Size chart')}</h2>
+      <h2 data-cms-path={wordPath('sizeChartTitle')}>{word('sizeChartTitle', 'Size guide')}</h2>
       <p>{product.public.name}</p>
       <button type="button" className="size-chart-close" aria-label="Close" onClick={onClose}><Icon name="close" size={22} /></button>
     </div>
-    <div className="size-chart-table">
-      <table>
-        <thead><tr>{chart.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
-        <tbody>
-          {chart.rows.map((row) => <tr key={row[0]}>
-            {row.map((cell, index) => (index === 0
-              ? <th key={cell} scope="row">{cell}</th>
-              : <td key={`${row[0]}-${chart.columns[index]}`} data-label={chart.columns[index]}>{cell}</td>))}
-          </tr>)}
-        </tbody>
-      </table>
+
+    <div className="size-chart-tabs" role="tablist" aria-label="Size guide">
+      {tabs.map(([id, label]) => <button
+        key={id}
+        type="button"
+        role="tab"
+        aria-selected={tab === id}
+        className={tab === id ? 'is-chosen' : ''}
+        onClick={() => setTab(id)}
+      >{label}</button>)}
     </div>
-    {chart.note && <p className="size-chart-note">{chart.note}</p>}
+
+    {tab === 'measure'
+      ? <div className="size-measure">
+        <MeasureGarment type={chart.diagram ?? 'tee'} />
+        <ul className="size-measure-key">
+          {(chart.measure ?? []).map((row, index) => <li key={row.key}>
+            <span className="size-measure-badge" aria-hidden="true">{row.key}</span>
+            <span>
+              <strong data-cms-path={cms(contentPath('sizeCharts', product.public.subcategory, 'measure', index, 'label'))}>{row.label}</strong>
+              <small data-cms-path={cms(contentPath('sizeCharts', product.public.subcategory, 'measure', index, 'note'))}>{row.note}</small>
+            </span>
+          </li>)}
+        </ul>
+        {chart.tip && <p className="size-measure-tip" data-cms-path={cms(contentPath('sizeCharts', product.public.subcategory, 'tip'))}>{chart.tip}</p>}
+      </div>
+      : <>
+        <ChartTable chart={chart} unit={tab} />
+        {/* The note carries the unit, so it has to change with the tab. */}
+        {(tab === 'inch' ? chart.noteInch : chart.note) && <p
+          className="size-chart-note"
+          data-cms-path={cms(contentPath('sizeCharts', product.public.subcategory, tab === 'inch' ? 'noteInch' : 'note'))}
+        >{tab === 'inch' ? chart.noteInch : chart.note}</p>}
+      </>}
+
     <button type="button" className="btn btn-primary size-chart-back" onClick={onClose}>
-      <Icon name="arrowRight" size={19} className="inline-arrow is-back" />
       <span data-cms-path={wordPath('sizeChartClose')}>{word('sizeChartClose', 'Back to my request')}</span>
     </button>
   </dialog>;

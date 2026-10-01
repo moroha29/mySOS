@@ -267,3 +267,42 @@ describe('the rest of the category, as a rail', () => {
     expect(css).toMatch(/\.pdp-thumbs li \{ flex-basis: 37%; \}/);
   });
 });
+
+describe('the size guide, as the drawing has it', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const visuals = readFileSync(new URL('../src/public/components/Visuals.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('answers the question three ways rather than one', () => {
+    expect(source).toContain("['measure', word('measureTab'");
+    expect(source).toContain("['cm', word('chartCmTab'");
+    expect(source).toContain("['inch', word('chartInchTab'");
+    expect(css).toContain('.size-chart-tabs');
+    // It opens on the guide, because a reader who needs the chart knows where
+    // to hold the tape already.
+    expect(source).toContain("const [tab, setTab] = useState('measure');");
+  });
+
+  it('shows where to hold the tape, with a letter on each line', () => {
+    expect(visuals).toContain('export function MeasureGarment(');
+    // Every line first, then every letter: drawn in turn, the line down the
+    // body struck through the letter on the chest.
+    const figure = visuals.slice(visuals.indexOf('export function MeasureGarment('));
+    const lastLine = figure.lastIndexOf('{...ARROW}');
+    const firstBadge = figure.indexOf('<Badge');
+    expect(firstBadge).toBeGreaterThan(lastLine);
+    for (const key of ['A', 'B', 'C', 'D']) {
+      expect(figure, key).toContain(`letter="${key}"`);
+    }
+    expect(siteContent.sizeCharts.tshirts.measure).toHaveLength(4);
+  });
+
+  it('works the inches out rather than keeping a second set of numbers', () => {
+    // Two sets could disagree; one set and a conversion cannot.
+    expect(source).toContain('const asInches = (value)');
+    expect(source).toContain('number / 2.54');
+    // And the note carries the unit, so it changes with the tab.
+    expect(source).toContain("tab === 'inch' ? chart.noteInch : chart.note");
+    expect(siteContent.sizeCharts.tshirts.noteInch).toMatch(/inches/);
+  });
+});
