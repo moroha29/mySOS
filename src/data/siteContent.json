@@ -560,7 +560,12 @@
       "sizeGuideTitle": "Size guide",
       "measureTab": "Measurement guide",
       "chartCmTab": "Size chart (cm)",
-      "chartInchTab": "Size chart (inch)"
+      "chartInchTab": "Size chart (inch)",
+      "uploadCta": "Upload your logo or drop it here",
+      "uploadOnNext": "Files are attached on the next step",
+      "standardLabel": "Standard size",
+      "customLabel": "Enter my own",
+      "addonsHint": "Select any add ons"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -1362,7 +1367,10 @@
     "Sand": "#e5dcc8",
     "Maroon": "#7a2230",
     "Yellow": "#f2b722",
-    "Pink": "#e87fa8"
+    "Pink": "#e87fa8",
+    "Natural": "#e8e0cd",
+    "Sage green": "#9cab8a",
+    "Cream": "#f2ead9"
   },
   "productSpecs": {
     "tshirts": [
@@ -2041,5 +2049,274 @@
         "icon": "welcomePack"
       }
     ]
+  },
+  "productSteps": {
+    "totes": [
+      {
+        "type": "dimensions",
+        "id": "dimensions",
+        "question": "Choose dimensions",
+        "standardLabel": "Standard size",
+        "customLabel": "Enter my own",
+        "fields": [
+          {
+            "id": "width",
+            "label": "Width (cm)",
+            "standard": "35"
+          },
+          {
+            "id": "height",
+            "label": "Height (cm)",
+            "standard": "40"
+          },
+          {
+            "id": "depth",
+            "label": "Depth (cm)",
+            "standard": "10"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "methods",
+        "id": "printing",
+        "question": "Choose a customisation option"
+      }
+    ],
+    "drawstring": [
+      {
+        "type": "dimensions",
+        "id": "dimensions",
+        "question": "Choose dimensions",
+        "standardLabel": "Standard size",
+        "customLabel": "Enter my own",
+        "fields": [
+          {
+            "id": "width",
+            "label": "Width (cm)",
+            "standard": "35"
+          },
+          {
+            "id": "height",
+            "label": "Height (cm)",
+            "standard": "45"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "methods",
+        "id": "printing",
+        "question": "Choose a customisation option"
+      }
+    ],
+    "lanyards": [
+      {
+        "type": "dimensions",
+        "id": "size",
+        "question": "Lanyard size",
+        "hint": "See standard dimensions in the product description.",
+        "standardLabel": "Standard size",
+        "customLabel": "Enter my own",
+        "fields": [
+          {
+            "id": "lanyardWidth",
+            "label": "Lanyard width (mm)",
+            "standard": "20"
+          },
+          {
+            "id": "lanyardLength",
+            "label": "Lanyard length (cm)",
+            "standard": "90"
+          }
+        ]
+      },
+      {
+        "type": "cards",
+        "id": "material",
+        "question": "Material",
+        "hint": "Options subject to supplier confirmation.",
+        "options": [
+          {
+            "name": "Polyester",
+            "icon": "layers"
+          },
+          {
+            "name": "Nylon",
+            "icon": "thread"
+          },
+          {
+            "name": "Recycled PET",
+            "icon": "leaf"
+          },
+          {
+            "name": "Help me decide",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Colour"
+      },
+      {
+        "type": "cards",
+        "id": "branding",
+        "question": "Branding",
+        "options": [
+          {
+            "name": "Sublimation",
+            "note": "Full colour, edge to edge branding",
+            "icon": "droplet"
+          },
+          {
+            "name": "Silkscreen",
+            "note": "Durable and vibrant single colour print",
+            "icon": "layers"
+          },
+          {
+            "name": "Help me decide",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "addons",
+        "id": "addons",
+        "question": "Add ons",
+        "optional": true,
+        "hint": "Select any add ons for your lanyard.",
+        "options": [
+          {
+            "name": "Safety breakaway",
+            "note": "Release clasp at the neck",
+            "icon": "flexible"
+          },
+          {
+            "name": "Detachable buckle",
+            "note": "Detach without removing the lanyard",
+            "icon": "transfer"
+          },
+          {
+            "name": "Retractable badge reel",
+            "note": "Extend your badge for scanning",
+            "icon": "quantity"
+          },
+          {
+            "name": "Badge holder",
+            "note": "Add a holder for your ID or event pass",
+            "icon": "badge",
+            "fields": [
+              {
+                "id": "holderType",
+                "label": "Holder type",
+                "type": "select",
+                "options": [
+                  "Clear soft PVC",
+                  "Rigid plastic",
+                  "PU leather"
+                ],
+                "note": "Also available: rigid plastic or PU, subject to confirmation."
+              },
+              {
+                "id": "orientation",
+                "label": "Orientation",
+                "type": "choice",
+                "options": [
+                  "Portrait",
+                  "Landscape"
+                ]
+              },
+              {
+                "id": "cardWidth",
+                "label": "Card width (mm)"
+              },
+              {
+                "id": "cardHeight",
+                "label": "Card height (mm)"
+              }
+            ],
+            "fieldsNote": "Enter the size of the card that needs to fit inside."
+          }
+        ]
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Upload logo or artwork",
+        "optional": true,
+        "hint": "PNG, JPG or PDF. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request."
+      }
+    ],
+    "gift-sets": [
+      {
+        "type": "upload",
+        "id": "logo",
+        "question": "Upload your logo",
+        "hint": "PNG, JPG, PDF or AI",
+        "note": "You can share your logo later if it is not ready."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Additional notes",
+        "optional": true,
+        "placeholder": "Tell us about any logo placement preferences or special requests."
+      }
+    ]
+  },
+  "productUnit": {
+    "gift-sets": "sets"
+  },
+  "productAssurance": {
+    "gift-sets": {
+      "title": "We will handle the branding",
+      "note": "Our team will recommend logo placement and prepare a visual mockup for your approval before production."
+    }
+  },
+  "productIncludes": {
+    "executive_gift_set": {
+      "title": "What is included",
+      "items": [
+        {
+          "name": "Notebook",
+          "note": "A hardcover notebook for everyday notes.",
+          "visual": "notebook"
+        },
+        {
+          "name": "Pen",
+          "note": "A matching pen for the set.",
+          "visual": "pen"
+        },
+        {
+          "name": "Insulated bottle",
+          "note": "A reusable bottle for daily use.",
+          "visual": "bottle"
+        },
+        {
+          "name": "Gift box",
+          "note": "The set comes neatly arranged in a matching box.",
+          "visual": "gift-set"
+        }
+      ]
+    }
   }
 }

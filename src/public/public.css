@@ -2124,6 +2124,88 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   :root { --pad: 18px; }
 }
 
+/* ------------------------------------------- 38. the steps a kind is asked
+   A bag asks for its dimensions, a lanyard for its material and its add-ons,
+   a gift set only for a logo. These are the pieces those steps are built from;
+   the panel they sit in is section 37's. */
+
+.pdp-step-optional { font-style: normal; font-weight: 500; color: var(--muted); }
+.pdp-step-note { margin-top: 8px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+
+/* A size, either the standard one or typed in. */
+.pdp-dimensions { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.pdp-dimensions li { display: grid; gap: 5px; }
+.pdp-dimensions label { font-size: 15px; font-weight: 600; color: var(--muted); }
+.pdp-dimensions input { height: 46px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 11px; background: #fff; font: inherit; font-size: 16.5px; color: var(--ink); }
+.pdp-dimensions input:read-only { background: var(--paper); color: var(--muted); }
+.pdp-dimensions input:focus-visible { border-color: var(--green); outline: none; }
+
+/* Add-ons: several at once, and one of them can open a panel of its own. */
+.pdp-addons { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.pdp-addons label {
+  position: relative; display: block; padding: 12px 12px 14px; border: 1px solid var(--line); border-radius: 14px;
+  background: #fff; cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
+}
+.pdp-addons label:hover { border-color: var(--navy); }
+.pdp-addons label.is-chosen { border-color: var(--green); background: #effaf4; }
+.pdp-addons input { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; accent-color: var(--green-dark); }
+.pdp-addons strong { display: block; margin-top: 4px; font-size: 16px; font-weight: 700; color: var(--ink); }
+.pdp-addons small { display: block; margin-top: 3px; font-size: 14.5px; line-height: 1.4; color: var(--muted); }
+.pdp-addon-panel { margin-top: 12px; padding: 16px; border-radius: 14px; background: #effaf4; }
+.pdp-addon-panel ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.pdp-addon-panel li { display: grid; gap: 5px; align-content: start; }
+.pdp-addon-panel label { font-size: 15px; font-weight: 700; color: var(--ink); }
+.pdp-addon-panel input, .pdp-addon-panel select {
+  height: 44px; padding: 0 10px; border: 1.5px solid #c6e2d3; border-radius: 10px; background: #fff;
+  font: inherit; font-size: 16px; color: var(--ink);
+}
+.pdp-addon-panel small { font-size: 14px; line-height: 1.45; color: #3d6b56; }
+.pdp-addon-choice { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.pdp-addon-choice button {
+  min-height: 44px; border: 1.5px solid #c6e2d3; border-radius: 10px; background: #fff;
+  font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); cursor: pointer;
+}
+.pdp-addon-choice button.is-chosen { border-color: var(--green); background: #d9f0e4; color: var(--green-dark); font-weight: 700; }
+.pdp-addon-note { margin-top: 10px; font-size: 14.5px; color: #3d6b56; }
+
+/* Somewhere to put a logo, and somewhere to say the rest. */
+.pdp-dropzone {
+  margin-top: 12px; display: grid; justify-items: center; gap: 4px; padding: 26px 18px;
+  border: 1.5px dashed var(--navy-soft); border-radius: 16px; background: var(--paper); text-align: center;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pdp-dropzone:hover { border-color: var(--green); background: #f7fbf9; }
+.pdp-dropzone .icon { color: var(--navy); }
+.pdp-dropzone strong { font-size: 17px; font-weight: 700; color: var(--navy); }
+.pdp-dropzone small { font-size: 15px; color: var(--muted); }
+.pdp-notes {
+  margin-top: 12px; width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px;
+  background: #fff; font: inherit; font-size: 16.5px; line-height: 1.5; color: var(--ink); resize: vertical;
+}
+.pdp-notes:focus-visible { border-color: var(--green); outline: none; }
+
+/* What MySOS will take care of, where the kind has no printing step to say it. */
+.pdp-assurance { margin: 0 24px; display: flex; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #effaf4; }
+.pdp-assurance .icon { flex: none; color: var(--green-dark); }
+.pdp-assurance strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
+.pdp-assurance small { display: block; margin-top: 3px; font-size: 15.5px; line-height: 1.5; color: #3d6b56; }
+
+/* What is in the box. */
+.pdp-includes { margin-top: 18px; padding: 22px 24px 20px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }
+.pdp-includes h2 { font-size: 21px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.pdp-includes ul { margin-top: 14px; }
+.pdp-includes li { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.pdp-includes li:last-child { border-bottom: 0; }
+.pdp-includes .product-visual { flex: none; width: 56px; height: 56px; border-radius: 12px; background: var(--soft); }
+.pdp-includes strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
+.pdp-includes small { display: block; margin-top: 2px; font-size: 15.5px; line-height: 1.45; color: var(--muted); }
+
+@media (max-width: 620px) {
+  .pdp-assurance { margin-inline: 18px; }
+  .pdp-addons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pdp-addon-panel ul { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* ---------------------------------------------------------- small screens
    From an audit of every page at 360, 390, 768 and 1024px wide: nothing
    scrolled sideways, but some tap targets were tiny and some columns were too
