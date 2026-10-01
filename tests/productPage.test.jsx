@@ -30,12 +30,12 @@ const tee = visible.find((product) => product.public.slug === 'premium-cotton-te
 
 describe('a product has a page of its own', () => {
   it('routes to it by slug, and only for products the site shows', () => {
-    expect(resolvePublicRoute('/mySOS/products/premium-cotton-tee/')).toEqual({ page: 'product', slug: 'premium-cotton-tee' });
-    expect(resolvePublicRoute('/mySOS/products/not-a-product/')).toEqual({ page: 'not-found' });
+    expect(resolvePublicRoute('/products/premium-cotton-tee/')).toEqual({ page: 'product', slug: 'premium-cotton-tee' });
+    expect(resolvePublicRoute('/products/not-a-product/')).toEqual({ page: 'not-found' });
     const hidden = productData.catalogue.find((product) => !product.public.visible);
-    if (hidden) expect(resolvePublicRoute(`/mySOS/products/${hidden.public.slug}/`)).toEqual({ page: 'not-found' });
+    if (hidden) expect(resolvePublicRoute(`/products/${hidden.public.slug}/`)).toEqual({ page: 'not-found' });
     // The listing page keeps its own address.
-    expect(resolvePublicRoute('/mySOS/products/')).toEqual({ page: 'products' });
+    expect(resolvePublicRoute('/products/')).toEqual({ page: 'products' });
   });
 
   it('is prerendered for every product the site shows', () => {
@@ -45,7 +45,7 @@ describe('a product has a page of its own', () => {
   });
 
   it('shows the product, what it is and how it can be customised', () => {
-    const markup = render(`/mySOS/products/${tee.public.slug}/`);
+    const markup = render(`/products/${tee.public.slug}/`);
     expect(markup).toContain(tee.public.name);
     expect(markup).toContain(tee.public.description);
     // Its own printing methods, each with what it is best for.
@@ -64,8 +64,8 @@ describe('a product has a page of its own', () => {
   });
 
   it('hands the choices to the request page instead of asking again', () => {
-    const markup = render(`/mySOS/products/${tee.public.slug}/`);
-    expect(markup).toMatch(/href="\/mySOS\/request\/\?product=premium_cotton_tee&amp;qty=\d+"/);
+    const markup = render(`/products/${tee.public.slug}/`);
+    expect(markup).toMatch(/href="\/request\/\?product=premium_cotton_tee&amp;qty=\d+"/);
     // The request page reads them back, keeping only fields that product has.
     const line = makeLine({ productId: 'premium_cotton_tee', quantity: '80', details: { colour: 'Navy', printing: 'Silkscreen', nonsense: 'x' } });
     expect(line.quantity).toBe(80);
@@ -73,7 +73,7 @@ describe('a product has a page of its own', () => {
   });
 
   it('calls a published price a guide, and says so where there is none', () => {
-    const markup = render(`/mySOS/products/${tee.public.slug}/`);
+    const markup = render(`/products/${tee.public.slug}/`);
     expect(markup).toContain('Indicative price');
     expect(markup).toContain(siteContent.pages.product.estimateNote);
     // What MySOS pays never appears as a price on the page: that stays in the
@@ -87,7 +87,7 @@ describe('a product has a page of its own', () => {
 
   it('never sends anyone to the quotation engine', () => {
     for (const product of visible.slice(0, 8)) {
-      const markup = render(`/mySOS/products/${product.public.slug}/`);
+      const markup = render(`/products/${product.public.slug}/`);
       expect(markup, product.public.slug).not.toMatch(/quotation_engine|quotation-engine/i);
     }
   });
@@ -116,11 +116,11 @@ describe('one look across the pages', () => {
   it('shares one strip of categories between the homepage and products', () => {
     // Literally the same component, so the pills and the spacing cannot drift
     // apart between the two pages.
-    const home = render('/mySOS/');
-    const products = render('/mySOS/products/', '?category=bags');
+    const home = render('/');
+    const products = render('/products/', '?category=bags');
     for (const markup of [home, products]) expect(markup).toContain('class="category-strip"');
     for (const category of siteContent.categories) {
-      expect(home).toContain(`/mySOS/products/?category=${category.id}`);
+      expect(home).toContain(`/products/?category=${category.id}`);
       expect(products).toContain(`?category=${category.id}`);
     }
     // Only the products page marks one, because only it is showing a category.
@@ -150,7 +150,7 @@ describe('the line across the top of every page', () => {
   const shell = readFileSync(new URL('../src/public/components/SiteShell.jsx', import.meta.url), 'utf8');
 
   it('sits above the header, on every page, from the content', () => {
-    for (const pathname of ['/mySOS/', '/mySOS/products/', '/mySOS/request/', '/mySOS/why-mysos/', `/mySOS/products/${tee.public.slug}/`]) {
+    for (const pathname of ['/', '/products/', '/request/', '/why-mysos/', `/products/${tee.public.slug}/`]) {
       const markup = render(pathname);
       const strip = markup.indexOf('class="site-announce"');
       expect(strip, pathname).toBeGreaterThan(-1);

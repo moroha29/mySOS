@@ -67,28 +67,28 @@ describe('a solution has an icon of its own', () => {
 
 describe('an uploaded picture can stand in for an icon', () => {
   it('is drawn as a picture, fitted to the icon\'s size', () => {
-    const html = renderToStaticMarkup(<Icon name="/mySOS/assets/uploads/award-3f9c2a11.png" size={30} cmsPath={['homepage', 'benefits', 0, 'icon']} />);
-    expect(html).toMatch(/^<img class="icon icon-picture" src="\/mySOS\/assets\/uploads\/award-3f9c2a11.png" width="30" height="30" alt=""/);
+    const html = renderToStaticMarkup(<Icon name="/assets/uploads/award-3f9c2a11.png" size={30} cmsPath={['homepage', 'benefits', 0, 'icon']} />);
+    expect(html).toMatch(/^<img class="icon icon-picture" src="\/assets\/uploads\/award-3f9c2a11.png" width="30" height="30" alt=""/);
     expect(html).toContain('data-cms-icon="true"');
   });
 
   it('tells a picture from an icon name', () => {
     expect(isIconPicture('school')).toBe(false);
-    expect(isIconPicture('/mySOS/assets/uploads/a.png')).toBe(true);
+    expect(isIconPicture('/assets/uploads/a.png')).toBe(true);
     expect(isIconPicture('https://example.com/a.webp')).toBe(true);
   });
 });
 
 describe('icons on the page carry their content path', () => {
   it('on the home page', () => {
-    const html = renderAt('/mySOS/', HomePage);
+    const html = renderAt('/', HomePage);
     // The reasons in the navy band, and the mark beside each figure.
     expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
     expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;homeStats&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
   });
 
   it('on the Why MySOS page', () => {
-    const html = renderAt('/mySOS/why-mysos/', WhyPage);
+    const html = renderAt('/why-mysos/', WhyPage);
     expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
     expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;loyalty&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
   });

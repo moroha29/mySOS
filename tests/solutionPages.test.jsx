@@ -26,26 +26,26 @@ const cmsPath = (...path) => `data-cms-path="${JSON.stringify(path).replace(/"/g
 const text = (markup) => markup.replace(/<[^>]+>/g, ' ');
 
 describe('a page for every solution', () => {
-  it.each(solutions.map((solution) => solution.id))('/mySOS/solutions/%s/ resolves and is prerendered', (id) => {
-    expect(resolvePublicRoute(`/mySOS/solutions/${id}/`)).toEqual({ page: 'solution', id });
+  it.each(solutions.map((solution) => solution.id))('/solutions/%s/ resolves and is prerendered', (id) => {
+    expect(resolvePublicRoute(`/solutions/${id}/`)).toEqual({ page: 'solution', id });
     expect(readFileSync(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8')).toContain('...solutions.map((solution) => `/solutions/${solution.id}/`)');
   });
 
   it('an unknown solution is not found', () => {
-    expect(resolvePublicRoute('/mySOS/solutions/not-a-solution/')).toEqual({ page: 'not-found' });
+    expect(resolvePublicRoute('/solutions/not-a-solution/')).toEqual({ page: 'not-found' });
   });
 
   it('every solution link on the site goes to the new pages', () => {
-    for (const pathname of ['/mySOS/', '/mySOS/solutions/', '/mySOS/products/']) {
+    for (const pathname of ['/', '/solutions/', '/products/']) {
       const markup = renderAt(pathname);
       expect(markup).not.toContain('?industry=');
-      for (const solution of solutions) expect(markup).toContain(`href="/mySOS/solutions/${solution.id}/"`);
+      for (const solution of solutions) expect(markup).toContain(`href="/solutions/${solution.id}/"`);
     }
   });
 });
 
 describe.each(solutions)('the $name page', (solution) => {
-  const markup = renderAt(`/mySOS/solutions/${solution.id}/`);
+  const markup = renderAt(`/solutions/${solution.id}/`);
   const defaultCase = solution.useCases.find((useCase) => useCase.id === solution.defaultUseCase);
 
   it('shows its banner, with breadcrumb and a WhatsApp button', () => {
@@ -85,7 +85,7 @@ describe.each(solutions)('the $name page', (solution) => {
 });
 
 describe('the page wording and content are editable', () => {
-  const markup = renderAt('/mySOS/solutions/churches/');
+  const markup = renderAt('/solutions/churches/');
   const index = solutions.findIndex((solution) => solution.id === 'churches');
 
   it('the banner, use cases and builder wording carry their content paths', () => {
@@ -277,16 +277,16 @@ describe('the popular packages go somewhere', () => {
     // Six cards that looked clickable and were not: no href, no button, no
     // handler - nothing at all.
     expect(source).toContain('className="popular-card"');
-    expect(source).toContain("href={item.href ?? '/mySOS/solutions/'}");
+    expect(source).toContain("href={item.href ?? '/solutions/'}");
     expect(source).not.toMatch(/popularSolutions\.map\(\(item, index\) => <article/);
   });
 
   it('points every one of them at a page that exists', () => {
     const routes = new Set([
-      ...solutions.map((item) => `/mySOS/solutions/${item.id}/`),
-      ...siteContent.categories.map((item) => `/mySOS/products/?category=${item.id}`),
-      '/mySOS/solutions/',
-      '/mySOS/products/',
+      ...solutions.map((item) => `/solutions/${item.id}/`),
+      ...siteContent.categories.map((item) => `/products/?category=${item.id}`),
+      '/solutions/',
+      '/products/',
     ]);
     expect(siteContent.popularSolutions.length).toBeGreaterThan(0);
     for (const item of siteContent.popularSolutions) {

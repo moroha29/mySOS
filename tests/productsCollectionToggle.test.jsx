@@ -16,7 +16,7 @@ const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', impo
 
 describe('the product collection View All / Show Less toggle', () => {
   it('starts collapsed, with a button that says what it controls', () => {
-    globalThis.location = { pathname: '/mySOS/products/', search: '' };
+    globalThis.location = { pathname: '/products/', search: '' };
     expect(getPublicProducts({ category: 'apparel' }).length, 'apparel has more than one screen of products').toBeGreaterThan(8);
     const markup = renderToStaticMarkup(<ProductsPage />);
     expect(markup).toContain('id="product-collection-grid"');
@@ -52,7 +52,7 @@ describe('category tabs', () => {
     const { default: ProductsPage } = await import('../src/public/pages/ProductsPage');
     const React = (await import('react')).default;
     const saved = globalThis.location;
-    globalThis.location = { pathname: '/mySOS/products/', search: '?category=bags' };
+    globalThis.location = { pathname: '/products/', search: '?category=bags' };
     try {
       const html = renderToStaticMarkup(React.createElement(ProductsPage));
       const strip = html.match(/<nav class="category-strip"[\s\S]*?<\/nav>/)?.[0] ?? '';
@@ -83,7 +83,7 @@ describe('choosing a category', () => {
   });
 
   it('still has a real address, so it opens in a new tab and steps back', () => {
-    globalThis.location = { pathname: '/mySOS/products/', search: '?category=bags' };
+    globalThis.location = { pathname: '/products/', search: '?category=bags' };
     const markup = renderToStaticMarkup(<ProductsPage />);
     expect(markup).toContain('href="?category=drinkware"');
     expect(markup).toContain('Canvas Tote Bag');

@@ -60,10 +60,10 @@ const resourceLinks = footer.resourceLinks ?? [];
 // wording is content. The Resources list is written here, so it has none.
 function dropdownFor(label) {
   if (label === 'Products') {
-    return siteContent.categories.map((item) => ({ label: item.name, href: `/mySOS/products/?category=${item.id}`, path: categoryPath(item, 'name') }));
+    return siteContent.categories.map((item) => ({ label: item.name, href: `/products/?category=${item.id}`, path: categoryPath(item, 'name') }));
   }
   if (label === 'Solutions') {
-    return solutions.map((item) => ({ label: item.name, href: `/mySOS/solutions/${item.id}/`, path: solutionPath(item, 'name') }));
+    return solutions.map((item) => ({ label: item.name, href: `/solutions/${item.id}/`, path: solutionPath(item, 'name') }));
   }
   if (label === 'Resources') {
     // Wording and destination: these entries are content, unlike the product
@@ -107,7 +107,7 @@ function HeaderQuoteButton({ className }) {
   return <a className={className} href={REQUEST_PATH} data-cms-paths={cmsAll(labelPath(key))}>{text}</a>;
 }
 
-// Several fields hold "/mySOS/" — the site's base path and the placeholder
+// Several fields hold "/" — the site's base path and the placeholder
 // legal links — so the manager cannot tell them apart from the URL alone.
 // Naming the field here is what stops it guessing.
 const logoPaths = cmsAll(configPath('basePath'));
@@ -151,11 +151,11 @@ export function SiteFooter() {
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'productsHeading'))}>{footerText('productsHeading', 'Products')}</h3>
-        {siteContent.categories.map((item) => <a key={item.id} href={`/mySOS/products/?category=${item.id}`} data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</a>)}
+        {siteContent.categories.map((item) => <a key={item.id} href={`/products/?category=${item.id}`} data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</a>)}
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'solutionsHeading'))}>{footerText('solutionsHeading', 'Solutions')}</h3>
-        {solutions.map((item) => <a key={item.id} href={`/mySOS/solutions/${item.id}/`} data-cms-path={cms(solutionPath(item, 'name'))}>{item.name.replace(' Organisations', '')}</a>)}
+        {solutions.map((item) => <a key={item.id} href={`/solutions/${item.id}/`} data-cms-path={cms(solutionPath(item, 'name'))}>{item.name.replace(' Organisations', '')}</a>)}
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'resourcesHeading'))}>{footerText('resourcesHeading', 'Resources')}</h3>

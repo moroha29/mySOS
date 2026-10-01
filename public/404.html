@@ -10,7 +10,7 @@
     <script>
       (function () {
         var path = window.location.pathname;
-        var base = '/mySOS/';
+        var base = '/';
         if (!path.startsWith(base)) return;
         var route = path.slice(base.length);
         var query = new URLSearchParams(window.location.search);

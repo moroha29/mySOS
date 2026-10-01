@@ -59,14 +59,14 @@ describe('the guides themselves', () => {
 });
 
 describe('the hub', () => {
-  const markup = () => renderAt('/mySOS/resources/');
+  const markup = () => renderAt('/resources/');
 
   it('has a route, and every guide has one under it', () => {
-    expect(resolvePublicRoute('/mySOS/resources/')).toEqual({ page: 'resources' });
+    expect(resolvePublicRoute('/resources/')).toEqual({ page: 'resources' });
     for (const article of resources.articles) {
-      expect(resolvePublicRoute(`/mySOS/resources/${article.slug}/`)).toEqual({ page: 'guide', slug: article.slug });
+      expect(resolvePublicRoute(`/resources/${article.slug}/`)).toEqual({ page: 'guide', slug: article.slug });
     }
-    expect(resolvePublicRoute('/mySOS/resources/not-a-guide/')).toEqual({ page: 'not-found' });
+    expect(resolvePublicRoute('/resources/not-a-guide/')).toEqual({ page: 'not-found' });
   });
 
   it('opens with the search and the topics, and lists the guides', () => {
@@ -80,12 +80,12 @@ describe('the hub', () => {
 
   it('is what the header and the footer point at', () => {
     const nav = siteConfig.navigation.find((item) => item.label === 'Resources');
-    expect(nav.href).toBe('/mySOS/resources/');
+    expect(nav.href).toBe('/resources/');
     const links = siteContent.footer.resourceLinks.map((link) => link.href);
-    expect(links).toContain('/mySOS/resources/');
+    expect(links).toContain('/resources/');
     // Every other one lands on a guide that exists.
-    for (const href of links.filter((link) => link !== '/mySOS/resources/')) {
-      const slug = href.replace('/mySOS/resources/', '').replace(/\/$/, '');
+    for (const href of links.filter((link) => link !== '/resources/')) {
+      const slug = href.replace('/resources/', '').replace(/\/$/, '');
       expect(resources.articles.some((article) => article.slug === slug), href).toBe(true);
     }
   });
@@ -99,7 +99,7 @@ describe('the hub', () => {
 
 describe('one guide', () => {
   const first = resources.articles[0];
-  const markup = () => renderAt(`/mySOS/resources/${first.slug}/`);
+  const markup = () => renderAt(`/resources/${first.slug}/`);
 
   it('carries its own words, and the contents beside them', () => {
     const html = markup();
@@ -119,10 +119,10 @@ describe('one guide', () => {
 
   it('offers the guide before it and the one after', () => {
     const middle = resources.articles[1];
-    globalThis.location = { pathname: `/mySOS/resources/${middle.slug}/`, search: '' };
+    globalThis.location = { pathname: `/resources/${middle.slug}/`, search: '' };
     const html = renderToStaticMarkup(<PublicApp />);
-    expect(html).toContain(`href="/mySOS/resources/${resources.articles[0].slug}/"`);
-    expect(html).toContain(`href="/mySOS/resources/${resources.articles[2].slug}/"`);
+    expect(html).toContain(`href="/resources/${resources.articles[0].slug}/"`);
+    expect(html).toContain(`href="/resources/${resources.articles[2].slug}/"`);
   });
 
   it('is editable: every line of it has a content path', () => {

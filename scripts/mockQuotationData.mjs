@@ -16,7 +16,7 @@ function syntheticNumbers(value, path = '') {
 }
 export function createMockData(name, source) {
   if (name === 'successStories') return [];
-  if (name === 'siteConfig') return { companyName: 'Demo Merchandise Studio', legalName: 'Fictional demo company', basePath: '/mySOS/', email: '', whatsapp: { enabled: false }, socialLinks: [], navigation: [] };
+  if (name === 'siteConfig') return { companyName: 'Demo Merchandise Studio', legalName: 'Fictional demo company', basePath: '/', email: '', whatsapp: { enabled: false }, socialLinks: [], navigation: [] };
   if (name === 'tierData') {
     const boundaries = [[1, 12], [13, 24], [25, 48], [49, 96], [97, 192], [193, 384], [385, 768], [769, 999999]];
     return boundaries.map(([minQty, maxQty], index) => ({ label: `${minQty}–${maxQty}`, minQty, maxQty, costMultiplier: 1, sellMultiplier: 1.9 - index * .07, marginAdjustment: .01 }));

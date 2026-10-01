@@ -246,7 +246,7 @@ function Gallery({ product, category }) {
     {photos.others.length > 0 && <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
       <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
         {photos.others.map((other) => <li key={other.slug}>
-          <a href={`/mySOS/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
+          <a href={`/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
         </li>)}
       </ul>
       {(reach.prev || reach.next) && <>
@@ -773,9 +773,9 @@ export default function ProductDetailPage({ slug }) {
 
   return <main className="page-paper pdp">
     <nav className="breadcrumb pdp-breadcrumb" aria-label="Breadcrumb">
-      <a href="/mySOS/">Home</a>
+      <a href="/">Home</a>
       <span aria-hidden="true">›</span>
-      <a href={`/mySOS/products/?category=${product.public.category}`}>{category?.name ?? product.public.category}</a>
+      <a href={`/products/?category=${product.public.category}`}>{category?.name ?? product.public.category}</a>
       <span aria-hidden="true">›</span>
       <span aria-current="page">{product.public.name}</span>
     </nav>
@@ -793,7 +793,7 @@ export default function ProductDetailPage({ slug }) {
           </span>
         </p>
         <p className="pdp-category-link">
-          <a className="text-link" href={`/mySOS/products/?category=${product.public.category}`}>
+          <a className="text-link" href={`/products/?category=${product.public.category}`}>
             {fill(word('relatedTitle', 'More in this category'), {})} <Icon name="arrowRight" size={18} className="inline-arrow" />
           </a>
         </p>

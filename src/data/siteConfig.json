@@ -1,7 +1,7 @@
 {
   "companyName": "MySOS",
   "tagline": "You're One Step Away From Your Solution!",
-  "basePath": "/mySOS/",
+  "basePath": "/",
   "email": "mysourceofsolutions@gmail.com",
   "whatsapp": {
     "enabled": true,
@@ -20,23 +20,23 @@
   "navigation": [
     {
       "label": "Products",
-      "href": "/mySOS/products/"
+      "href": "/products/"
     },
     {
       "label": "Solutions",
-      "href": "/mySOS/solutions/"
+      "href": "/solutions/"
     },
     {
       "label": "Why MySOS",
-      "href": "/mySOS/why-mysos/"
+      "href": "/why-mysos/"
     },
     {
       "label": "Success Stories",
-      "href": "/mySOS/success-stories/"
+      "href": "/success-stories/"
     },
     {
       "label": "Resources",
-      "href": "/mySOS/resources/"
+      "href": "/resources/"
     }
   ],
   "companyRegistration": "202322383G",

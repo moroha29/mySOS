@@ -81,7 +81,7 @@ export default function StoryDetailPage({ slug }) {
       <span>404</span>
       <h1 data-cms-path={cms(pagePath('story', 'missingTitle'))}>{pageText('story', 'missingTitle', 'Story not found')}</h1>
       <p data-cms-path={cms(pagePath('story', 'missingDescription'))}>{pageText('story', 'missingDescription')}</p>
-      <a className="btn btn-primary" href="/mySOS/success-stories/"><span data-cms-path={cms(pagePath('story', 'missingButtonLabel'))}>{pageText('story', 'missingButtonLabel', 'View all success stories')}</span></a>
+      <a className="btn btn-primary" href="/success-stories/"><span data-cms-path={cms(pagePath('story', 'missingButtonLabel'))}>{pageText('story', 'missingButtonLabel', 'View all success stories')}</span></a>
     </main>;
   }
 
@@ -108,16 +108,16 @@ export default function StoryDetailPage({ slug }) {
   return <main>
     <nav className="breadcrumb" aria-label="Breadcrumb">
       {/* Names the field, so the manager does not match this to one of the
-        * placeholder legal links, which point at "/mySOS/" too. */}
-      <a href="/mySOS/" data-cms-paths={cmsAll(configPath('basePath'))}><span data-cms-path={cms(pagePath('story', 'homeCrumbLabel'))}>{pageText('story', 'homeCrumbLabel', 'Home')}</span></a><i aria-hidden="true">›</i>
-      <a href="/mySOS/success-stories/"><span data-cms-path={cms(pagePath('story', 'storiesCrumbLabel'))}>{pageText('story', 'storiesCrumbLabel', 'Success Stories')}</span></a><i aria-hidden="true">›</i>
+        * placeholder legal links, which point at "/" too. */}
+      <a href="/" data-cms-paths={cmsAll(configPath('basePath'))}><span data-cms-path={cms(pagePath('story', 'homeCrumbLabel'))}>{pageText('story', 'homeCrumbLabel', 'Home')}</span></a><i aria-hidden="true">›</i>
+      <a href="/success-stories/"><span data-cms-path={cms(pagePath('story', 'storiesCrumbLabel'))}>{pageText('story', 'storiesCrumbLabel', 'Success Stories')}</span></a><i aria-hidden="true">›</i>
       <span aria-current="page" data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</span>
     </nav>
 
     <section className="story-hero">
       <div className="story-hero-bg" aria-hidden="true" data-reveal><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/hero`)} imagePath={storyPath(story, 'image')} wide eager /></div>
       <div className="story-hero-inner" data-reveal>
-        <a className="back-link" href="/mySOS/success-stories/"><Icon name="chevronLeft" size={18} /> <span data-cms-path={cms(pagePath('story', 'backLabel'))}>{pageText('story', 'backLabel', 'Back to all stories')}</span></a>
+        <a className="back-link" href="/success-stories/"><Icon name="chevronLeft" size={18} /> <span data-cms-path={cms(pagePath('story', 'backLabel'))}>{pageText('story', 'backLabel', 'Back to all stories')}</span></a>
         <div><span className="badge">{industry}</span></div>
         <h1 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h1>
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>

@@ -66,7 +66,7 @@ describe('browsing every product', () => {
 
 describe('the Get a Quote page', () => {
   it('holds the whole catalogue in the window that adds a product', () => {
-    globalThis.location = { pathname: '/mySOS/request/', search: '' };
+    globalThis.location = { pathname: '/request/', search: '' };
     const html = renderToStaticMarkup(<PublicApp />);
     // The catalogue used to sit open under the request, an accordion of every
     // category beneath the rows already chosen.
@@ -80,7 +80,7 @@ describe('the Get a Quote page', () => {
   });
 
   it('opens that window on a button, and it is shut until then', () => {
-    globalThis.location = { pathname: '/mySOS/request/', search: '' };
+    globalThis.location = { pathname: '/request/', search: '' };
     const html = renderToStaticMarkup(<PublicApp />);
     expect(html).toContain('class="btn btn-outline request-add-open"');
     // A <dialog> without the open attribute is closed, and closed is how the

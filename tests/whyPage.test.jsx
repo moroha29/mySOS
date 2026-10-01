@@ -14,7 +14,7 @@ afterEach(() => {
 });
 
 const render = () => {
-  globalThis.location = { pathname: '/mySOS/why-mysos/', search: '' };
+  globalThis.location = { pathname: '/why-mysos/', search: '' };
   return renderToStaticMarkup(<WhyPage />);
 };
 const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');

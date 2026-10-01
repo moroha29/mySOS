@@ -10,7 +10,7 @@ import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '..
 // One large project and four smaller ones per page, as in the design.
 const PAGE_SIZE = 5;
 
-const storyHref = (story) => `/mySOS/success-stories/${story.slug}/`;
+const storyHref = (story) => `/success-stories/${story.slug}/`;
 const storyPicture = (story) => picture(story.image, `stories/${story.slug}/cover`);
 const categoryName = (id) => (solutions.find((solution) => solution.id === id)?.name ?? String(id).replace(/-/g, ' ')).replace(' Organisations', '');
 const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
@@ -272,7 +272,7 @@ export default function StoriesPage() {
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('stories', 'heroLead'))}>{pageText('stories', 'heroLead')}</p>
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
             <QuoteButton showArrow />
-            <Button href="/mySOS/products/" variant="ghost">
+            <Button href="/products/" variant="ghost">
               <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
               <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>

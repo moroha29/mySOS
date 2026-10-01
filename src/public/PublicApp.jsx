@@ -18,7 +18,7 @@ import watchChrome from './chrome';
 import watchReveals from './reveal';
 import { watchTextStyles } from './textStyles';
 
-export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/mySOS/') {
+export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/') {
   const normalized = pathname.replace(/^\/mySOS\/?/, '/').replace(/\/+$/, '') || '/';
   if (normalized === '/') return { page: 'home' };
   if (normalized === '/products') return { page: 'products' };
@@ -41,7 +41,7 @@ export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '
 }
 
 function NotFound() {
-  return <main className="not-found"><span>404</span><h1>Page not found</h1><p>The page you are looking for may have moved.</p><a className="btn btn-primary" href="/mySOS/">Back to MySOS</a></main>;
+  return <main className="not-found"><span>404</span><h1>Page not found</h1><p>The page you are looking for may have moved.</p><a className="btn btn-primary" href="/">Back to MySOS</a></main>;
 }
 
 export default function PublicApp() {

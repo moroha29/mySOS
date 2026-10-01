@@ -53,7 +53,7 @@ describe('the built output', () => {
     for (const page of pages) {
       const html = readFileSync(new URL(`../dist/${page}`, import.meta.url), 'utf8');
       expect(html, `${page} still points at source assets`).not.toMatch(/\/src\/assets\//);
-      expect(html, `${page} has a doubled base prefix`).not.toContain('/mySOS/mySOS/');
+      expect(html, `${page} still carries the old /mySOS/ prefix`).not.toContain('/mySOS/');
     }
   });
 

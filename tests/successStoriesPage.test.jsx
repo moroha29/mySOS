@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 const render = (search = '') => {
-  globalThis.location = { pathname: '/mySOS/success-stories/', search };
+  globalThis.location = { pathname: '/success-stories/', search };
   return renderToStaticMarkup(<StoriesPage />);
 };
 
@@ -28,7 +28,7 @@ describe('Success Stories: All Projects', () => {
   it('badges each tile with its category and links it to the story', () => {
     const html = render();
     expect(html.match(/class="project-badge"/g)).toHaveLength(Math.min(5, successStories.length));
-    expect(html).toContain(`href="/mySOS/success-stories/${successStories[0].slug}/"`);
+    expect(html).toContain(`href="/success-stories/${successStories[0].slug}/"`);
   });
 
   it('pages through the projects', () => {
@@ -58,7 +58,7 @@ describe('Success Stories: a category tab', () => {
     expect(html).toContain(schools[0].summary);
     for (const fact of schools[0].highlights) expect(html).toContain(fact.text);
     expect(html).toContain('Read Full Story');
-    expect(html).toContain(`href="/mySOS/success-stories/${schools[0].slug}/"`);
+    expect(html).toContain(`href="/success-stories/${schools[0].slug}/"`);
     expect(html).not.toContain('project-tile');
   });
 

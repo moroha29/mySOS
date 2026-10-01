@@ -16,7 +16,7 @@ export default function SolutionsPage() {
   );
   // Each solution has its own page now; links in the old ?industry= form go there.
   useEffect(() => {
-    if (selected) globalThis.location?.replace?.(`/mySOS/solutions/${selected.id}/`);
+    if (selected) globalThis.location?.replace?.(`/solutions/${selected.id}/`);
   }, [selected]);
 
   return <main>
@@ -31,7 +31,7 @@ export default function SolutionsPage() {
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('solutions', 'heroLead'))}>{pageText('solutions', 'heroLead')}</p>
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
             <QuoteButton showArrow />
-            <Button href="/mySOS/products/" variant="ghost">
+            <Button href="/products/" variant="ghost">
               <span data-cms-path={cms(labelPath('heroExploreButton'))}>{label('heroExploreButton', 'Explore Products')}</span>
               <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
@@ -67,7 +67,7 @@ export default function SolutionsPage() {
         {siteContent.popularSolutions.map((item, index) => <a
           key={item.name}
           className="popular-card"
-          href={item.href ?? '/mySOS/solutions/'}
+          href={item.href ?? '/solutions/'}
           data-cms-path={cms(contentPath('popularSolutions', index, 'href'))}
         >
           <Product type={item.visual} color={item.colour} mark="" />
@@ -82,7 +82,7 @@ export default function SolutionsPage() {
           <strong data-cms-path={cms(pagePath('solutions', 'productsBandTitle'))}>{pageText('solutions', 'productsBandTitle', 'Have a specific product in mind?')}</strong>
           <p data-cms-path={cms(pagePath('solutions', 'productsBandLead'))}>{pageText('solutions', 'productsBandLead')}</p>
         </div>
-        <Button href="/mySOS/products/" variant="primary">
+        <Button href="/products/" variant="primary">
           <span data-cms-path={cms(labelPath('viewAllProductsLabel'))}>{label('viewAllProductsLabel', 'View All Products')}</span>
           <Icon name="arrowRight" size={18} className="inline-arrow" />
         </Button>

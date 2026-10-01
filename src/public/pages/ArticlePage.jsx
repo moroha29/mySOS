@@ -50,7 +50,7 @@ export default function ArticlePage({ slug }) {
 
   return <main className="article-page">
     <nav className="breadcrumb" aria-label="Breadcrumb">
-      <a href="/mySOS/resources/" data-cms-path={cms(hubPath('eyebrow'))}>Resources</a>
+      <a href="/resources/" data-cms-path={cms(hubPath('eyebrow'))}>Resources</a>
       <span aria-hidden="true">/</span>
       <span aria-current="page">{topicName(article.topic)}</span>
     </nav>

@@ -46,7 +46,7 @@ const visibleMethods = printData.methods.filter((method) => method.public?.visib
 
 describe('page order: reviews sit directly under the banner', () => {
   it('home: the logos sit right under the banner, then the reviews', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     const banner = markup.indexOf('class="home-hero"');
     const logos = markup.indexOf('class="trust-strip"');
     const reviews = markup.indexOf('class="home-reviews"');
@@ -62,7 +62,7 @@ describe('page order: reviews sit directly under the banner', () => {
   });
 
   it('why mysos: directly under the banner, above the reasons', () => {
-    const markup = render(WhyPage, '/mySOS/why-mysos/');
+    const markup = render(WhyPage, '/why-mysos/');
     const banner = markup.indexOf('class="hero hero-compact"');
     const reviews = markup.indexOf('class="section reviews"');
     const reasons = markup.indexOf('class="why-choose"');
@@ -73,7 +73,7 @@ describe('page order: reviews sit directly under the banner', () => {
   });
 
   it('success stories: the reviews row opens the page', () => {
-    const markup = render(StoriesPage, '/mySOS/success-stories/');
+    const markup = render(StoriesPage, '/success-stories/');
     const reviews = markup.indexOf('class="stories-reviews');
     const pills = markup.indexOf('class="filter-row"');
     const panel = markup.indexOf('class="projects-panel"');
@@ -85,7 +85,7 @@ describe('page order: reviews sit directly under the banner', () => {
 
 describe('the products page, as the design has it', () => {
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
-  const markup = (category) => render(ProductsPage, '/mySOS/products/', category ? `?category=${category}` : '');
+  const markup = (category) => render(ProductsPage, '/products/', category ? `?category=${category}` : '');
   const source = readFileSync(new URL('../src/public/pages/ProductsPage.jsx', import.meta.url), 'utf8');
 
   it('leads with the category and a search that narrows the shelf', () => {
@@ -131,7 +131,7 @@ describe('the home banner and the sections under it', () => {
   const home = readFileSync(new URL('../src/public/pages/HomePage.jsx', import.meta.url), 'utf8');
 
   it('carries the concept the client designed, word for word', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     // The concept page is the client's own design, so its wording is theirs.
     expect(markup).toContain(siteContent.headings.heroEyebrow);
     expect(markup).toContain(siteContent.headings.heroTitleLead);
@@ -147,7 +147,7 @@ describe('the home banner and the sections under it', () => {
   });
 
   it('turns the banner picture card over, starting on one the server drew', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     const slides = [...markup.matchAll(/class="hero-card-slide( is-active)?"/g)];
     expect(slides.length).toBeGreaterThan(1);
     expect(slides.filter(([, active]) => active)).toHaveLength(1);
@@ -160,7 +160,7 @@ describe('the home banner and the sections under it', () => {
 
   it('lets the manager choose the slideshow pictures', () => {
     expect(siteContent.scenes.homeHeroSlides).toBeInstanceOf(Array);
-    expect(render(HomePage, '/mySOS/')).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
+    expect(render(HomePage, '/')).toContain('data-cms-path="[&quot;homepage&quot;,&quot;scenes&quot;,&quot;homeHeroSlides&quot;,0]"');
   });
 
   it('measures the logo marquee against the width the stylesheet uses', () => {
@@ -169,11 +169,11 @@ describe('the home banner and the sections under it', () => {
     // not the organisations' names set as text.
     const width = Number(css.match(/\.trust-logo \{[^}]*width: (\d+)px/)[1]);
     expect(Number(home.match(/const CARD_WIDTH = (\d+);/)[1])).toBe(width);
-    expect(render(HomePage, '/mySOS/')).toMatch(/class="crest-img" src="[^"]+" alt="Nanyang Technological University"/);
+    expect(render(HomePage, '/')).toMatch(/class="crest-img" src="[^"]+" alt="Nanyang Technological University"/);
   });
 
   it('gives every category a tile, one for one, each in its own wash', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     const tiles = [...markup.matchAll(/class="home-tile tone-(\w+)"/g)].map(([, tone]) => tone);
     expect(tiles).toHaveLength(siteContent.categories.length);
     expect(new Set(tiles).size).toBe(siteContent.categories.length);
@@ -184,7 +184,7 @@ describe('the home banner and the sections under it', () => {
   });
 
   it('titles every section as the concept does', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     for (const key of ['homeTilesEyebrow', 'categoriesHeading', 'homeWhyEyebrow', 'homeWhyHeading',
       'homeWorkEyebrow', 'homeWorkHeading', 'homeProcessEyebrow', 'homeProcessHeading', 'homeClosingTitle']) {
       expect(markup, key).toContain(siteContent.headings[key].replaceAll("'", '&#x27;'));
@@ -212,7 +212,7 @@ describe('the home banner and the sections under it', () => {
   });
 
   it('opens the promises with a figure that counts up, then each with its mark', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     // The figure the server draws is the mark itself, so a reader with no
     // JavaScript — or one who asked for less motion — sees it, not a zero.
     expect(markup).toContain(`>${siteContent.homeFigure.value}</strong>`);
@@ -250,7 +250,7 @@ describe('the home banner and the sections under it', () => {
     // And where the observer never reports, everything is shown anyway.
     expect(reveal).toMatch(/const safety = setTimeout\(\(\) => \{/);
     expect(reveal).toMatch(/for \(const node of root\.querySelectorAll\('\[data-reveal\]'\)\) node\.classList\.add\(SEEN\);/);
-    expect(render(HomePage, '/mySOS/')).toMatch(/data-reveal/);
+    expect(render(HomePage, '/')).toMatch(/data-reveal/);
   });
 
   it('sets the category strip in navy, with green under the cursor', () => {
@@ -269,7 +269,7 @@ describe('the home banner and the sections under it', () => {
   });
 
   it('carries the stats, the reasons, the budget bands and the work', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     for (const stat of siteContent.homeStats) expect(markup).toContain(stat.note);
     for (const band of siteContent.budgetBands) expect(markup).toContain(band.label);
     // Four reasons in the navy band, numbered.
@@ -472,7 +472,7 @@ describe('how it works is told the same way on both pages', () => {
   const journey = readFileSync(new URL('../src/public/components/ProcessJourney.jsx', import.meta.url), 'utf8');
 
   it('gives the homepage the Why MySOS journey, not a row of its own', () => {
-    const markup = render(HomePage, '/mySOS/');
+    const markup = render(HomePage, '/');
     expect([...markup.matchAll(/class="journey-card"/g)]).toHaveLength(siteContent.process.length);
     expect(markup).toContain('class="journey-steps"');
     expect(markup).toContain('class="process-band"');
@@ -600,7 +600,7 @@ describe('the footer the client drew', () => {
 
   it('drops the three links that all went to the home page', () => {
     // Privacy Policy, Terms & Conditions and Refund Policy each pointed at
-    // "/mySOS/", so all three were dead. The design has no room for them.
+    // "/", so all three were dead. The design has no room for them.
     expect(shell).not.toContain('legalLinks');
     expect(JSON.stringify(siteContent.footer)).not.toContain('legalLinks');
   });

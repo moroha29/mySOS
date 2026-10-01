@@ -146,7 +146,7 @@ export default function WhyPage() {
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(pagePath('why', 'heroLead'))}>{pageText('why', 'heroLead', 'One Supplier. Endless Possibilities.')}</p>
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '330ms' }}>
             <QuoteButton showArrow />
-            <Button href="/mySOS/success-stories/" variant="ghost">
+            <Button href="/success-stories/" variant="ghost">
               <span data-cms-path={cms(labelPath('viewAllStoriesButton'))}>{label('viewAllStoriesButton', 'View All Success Stories')}</span>
               <Icon name="arrowRight" size={19} className="inline-arrow" />
             </Button>
@@ -157,7 +157,7 @@ export default function WhyPage() {
     </section>
 
     {/* Reviews sit directly under the banner, as on the other pages. */}
-    <Testimonials action={<Button href="/mySOS/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></Button>} />
+    <Testimonials action={<Button href="/success-stories/" variant="outline"><span data-cms-path={cms(labelPath('viewAllReviewsButton'))}>{label('viewAllReviewsButton', 'View All Reviews')}</span> <Icon name="arrowRight" size={18} className="inline-arrow" /></Button>} />
 
     <ReasonStack />
     <ProcessJourney
