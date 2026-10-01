@@ -15,7 +15,8 @@ describe('isolated public quotation demo', () => {
   it('fails closed for a new unreviewed data source', () => {
     expect(() => createMockData('privateCustomers', [{ name: 'Real client' }])).toThrow();
   });
-  it('uses the shared engine and produces clearly labelled demo exports', async () => {
+  // Starting Vite and compiling the engines can pass the 5s default on a cold run.
+  it('uses the shared engine and produces clearly labelled demo exports', { timeout: 30000 }, async () => {
     const vite = await createServer({ mode: 'mock', server: { middlewareMode: true }, appType: 'custom', logLevel: 'silent' });
     try {
       const { createInitialValue } = await vite.ssrLoadModule('/src/App.jsx');
