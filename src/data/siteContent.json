@@ -555,8 +555,12 @@
       "sizesLaterTitle": "No worries, you can share your size breakdown later.",
       "sizesLaterNote": "We will confirm sizes before production.",
       "sizesTotalLabel": "pieces across the sizes",
-      "sizeChartTitle": "Size chart",
-      "sizeChartClose": "Back to my request"
+      "sizeChartTitle": "Size guide",
+      "sizeChartClose": "Back to my request",
+      "sizeGuideTitle": "Size guide",
+      "measureTab": "Measurement guide",
+      "chartCmTab": "Size chart (cm)",
+      "chartInchTab": "Size chart (inch)"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -1480,7 +1484,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "polos": {
       "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
@@ -1527,7 +1556,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "hoodies": {
       "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
@@ -1574,7 +1628,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "jerseys": {
       "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
@@ -1621,7 +1700,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "singlets": {
       "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
@@ -1668,7 +1772,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "jackets": {
       "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
@@ -1715,7 +1844,32 @@
           "79",
           "51"
         ]
-      ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     }
   },
   "sizeRun": [

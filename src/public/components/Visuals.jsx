@@ -236,6 +236,57 @@ function Sticker({ color = 'navy' }) {
 
 const garmentTypes = new Set(['tee', 'polo', 'jersey', 'hoodie', 'jacket', 'windbreaker', 'bomber', 'long-sleeve', 'sleeveless']);
 
+/*
+ * The garment with its measurements on it, for the size guide: the same tee
+ * body the rest of the site draws, with the four lines a tape measure follows
+ * and a letter on each that the legend underneath picks up.
+ */
+const ARROW = { stroke: '#0f7a4d', strokeWidth: 2.4, strokeLinecap: 'round', fill: 'none' };
+const HEAD = { fill: '#0f7a4d' };
+
+function Badge({ x, y, letter }) {
+  return (
+    <g>
+      <circle cx={x} cy={y} r="11.5" fill="#0f7a4d" />
+      <text x={x} y={y + 4.4} textAnchor="middle" fontSize="12.5" fontWeight="800" fill="#fff" fontFamily="Inter, sans-serif">{letter}</text>
+    </g>
+  );
+}
+
+export function MeasureGarment({ type = 'tee' }) {
+  const variant = type === 'hoodie' || type === 'jacket' ? 'hoodie' : 'tee';
+  return (
+    <svg viewBox="6 2 188 198" className="measure-figure" role="img" aria-label="Where each measurement is taken on the garment">
+      {/* the garment */}
+      <path d={bodyOf(variant)} fill="#fbfcfd" stroke="#c9d2e0" strokeWidth="2" strokeLinejoin="round" />
+
+      {/* Every line first, then every letter: drawn in turn, the line down the
+          body struck through the letter on the chest. */}
+      <path d="M56 30 V14 M144 30 V14" stroke="#c9d2e0" strokeWidth="1.5" strokeDasharray="4 4" />
+      <path d="M58 17 H142" {...ARROW} />
+      <path d="M57 17 l7 -4 v8 z" {...HEAD} />
+      <path d="M143 17 l-7 -4 v8 z" {...HEAD} />
+
+      <path d="M68 112 H132" {...ARROW} />
+      <path d="M65 112 l7 -4 v8 z" {...HEAD} />
+      <path d="M135 112 l-7 -4 v8 z" {...HEAD} />
+
+      <path d="M100 38 V176" {...ARROW} />
+      <path d="M100 34 l-4 7 h8 z" {...HEAD} />
+      <path d="M100 180 l-4 -7 h8 z" {...HEAD} />
+
+      <path d="M150 42 L170 70" {...ARROW} />
+      <path d="M148 39 l8 1 -4 6 z" {...HEAD} />
+      <path d="M172 73 l-8 -1 4 -6 z" {...HEAD} />
+
+      <Badge x={100} y={17} letter="C" />
+      <Badge x={100} y={112} letter="A" />
+      <Badge x={100} y={158} letter="B" />
+      <Badge x={180} y={56} letter="D" />
+    </svg>
+  );
+}
+
 /* A drawing per kind. The chain of ternaries this replaced had grown to
    thirteen branches and its indentation no longer said which was which. */
 const marked = { cap: Cap, bucket: Cap, tote: Tote, bag: Tote, bottle: Bottle };
