@@ -126,6 +126,7 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
 function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }) {
   const product = productFor(line.productId);
   const asking = needsPrintingChoice(line);
+  const noteParts = line.note?.match(/^([^:]+):\s*(.*)$/);
   return <li className={open ? 'request-row is-open' : 'request-row'}>
     <div className="request-row-main">
       <span className="request-thumb">
@@ -133,7 +134,11 @@ function RequestRow({ line, index, open, onToggle, onChange, onRemove, onFiles }
       </span>
       <span className="request-name">
         <strong>{line.name}</strong>
-        {line.note && <small className={/^Printing:/i.test(line.note) ? 'request-note is-highlight' : 'request-note'}>{line.note}</small>}
+        {line.note && <small className={/^Printing:/i.test(line.note) ? 'request-note is-highlight' : 'request-note'}>
+          {noteParts
+            ? <><span className="request-note-label">{noteParts[1]}</span><span className="request-note-detail">{noteParts[2]}</span></>
+            : <span className="request-note-detail">{line.note}</span>}
+        </small>}
         {line.files.length > 0 && <small className="request-files">{line.files.join(', ')}</small>}
         {/* Asked here rather than buried in the details, because how a thing is
             printed is the one choice MySOS cannot guess from the product. */}
