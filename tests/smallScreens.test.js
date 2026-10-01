@@ -124,3 +124,24 @@ describe('a second pass on a phone, at 320 as well as 390', () => {
     expect(narrow).toMatch(/\.hero-results li \.btn \{[^}]*padding-inline: 10px/);
   });
 });
+
+describe('one margin, every page, every width', () => {
+  it('keeps the page off the edge of the screen', () => {
+    // At 24px the site ran almost to the edge on a laptop, where the column is
+    // narrower than --content and the padding is the whole of the margin.
+    expect(css).toMatch(/--pad: 44px;/);
+    expect(css).toMatch(/--gutter: max\(var\(--pad\), calc\(\(100% - var\(--content\)\) \/ 2 \+ var\(--pad\)\)\);/);
+  });
+
+  it('narrows it by how much room there is', () => {
+    expect(block('max-width: 1080px')).toMatch(/:root \{ --pad: 30px; \}/);
+    expect(block('max-width: 620px')).toMatch(/:root \{ --pad: 18px; \}/);
+  });
+
+  it('measures the banner from the same token as the sections under it', () => {
+    // The banner kept its own 18px on a narrow screen, so at 768 the words
+    // started 12px inside the sections below them.
+    expect(css).not.toMatch(/\.home-hero-inner \{[^}]*padding: \d+px 18px/);
+    expect(css).not.toMatch(/\.resources-hero-inner \{[^}]*padding: \d+px 18px/);
+  });
+});
