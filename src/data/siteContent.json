@@ -392,37 +392,43 @@
       "name": "Orientation Pack",
       "icon": "school",
       "visual": "tee",
-      "colour": "navy"
+      "colour": "navy",
+      "href": "/mySOS/solutions/schools/"
     },
     {
       "name": "Welcome Kit",
       "icon": "bag",
       "visual": "tote",
-      "colour": "sand"
+      "colour": "sand",
+      "href": "/mySOS/solutions/businesses/"
     },
     {
       "name": "Graduation Pack",
       "icon": "school",
       "visual": "bottle",
-      "colour": "teal"
+      "colour": "teal",
+      "href": "/mySOS/solutions/schools/"
     },
     {
       "name": "Sports Pack",
       "icon": "sports",
       "visual": "jersey",
-      "colour": "green"
+      "colour": "green",
+      "href": "/mySOS/solutions/sports-teams/"
     },
     {
       "name": "Event Pack",
       "icon": "lanyard",
       "visual": "lanyard",
-      "colour": "blue"
+      "colour": "blue",
+      "href": "/mySOS/solutions/events/"
     },
     {
       "name": "Corporate Gifts",
       "icon": "gift",
       "visual": "gift-set",
-      "colour": "black"
+      "colour": "black",
+      "href": "/mySOS/products/?category=corporate-gifts"
     }
   ],
   "faq": [
