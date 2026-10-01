@@ -306,3 +306,43 @@ describe('the size guide, as the drawing has it', () => {
     expect(siteContent.sizeCharts.tshirts.noteInch).toMatch(/inches/);
   });
 });
+
+describe('each kind is asked what the drawing asks it', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+
+  it("follows the client's own list where there is one", () => {
+    expect(source).toContain('const stepsFor = (product)');
+    expect(source).toContain('function DrawnStep(');
+    // A kind with no list keeps the general steps.
+    expect(source).toContain('{drawn');
+    for (const kind of ['totes', 'lanyards', 'gift-sets']) {
+      expect(siteContent.productSteps[kind], kind).toBeTruthy();
+    }
+  });
+
+  it('asks a bag for its dimensions and a set only for a logo', () => {
+    const types = (kind) => siteContent.productSteps[kind].map((step) => step.type);
+    expect(types('totes')).toContain('dimensions');
+    expect(types('gift-sets')).toEqual(['upload', 'notes']);
+    // A set is counted in sets, and says who handles the branding.
+    expect(siteContent.productUnit['gift-sets']).toBe('sets');
+    expect(siteContent.productAssurance['gift-sets'].title).toMatch(/\S/);
+    expect(siteContent.productIncludes.executive_gift_set.items.length).toBeGreaterThan(2);
+  });
+
+  it('lets a lanyard add-on open a panel of its own', () => {
+    const addons = siteContent.productSteps.lanyards.find((step) => step.type === 'addons');
+    const holder = addons.options.find((option) => option.fields);
+    expect(holder.name).toBe('Badge holder');
+    expect(holder.fields.length).toBe(4);
+    // And it only opens once the add-on has been picked.
+    expect(source).toContain('step.options.filter((option) => option.fields && chosen.includes(option.name))');
+  });
+
+  it('carries every answer into the quote as one readable line', () => {
+    // The builder has a field for colour and printing and nothing for the
+    // rest, so the rest travels as the row's note.
+    expect(source).toContain('const drawnNote = useMemo(');
+    expect(source).toContain("params.set('note', drawnNote.slice(0, 400))");
+  });
+});

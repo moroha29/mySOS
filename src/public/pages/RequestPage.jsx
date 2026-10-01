@@ -25,6 +25,9 @@ export default function RequestPage() {
     printing: params.get('printing') ?? '',
     // The breakdown typed on the product's page, as "10 S, 20 M".
     sizes: (params.get('sizes') ?? '').slice(0, 200),
+    // Everything the product's own steps asked that the builder has no field
+    // for - a lanyard's material, its add-ons and their sizes - as one line.
+    note: (params.get('note') ?? '').slice(0, 400),
   };
   // What someone typed into the homepage's search arrives here as their note.
   const asked = (params.get('ask') ?? '').slice(0, 500);
@@ -55,7 +58,7 @@ export default function RequestPage() {
 
     <RequestBuilder
       remember
-      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, details: { colour: chosen.colour, printing: chosen.printing, sizes: chosen.sizes } }] : []}
+      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, note: chosen.note, details: { colour: chosen.colour, printing: chosen.printing, sizes: chosen.sizes } }] : []}
       startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}
       titlePath={cms(pagePath('request', 'builderTitle'))}
