@@ -65,6 +65,21 @@ export const scenePath = (...path) => contentPath('scenes', ...path);
  */
 export const picture = (value, key) => (String(value ?? '').trim() || getImage(key));
 
+/*
+ * A product's own picture.
+ *
+ * Product photographs used to be files only: one named after the product's
+ * slug, dropped into src/assets/images/products. Nothing in the content said
+ * which picture a product had, so the manager had no field to offer and a
+ * product's picture could not be changed from it at all. Each product now has
+ * an entry under productImages; a picture chosen in the manager wins, and the
+ * file is still the default.
+ */
+export const productImage = (slug) => picture(siteContent.productImages?.[slug]?.image, slug && `products/${slug}`);
+
+/** Where that picture lives in the manager's draft, or null for a product with no entry. */
+export const productImagePath = (slug) => (siteContent.productImages?.[slug] ? contentPath('productImages', slug, 'image') : null);
+
 /** Wording from content, with the shipped copy as the fallback. */
 export const pageText = (page, key, fallback = '') => siteContent.pages?.[page]?.[key] ?? fallback;
 

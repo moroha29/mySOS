@@ -18,6 +18,12 @@ import watchChrome from './chrome';
 import watchReveals from './reveal';
 import { watchTextStyles } from './textStyles';
 
+/*
+ * The site is served from the root of its own domain. The leading /mySOS that
+ * is still taken off here is not the old GitHub Pages path: the website manager
+ * shows this site in its preview at <manager>/mySOS/..., and the page has to
+ * find its route there too. textStyles.js makes the same allowance.
+ */
 export function resolvePublicRoute(pathname = globalThis.location?.pathname ?? '/') {
   const normalized = pathname.replace(/^\/mySOS\/?/, '/').replace(/\/+$/, '') || '/';
   if (normalized === '/') return { page: 'home' };

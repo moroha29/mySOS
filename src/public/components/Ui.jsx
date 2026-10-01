@@ -3,7 +3,7 @@ import googleReviews from '../../data/googleReviews.json';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
-import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, scenePath, solutionPath, storyPath } from '../cms';
+import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, productImage, productImagePath, scenePath, solutionPath, storyPath } from '../cms';
 import { REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
 import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
@@ -93,11 +93,21 @@ export function Photo({ style, label, className = '', image, imageKey, imagePath
   return <Scene kind={scene.kind} shirt={scene.shirt} wide={wide} className={className} label={label} />;
 }
 
+/*
+ * A product's picture: its photograph, or the drawn stand-in when it has none.
+ *
+ * Either way it carries the path of the product's picture in the manager's
+ * draft, so clicking it there opens that picture. The drawn stand-in has no
+ * <img> to hang the path on, so it goes on the box, marked as a background the
+ * way the hero panels are: a picture chosen for it is painted over the drawing
+ * until the published page renders it as a photograph.
+ */
 export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }) {
-  const src = getImage(slug && `products/${slug}`);
-  if (src) return <div className={`product-visual has-photo ${className}`.trim()}><img src={src} alt="" loading="lazy" /></div>;
+  const src = productImage(slug);
+  const path = productImagePath(slug);
+  if (src) return <div className={`product-visual has-photo ${className}`.trim()}><img src={src} alt="" loading="lazy" data-cms-path={path && cms(path)} /></div>;
   const { type, colour } = parseProductVisual(imageStyle);
-  return <Product type={type} color={colour} mark={mark} className={className} />;
+  return <Product type={type} color={colour} mark={mark} className={className} attrs={path ? { 'data-cms-path': cms(path), 'data-cms-background': 'true' } : undefined} />;
 }
 
 /* -------------------------------------------------------------------- cards */

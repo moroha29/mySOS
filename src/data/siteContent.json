@@ -2318,5 +2318,109 @@
         }
       ]
     }
+  },
+  "productImages": {
+    "premium-cotton-tee": {
+      "image": ""
+    },
+    "cotton-round-neck-tee": {
+      "image": ""
+    },
+    "cotton-v-neck-tee": {
+      "image": ""
+    },
+    "dryfit-performance-tee": {
+      "image": ""
+    },
+    "dryfit-v-neck": {
+      "image": ""
+    },
+    "polo-cotton-pique": {
+      "image": ""
+    },
+    "dryfit-polo": {
+      "image": ""
+    },
+    "premium-cvc-polo": {
+      "image": ""
+    },
+    "sublimation-jersey": {
+      "image": ""
+    },
+    "custom-snapback": {
+      "image": ""
+    },
+    "custom-dad-cap": {
+      "image": ""
+    },
+    "trucker-mesh-cap": {
+      "image": ""
+    },
+    "five-panel-cap": {
+      "image": ""
+    },
+    "custom-bucket-hat": {
+      "image": ""
+    },
+    "fitted-cap": {
+      "image": ""
+    },
+    "custom-cut-and-sew": {
+      "image": ""
+    },
+    "canvas-tote-bag": {
+      "image": ""
+    },
+    "insulated-bottle": {
+      "image": ""
+    },
+    "executive-gift-set": {
+      "image": ""
+    },
+    "hardcover-notebook": {
+      "image": ""
+    },
+    "event-lanyard": {
+      "image": ""
+    },
+    "long-sleeve-tee": {
+      "image": ""
+    },
+    "pullover-hoodie": {
+      "image": ""
+    },
+    "windbreaker-jacket": {
+      "image": ""
+    },
+    "bomber-jacket": {
+      "image": ""
+    },
+    "custom-singlet": {
+      "image": ""
+    },
+    "drawstring-bag": {
+      "image": ""
+    },
+    "custom-towel": {
+      "image": ""
+    },
+    "custom-medal": {
+      "image": ""
+    },
+    "picnic-mat": {
+      "image": ""
+    },
+    "stationery-set": {
+      "image": ""
+    },
+    "name-tent": {
+      "image": ""
+    },
+    "die-cut-sticker": {
+      "image": ""
+    },
+    "tattoo-sticker": {
+      "image": ""
+    }
   }
 }
