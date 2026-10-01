@@ -3,7 +3,7 @@ import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
 import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } from '../../utils/solutionRequest';
-import { cms, contentPath, pagePath, pageText, picture } from '../cms';
+import { cms, contentPath, pagePath, pageText, productImage, productImagePath } from '../cms';
 import Icon from '../components/Icons';
 import { ProductShot } from '../components/Ui';
 import { MeasureGarment, Product } from '../components/Visuals';
@@ -200,12 +200,12 @@ function SizeChart({ product, open, onClose }) {
 
 function Gallery({ product, category }) {
   const photos = useMemo(() => {
-    const own = picture('', `products/${product.public.slug}`);
+    const own = productImage(product.public.slug);
     // Everything else in the category, not the first three: the row scrolls,
     // so there is room for all of them.
     const others = getPublicProducts({ category: product.public.category })
       .filter((item) => item.id !== product.id)
-      .map((item) => ({ slug: item.public.slug, src: picture('', `products/${item.public.slug}`), name: item.public.name }))
+      .map((item) => ({ slug: item.public.slug, src: productImage(item.public.slug), name: item.public.name }))
       .filter((item) => item.src)
       .slice(0, 12);
     return { own, others };
@@ -239,7 +239,7 @@ function Gallery({ product, category }) {
     <div className="pdp-shot">
       {product.public.featured && <span className="pdp-badge" data-cms-path={cms(contentPath('labels', 'featuredBadge'))}>{siteContent.labels?.featuredBadge ?? 'Most requested'}</span>}
       {photos.own
-        ? <img src={photos.own} alt={product.public.name} />
+        ? <img src={photos.own} alt={product.public.name} data-cms-path={productImagePath(product.public.slug) && cms(productImagePath(product.public.slug))} />
         : <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />}
     </div>
     {photos.others.length > 0 && <p className="pdp-thumbs-label">{`More ${(category?.name ?? '').toLowerCase()}`.trim()}</p>}

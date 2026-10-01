@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, productImage } from '../cms';
 import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/catalogue';
-import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
@@ -53,13 +52,16 @@ function typeRowFor(category, products, names) {
 
 
 /* The picture beside the banner: the category's own if one is uploaded, else
-   the first photograph among its products, else the drawn stand-in. */
+   the first photograph among its products, else the drawn stand-in. A borrowed
+   product photograph still carries the category's own picture field, so the
+   banner can be given a picture of its own from the manager; unmarked, it was
+   the one picture on the page that could not be clicked. */
 function categoryPicture(category, products) {
   const chosen = String(category?.image ?? '').trim();
   if (chosen) return { src: chosen, path: categoryPath(category, 'image') };
   for (const product of products) {
-    const photo = getImage(`products/${product.public.slug}`);
-    if (photo) return { src: photo, path: null };
+    const photo = productImage(product.public.slug);
+    if (photo) return { src: photo, path: typeof category?.image === 'string' ? categoryPath(category, 'image') : null };
   }
   return { src: picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero'), path: scenePath('productsHeroImage') };
 }
