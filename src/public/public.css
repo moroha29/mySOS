@@ -26,9 +26,13 @@
      1520, because on a large monitor the page still read as a column floating
      in the middle of the screen. */
   --content: 1760px;
-  /* What the page keeps either side of its column, so a full-bleed band and a
-     section line up with each other. */
-  --gutter: max(24px, calc((100% - var(--content)) / 2 + 24px));
+  /* What every page keeps either side of its words. On a laptop the column is
+     narrower than --content, so this is the whole of the margin: at 24px the
+     site ran almost to the edge of the screen. */
+  --pad: 44px;
+  /* The same margin measured from a full-bleed band, so the band and the
+     sections under it line up with each other. */
+  --gutter: max(var(--pad), calc((100% - var(--content)) / 2 + var(--pad)));
   /* The bar at the top of every page, and anything that has to clear it. */
   --header-h: 88px;
 
@@ -64,7 +68,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    Titles were raised (most at 46px and up, least at label size) and everything
    else trimmed about 6%, with nothing left under 12.5px. */
 
-.section { max-width: var(--content); margin: 0 auto; padding: 54px 24px; }
+.section { max-width: var(--content); margin: 0 auto; padding: 54px var(--pad); }
 .section-tight { padding-top: 34px; padding-bottom: 34px; }
 .section-soft { background: var(--soft); }
 .band { width: calc(100% - 24px); margin: 0 auto; }
@@ -132,7 +136,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* ================================================================ 3. header */
 
 .site-header { position: sticky; top: 0; z-index: 60; height: var(--header-h); background: rgba(255,255,255,.97); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
-.site-header-inner { max-width: var(--content); height: 100%; margin: 0 auto; padding: 0 28px; display: flex; align-items: center; gap: 34px; }
+.site-header-inner { max-width: var(--content); height: 100%; margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; gap: 34px; }
 /* Never shrinks: as a flex child it used to give way to the menu links and
    disappear entirely (0px wide at 861px). */
 .site-logo { display: inline-flex; align-items: center; flex: none; }
@@ -196,7 +200,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .hero-slide.is-active { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
 
-.hero-inner { max-width: var(--content); margin: 0 auto; padding: 56px 24px; display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); align-items: center; gap: 30px; position: relative; z-index: 2; }
+.hero-inner { max-width: var(--content); margin: 0 auto; padding: 56px var(--pad); display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr); align-items: center; gap: 30px; position: relative; z-index: 2; }
 .hero h1 { font-size: 58px; font-weight: 900; letter-spacing: -.03em; }
 .hero h1 em { display: block; font-style: normal; color: var(--green-light); }
 .hero-lead { margin-top: 18px; max-width: 520px; font-size: 20px; line-height: 1.68; color: #ccd8f0; }
@@ -246,7 +250,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ========================================================== 6. trust strip */
 
-.trust-strip { max-width: var(--content); margin: 0 auto; padding: 34px 24px 26px; }
+.trust-strip { max-width: var(--content); margin: 0 auto; padding: 34px var(--pad) 26px; }
 .trust-strip .mini-title { text-align: center; font-size: 16px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-light); }
 .trust-row { margin-top: 18px; display: flex; align-items: center; gap: 12px; }
 /* Marquee: the viewport masks, the track flows. Fixed-width cards keep the
@@ -391,7 +395,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .promo-art .scene { position: absolute; inset: 14px 14px 14px 0; border-radius: var(--radius-sm); }
 
 .page-cta { position: relative; overflow: hidden; background: linear-gradient(112deg, var(--navy-deep), var(--navy) 54%, #1b4dad); color: #fff; }
-.page-cta-inner { max-width: var(--content); margin: 0 auto; padding: 30px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
+.page-cta-inner { max-width: var(--content); margin: 0 auto; padding: 30px var(--pad); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
 .page-cta h2 { font-size: 26px; font-weight: 800; }
 .page-cta p { margin-top: 7px; font-size: 17.5px; color: #ccd8f0; }
 .page-cta-actions { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -428,7 +432,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ======================================================= 16. story detail */
 
-.breadcrumb { max-width: var(--content); margin: 0 auto; padding: 12px 24px; display: flex; gap: 8px; font-size: 16.5px; color: var(--muted); }
+.breadcrumb { max-width: var(--content); margin: 0 auto; padding: 12px var(--pad); display: flex; gap: 8px; font-size: 16.5px; color: var(--muted); }
 .breadcrumb a:hover { color: var(--navy); }
 .breadcrumb span[aria-current] { color: var(--ink); font-weight: 700; }
 
@@ -436,7 +440,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .story-hero-bg { position: absolute; inset: 0; z-index: 0; }
 .story-hero-bg .scene { height: 100%; border-radius: 0; }
 .story-hero::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(96deg, var(--navy-deep) 0%, rgba(10,33,89,.96) 40%, rgba(10,33,89,.55) 62%, rgba(10,33,89,.12) 100%); }
-.story-hero-inner { position: relative; z-index: 2; max-width: min(var(--content), 100%); margin: 0 auto; padding: 30px 24px 44px; min-height: 320px; max-width: var(--content); }
+.story-hero-inner { position: relative; z-index: 2; max-width: min(var(--content), 100%); margin: 0 auto; padding: 30px var(--pad) 44px; min-height: 320px; max-width: var(--content); }
 .back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; font-size: 17px; font-weight: 600; color: #cddaf2; }
 .story-hero h1 { margin: 12px 0 10px; font-size: 43px; font-weight: 900; max-width: 560px; }
 .story-hero > .story-hero-inner > p { max-width: 430px; font-size: 17.5px; line-height: 1.65; color: #cddaf2; }
@@ -446,13 +450,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .story-meta dt { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fb8e6; }
 .story-meta dd { margin: 3px 0 0; font-size: 17px; font-weight: 700; }
 
-.gallery-strip { max-width: var(--content); margin: 0 auto; padding: 14px 24px 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.gallery-strip { max-width: var(--content); margin: 0 auto; padding: 14px var(--pad) 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
 .gallery-strip .scene { height: 92px; border: 2px solid var(--line); border-radius: 8px; }
 .gallery-strip .scene.is-active { border-color: var(--green); }
 .gallery-more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 92px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--muted); }
 .gallery-more:hover { border-color: var(--navy); color: var(--navy); }
 
-.story-body { max-width: var(--content); margin: 0 auto; padding: 34px 24px 54px; display: grid; grid-template-columns: 200px 1fr; gap: 34px; align-items: start; }
+.story-body { max-width: var(--content); margin: 0 auto; padding: 34px var(--pad) 54px; display: grid; grid-template-columns: 200px 1fr; gap: 34px; align-items: start; }
 .story-toc { position: sticky; top: 92px; display: grid; gap: 2px; padding: 14px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .story-toc > span { margin: 2px 0 10px 10px; font-size: 16.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--navy); }
 .story-toc a { padding: 9px 12px; border-left: 2px solid transparent; border-radius: 0 6px 6px 0; font-size: 17px; font-weight: 600; color: var(--muted); }
@@ -721,7 +725,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
    slab, the wordmark and what MySOS is on the left, three columns of links,
    and every way to reach them gathered in the last column. */
 .site-footer { background: var(--paper); color: var(--muted); border-top: 1px solid var(--line); }
-.footer-grid { max-width: var(--content); margin: 0 auto; padding: 54px 24px 34px; display: grid; grid-template-columns: 1.4fr repeat(3, .78fr) 1.35fr; gap: 28px; }
+.footer-grid { max-width: var(--content); margin: 0 auto; padding: 54px var(--pad) 34px; display: grid; grid-template-columns: 1.4fr repeat(3, .78fr) 1.35fr; gap: 28px; }
 .footer-grid h3 { margin-bottom: 12px; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--navy); }
 .footer-grid a { display: block; padding: 8px 0; font-size: 17px; color: var(--muted); }
 .footer-grid a:hover { color: var(--navy); }
@@ -745,7 +749,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .footer-socials a, .footer-socials span { width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--navy); }
 .footer-socials a:hover { border-color: var(--navy); background: var(--soft); }
 
-.footer-bottom { max-width: var(--content); margin: 0 auto; padding: 18px 24px 26px; border-top: 1px solid var(--line); font-size: 16.5px; color: var(--muted); }
+.footer-bottom { max-width: var(--content); margin: 0 auto; padding: 18px var(--pad) 26px; border-top: 1px solid var(--line); font-size: 16.5px; color: var(--muted); }
 
 /* ========================================================= 19. responsive */
 
@@ -1001,7 +1005,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .solution-collage-tile.tile-4 { right: 0; bottom: 0; width: 42%; height: 46%; clip-path: polygon(16% 0, 100% 0, 100% 100%, 0 100%); }
 
 /* use cases */
-.use-cases { max-width: var(--content); margin: 0 auto; padding: 26px 24px 20px; }
+.use-cases { max-width: var(--content); margin: 0 auto; padding: 26px var(--pad) 20px; }
 .use-cases .section-heading { margin-bottom: 22px; }
 .use-case-rail { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) 44px; align-items: center; gap: 14px; }
 .use-case-rail.is-all { grid-template-columns: minmax(0, 1fr); }
@@ -1207,7 +1211,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 
 /* banner */
 .home-hero { background: var(--paper); }
-.home-hero-inner { max-width: var(--content); margin: 0 auto; padding: 68px 24px 76px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 54px; align-items: stretch; }
+.home-hero-inner { max-width: var(--content); margin: 0 auto; padding: 68px var(--pad) 76px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 54px; align-items: stretch; }
 .home-hero-copy .eyebrow { margin-bottom: 18px; font-size: 14px; font-weight: 700; letter-spacing: .15em; color: var(--muted); }
 .home-hero h1 { font-size: clamp(44px, 5.4vw, 78px); font-weight: 800; line-height: .94; letter-spacing: -.055em; color: var(--ink); }
 .home-hero h1 span, .home-hero h1 em { display: inline-block; }
@@ -1260,7 +1264,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 /* the four promises, as plain figures */
 /* The promises, as a plain row rather than four cards: a figure that counts up
    to "endless", then each promise with its mark, divided by hairlines. */
-.home-stats { max-width: var(--content); margin: 0 auto; padding: 10px 24px 60px; display: grid; grid-template-columns: minmax(200px, .8fr) minmax(0, 3fr); gap: 34px; align-items: center; }
+.home-stats { max-width: var(--content); margin: 0 auto; padding: 10px var(--pad) 60px; display: grid; grid-template-columns: minmax(200px, .8fr) minmax(0, 3fr); gap: 34px; align-items: center; }
 .home-figure { padding-right: 34px; border-right: 1px solid var(--line); }
 /* The figure and what it counts are one line of type, written at the size of
    the promises beside it — "∞ Products" reads as "Quality assured" does. The
@@ -1284,7 +1288,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 /* The reviews slider, in the homepage's own spacing and card shapes. */
 .home-reviews .reviews { padding-top: 54px; padding-bottom: 20px; }
 .home-reviews .review-card { border-radius: 22px; }
-.home-review { max-width: var(--content); margin: 0 auto; padding: 30px 24px 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
+.home-review { max-width: var(--content); margin: 0 auto; padding: 30px var(--pad) 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 18px; }
 .home-review-score { display: inline-flex; align-items: center; gap: 10px; }
 .home-review-score strong { font-size: 26px; font-weight: 800; color: var(--ink); }
 .home-review-quote { flex: 1; min-width: 260px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; font-size: 17.5px; line-height: 1.5; color: var(--muted); }
@@ -1313,7 +1317,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 
 /* why mysos */
 .home-why { background: var(--navy); color: #fff; }
-.home-why-inner { max-width: var(--content); margin: 0 auto; padding: 72px 24px 78px; }
+.home-why-inner { max-width: var(--content); margin: 0 auto; padding: 72px var(--pad) 78px; }
 .home-why-head { margin-bottom: 4px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: end; }
 .home-why-head .eyebrow { color: #9fb8e6; }
 .home-why-head h2 { margin-top: 14px; font-size: clamp(36px, 4.2vw, 60px); font-weight: 800; line-height: 1; letter-spacing: -.045em; color: #fff; }
@@ -1366,7 +1370,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-closing { color: #fff; }
 
 @media (max-width: 1080px) {
-  .home-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 34px; padding: 44px 24px 54px; }
+  .home-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 34px; padding: 44px var(--pad) 54px; }
   .hero-card { min-height: 380px; }
   .home-stats { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .home-figure { padding-right: 0; padding-bottom: 20px; border-right: 0; border-bottom: 1px solid var(--line); }
@@ -1383,7 +1387,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 
 @media (max-width: 620px) {
   .home-page .section { padding: 44px 18px; }
-  .home-hero-inner { padding: 32px 18px 40px; }
+  .home-hero-inner { padding: 32px var(--pad) 40px; }
   .site-announce { font-size: 15.5px; }
 
   .hero-search { flex-wrap: wrap; border-radius: 20px; padding: 14px; }
@@ -1410,9 +1414,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
    homepage, so the two read as one site. */
 
 .pdp { padding-bottom: 20px; }
-.pdp-breadcrumb { max-width: var(--content); padding: 20px 24px 8px; font-size: 16.5px; }
+.pdp-breadcrumb { max-width: var(--content); padding: 20px var(--pad) 8px; font-size: 16.5px; }
 .pdp-breadcrumb span[aria-current] { color: var(--ink); font-weight: 700; }
-.pdp-top { max-width: var(--content); margin: 0 auto; padding: 8px 24px 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.pdp-top { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 
 .pdp-shot { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: 26px; background: var(--soft); overflow: hidden; }
 .pdp-shot img { width: 100%; height: 100%; object-fit: cover; }
@@ -1613,7 +1617,7 @@ main:not(.home-page) { background: var(--paper); }
 .page-cta, .home-closing { background: #046b45; }
 .page-cta::before, .home-closing::before { display: none; }
 .page-cta-inner, .home-closing-inner {
-  max-width: var(--content); margin: 0 auto; padding: 84px 24px 88px;
+  max-width: var(--content); margin: 0 auto; padding: 84px var(--pad) 88px;
   display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: end;
 }
 .page-cta h2, .home-closing h2 { max-width: 12ch; font-size: clamp(44px, 5vw, 74px); font-weight: 800; line-height: .96; letter-spacing: -.05em; color: #fff; }
@@ -1646,7 +1650,7 @@ main:not(.home-page) { background: var(--paper); }
 /* Navy, with white words: on white it read as part of the banner below it and
    a reader could not see it was the menu of categories. */
 .category-strip { background: var(--navy); border-bottom: 0; }
-.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 24px; }
+.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; gap: 24px; }
 .category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .category-strip ul::-webkit-scrollbar { display: none; }
 .category-strip li { flex: none; }
@@ -2081,6 +2085,14 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .size-chart-table td::before { content: attr(data-label); font-weight: 700; color: var(--ink); }
 }
 
+/* The page's margin, by how much room there is for it. */
+@media (max-width: 1080px) {
+  :root { --pad: 30px; }
+}
+@media (max-width: 620px) {
+  :root { --pad: 18px; }
+}
+
 /* ---------------------------------------------------------- small screens
    From an audit of every page at 360, 390, 768 and 1024px wide: nothing
    scrolled sideways, but some tap targets were tiny and some columns were too
@@ -2211,7 +2223,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    them in the same card as every other banner. */
 .story-hero {
   display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 54px; align-items: center;
-  max-width: var(--content); margin: 0 auto; padding: 68px 24px 76px;
+  max-width: var(--content); margin: 0 auto; padding: 68px var(--pad) 76px;
   background: var(--paper); color: var(--ink); overflow: visible;
 }
 .story-hero::after { display: none; }
@@ -2455,7 +2467,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* The homepage's heading for the process band: the band runs edge to edge, so
    its head keeps the page's column and gutter. */
-.process-band > .home-process-head { max-width: var(--content); margin: 0 auto 30px; padding: 0 24px; }
+.process-band > .home-process-head { max-width: var(--content); margin: 0 auto 30px; padding: 0 var(--pad); }
 @media (max-width: 860px) {
   .process-band > .home-process-head { padding-inline: 18px; }
 }
@@ -2671,7 +2683,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 .resources-hero { position: relative; background: var(--navy-deep); color: #fff; overflow: hidden; }
 .resources-hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(700px 420px at 78% 10%, rgba(47, 208, 127, .18), transparent 68%); pointer-events: none; }
-.resources-hero-inner { position: relative; z-index: 1; max-width: var(--content); margin: 0 auto; padding: 66px 24px 72px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 48px; align-items: center; }
+.resources-hero-inner { position: relative; z-index: 1; max-width: var(--content); margin: 0 auto; padding: 66px var(--pad) 72px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 48px; align-items: center; }
 .resources-hero .eyebrow { display: block; margin-bottom: 16px; font-size: 14px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #9fb8e6; }
 .resources-hero h1 { font-size: clamp(42px, 5vw, 72px); font-weight: 800; line-height: .98; letter-spacing: -.05em; }
 .resources-hero h1 em { font-style: normal; color: var(--green-light); }
@@ -2691,7 +2703,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .resources-hero-art { border-radius: 26px; overflow: hidden; box-shadow: 0 30px 70px rgba(0, 0, 0, .35); }
 .resources-hero-art .scene { height: 420px; }
 
-.topic-row { max-width: var(--content); margin: 0 auto; padding: 16px 24px; display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--line); }
+.topic-row { max-width: var(--content); margin: 0 auto; padding: 16px var(--pad); display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--line); }
 .topic-row button {
   padding: 11px 20px; border: 0; border-radius: 999px; background: transparent;
   font: inherit; font-size: 17px; font-weight: 600; color: var(--muted); cursor: pointer;
@@ -2725,7 +2737,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* --------------------------------------------------------------- one guide */
 .article-page > .breadcrumb { padding-top: 22px; }
-.article-layout { max-width: var(--content); margin: 0 auto; padding: 8px 24px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 54px; align-items: start; }
+.article-layout { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 54px; align-items: start; }
 .article-body { max-width: 760px; }
 .article-body h1 { margin-top: 14px; font-size: clamp(34px, 3.6vw, 52px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; color: var(--ink); }
 .article-lead { margin-top: 16px; font-size: 19px; line-height: 1.6; color: var(--muted); }
@@ -2804,7 +2816,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 
 @media (max-width: 980px) {
-  .resources-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 46px 18px 52px; }
+  .resources-hero-inner { grid-template-columns: minmax(0, 1fr); gap: 30px; padding: 46px var(--pad) 52px; }
   .resources-hero-art .scene { height: 260px; }
   .guide-lead-row { grid-template-columns: minmax(0, 1fr); }
   .guide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2835,7 +2847,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .solution-hero::before { display: none; }
 .hero:not(.has-background) .hero-inner,
 .solution-hero-inner {
-  max-width: var(--content); margin: 0 auto; padding: 44px 24px 48px; gap: 44px; min-height: 360px;
+  max-width: var(--content); margin: 0 auto; padding: 44px var(--pad) 48px; gap: 44px; min-height: 360px;
   grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); align-items: stretch;
 }
 /* No padding of its own: 14px above and below the words made the picture's
@@ -2919,7 +2931,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .hero:not(.has-background) .hero-inner,
   .solution-hero-inner,
   .story-hero {
-    grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0 18px 26px; gap: 22px;
+    grid-template-columns: minmax(0, 1fr); min-height: 0; padding: 0 var(--pad) 26px; gap: 22px;
   }
   .hero:not(.has-background) .hero-inner > div:first-child,
   .solution-hero-copy,

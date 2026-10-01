@@ -67,11 +67,14 @@ describe('one band at the top of every page', () => {
   it('keeps the same column on both sides, the one the homepage keeps', () => {
     // The words used to be measured from the band and the picture ran off the
     // right of the screen, so a page had a margin on one side only.
-    expect(css).toMatch(/--gutter: max\(24px, calc\(\(100% - var\(--content\)\) \/ 2 \+ 24px\)\);/);
+    // One token for the margin, so a full-bleed band and a section keep the
+    // same one however wide the screen is.
+    expect(css).toMatch(/--pad: \d+px;/);
+    expect(css).toMatch(/--gutter: max\(var\(--pad\), calc\(\(100% - var\(--content\)\) \/ 2 \+ var\(--pad\)\)\);/);
     const inner = ruleFrom('.hero:not(.has-background) .hero-inner,');
     expect(inner).toContain('max-width: var(--content)');
     expect(inner).toContain('margin: 0 auto');
-    expect(inner).toContain('padding: 44px 24px 48px');
+    expect(inner).toContain('padding: 44px var(--pad) 48px');
     // A story's banner is the band and the grid in one, so its column is made
     // of padding: the colour still has to reach both edges of the screen.
     expect(rulesFor('.story-hero')).toContain('padding: 44px var(--gutter) 48px');
@@ -115,7 +118,7 @@ describe('one band at the top of every page', () => {
     // The picture needs a height of its own once nothing sits beside it, and
     // the same gutter the words keep.
     expect(block).toMatch(/\.hero-scene, \.solution-collage, \.story-hero-bg \{ min-height: \d+px; border-radius: \d+px; \}/);
-    expect(block).toContain('padding: 0 18px 26px');
+    expect(block).toContain('padding: 0 var(--pad) 26px');
   });
 });
 
