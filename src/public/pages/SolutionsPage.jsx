@@ -62,10 +62,18 @@ export default function SolutionsPage() {
     <section className="section">
       <SectionHeading eyebrow={heading('popularSolutionsHeading', 'Popular solutions')} eyebrowPath={headingPath('popularSolutionsHeading')} align="left" />
       <div className="popular-grid">
-        {siteContent.popularSolutions.map((item, index) => <article key={item.name}>
+        {/* Each one goes somewhere. They were articles with no link in them at
+            all, so the whole row looked clickable and did nothing. */}
+        {siteContent.popularSolutions.map((item, index) => <a
+          key={item.name}
+          className="popular-card"
+          href={item.href ?? '/mySOS/solutions/'}
+          data-cms-path={cms(contentPath('popularSolutions', index, 'href'))}
+        >
           <Product type={item.visual} color={item.colour} mark="" />
           <h3 data-cms-path={cms(contentPath('popularSolutions', index, 'name'))}>{item.name}</h3>
-        </article>)}
+          <span className="popular-go" aria-hidden="true"><Icon name="arrowRight" size={18} className="inline-arrow" /></span>
+        </a>)}
       </div>
       {/* Somewhere to go for a reader who knows the product and not the
           package — it used to be a button back to the page they were on. */}

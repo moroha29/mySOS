@@ -269,3 +269,35 @@ describe('the solutions page picks an industry once', () => {
     expect(siteContent.pages.solutions.productsBandTitle).toBeTruthy();
   });
 });
+
+describe('the popular packages go somewhere', () => {
+  const source = readFileSync(new URL('../src/public/pages/SolutionsPage.jsx', import.meta.url), 'utf8');
+
+  it('is a link, not an article with a card drawn round it', () => {
+    // Six cards that looked clickable and were not: no href, no button, no
+    // handler - nothing at all.
+    expect(source).toContain('className="popular-card"');
+    expect(source).toContain("href={item.href ?? '/mySOS/solutions/'}");
+    expect(source).not.toMatch(/popularSolutions\.map\(\(item, index\) => <article/);
+  });
+
+  it('points every one of them at a page that exists', () => {
+    const routes = new Set([
+      ...solutions.map((item) => `/mySOS/solutions/${item.id}/`),
+      ...siteContent.categories.map((item) => `/mySOS/products/?category=${item.id}`),
+      '/mySOS/solutions/',
+      '/mySOS/products/',
+    ]);
+    expect(siteContent.popularSolutions.length).toBeGreaterThan(0);
+    for (const item of siteContent.popularSolutions) {
+      expect(item.href, item.name).toMatch(/\S/);
+      expect(routes.has(item.href), `${item.name} -> ${item.href}`).toBe(true);
+    }
+  });
+
+  it('says it is a link, so nobody has to guess', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    expect(source).toContain('className="popular-go"');
+    expect(css).toContain('.popular-card:hover');
+  });
+});

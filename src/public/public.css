@@ -496,7 +496,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .solution-card p { margin: 8px 0 12px; min-height: 36px; font-size: 17px; line-height: 1.6; color: var(--muted); }
 
 .popular-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
-.popular-grid article { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); text-align: center; }
+.popular-grid article, .popular-card { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); text-align: center; }
 .popular-grid .product-visual { height: 92px; border-radius: 8px; background: var(--soft); }
 .popular-grid h3 { margin-top: 10px; font-size: 16px; font-weight: 700; }
 
@@ -1595,7 +1595,7 @@ main:not(.home-page) { background: var(--paper); }
 
 /* Cards, panels and rails, all on the same radius and wash. */
 .product-card, .story-card, .solution-card, .benefit-grid article, .loyalty-card,
-.popular-grid article, .faq-list, .empty-state, .request-layout > *, .use-case-card,
+.popular-grid article, .popular-card, .faq-list, .empty-state, .request-layout > *, .use-case-card,
 .journey-card-face, .reason-card, .stories-reviews, .project-tile {
   border-radius: 22px;
 }
@@ -1835,8 +1835,19 @@ html.is-scrolled .wordmark { height: 36px; }
 .loyalty-card { padding: 28px 26px 30px; border-radius: 22px; }
 .loyalty-card h3 { margin-top: 20px; font-size: 21px; letter-spacing: -.02em; }
 .loyalty-card p { font-size: 16px; }
-.popular-grid article { padding: 18px; border-radius: 22px; background: #fff; border: 1px solid var(--line); }
+.popular-grid article, .popular-card { padding: 18px; border-radius: 22px; background: #fff; border: 1px solid var(--line); }
 .popular-grid h3 { font-size: 17px; }
+/* It is a link, so it says so: it lifts under the cursor and carries an arrow
+   the way every other card on the site does. */
+.popular-card { display: block; color: inherit; transition: transform .25s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, box-shadow .25s ease; }
+.popular-card:hover { transform: translateY(-3px); border-color: var(--green); box-shadow: var(--shadow-sm); }
+.popular-card h3 { color: var(--ink); }
+.popular-go { display: inline-flex; margin-top: 6px; color: var(--green-dark); }
+.popular-card:hover .inline-arrow { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) {
+  .popular-card:hover { transform: none; }
+  .popular-card:hover .inline-arrow { transform: none; }
+}
 
 /* The filters on the stories page, in the same pill shape as the categories. */
 .filter-row button { height: 44px; padding: 0 20px; border-radius: 999px; font-size: 16px; transition: background-color .2s ease, color .2s ease, border-color .2s ease; }
