@@ -215,7 +215,12 @@ describe('the home banner and the sections under it', () => {
     const markup = render(HomePage, '/');
     // The figure the server draws is the mark itself, so a reader with no
     // JavaScript — or one who asked for less motion — sees it, not a zero.
-    expect(markup).toContain(`>${siteContent.homeFigure.value}</strong>`);
+    // That mark is the MySOS logo now, where it was "∞"; the figure in words
+    // still names it for a screen reader.
+    expect(markup).toMatch(/<strong class="home-figure-value has-mark" aria-label="∞"><img class="home-figure-mark" src="[^"]*mark[^"]*\.png" alt=""/);
+    expect(markup).toContain('data-cms-path="[&quot;homepage&quot;,&quot;homeFigure&quot;,&quot;image&quot;]"');
+    expect(siteContent.homeFigure.image).toBe('');
+    expect(home).toMatch(/setShown\(null\);\s+node\.classList\.add\('is-settled'\);/);
     expect(markup).toContain(siteContent.homeFigure.label);
     expect(home).toMatch(/setShown\(String\(Math\.round\(eased \* 99\)\)\)/);
     expect(home).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);

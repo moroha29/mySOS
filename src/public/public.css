@@ -1280,6 +1280,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-figure-value,
 .home-figure-label { font-size: clamp(26px, 2.4vw, 38px); font-weight: 700; line-height: 1.02; letter-spacing: -.04em; color: var(--navy); }
 .home-figure-value { display: inline-block; font-variant-numeric: tabular-nums; }
+/* The count settles on the MySOS mark. The box is the mark's height from the
+   start and the digits sit on its floor, so nothing below moves when the
+   number gives way to the picture. */
+.home-figure-value.has-mark { display: flex; align-items: flex-end; height: 2.1em; margin-bottom: .28em; }
+.home-figure-mark { display: block; height: 100%; width: auto; }
 .home-figure-label { display: block; }
 .home-figure small { display: block; margin-top: 12px; font-size: 15px; line-height: 1.5; color: var(--muted); }
 .home-stat-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }

@@ -184,15 +184,20 @@ function HeroSearch() {
 
 /*
  * The figure at the head of the promises: counts up from nothing and settles
- * on the mark for "endless". The final mark is what the server draws, so it is
- * what a reader sees with no JavaScript, or one who asked for less motion; the
- * count only replaces it while it runs.
+ * on the MySOS mark, where it used to settle on "∞". The mark is what the
+ * server draws, so it is what a reader sees with no JavaScript, or one who
+ * asked for less motion; the count only replaces it while it runs.
+ *
+ * `value` is still the figure in words: it names the mark for a screen reader,
+ * and is what is drawn if the picture is ever missing.
  */
 const COUNT_MS = 1400;
 
 function CountToInfinity({ value = '∞' }) {
-  const [shown, setShown] = useState(value);
+  // null is the settled state: the mark, not a number.
+  const [shown, setShown] = useState(null);
   const ref = useRef(null);
+  const mark = picture(siteContent.homeFigure?.image, 'brand/mark');
 
   useEffect(() => {
     const node = ref.current;
@@ -210,7 +215,7 @@ function CountToInfinity({ value = '∞' }) {
         setShown(String(Math.round(eased * 99)));
         frame = requestAnimationFrame(tick);
       } else {
-        setShown(value);
+        setShown(null);
         node.classList.add('is-settled');
       }
     };
@@ -226,7 +231,12 @@ function CountToInfinity({ value = '∞' }) {
     return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
   }, [value]);
 
-  return <strong className="home-figure-value" ref={ref} aria-label={value} data-cms-path={cms(contentPath('homeFigure', 'value'))}>{shown}</strong>;
+  if (!mark) {
+    return <strong className="home-figure-value" ref={ref} aria-label={value} data-cms-path={cms(contentPath('homeFigure', 'value'))}>{shown ?? value}</strong>;
+  }
+  return <strong className="home-figure-value has-mark" ref={ref} aria-label={value}>
+    {shown ?? <img className="home-figure-mark" src={mark} alt="" data-cms-path={cms(contentPath('homeFigure', 'image'))} />}
+  </strong>;
 }
 
 /* ------------------------------------------------------- proof and logos */
