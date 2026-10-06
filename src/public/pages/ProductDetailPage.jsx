@@ -266,6 +266,36 @@ function Gallery({ product, category }) {
  * The request builder for one product. Every answer is carried to the request
  * page in the address, so the customer never retypes what they chose here.
  */
+/*
+ * The standard sizes a kind is offered in, read from its own size chart so
+ * the guide and the form can never disagree about what "Large" means. A kind
+ * whose step does not ask for them keeps the one standard size it had.
+ */
+function sizeOptionsFor(step, product) {
+  if (!step?.sizesFromChart) return [];
+  const chart = chartFor(product);
+  if (!chart) return [];
+  return chart.rows.map((row) => ({
+    name: row[0],
+    values: Object.fromEntries(step.fields.map((field) => {
+      const at = chart.columns.indexOf(field.column);
+      return [field.id, (at > 0 ? row[at] : null) ?? field.standard ?? ''];
+    })),
+  }));
+}
+
+/** Which size is being asked for, and what it measures. */
+function sizePick(step, product, answers) {
+  const sizes = sizeOptionsFor(step, product);
+  const asked = answers[step.id] ?? '';
+  const fallback = sizes.find((size) => size.name === (step.defaultSize ?? 'Standard'))?.name ?? sizes[0]?.name ?? 'standard';
+  const picked = asked || fallback;
+  const custom = picked === 'custom';
+  const size = sizes.find((item) => item.name === picked) ?? null;
+  const valueOf = (field) => (custom ? (answers[field.id] ?? '') : (size?.values[field.id] ?? field.standard ?? ''));
+  return { sizes, picked, custom, size, valueOf };
+}
+
 /* The steps a kind is asked, where the client drew its own set. */
 const stepsFor = (product) => siteContent.productSteps?.[product.public.subcategory] ?? null;
 const unitFor = (product) => siteContent.productUnit?.[product.public.subcategory] ?? '';
@@ -315,11 +345,23 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
   </p>;
 
   if (step.type === 'dimensions') {
-    const custom = mine === 'custom';
+    const { sizes, picked, custom, valueOf } = sizePick(step, product, answers);
     return <section className="pdp-step">
       {head}
-      <div className="pdp-sizing" role="radiogroup" aria-label={step.question}>
-        <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>
+      {/* The sizes this kind is made in, then the way to ask for one it is
+          not. A kind with no chart behind it keeps the single standard it
+          always had. */}
+      <div className={`pdp-sizing${sizes.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
+        {sizes.length
+          ? sizes.map((size) => <button
+            key={size.name}
+            type="button"
+            role="radio"
+            aria-checked={picked === size.name}
+            className={picked === size.name ? 'is-chosen' : ''}
+            onClick={() => set(step.id, size.name)}
+          >{size.name}</button>)
+          : <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>}
         <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(step.id, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
       </div>
       <ul className="pdp-dimensions">
@@ -331,7 +373,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
             inputMode="decimal"
             placeholder={field.standard ?? ''}
             readOnly={!custom}
-            value={custom ? (answers[field.id] ?? '') : (field.standard ?? '')}
+            value={valueOf(field)}
             onChange={(event) => set(field.id, event.target.value)}
           />
         </li>)}
@@ -544,12 +586,17 @@ function BuildPanel({ product, onChart }) {
         continue;
       }
       if (step.type === 'dimensions') {
-        if (value !== 'custom') continue;
+        const { sizes, picked, custom, valueOf } = sizePick(step, product, answers);
+        if (!custom && !sizes.length) continue;
         const parts = step.fields
-          .map((field) => [field.label, answers[field.id]])
+          .map((field) => [field.label, valueOf(field)])
           .filter(([, answer]) => String(answer ?? '').trim())
           .map(([label, answer]) => `${label} ${answer}`);
-        if (parts.length) said.push(`${step.question}: ${parts.join(', ')}`);
+        // A named size still carries its numbers: the name is what MySOS
+        // reads, the numbers are what gets made.
+        const head = custom ? '' : `${picked} - `;
+        if (parts.length) said.push(`${step.question}: ${head}${parts.join(', ')}`);
+        else if (!custom) said.push(`${step.question}: ${picked}`);
         continue;
       }
       if (String(value ?? '').trim()) said.push(step.type === 'notes' ? String(value).trim() : `${step.question}: ${value}`);

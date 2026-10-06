@@ -361,6 +361,45 @@ describe('the size guide, as the drawing has it', () => {
   });
 });
 
+describe('the sizes a bag is made in', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('offers the standard sizes from the chart, and a size of your own', () => {
+    expect(source).toContain('function sizeOptionsFor(step, product)');
+    expect(source).toContain('function sizePick(step, product, answers)');
+    expect(css).toContain('.pdp-sizing.is-sizes {');
+    for (const kind of ['totes', 'drawstring']) {
+      const step = siteContent.productSteps[kind].find((item) => item.type === 'dimensions');
+      const chart = siteContent.sizeCharts[kind];
+      expect(step.sizesFromChart, kind).toBe(true);
+      // Every field reads a column the chart actually has, so a size can
+      // never come back blank.
+      for (const field of step.fields) {
+        expect(chart.columns.indexOf(field.column), `${kind} ${field.id}`).toBeGreaterThan(0);
+      }
+      // And the size it opens on is one of the chart's own rows.
+      expect(chart.rows.map((row) => row[0]), kind).toContain(step.defaultSize);
+    }
+  });
+
+  it('leaves a kind with no chart the one standard it had', () => {
+    // The lanyard has a standard size and no chart behind it; it keeps the
+    // two buttons rather than losing them to an empty list.
+    const step = siteContent.productSteps.lanyards.find((item) => item.type === 'dimensions');
+    expect(step.sizesFromChart).toBeUndefined();
+    expect(siteContent.sizeCharts.lanyards).toBeUndefined();
+    expect(source).toContain("if (!step?.sizesFromChart) return [];");
+    expect(source).toContain("step.standardLabel ?? word('standardLabel'");
+  });
+
+  it('sends the size that was asked for, name and numbers alike', () => {
+    // The name is what MySOS reads; the numbers are what gets made.
+    expect(source).toContain("const head = custom ? '' : `${picked} - `;");
+    expect(source).toContain('if (!custom && !sizes.length) continue;');
+  });
+});
+
 describe('the gift sets in the catalogue', () => {
   const sets = productData.catalogue.filter((item) => item.public.subcategory === 'gift-sets');
 
