@@ -95,6 +95,26 @@ describe('the products page, as the design has it', () => {
     expect(source).toContain('.toLowerCase().includes(asked)');
   });
 
+  it('says the search worked, because the shelf it filters is a screen away', () => {
+    // Nothing happened on screen when someone typed: the grid that changed
+    // was below the fold, so a search that worked looked like one that broke.
+    expect(source).toContain("className={products.length ? 'collection-found' : 'collection-found is-none'}");
+    expect(source).toContain("role=\"status\"");
+    expect(source).toContain('aria-live="polite"');
+    // And it offers the way down, as does pressing enter.
+    expect(source).toContain('const goToResults = () => collectionRef.current?.scrollIntoView');
+    expect(source).toContain('onSubmit={(event) => { event.preventDefault(); goToResults(); }}');
+    expect(source).toContain('onClick={goToResults}');
+    // It is not shown until there is something to say.
+    expect(source).toContain('{query.trim() && <p');
+    expect(markup()).not.toContain('collection-found');
+    expect(css).toContain('.collection-found {');
+    for (const key of ['searchFound', 'searchFoundOne', 'searchFoundNone']) {
+      expect(siteContent.pages.products[key], key).toBeTruthy();
+    }
+    expect(siteContent.pages.products.searchFound).toContain('{count}');
+  });
+
   it('puts the kinds within a category in a row of their own', () => {
     const html = markup();
     expect(html).toContain('class="type-row"');

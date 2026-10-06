@@ -10,6 +10,8 @@ import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 import { Product } from '../components/Visuals';
 
+const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
+
 /*
  * What each kind of product is drawn as in the row that picks between them.
  * Anything the drawings do not cover falls back to the category's own mark.
@@ -74,6 +76,10 @@ export default function ProductsPage() {
   const [sort, setSort] = useState('featured');
   const [showAll, setShowAll] = useState(false);
   const collectionRef = useRef(null);
+  /* The shelf the search narrows is a screen below the box that narrows it.
+     Saying how many matched, and offering the way down, is the difference
+     between a search that looks broken and one that worked. */
+  const goToResults = () => collectionRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 
   /*
    * Categories are swapped in place. They used to be plain links, so choosing
@@ -168,7 +174,7 @@ export default function ProductsPage() {
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(categoryPath(activeCategory, 'description'))}>{activeCategory.description}</p>
           {/* Searching narrows what is on the shelf below rather than sending
               the reader to another page for the answer. */}
-          <form className="hero-search collection-search" role="search" data-reveal style={{ '--reveal-delay': '300ms' }} onSubmit={(event) => event.preventDefault()}>
+          <form className="hero-search collection-search" role="search" data-reveal style={{ '--reveal-delay': '300ms' }} onSubmit={(event) => { event.preventDefault(); goToResults(); }}>
             <Icon name="search" size={22} />
             <input
               type="search"
@@ -180,6 +186,23 @@ export default function ProductsPage() {
             />
             {query && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={19} /></button>}
           </form>
+          {/* Read out as it changes, so it reaches someone who cannot see the
+              shelf move either. */}
+          {query.trim() && <p className={products.length ? 'collection-found' : 'collection-found is-none'} role="status" aria-live="polite">
+            {products.length
+              ? <button type="button" onClick={goToResults}>
+                <span data-cms-path={cms(pagePath('products', products.length === 1 ? 'searchFoundOne' : 'searchFound'))}>
+                  {products.length === 1
+                    ? pageText('products', 'searchFoundOne', '1 match below')
+                    : fill(pageText('products', 'searchFound', '{count} matches below'), { count: products.length })}
+                </span>
+                <Icon name="chevronDown" size={18} />
+              </button>
+              : <span>
+                <Icon name="search" size={18} />
+                <span data-cms-path={cms(pagePath('products', 'searchFoundNone'))}>{pageText('products', 'searchFoundNone', 'Nothing here matches')}</span>
+              </span>}
+          </p>}
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '360ms' }}>
             <QuoteButton showArrow />
             <Button href="/mySOS/solutions/" variant="ghost">

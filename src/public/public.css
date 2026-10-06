@@ -2640,6 +2640,25 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    narrow it down; the cards carry the price and the things MySOS is asked
    for most, on the picture, so the grid has something to read. */
 
+/* The shelf a search narrows is a screen below the box that narrows it, so
+   the box says what it did and offers the way down. Without this a search
+   that worked looks exactly like a search that found nothing. */
+.collection-found { margin-top: 12px; animation: found-in .22s ease-out both; }
+.collection-found button, .collection-found > span {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px;
+  border: 1.5px solid var(--green); border-radius: 999px; background: #fff; box-shadow: var(--shadow-sm);
+  font-size: 16.5px; font-weight: 700; color: var(--green-dark);
+}
+/* It reports, it does not ask: the button under it is the thing to press. */
+.collection-found button { cursor: pointer; transition: background .2s, transform .2s; }
+.collection-found button:hover { background: #effaf4; transform: translateY(-1px); }
+.collection-found.is-none > span { border-color: var(--line); color: var(--ink); }
+@keyframes found-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .collection-found { animation: none; }
+  .collection-found button:hover { transform: none; }
+}
+
 .collection-bar {
   margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;

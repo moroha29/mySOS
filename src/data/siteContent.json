@@ -513,7 +513,12 @@
       "sortLabel": "Sort by",
       "sortFeatured": "Featured",
       "sortName": "Name A–Z",
-      "sortPrice": "Price, low to high"
+      "sortPrice": "Price, low to high",
+      "searchFoundOne": "1 match below",
+      "searchFound": "{count} matches below",
+      "searchFoundNone": "Nothing here matches",
+      "searchSeeLabel": "See them",
+      "searchNoneHint": "Try a different word, or browse every category."
     },
     "product": {
       "buildTitle": "Build your request",
