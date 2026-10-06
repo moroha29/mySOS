@@ -272,6 +272,34 @@ const unitFor = (product) => siteContent.productUnit?.[product.public.subcategor
 const assuranceFor = (product) => siteContent.productAssurance?.[product.public.subcategory] ?? null;
 
 /*
+ * One colour to choose. A colour with ink of its own is drawn as itself;
+ * "Other" is drawn as a swatch too, in every colour at once, because it is
+ * still a colour answer and a word in a pill beside a row of circles reads
+ * as something else entirely.
+ */
+const OTHER_COLOUR = /^other\b/i;
+
+function ColourChoice({ name, chosen, onPick }) {
+  const ink = swatchFor(name);
+  const other = !ink && OTHER_COLOUR.test(name);
+  return <button
+    type="button"
+    role="radio"
+    title={name}
+    aria-label={name}
+    aria-checked={chosen}
+    className={[ink || other ? 'is-swatch' : 'is-word', other ? 'is-other' : '', chosen ? 'is-chosen' : ''].filter(Boolean).join(' ')}
+    style={ink ? { '--ink': ink } : undefined}
+    onClick={onPick}
+  >
+    {ink || other ? <em aria-hidden="true" /> : name}
+    {/* "Other (tell us in the notes)" says where to say it; beside a swatch
+        the first word is enough, and the whole name is still on the button. */}
+    {other && <span>{name.replace(/\s*\(.*\)\s*$/, '')}</span>}
+  </button>;
+}
+
+/*
  * One step of a drawn set. Every type here appears in the drawings: a size
  * either standard or typed in, a row of cards to pick one from, the colours,
  * add-ons that can open a panel of their own, somewhere to put a logo and
@@ -318,7 +346,9 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
   if (step.type === 'cards') {
     return <section className="pdp-step">
       {head}
-      <div className="pdp-methods" role="radiogroup" aria-label={step.question}>
+      {/* All of them in one row where they fit: a material is chosen by
+          comparing, which is harder two at a time. */}
+      <div className="pdp-methods is-row" role="radiogroup" aria-label={step.question}>
         {step.options.map((option) => <button
           key={option.name}
           type="button"
@@ -327,7 +357,11 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === option.name ? 'is-chosen' : ''}
           onClick={() => set(step.id, option.name)}
         >
-          <span className="pdp-method-shot"><Icon name={option.icon ?? 'spark'} size={30} /></span>
+          {/* An option that comes in a colour shows the colour. The rest keep
+              the mark, until MySOS uploads a photograph of it. */}
+          <span className={`pdp-method-shot${option.swatch ? ' is-swatch' : ''}`} style={option.swatch ? { '--ink': option.swatch } : undefined}>
+            {option.swatch ? null : <Icon name={option.icon ?? 'spark'} size={30} />}
+          </span>
           <strong>{option.name}</strong>
           {option.note && <small>{option.note}</small>}
         </button>)}
@@ -340,20 +374,12 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
     return <section className="pdp-step">
       {head}
       <div className="pdp-colours" role="radiogroup" aria-label={step.question}>
-        {colours.map((option) => {
-          const ink = swatchFor(option);
-          return <button
-            key={option}
-            type="button"
-            role="radio"
-            title={option}
-            aria-label={option}
-            aria-checked={mine === option}
-            className={[ink ? 'is-swatch' : 'is-word', mine === option ? 'is-chosen' : ''].filter(Boolean).join(' ')}
-            style={ink ? { '--ink': ink } : undefined}
-            onClick={() => set(step.id, mine === option ? '' : option)}
-          >{ink ? <em aria-hidden="true" /> : option}</button>;
-        })}
+        {colours.map((option) => <ColourChoice
+          key={option}
+          name={option}
+          chosen={mine === option}
+          onPick={() => set(step.id, mine === option ? '' : option)}
+        />)}
       </div>
     </section>;
   }
@@ -647,20 +673,12 @@ function BuildPanel({ product, onChart }) {
       {/* The colour itself rather than its name in a box. The name is still
           carried, for anyone who hovers and for a reader who cannot see it. */}
       <div className="pdp-colours" role="radiogroup" aria-labelledby="pdp-colour">
-        {colours.map((option) => {
-          const ink = swatchFor(option);
-          return <button
-            key={option}
-            type="button"
-            role="radio"
-            title={option}
-            aria-label={option}
-            aria-checked={colour === option}
-            className={[ink ? 'is-swatch' : 'is-word', colour === option ? 'is-chosen' : ''].filter(Boolean).join(' ')}
-            style={ink ? { '--ink': ink } : undefined}
-            onClick={() => setColour(colour === option ? '' : option)}
-          >{ink ? <em aria-hidden="true" /> : option}</button>;
-        })}
+        {colours.map((option) => <ColourChoice
+          key={option}
+          name={option}
+          chosen={colour === option}
+          onPick={() => setColour(colour === option ? '' : option)}
+        />)}
       </div>
     </section>}
 
@@ -725,7 +743,8 @@ function BuildPanel({ product, onChart }) {
         ? <p className="pdp-price">
           <small data-cms-path={wordPath('estimateLabel')}>{word('estimateLabel', 'Indicative price')}</small>
           <strong>{price}</strong>
-          {amount ? <span>{`about $${(amount * clampQuantity(quantity)).toFixed(0)} for ${clampQuantity(quantity)} pieces`}</span> : null}
+          {/* A set is counted in sets, here as well as in the question above. */}
+          {amount ? <span>{`about $${(amount * clampQuantity(quantity)).toFixed(0)} for ${clampQuantity(quantity)} ${unitFor(product) || 'pieces'}`}</span> : null}
         </p>
         : null}
       <p className="pdp-price-note" data-cms-path={price ? wordPath('estimateNote') : wordPath('noPriceNote')}>{price ? word('estimateNote') : word('noPriceNote')}</p>

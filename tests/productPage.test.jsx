@@ -203,15 +203,28 @@ describe('the product page, as the client marked it up', () => {
   });
 
   it('draws a colour as the colour, with its name for anyone who cannot see it', () => {
-    expect(source).toContain('const ink = swatchFor(option);');
-    expect(source).toContain('title={option}');
-    expect(source).toContain('aria-label={option}');
-    // A name with no swatch is still offered, as a word.
-    expect(source).toContain("ink ? 'is-swatch' : 'is-word'");
+    // One component, used by the drawn steps and the general ones alike.
+    expect(source).toContain('function ColourChoice(');
+    expect(source).toContain('const ink = swatchFor(name);');
+    expect(source).toContain('title={name}');
+    expect(source).toContain('aria-label={name}');
+    expect(source.match(/const ink = swatchFor\(/g)).toHaveLength(1);
     expect(css).toContain('.pdp-colours button.is-swatch em');
     for (const name of ['Navy', 'Black', 'White', 'Red']) {
       expect(siteContent.colourSwatches[name], name).toMatch(/^#[0-9a-f]{6}$/i);
     }
+  });
+
+  it('keeps "Other" in the row of colours rather than on a line of its own', () => {
+    // It is still a colour answer; a pill under a row of circles reads as
+    // something else. The full name stays on the button for a screen reader.
+    expect(source).toContain('const OTHER_COLOUR =');
+    expect(source).toContain("other ? 'is-other' : ''");
+    expect(css).toContain('.pdp-colours button.is-other em');
+    expect(css).toMatch(/\.pdp-colours button\.is-other em \{[^}]*conic-gradient/);
+    const other = siteContent.requestOptions.lanyards.find((field) => field.id === 'colour').options.at(-1);
+    expect(other).toMatch(/^Other/);
+    expect(siteContent.colourSwatches[other]).toBeUndefined();
   });
 
   it('leaves room on each method for a picture of it', () => {
@@ -348,8 +361,49 @@ describe('the size guide, as the drawing has it', () => {
   });
 });
 
+describe('the gift sets in the catalogue', () => {
+  const sets = productData.catalogue.filter((item) => item.public.subcategory === 'gift-sets');
+
+  it('offers the navy set beside the executive one', () => {
+    expect(sets.map((item) => item.id)).toEqual(['executive_gift_set', 'navy_gift_set']);
+    const navy = sets.find((item) => item.id === 'navy_gift_set');
+    expect(navy.public.slug).toBe('navy-gift-set');
+    expect(navy.public.visible).toBe(true);
+    expect(navy.public.category).toBe('corporate-gifts');
+    // Both are sets, so both are asked the set's questions and counted in sets.
+    expect(siteContent.productUnit['gift-sets']).toBe('sets');
+    expect(siteContent.productIncludes[navy.id]).toBeTruthy();
+    expect(siteContent.productIncludes[navy.id].items.length).toBeGreaterThan(2);
+  });
+
+  it('counts a set in sets where it says what the price buys', () => {
+    expect(readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8'))
+      .toContain("${unitFor(product) || 'pieces'}");
+  });
+});
+
 describe('each kind is asked what the drawing asks it', () => {
   const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('shows a material in its own colour rather than a mark standing in', () => {
+    const material = siteContent.productSteps.lanyards.find((step) => step.id === 'material');
+    const swatched = material.options.filter((option) => option.swatch);
+    expect(swatched.map((option) => option.name)).toEqual(['Polyester', 'Nylon', 'Recycled PET']);
+    for (const option of swatched) expect(option.swatch, option.name).toMatch(/^#[0-9a-f]{6}$/i);
+    // "Help me decide" is not a material and has no colour to show.
+    expect(material.options.at(-1).swatch).toBeUndefined();
+    expect(source).toContain("option.swatch ? ' is-swatch' : ''");
+    expect(css).toContain('.pdp-method-shot.is-swatch');
+  });
+
+  it('puts the choices side by side, each mark at the same height', () => {
+    // A button centres its own contents, so cards of different heights put
+    // their marks at different heights until told otherwise.
+    expect(css).toMatch(/\.pdp-methods button \{[^}]*align-content: start/);
+    expect(css).toContain('.pdp-methods.is-row {');
+    expect(source).toContain('className="pdp-methods is-row"');
+  });
 
   it("follows the client's own list where there is one", () => {
     expect(source).toContain('const stepsFor = (product)');

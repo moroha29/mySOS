@@ -621,6 +621,35 @@
       ]
     },
     {
+      "id": "navy_gift_set",
+      "public": {
+        "slug": "navy-gift-set",
+        "name": "Navy Gift Set",
+        "category": "corporate-gifts",
+        "subcategory": "gift-sets",
+        "description": "A ready selected gift set, personalised with your logo.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "gift-set-navy",
+        "displayPricing": {
+          "show": true,
+          "prefix": "From",
+          "amount": 25,
+          "unit": "set"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 10,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
       "id": "hardcover_notebook",
       "public": {
         "slug": "hardcover-notebook",

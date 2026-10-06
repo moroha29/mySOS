@@ -2254,15 +2254,18 @@
         "options": [
           {
             "name": "Polyester",
-            "icon": "layers"
+            "icon": "layers",
+            "swatch": "#1f3a7a"
           },
           {
             "name": "Nylon",
-            "icon": "thread"
+            "icon": "thread",
+            "swatch": "#1d1f24"
           },
           {
             "name": "Recycled PET",
-            "icon": "leaf"
+            "icon": "leaf",
+            "swatch": "#117a4d"
           },
           {
             "name": "Help me decide",
@@ -2401,6 +2404,31 @@
   },
   "productIncludes": {
     "executive_gift_set": {
+      "title": "What is included",
+      "items": [
+        {
+          "name": "Notebook",
+          "note": "A hardcover notebook for everyday notes.",
+          "visual": "notebook"
+        },
+        {
+          "name": "Pen",
+          "note": "A matching pen for the set.",
+          "visual": "pen"
+        },
+        {
+          "name": "Insulated bottle",
+          "note": "A reusable bottle for daily use.",
+          "visual": "bottle"
+        },
+        {
+          "name": "Gift box",
+          "note": "The set comes neatly arranged in a matching box.",
+          "visual": "gift-set"
+        }
+      ]
+    },
+    "navy_gift_set": {
       "title": "What is included",
       "items": [
         {
