@@ -6,7 +6,8 @@ import productData from '../src/data/productData.json';
 import siteConfig from '../src/data/siteConfig.json';
 import siteContent from '../src/data/siteContent.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
-import { makeLine } from '../src/utils/solutionRequest';
+import iconLibrary from '../src/data/iconLibrary.json';
+import { makeLine, printingFieldFor } from '../src/utils/solutionRequest';
 
 /*
  * A product's own page: the picture, and everything needed to ask for that
@@ -358,6 +359,67 @@ describe('the size guide, as the drawing has it', () => {
     // And the note carries the unit, so it changes with the tab.
     expect(source).toContain("tab === 'inch' ? chart.noteInch : chart.note");
     expect(siteContent.sizeCharts.tshirts.noteInch).toMatch(/inches/);
+  });
+});
+
+describe('the bottle chooses its capacity and its cap', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const request = readFileSync(new URL('../src/public/pages/RequestPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const steps = siteContent.productSteps.bottles;
+  const stepFor = (id) => steps.find((step) => step.id === id);
+
+  it('asks what the drawing asks, in that order', () => {
+    expect(steps.map((step) => step.id)).toEqual(['capacity', 'cap', 'colour', 'decoration', 'packaging', 'artwork', 'notes']);
+    expect(steps.filter((step) => step.optional).map((step) => step.id)).toEqual(['packaging', 'artwork', 'notes']);
+  });
+
+  it('offers the capacities it stocks and a way to ask for another', () => {
+    const capacity = stepFor('capacity');
+    expect(capacity.type).toBe('select');
+    expect(capacity.allowCustom).toBe(true);
+    expect(capacity.options.length).toBeGreaterThan(2);
+    expect(capacity.note).toMatch(/custom capacity/i);
+    // One list and one typed answer, both under the same name, so the request
+    // carries whichever was given without having to know which.
+    expect(source).toContain("if (step.type === 'select') {");
+    expect(source).toContain('answers[`${step.id}Mode`]');
+    expect(css).toContain('.pdp-field {');
+  });
+
+  it('names the cap most people take rather than leaving it to the order', () => {
+    const cap = stepFor('cap');
+    expect(cap.options.map((option) => option.name)).toEqual(['Screw cap', 'Straw lid', 'Carry handle cap']);
+    expect(cap.options.filter((option) => option.tag)).toHaveLength(1);
+    expect(cap.options[0].tag).toBe('Standard');
+    expect(source).toContain('className="pdp-method-tag"');
+    expect(css).toContain('.pdp-method-tag {');
+    // Each cap has a mark of its own, not the same one three times.
+    const icons = cap.options.map((option) => option.icon);
+    expect(new Set(icons).size).toBe(3);
+    const drawn = new Set(iconLibrary.icons.map((item) => item.name));
+    for (const icon of icons) expect(drawn.has(icon), icon).toBe(true);
+  });
+
+  it('sends the customisation under the name this product gives it', () => {
+    // A bottle calls its printing choice "decoration". Sent as "printing" it
+    // would be filtered out of the row and lost.
+    const decoration = stepFor('decoration');
+    expect(decoration.asPrinting).toBe(true);
+    expect(decoration.id).toBe(printingFieldFor('insulated_bottle').id);
+    expect(request).toContain('const printingField = (wanted && printingFieldFor(wanted)?.id)');
+    expect(request).toContain('[printingField]: chosen.printing');
+    // And every card's answer is one the field will accept.
+    const accepted = printingFieldFor('insulated_bottle').options;
+    for (const option of decoration.options) {
+      expect(accepted, option.name).toContain(option.value ?? option.name);
+    }
+  });
+
+  it('keeps two answers given in quick succession', () => {
+    // Added to whatever has been answered rather than to a copy taken when
+    // the step was drawn, or the second click drops the first.
+    expect(source).toContain('onAnswer((said) => ({ ...said, [key]: value }))');
   });
 });
 

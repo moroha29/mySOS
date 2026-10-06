@@ -1194,10 +1194,11 @@
         "label": "Decoration",
         "type": "choice",
         "options": [
-          "Print",
+          "Let MySOS recommend",
+          "UV printing",
           "Laser engraving"
         ],
-        "recommended": "Print"
+        "recommended": "Let MySOS recommend"
       },
       {
         "id": "colour",
@@ -1444,6 +1445,32 @@
       {
         "label": "Mockup",
         "value": "Sent for approval before production"
+      }
+    ],
+    "bottles": [
+      {
+        "label": "Material",
+        "value": "Stainless steel, double walled"
+      },
+      {
+        "label": "Construction",
+        "value": "Vacuum insulated"
+      },
+      {
+        "label": "Capacity",
+        "value": "350 ml to 1 litre, or a volume you ask for"
+      },
+      {
+        "label": "Cap type",
+        "value": "Screw cap, straw lid or carry handle cap"
+      },
+      {
+        "label": "Colour",
+        "value": "Choose from the range or ask for your own"
+      },
+      {
+        "label": "Customisation",
+        "value": "UV printing or laser engraving"
       }
     ]
   },
@@ -2400,6 +2427,103 @@
         "question": "Additional notes",
         "optional": true,
         "placeholder": "Tell us about any logo placement preferences or special requests."
+      }
+    ],
+    "bottles": [
+      {
+        "type": "select",
+        "id": "capacity",
+        "question": "Choose capacity",
+        "allowCustom": true,
+        "standardLabel": "Available capacities",
+        "customLabel": "Custom capacity",
+        "placeholder": "Choose an available capacity",
+        "options": [
+          "350 ml",
+          "500 ml",
+          "650 ml",
+          "750 ml",
+          "1 litre"
+        ],
+        "customPlaceholder": "Enter your preferred volume, for example 600 ml",
+        "note": "Need a custom capacity? Enter your preferred volume for us to check availability."
+      },
+      {
+        "type": "cards",
+        "id": "cap",
+        "question": "Choose your cap",
+        "hint": "Choose one cap for your bottle.",
+        "options": [
+          {
+            "name": "Screw cap",
+            "tag": "Standard",
+            "icon": "screwCap"
+          },
+          {
+            "name": "Straw lid",
+            "icon": "strawLid"
+          },
+          {
+            "name": "Carry handle cap",
+            "icon": "handleCap"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "cards",
+        "id": "decoration",
+        "question": "Choose a customisation option",
+        "asPrinting": true,
+        "options": [
+          {
+            "name": "UV printing",
+            "note": "Full colour, wrapped around the bottle",
+            "icon": "palette"
+          },
+          {
+            "name": "Laser engraving",
+            "note": "A permanent mark in the steel",
+            "icon": "design"
+          },
+          {
+            "name": "Help me decide",
+            "value": "Let MySOS recommend",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "packaging",
+        "question": "Packaging preference",
+        "optional": true,
+        "placeholder": "No preference",
+        "options": [
+          "Individual boxes",
+          "Gift packaging",
+          "Bulk packed"
+        ],
+        "hint": "Ask about individual boxes or gift packaging."
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "PNG, JPG or PDF. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request."
       }
     ]
   },

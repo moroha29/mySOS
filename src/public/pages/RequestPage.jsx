@@ -1,4 +1,5 @@
 import siteContent from '../../data/siteContent.json';
+import { printingFieldFor } from '../../utils/solutionRequest';
 import { cms, heroBackground, pagePath, pageText, picture, scenePath } from '../cms';
 import Icon from '../components/Icons';
 import RequestBuilder from '../components/RequestBuilder';
@@ -29,6 +30,13 @@ export default function RequestPage() {
     // for - a lanyard's material, its add-ons and their sizes - as one line.
     note: (params.get('note') ?? '').slice(0, 400),
   };
+  /*
+   * A product calls its printing choice by its own name - a bottle's is
+   * "decoration" - and a detail the product has no field for is dropped. So
+   * the choice made on the product's page is set under the name that product
+   * uses, not under "printing" for everything.
+   */
+  const printingField = (wanted && printingFieldFor(wanted)?.id) || 'printing';
   // What someone typed into the homepage's search arrives here as their note.
   const asked = (params.get('ask') ?? '').slice(0, 500);
   return <main className="solution-page request-page">
@@ -58,7 +66,7 @@ export default function RequestPage() {
 
     <RequestBuilder
       remember
-      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, note: chosen.note, details: { colour: chosen.colour, printing: chosen.printing, sizes: chosen.sizes } }] : []}
+      startWith={wanted ? [{ productId: wanted, quantity: chosen.quantity, note: chosen.note, details: { colour: chosen.colour, [printingField]: chosen.printing, sizes: chosen.sizes } }] : []}
       startNotes={asked}
       title={pageText('request', 'builderTitle', 'Build Your Request')}
       titlePath={cms(pagePath('request', 'builderTitle'))}

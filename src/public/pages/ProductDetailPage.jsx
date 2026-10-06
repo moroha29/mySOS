@@ -284,6 +284,19 @@ function sizeOptionsFor(step, product) {
   }));
 }
 
+/*
+ * How this thing should be printed, from whichever step asks. A card can
+ * travel under a different name than the one written on it: "Help me decide"
+ * reaches the quote as "Let MySOS recommend", which is what the builder's own
+ * list calls it.
+ */
+function printingAnswer(drawn, answers) {
+  const step = drawn?.find((item) => item.type === 'methods' || item.asPrinting);
+  if (!step) return '';
+  const said = answers[step.id] ?? '';
+  return step.options?.find((item) => item.name === said)?.value ?? said;
+}
+
 /** Which size is being asked for, and what it measures. */
 function sizePick(step, product, answers) {
   const sizes = sizeOptionsFor(step, product);
@@ -336,7 +349,9 @@ function ColourChoice({ name, chosen, onPick }) {
  * somewhere to say the rest.
  */
 function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
-  const set = (key, value) => onAnswer({ ...answers, [key]: value });
+  // Added to whatever has been answered so far rather than to a copy taken
+  // when this step was drawn: two answers in quick succession both stick.
+  const set = (key, value) => onAnswer((said) => ({ ...said, [key]: value }));
   const mine = answers[step.id] ?? '';
   const head = <p className="pdp-step-head">
     <span className="pdp-step-number" aria-hidden="true">{number}</span>
@@ -404,6 +419,9 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           <span className={`pdp-method-shot${option.swatch ? ' is-swatch' : ''}`} style={option.swatch ? { '--ink': option.swatch } : undefined}>
             {option.swatch ? null : <Icon name={option.icon ?? 'spark'} size={30} />}
           </span>
+          {/* The one most people take, said once rather than left to be
+              guessed from the order. */}
+          {option.tag && <em className="pdp-method-tag">{option.tag}</em>}
           <strong>{option.name}</strong>
           {option.note && <small>{option.note}</small>}
         </button>)}
@@ -500,6 +518,33 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
     </section>;
   }
 
+  if (step.type === 'select') {
+    const custom = Boolean(step.allowCustom) && answers[`${step.id}Mode`] === 'custom';
+    return <section className="pdp-step">
+      {head}
+      {/* What is stocked, and the way to ask for something that is not. The
+          two are the same answer, so they share one line on the request. */}
+      {step.allowCustom && <div className="pdp-sizing" role="radiogroup" aria-label={step.question}>
+        <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(`${step.id}Mode`, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard')}</button>
+        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(`${step.id}Mode`, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
+      </div>}
+      {custom
+        ? <input
+          className="pdp-field"
+          type="text"
+          aria-label={step.question}
+          placeholder={step.customPlaceholder ?? ''}
+          value={mine}
+          onChange={(event) => set(step.id, event.target.value)}
+        />
+        : <select className="pdp-field" aria-label={step.question} value={mine} onChange={(event) => set(step.id, event.target.value)}>
+          <option value="">{step.placeholder ?? ''}</option>
+          {step.options.map((option) => <option key={option} value={option}>{option}</option>)}
+        </select>}
+      {step.note && <p className="pdp-step-note">{step.note}</p>}
+    </section>;
+  }
+
   if (step.type === 'upload') {
     return <section className="pdp-step">
       {head}
@@ -571,7 +616,8 @@ function BuildPanel({ product, onChart }) {
     if (!drawn) return '';
     const said = [];
     for (const step of drawn) {
-      if (step.type === 'colour' || step.type === 'methods' || step.type === 'upload') continue;
+      // The colour and the printing have fields of their own on the request.
+      if (step.type === 'colour' || step.type === 'methods' || step.type === 'upload' || step.asPrinting) continue;
       const value = answers[step.id];
       if (step.type === 'addons') {
         const chosen = Array.isArray(value) ? value : [];
@@ -607,7 +653,7 @@ function BuildPanel({ product, onChart }) {
   const href = useMemo(() => {
     const params = new URLSearchParams({ product: product.id, qty: String(clampQuantity(quantity)) });
     const saidColour = drawn ? answers[drawn.find((step) => step.type === 'colour')?.id] : colour;
-    const saidMethod = drawn ? answers[drawn.find((step) => step.type === 'methods')?.id] : method;
+    const saidMethod = drawn ? printingAnswer(drawn, answers) : method;
     if (saidColour) params.set('colour', saidColour);
     if (saidMethod) params.set('printing', saidMethod);
     if (sizing === 'enter' && sizesLine) params.set('sizes', sizesLine);
