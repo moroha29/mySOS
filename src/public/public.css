@@ -2889,8 +2889,13 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .resources-empty { font-size: 18px; line-height: 1.6; color: var(--muted); }
 
 /* --------------------------------------------------------------- one guide */
-.article-page > .breadcrumb { padding-top: 22px; }
-.article-layout { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 54px; align-items: start; }
+/* A guide is read at 760px however wide the screen is, so the full site
+   width left a band of nothing between the words and the contents list. The
+   page is narrower here and the list is wider, so the two sit together. */
+.article-page { --article: 1300px; }
+.article-page > .breadcrumb { max-width: var(--article); padding-top: 22px; }
+.article-page .resources-cta { max-width: var(--article); }
+.article-layout { max-width: var(--article); margin: 0 auto; padding: 8px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 56px; align-items: start; }
 .article-body { max-width: 760px; }
 .article-body h1 { margin-top: 14px; font-size: clamp(34px, 3.6vw, 52px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; color: var(--ink); }
 .article-lead { margin-top: 16px; font-size: 19px; line-height: 1.6; color: var(--muted); }
@@ -2946,10 +2951,12 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .article-nearby strong { display: block; margin-top: 6px; font-size: 17px; font-weight: 700; color: var(--ink); }
 .article-nearby a:hover strong { color: var(--green-dark); }
 
-.article-toc { position: sticky; top: calc(var(--header-h) + 24px); }
-.article-toc > p { font-size: 17px; font-weight: 800; color: var(--ink); }
-.article-toc ol { margin-top: 14px; display: grid; gap: 4px; }
-.article-toc a { display: block; padding: 7px 0 7px 14px; border-left: 2px solid var(--line); font-size: 16.5px; line-height: 1.4; color: var(--muted); }
+/* The list is a panel of its own rather than words floating in the margin:
+   it is the only thing in that column and it should look like it. */
+.article-toc { position: sticky; top: calc(var(--header-h) + 24px); padding: 24px 26px 26px; border: 1px solid var(--line); border-radius: 22px; background: var(--paper); }
+.article-toc > p { font-size: 19px; font-weight: 800; color: var(--ink); }
+.article-toc ol { margin-top: 16px; display: grid; gap: 2px; }
+.article-toc a { display: block; padding: 11px 0 11px 18px; border-left: 3px solid var(--line); font-size: 17.5px; line-height: 1.4; color: var(--muted); }
 .article-toc a:hover { color: var(--ink); }
 .article-toc a.is-active { border-left-color: var(--green); color: var(--green-dark); font-weight: 700; }
 

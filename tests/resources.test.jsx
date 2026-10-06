@@ -144,6 +144,20 @@ describe('a guide on a narrow screen', () => {
     expect(css).toMatch(/\.article-body \{ min-width: 0; \}/);
   });
 
+  it('gives the contents list the room the words do not use', () => {
+    // A guide is read at 760px however wide the screen is, so the full site
+    // width left a band of nothing between the words and the list.
+    expect(css).toContain('.article-page { --article: 1300px; }');
+    expect(css).toContain('.article-layout { max-width: var(--article);');
+    expect(css).toMatch(/\.article-layout \{[^}]*grid-template-columns: minmax\(0, 1fr\) 360px/);
+    // The breadcrumb above and the banner below line up with it.
+    expect(css).toContain('.article-page > .breadcrumb { max-width: var(--article);');
+    expect(css).toContain('.article-page .resources-cta { max-width: var(--article); }');
+    // And the list is a panel rather than words floating in the margin.
+    expect(css).toMatch(/\.article-toc \{[^}]*border-radius: 22px/);
+    expect(css).toMatch(/\.article-toc \{[^}]*background: var\(--paper\)/);
+  });
+
   it('leaves out the contents list where there is no column for it', () => {
     const narrow = css.slice(css.indexOf('@media (max-width: 1080px)', css.indexOf('35. the knowledge hub')));
     expect(narrow.slice(0, narrow.indexOf('\n}'))).toContain('.article-toc { display: none; }');
