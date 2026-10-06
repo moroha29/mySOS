@@ -1421,6 +1421,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-breadcrumb span[aria-current] { color: var(--ink); font-weight: 700; }
 .pdp-top { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 
+/* The picture and the views beneath it have to fit on the screen together.
+   On a short monitor the column is bounded by the height rather than the
+   width, so the square shrinks instead of pushing the row off the bottom. */
+.pdp-gallery { max-width: min(100%, 560px); }
+@media (min-width: 981px) and (max-height: 940px) { .pdp-gallery { max-width: min(100%, 48vh); } }
 .pdp-shot { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: 26px; background: var(--soft); overflow: hidden; }
 .pdp-shot img { width: 100%; height: 100%; object-fit: cover; }
 .pdp-shot .product-visual { width: 70%; }
@@ -1435,7 +1440,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 }
 .pdp-thumbs::-webkit-scrollbar { display: none; }
 .pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
-.pdp-thumbs a { display: block; aspect-ratio: 1 / 1; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+.pdp-thumbs a, .pdp-thumbs button { display: block; width: 100%; aspect-ratio: 1 / 1; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; }
+.pdp-thumbs button.is-chosen { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+/* A view MySOS has not photographed yet: the place is held, plainly empty
+   rather than looking like a picture that failed to load. */
+.pdp-thumbs li.is-empty span { display: grid; place-items: center; aspect-ratio: 1 / 1; border: 1px dashed var(--line); border-radius: 15px; background: var(--paper); color: var(--line); }
 /* The edge fades where there is more to come, so the rail says so without a
    scrollbar. */
 .pdp-thumb-rail.has-more::after {
@@ -1454,7 +1463,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-thumb-arrow.is-next { right: -8px; }
 .pdp-thumb-arrow:disabled { opacity: 0; pointer-events: none; }
 .pdp-thumb-arrow:hover:not(:disabled) { border-color: var(--navy); }
-.pdp-thumbs a:hover { border-color: var(--green); }
+.pdp-thumbs a:hover, .pdp-thumbs button:hover { border-color: var(--green); }
 .pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
 .pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
 .pdp-mockup .icon { flex: none; margin-top: 2px; color: var(--green-dark); }
@@ -1696,7 +1705,7 @@ html.has-reveal [data-reveal] { opacity: 0; transform: translateY(18px); }
 html.has-reveal [data-reveal].is-in { opacity: 1; transform: none; }
 
 /* Cards and tiles lift a touch under the cursor. */
-.home-tile, .home-work-card, .product-card, .story-card, .solution-card, .hero-results li, .pdp-thumbs a {
+.home-tile, .home-work-card, .product-card, .story-card, .solution-card, .hero-results li, .pdp-thumbs a, .pdp-thumbs button {
   transition: transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, background-color .2s ease;
 }
 .hero-results li:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }

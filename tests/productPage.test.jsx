@@ -253,16 +253,36 @@ describe('the product page, as the client marked it up', () => {
   });
 });
 
-describe('the rest of the category, as a rail', () => {
+describe('the other views of this product, as a rail', () => {
   const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
 
-  it('offers the whole category rather than the first three of it', () => {
-    expect(source).toContain('.slice(0, 12)');
+  it('shows other views of this product, not other products', () => {
+    // products/<slug>-2.jpg and so on, beside the main photograph.
+    expect(source).toContain('`products/${product.public.slug}-${n}`');
     expect(source).toContain('className="pdp-thumbs" ref={railRef}');
+    // The rest of the category is a different question, answered at the foot
+    // of the page; the rail no longer links away.
+    const gallery = source.slice(source.indexOf('function Gallery('), source.indexOf('function ProductInfo('));
+    expect(gallery).not.toContain('/mySOS/products/${');
     const rail = css.slice(css.indexOf('.pdp-thumbs {'), css.indexOf('}', css.indexOf('.pdp-thumbs {')));
     expect(rail).toContain('overflow-x: auto');
     expect(rail).toContain('scroll-snap-type: x proximity');
+  });
+
+  it('brings a view up rather than opening a page', () => {
+    expect(source).toContain('onClick={() => setShown(index)}');
+    expect(source).toContain('aria-pressed={index === shown}');
+    expect(source).toContain('views[Math.min(shown, views.length - 1)]');
+    expect(css).toContain('.pdp-thumbs button.is-chosen');
+  });
+
+  it('holds a place open for a photograph that has not arrived', () => {
+    expect(source).toContain('const VIEW_SLOTS = 4;');
+    expect(source).toContain('Math.max(0, VIEW_SLOTS - views.length)');
+    // Plainly empty, rather than looking like a picture that failed to load.
+    expect(css).toContain('.pdp-thumbs li.is-empty span');
+    expect(css).toMatch(/\.pdp-thumbs li\.is-empty span \{[^}]*dashed/);
   });
 
   it('shows the way on only while there is something past the edge', () => {
@@ -279,6 +299,13 @@ describe('the rest of the category, as a rail', () => {
   it('fits four to a view, and a shade under three on a phone', () => {
     expect(css).toContain('.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }');
     expect(css).toMatch(/\.pdp-thumbs li \{ flex-basis: 37%; \}/);
+  });
+
+  it('fits the picture and the views on a short screen together', () => {
+    // A smaller monitor at 100% could only show part of the picture, with the
+    // row of views below the fold.
+    expect(css).toContain('.pdp-gallery { max-width: min(100%, 560px); }');
+    expect(css).toMatch(/max-height: 940px\).*\.pdp-gallery \{ max-width: min\(100%, 48vh\); \}/);
   });
 });
 

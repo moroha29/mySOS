@@ -199,18 +199,26 @@ function SizeChart({ product, open, onClose }) {
   </dialog>;
 }
 
+/*
+ * The product's own photographs: the big one, and the other views of the same
+ * thing in a row beneath it. Clicking one brings it up rather than opening
+ * another page -- the row used to be the rest of the category, which is a
+ * different question and is already answered at the foot of this page.
+ *
+ * MySOS drops products/<slug>-2.jpg and so on in beside the main photograph
+ * and they appear here. Until then the places are held open, so it is obvious
+ * where they go.
+ */
+const VIEW_SLOTS = 4;
+
 function Gallery({ product, category }) {
-  const photos = useMemo(() => {
-    const own = picture('', `products/${product.public.slug}`);
-    // Everything else in the category, not the first three: the row scrolls,
-    // so there is room for all of them.
-    const others = getPublicProducts({ category: product.public.category })
-      .filter((item) => item.id !== product.id)
-      .map((item) => ({ slug: item.public.slug, src: picture('', `products/${item.public.slug}`), name: item.public.name }))
-      .filter((item) => item.src)
-      .slice(0, 12);
-    return { own, others };
+  const views = useMemo(() => {
+    const found = [picture('', `products/${product.public.slug}`)];
+    for (let n = 2; n <= 6; n += 1) found.push(picture('', `products/${product.public.slug}-${n}`));
+    return found.filter(Boolean);
   }, [product]);
+  const [shown, setShown] = useState(0);
+  const empty = Math.max(0, VIEW_SLOTS - views.length);
 
   const railRef = useRef(null);
   const [reach, setReach] = useState({ prev: false, next: false });
@@ -228,7 +236,7 @@ function Gallery({ product, category }) {
     if (!rail) return undefined;
     globalThis.addEventListener('resize', measure);
     return () => globalThis.removeEventListener('resize', measure);
-  }, [photos.others.length]);
+  }, [views.length]);
   const nudge = (by) => {
     const rail = railRef.current;
     if (!rail) return;
@@ -239,26 +247,39 @@ function Gallery({ product, category }) {
   return <div className="pdp-gallery" data-reveal>
     <div className="pdp-shot">
       {product.public.featured && <span className="pdp-badge" data-cms-path={cms(contentPath('labels', 'featuredBadge'))}>{siteContent.labels?.featuredBadge ?? 'Most requested'}</span>}
-      {photos.own
-        ? <img src={photos.own} alt={product.public.name} />
+      {views.length
+        ? <img src={views[Math.min(shown, views.length - 1)]} alt={product.public.name} />
         : <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />}
     </div>
-    {photos.others.length > 0 && <p className="pdp-thumbs-label">{`More ${(category?.name ?? '').toLowerCase()}`.trim()}</p>}
-    {photos.others.length > 0 && <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
-      <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
-        {photos.others.map((other) => <li key={other.slug}>
-          <a href={`/mySOS/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
-        </li>)}
-      </ul>
-      {(reach.prev || reach.next) && <>
-        <button type="button" className="pdp-thumb-arrow is-prev" aria-label="Previous products" disabled={!reach.prev} onClick={() => nudge(-1)}>
-          <Icon name="chevronLeft" size={20} />
-        </button>
-        <button type="button" className="pdp-thumb-arrow is-next" aria-label="More products" disabled={!reach.next} onClick={() => nudge(1)}>
-          <Icon name="chevronRight" size={20} />
-        </button>
-      </>}
-    </div>}
+    {views.length > 0 && <>
+      <p className="pdp-thumbs-label" data-cms-path={wordPath('viewsLabel')}>{word('viewsLabel', 'Other views')}</p>
+      <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
+        <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
+          {views.map((src, index) => <li key={src}>
+            <button
+              type="button"
+              className={index === shown ? 'is-chosen' : ''}
+              aria-label={`${product.public.name}, view ${index + 1}`}
+              aria-pressed={index === shown}
+              onClick={() => setShown(index)}
+            ><img src={src} alt="" loading="lazy" /></button>
+          </li>)}
+          {/* A photograph that has not been supplied yet keeps its place
+              rather than the row closing up around it. */}
+          {Array.from({ length: empty }, (_, index) => <li key={`slot-${index}`} className="is-empty" aria-hidden="true">
+            <span><Icon name="photos" size={22} /></span>
+          </li>)}
+        </ul>
+        {(reach.prev || reach.next) && <>
+          <button type="button" className="pdp-thumb-arrow is-prev" aria-label="Previous views" disabled={!reach.prev} onClick={() => nudge(-1)}>
+            <Icon name="chevronLeft" size={20} />
+          </button>
+          <button type="button" className="pdp-thumb-arrow is-next" aria-label="More views" disabled={!reach.next} onClick={() => nudge(1)}>
+            <Icon name="chevronRight" size={20} />
+          </button>
+        </>}
+      </div>
+    </>}
     <span className="sr-only">{`${category?.name ?? product.public.category} product`}</span>
   </div>;
 }

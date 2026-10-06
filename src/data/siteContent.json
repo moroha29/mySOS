@@ -571,7 +571,8 @@
         "Small & Bulk Orders": "quantities",
         "Product Recommendations": "guidance",
         "One-Stop Sourcing": "mockup"
-      }
+      },
+      "viewsLabel": "Other views"
     },
     "request": {
       "breadcrumb": "Get a Quote",
