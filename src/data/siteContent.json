@@ -1878,6 +1878,113 @@
       "tip": "Lay your tee flat and compare with a tee you already own.",
       "diagram": "tee",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "totes": {
+      "note": "Measurements are of the bag laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Width",
+        "Height",
+        "Depth",
+        "Handle drop"
+      ],
+      "rows": [
+        [
+          "Small",
+          "30",
+          "35",
+          "8",
+          "22"
+        ],
+        [
+          "Standard",
+          "35",
+          "40",
+          "10",
+          "25"
+        ],
+        [
+          "Large",
+          "40",
+          "45",
+          "12",
+          "28"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Width",
+          "note": "Measure across the front of the bag at its widest"
+        },
+        {
+          "key": "B",
+          "label": "Height",
+          "note": "Measure from the top edge down to the base, handles excluded"
+        },
+        {
+          "key": "C",
+          "label": "Depth",
+          "note": "Measure the base gusset, the width of the side panel"
+        },
+        {
+          "key": "D",
+          "label": "Handle drop",
+          "note": "Measure from the top edge to the inside of the handle"
+        }
+      ],
+      "tip": "Not sure which size? Tell us what has to fit inside and we will match it to the nearest standard bag.",
+      "diagram": "tote",
+      "noteInch": "Measurements are of the bag laid flat, in inches. Allow half an inch either way."
+    },
+    "drawstring": {
+      "note": "Measurements are of the bag laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Width",
+        "Height",
+        "Cord length"
+      ],
+      "rows": [
+        [
+          "Small",
+          "30",
+          "40",
+          "110"
+        ],
+        [
+          "Standard",
+          "35",
+          "45",
+          "120"
+        ],
+        [
+          "Large",
+          "40",
+          "50",
+          "130"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Width",
+          "note": "Measure across the front of the bag at its widest"
+        },
+        {
+          "key": "B",
+          "label": "Height",
+          "note": "Measure from the top edge down to the base"
+        },
+        {
+          "key": "C",
+          "label": "Cord length",
+          "note": "Measure the drawcord end to end, pulled straight"
+        }
+      ],
+      "tip": "Not sure which size? Tell us what has to fit inside and we will match it to the nearest standard bag.",
+      "diagram": "drawstring",
+      "noteInch": "Measurements are of the bag laid flat, in inches. Allow half an inch either way."
     }
   },
   "sizeRun": [

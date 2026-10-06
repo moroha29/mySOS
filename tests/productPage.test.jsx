@@ -283,18 +283,59 @@ describe('the size guide, as the drawing has it', () => {
     expect(source).toContain("const [tab, setTab] = useState('measure');");
   });
 
+  /** One drawing on its own, up to wherever the next one begins. */
+  const drawing = (name) => {
+    const start = visuals.indexOf(`function ${name}(`);
+    expect(start, name).toBeGreaterThan(-1);
+    const end = visuals.indexOf('function ', start + 12);
+    return visuals.slice(start, end === -1 ? undefined : end);
+  };
+
   it('shows where to hold the tape, with a letter on each line', () => {
-    expect(visuals).toContain('export function MeasureGarment(');
     // Every line first, then every letter: drawn in turn, the line down the
     // body struck through the letter on the chest.
-    const figure = visuals.slice(visuals.indexOf('export function MeasureGarment('));
-    const lastLine = figure.lastIndexOf('{...ARROW}');
-    const firstBadge = figure.indexOf('<Badge');
-    expect(firstBadge).toBeGreaterThan(lastLine);
-    for (const key of ['A', 'B', 'C', 'D']) {
-      expect(figure, key).toContain(`letter="${key}"`);
+    for (const [name, keys] of [
+      ['MeasureGarment', ['A', 'B', 'C', 'D']],
+      ['MeasureTote', ['A', 'B', 'C', 'D']],
+      ['MeasureDrawstring', ['A', 'B', 'C']],
+    ]) {
+      const figure = drawing(name);
+      expect(figure.indexOf('<Badge'), name).toBeGreaterThan(figure.lastIndexOf('{...ARROW}'));
+      for (const key of keys) {
+        expect(figure, `${name} ${key}`).toContain(`letter="${key}"`);
+      }
     }
     expect(siteContent.sizeCharts.tshirts.measure).toHaveLength(4);
+  });
+
+  it('measures a bag as well as a garment', () => {
+    // A bag has a depth and a handle; a tee has neither, so the guide cannot
+    // be one drawing with the words swapped.
+    expect(visuals).toContain('export function MeasureFigure(');
+    expect(visuals).toContain("const measureFigures = { tote: MeasureTote,");
+    expect(source).toContain("<MeasureFigure type={chart.diagram ?? 'tee'} />");
+    for (const kind of ['totes', 'drawstring']) {
+      const chart = siteContent.sizeCharts[kind];
+      expect(chart, kind).toBeTruthy();
+      // The legend and the table answer for the same measurements.
+      expect(chart.measure.length, kind).toBe(chart.columns.length - 1);
+      expect(chart.rows.every((row) => row.length === chart.columns.length), kind).toBe(true);
+      expect(chart.noteInch, kind).toMatch(/inches/);
+    }
+    expect(siteContent.sizeCharts.totes.diagram).toBe('tote');
+    expect(siteContent.sizeCharts.totes.columns).toContain('Depth');
+    // The standard tote the build panel offers is the standard row of the chart.
+    const dimensions = siteContent.productSteps.totes.find((step) => step.type === 'dimensions');
+    const standard = siteContent.sizeCharts.totes.rows.find((row) => row[0] === 'Standard');
+    expect(dimensions.fields.map((field) => field.standard)).toEqual(standard.slice(1, 4));
+  });
+
+  it('puts the guide beside the question it answers', () => {
+    // The bag asks for its dimensions in the panel: the way to the guide
+    // belongs there, not only in the specifications table further up.
+    expect(source).toContain('onChart={chartFor(product) ? onChart : null}');
+    const step = source.slice(source.indexOf("if (step.type === 'dimensions')"));
+    expect(step.slice(0, step.indexOf("if (step.type === 'cards')"))).toContain('className="pdp-chart-link"');
   });
 
   it('works the inches out rather than keeping a second set of numbers', () => {
