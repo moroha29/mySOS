@@ -1082,7 +1082,18 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-choices button small { font-size: 14px; line-height: 1.2; opacity: .85; }
 .request-choices button.is-chosen { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
 .request-field select, .request-field input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; }
-.request-upload { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 8px 12px; border: 1.5px dashed #9fb6dc; border-radius: 8px; background: #fff; font-size: 16.5px; color: var(--navy); cursor: pointer; }
+/* The one box in this panel asking for something the quote cannot be firm
+   without. Everything else here is green or white, so it is blue, and it
+   turns green once there is a file in it. */
+.request-upload {
+  display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 14px;
+  border: 2px dashed var(--navy-soft); border-radius: 10px; background: #dbe6fb;
+  box-shadow: 0 2px 10px rgba(13, 42, 107, .10);
+  font-size: 16.5px; font-weight: 700; color: var(--navy); cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.request-upload:hover { border-color: var(--navy); background: #cedcf8; }
+.request-upload.has-files { border-style: solid; border-color: var(--green); background: #effaf4; color: var(--green-dark); }
 .request-upload.is-dragging, .request-drop.is-dragging { border-color: var(--green); background: #effaf4; }
 .request-skip { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 16px; color: var(--muted); }
 

@@ -118,6 +118,19 @@ describe('the window that adds a product', () => {
 describe('the request itself', () => {
   const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
 
+  it('makes the one box that changes the quote look like it', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // Everything else in that panel is green or white and the upload box read
+    // as part of the furniture. Blue, bolder and larger; green once it holds
+    // a file, so it is obvious the artwork arrived.
+    expect(css).toMatch(/\.request-upload \{[^}]*border: 2px dashed var\(--navy-soft\)/);
+    expect(css).toMatch(/\.request-upload \{[^}]*background: #dbe6fb/);
+    expect(css).toMatch(/\.request-upload \{[^}]*font-weight: 700/);
+    expect(css).toContain('.request-upload.has-files { border-style: solid; border-color: var(--green);');
+    expect(builder).toContain("className={line.files.length ? 'request-upload has-files' : 'request-upload'}");
+    expect(builder).toContain("name={line.files.length ? 'checkCircle' : 'upload'}");
+  });
+
   it('lists no products under the button that opens the catalogue', () => {
     // A list of suggestions under it put the catalogue back beneath the
     // request it had just been taken out of.

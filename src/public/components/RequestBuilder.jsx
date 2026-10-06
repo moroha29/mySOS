@@ -110,8 +110,11 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
       })}
       <div className="request-field">
         <span className="request-field-label" data-cms-path={wordPath('uploadReferenceLabel')}>{word('uploadReferenceLabel', 'Upload Reference')}</span>
-        <FilePicker id={`reference-${index}`} label={`Upload a reference for ${line.name}`} className="request-upload" onFiles={onFiles}>
-          <Icon name="upload" size={24} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
+        {/* Blue, where everything else on this page is green: it is the one
+            box here asking for something the quote cannot be firm without,
+            and it was reading as part of the furniture. */}
+        <FilePicker id={`reference-${index}`} label={`Upload a reference for ${line.name}`} className={line.files.length ? 'request-upload has-files' : 'request-upload'} onFiles={onFiles}>
+          <Icon name={line.files.length ? 'checkCircle' : 'upload'} size={24} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
         </FilePicker>
       </div>
       <div className="request-field">
