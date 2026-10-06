@@ -186,10 +186,14 @@ describe('the request message', () => {
     expect(recommendedDetails(detailFieldsFor('event_lanyard'))).toEqual({ width: '20mm', printing: 'Double-sided' });
     // A product whose kind has no printing question of its own is still asked
     // one, so nothing is sent to MySOS without saying how it should be printed.
+    const towel = detailFieldsFor('custom_towel');
+    expect(towel.slice(1)).toEqual(siteContent.requestOptions.default);
+    expect(towel[0].id).toBe('printing');
+    expect(towel[0].options).toContain('Let MySOS recommend');
+    // A medal's colour is its finish, and the field says so.
     const medal = detailFieldsFor('custom_medal');
-    expect(medal.slice(1)).toEqual(siteContent.requestOptions.default);
     expect(medal[0].id).toBe('printing');
-    expect(medal[0].options).toContain('Let MySOS recommend');
+    expect(medal.find((field) => field.id === 'colour').label).toBe('Finish');
   });
 
   it('offers "Other" only where MySOS has not said how this is printed', () => {

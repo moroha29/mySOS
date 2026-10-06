@@ -566,7 +566,12 @@
       "standardLabel": "Standard size",
       "customLabel": "Enter my own",
       "addonsHint": "Select any add ons",
-      "customSizeLabel": "Enter my own"
+      "customSizeLabel": "Enter my own",
+      "promiseMarks": {
+        "Small & Bulk Orders": "quantities",
+        "Product Recommendations": "guidance",
+        "One-Stop Sourcing": "mockup"
+      }
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -1232,6 +1237,19 @@
           "Other (tell us in the notes)"
         ]
       }
+    ],
+    "medals": [
+      {
+        "id": "colour",
+        "label": "Finish",
+        "type": "select",
+        "options": [
+          "Gold",
+          "Silver",
+          "Bronze",
+          "All three (gold, silver and bronze)"
+        ]
+      }
     ]
   },
   "announcement": "You're One Step Away From Your Solution!",
@@ -1372,7 +1390,10 @@
     "Pink": "#e87fa8",
     "Natural": "#e8e0cd",
     "Sage green": "#9cab8a",
-    "Cream": "#f2ead9"
+    "Cream": "#f2ead9",
+    "Gold": "#c9a227",
+    "Silver": "#b4b9c1",
+    "Bronze": "#a9713c"
   },
   "productSpecs": {
     "tshirts": [
@@ -1471,6 +1492,28 @@
       {
         "label": "Customisation",
         "value": "UV printing or laser engraving"
+      }
+    ],
+    "medals": [
+      {
+        "label": "Material",
+        "value": "Die-struck metal"
+      },
+      {
+        "label": "Finish",
+        "value": "Gold, silver or bronze"
+      },
+      {
+        "label": "Size",
+        "value": "50 mm to 80 mm, or a diameter you ask for"
+      },
+      {
+        "label": "Ribbon",
+        "value": "Plain or printed with your logo"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printed or engraved to your artwork"
       }
     ]
   },
@@ -2524,6 +2567,73 @@
         "question": "Add any other notes",
         "optional": true,
         "placeholder": "Tell us more about your request."
+      }
+    ],
+    "medals": [
+      {
+        "type": "select",
+        "id": "size",
+        "question": "Medal size",
+        "allowCustom": true,
+        "standardLabel": "Standard sizes",
+        "customLabel": "Another size",
+        "placeholder": "Choose a diameter",
+        "options": [
+          "50 mm",
+          "60 mm",
+          "70 mm",
+          "80 mm"
+        ],
+        "customPlaceholder": "Enter the diameter you need, for example 65 mm",
+        "note": "Measured across the face of the medal, ribbon excluded."
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Finish",
+        "hint": "Gold, silver and bronze can be ordered together."
+      },
+      {
+        "type": "cards",
+        "id": "ribbon",
+        "question": "Ribbon",
+        "options": [
+          {
+            "name": "Standard ribbon",
+            "tag": "Standard",
+            "note": "A plain ribbon in a colour you choose",
+            "icon": "lanyard"
+          },
+          {
+            "name": "Printed ribbon",
+            "note": "Your logo repeated along the ribbon",
+            "icon": "palette"
+          },
+          {
+            "name": "No ribbon",
+            "note": "The medal on its own",
+            "icon": "award"
+          }
+        ]
+      },
+      {
+        "type": "methods",
+        "id": "branding",
+        "question": "Branding"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Upload your artwork",
+        "optional": true,
+        "hint": "PNG, JPG, PDF or AI. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us about the event, the engraving or anything else."
       }
     ]
   },

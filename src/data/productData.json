@@ -934,7 +934,7 @@
         "description": "Die-struck medals with custom ribbons for races and competitions.",
         "visible": true,
         "featured": false,
-        "imageStyle": "tee-navy",
+        "imageStyle": "medal",
         "displayPricing": {
           "show": true,
           "prefix": "From",

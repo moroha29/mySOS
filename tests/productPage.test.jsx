@@ -7,7 +7,7 @@ import siteConfig from '../src/data/siteConfig.json';
 import siteContent from '../src/data/siteContent.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import iconLibrary from '../src/data/iconLibrary.json';
-import { makeLine, printingFieldFor } from '../src/utils/solutionRequest';
+import { detailFieldsFor, makeLine, printingFieldFor } from '../src/utils/solutionRequest';
 
 /*
  * A product's own page: the picture, and everything needed to ask for that
@@ -359,6 +359,56 @@ describe('the size guide, as the drawing has it', () => {
     // And the note carries the unit, so it changes with the tab.
     expect(source).toContain("tab === 'inch' ? chart.noteInch : chart.note");
     expect(siteContent.sizeCharts.tshirts.noteInch).toMatch(/inches/);
+  });
+});
+
+describe("the client's own marks, and the medal's own questions", () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const marks = readFileSync(new URL('../src/public/components/BrandMarks.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it("keeps the client's artwork as the client drew it", () => {
+    // Two colours, filled: not the single stroke the rest of the icons are,
+    // so it is a component of its own rather than a entry in Icons.jsx.
+    expect(marks).toContain("const NAVY = '#21348c';");
+    expect(marks).toContain("const GREEN = '#006451';");
+    expect(marks).toContain('viewBox="0 0 98.561 98.919"');
+    for (const name of ['mockup', 'guidance', 'quantities']) {
+      expect(marks, name).toContain(`${name}: <>`);
+    }
+    // Decoration beside a word that already says it: nothing to read aloud.
+    expect(marks).toContain('aria-hidden="true"');
+    expect(css).toContain('.brand-mark {');
+  });
+
+  it('gives a promise its mark by name, so a reworded one keeps the tick', () => {
+    const promises = siteContent.pages.product.promises;
+    const promiseMarks = siteContent.pages.product.promiseMarks;
+    expect(promises.every((promise) => promiseMarks[promise]), 'every promise marked').toBe(true);
+    // Keyed by the promise rather than its place in the list: reorder the
+    // promises and each keeps its own mark.
+    expect(Object.keys(promiseMarks)).toEqual(promises);
+    expect(source).toContain('siteContent.pages?.product?.promiseMarks?.[promise]');
+    expect(source).toContain('<Icon name="check" size={18} />');
+  });
+
+  it('asks a medal what a medal needs', () => {
+    const steps = siteContent.productSteps.medals;
+    expect(steps.map((step) => step.question)).toEqual([
+      'Medal size', 'Finish', 'Ribbon', 'Branding', 'Upload your artwork', 'Add any other notes',
+    ]);
+    // Its finish is its colour, so it arrives in a field of its own rather
+    // than buried in the note.
+    const field = detailFieldsFor('custom_medal').find((item) => item.id === 'colour');
+    expect(field.label).toBe('Finish');
+    expect(steps[1].type).toBe('colour');
+    for (const finish of ['Gold', 'Silver', 'Bronze']) {
+      expect(siteContent.colourSwatches[finish], finish).toMatch(/^#[0-9a-f]{6}$/i);
+      expect(field.options, finish).toContain(finish);
+    }
+    // One ribbon is the usual one and says so.
+    const ribbon = steps.find((step) => step.id === 'ribbon');
+    expect(ribbon.options.filter((option) => option.tag)).toHaveLength(1);
   });
 });
 

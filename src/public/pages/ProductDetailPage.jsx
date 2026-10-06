@@ -4,6 +4,7 @@ import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
 import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } from '../../utils/solutionRequest';
 import { cms, contentPath, pagePath, pageText, picture } from '../cms';
+import BrandMark from '../components/BrandMarks';
 import Icon from '../components/Icons';
 import { ProductShot } from '../components/Ui';
 import { MeasureFigure, Product } from '../components/Visuals';
@@ -920,8 +921,12 @@ export default function ProductDetailPage({ slug }) {
         <h1>{product.public.name}</h1>
         <p className="pdp-lead">{product.public.description}</p>
         <ul className="pdp-promises">
+          {/* The client's own mark where there is one for this promise, and
+              the tick for anything they add later. */}
           {(siteContent.pages?.product?.promises ?? []).map((promise, index) => <li key={promise}>
-            <Icon name="check" size={18} />
+            {siteContent.pages?.product?.promiseMarks?.[promise]
+              ? <BrandMark name={siteContent.pages.product.promiseMarks[promise]} size={30} />
+              : <Icon name="check" size={18} />}
             <span data-cms-path={cms(pagePath('product', 'promises', index))}>{promise}</span>
           </li>)}
         </ul>
