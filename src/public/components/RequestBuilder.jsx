@@ -396,6 +396,9 @@ export default function RequestBuilder({
       <aside className="request-summary" aria-labelledby="summary-title" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <h3 id="summary-title" data-cms-path={wordPath('summaryTitle')}>{word('summaryTitle', 'Your Request')}</h3>
         <p className="request-count">{fill(word('summaryCountLabel', '{count} products selected'), { count: lines.length })}</p>
+        {/* The part that grows with the request scrolls inside the panel;
+            the title above it and the button that sends it stay put. */}
+        <div className="request-summary-scroll">
         <ul className="request-summary-list">
           {lines.map((line) => {
             const product = productFor(line.productId);
@@ -420,6 +423,7 @@ export default function RequestBuilder({
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
+        </div>
 
         {/*
           * A recommended package. It can join the quote the customer is

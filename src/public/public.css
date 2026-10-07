@@ -1164,7 +1164,29 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-file-list button { width: 30px; height: 30px; display: grid; place-items: center; border: 0; background: none; color: var(--muted); cursor: pointer; }
 
 /* the summary */
-.request-summary { position: sticky; top: 90px; padding: 20px 20px 22px; }
+/* The list grows with the request, and the button that sends it was being
+   pushed off the bottom of the screen with it. The panel is bounded by the
+   screen now: the part that grows scrolls inside it, and scrolling to the
+   end of that list does not then carry the whole page with it. */
+.request-summary { position: sticky; top: 90px; padding: 20px 20px 22px; display: flex; flex-direction: column; max-height: calc(100vh - 110px); }
+.request-summary-scroll {
+  flex: 1 1 auto; min-height: 0; margin-right: -8px; padding-right: 8px;
+  overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: #c7d2e5 transparent;
+  /* A shadow at the top once it has been scrolled, and one at the bottom
+     while there is more to come. The gradients ride the content, so they
+     appear and go without anything measuring the scroll. */
+  background:
+    linear-gradient(#fff 30%, rgba(255, 255, 255, 0)) top / 100% 14px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0), #fff 70%) bottom / 100% 14px no-repeat,
+    radial-gradient(farthest-side at 50% 0, rgba(13, 42, 107, .16), rgba(13, 42, 107, 0)) top / 100% 9px no-repeat,
+    radial-gradient(farthest-side at 50% 100%, rgba(13, 42, 107, .16), rgba(13, 42, 107, 0)) bottom / 100% 9px no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+/* Visible, unlike the rails elsewhere on the site: here it is the thing
+   that says there is more of the request below. */
+.request-summary-scroll::-webkit-scrollbar { width: 8px; }
+.request-summary-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: #c7d2e5; }
 .request-count { margin-top: 2px; font-size: 16.5px; color: var(--muted); }
 .request-summary-list { margin: 14px 0 18px; border: 1px solid var(--line-soft); border-radius: 10px; }
 .request-summary-list li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 12px; }
@@ -1186,7 +1208,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .solution-hero-inner { grid-template-columns: minmax(0, 1fr); padding: 22px 24px 0; }
   .solution-collage { min-height: 340px; margin: 0 -24px; }
   .request-layout { grid-template-columns: minmax(0, 1fr); }
-  .request-summary { position: static; }
+  /* Stacked under the request rather than beside it: there is nothing to
+     stay in view of, so it is as tall as it needs to be. */
+  .request-summary { position: static; max-height: none; display: block; }
+  .request-summary-scroll { overflow: visible; margin-right: 0; padding-right: 0; }
   .request-details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {

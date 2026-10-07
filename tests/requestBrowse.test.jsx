@@ -118,6 +118,22 @@ describe('the window that adds a product', () => {
 describe('the request itself', () => {
   const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
 
+  it('keeps the send button on screen however long the request gets', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // The summary grows with every product added, and the button that sends
+    // it was being pushed off the bottom of the screen along with it.
+    expect(css).toMatch(/\.request-summary \{ position: sticky;[^}]*max-height: calc\(100vh - 110px\)/);
+    expect(css).toMatch(/\.request-summary \{[^}]*flex-direction: column/);
+    expect(css).toMatch(/\.request-summary-scroll \{[^}]*overflow-y: auto/);
+    // Reaching the end of that list does not then carry the page with it.
+    expect(css).toMatch(/\.request-summary-scroll \{[^}]*overscroll-behavior: contain/);
+    expect(builder).toContain('className="request-summary-scroll"');
+    // Stacked under the request on a narrow screen, it is as tall as it needs.
+    const narrow = css.slice(css.indexOf('.request-summary { position: static;'));
+    expect(narrow.slice(0, 200)).toContain('max-height: none');
+    expect(narrow.slice(0, 300)).toContain('.request-summary-scroll { overflow: visible;');
+  });
+
   it('makes the one box that changes the quote look like it', () => {
     const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
     // Everything else in that panel is green or white and the upload box read
