@@ -290,7 +290,7 @@ function Reviews() {
 /* --------------------------------------------------------------- sections */
 
 // The tiles alternate through a fixed set of washes, as the design has them.
-const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac'];
+const TILE_TONES = ['soft', 'navy', 'green', 'blue', 'mint', 'lilac', 'sand', 'rose'];
 /* Two of the six tiles are dark, and a navy mark on navy is no mark at all. */
 const DARK_TONES = new Set(['navy', 'green']);
 

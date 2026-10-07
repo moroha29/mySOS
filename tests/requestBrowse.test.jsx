@@ -72,7 +72,8 @@ describe('the Get a Quote page', () => {
     // category beneath the rows already chosen.
     expect(html).toContain('class="add-product"');
     expect(html).not.toContain('class="request-browse"');
-    for (const category of browseCategories()) expect(html).toContain(category.name);
+    // A category whose name carries an ampersand arrives escaped.
+    for (const category of browseCategories()) expect(html).toContain(category.name.replace(/&/g, '&amp;'));
     // Products that are not featured used to be reachable only by search.
     const plain = visible.filter((item) => !item.public.featured);
     expect(plain.length).toBeGreaterThan(20);

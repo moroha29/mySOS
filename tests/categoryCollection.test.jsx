@@ -231,3 +231,39 @@ describe('one mark for a category, wherever it is named', () => {
     expect(css).toContain('.home-tile .category-mark { width: 52px; height: 52px; }');
   });
 });
+
+describe('every category the menu offers has something behind it', () => {
+  const icons = JSON.parse(readFileSync(new URL('../src/data/iconLibrary.json', import.meta.url), 'utf8'));
+  const drawn = new Set(icons.icons.map((item) => item.name));
+  const visible = productData.catalogue.filter((item) => item.public.visible);
+
+  it('lists keychains and awards beside the six that were there', () => {
+    const ids = siteContent.categories.map((category) => category.id);
+    expect(ids).toContain('keychains-accessories');
+    expect(ids).toContain('trophies-awards');
+    // The client's own list puts medals with the awards rather than the gifts.
+    const medal = productData.catalogue.find((item) => item.id === 'custom_medal');
+    expect(medal.public.category).toBe('trophies-awards');
+  });
+
+  it('gives each one a mark, a row of kinds and products to show', () => {
+    for (const category of siteContent.categories) {
+      expect(drawn.has(category.icon), `${category.id} icon`).toBe(true);
+      const kinds = siteContent.categoryTypes[category.id];
+      if (kinds) for (const kind of kinds) expect(drawn.has(kind.icon), `${category.id}/${kind.id}`).toBe(true);
+      const mine = visible.filter((item) => item.public.category === category.id);
+      expect(mine.length, `${category.id} products`).toBeGreaterThan(0);
+      // Every kind named in the row is a kind of something real, or the row
+      // offers a filter that empties the shelf.
+      for (const item of mine) expect(siteContent.subcategoryNames[item.public.subcategory], item.id).toBeTruthy();
+    }
+  });
+
+  it('asks for a quote rather than publishing a price nobody has set', () => {
+    for (const id of ['custom_trophy', 'crystal_award', 'acrylic_award', 'recognition_plaque', 'metal_keychain', 'acrylic_keychain', 'enamel_keychain', 'bag_charm', 'enamel_pin']) {
+      const item = productData.catalogue.find((product) => product.id === id);
+      expect(item, id).toBeTruthy();
+      expect(item.public.displayPricing.show, id).toBe(false);
+    }
+  });
+});

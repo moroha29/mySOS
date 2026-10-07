@@ -273,6 +273,28 @@
       "image": "",
       "typeWord": "event essentials",
       "searchPlaceholder": "Search event products, e.g. lanyards or stickers"
+    },
+    {
+      "id": "keychains-accessories",
+      "name": "Keychains & Accessories",
+      "icon": "keychain",
+      "visual": "keychain",
+      "colour": "teal",
+      "description": "Keychains, bag charms & enamel pins",
+      "image": "",
+      "typeWord": "keychain",
+      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin"
+    },
+    {
+      "id": "trophies-awards",
+      "name": "Trophies & Awards",
+      "icon": "trophy",
+      "visual": "trophy",
+      "colour": "navy",
+      "description": "Trophies, medals, awards & plaques",
+      "image": "",
+      "typeWord": "award",
+      "searchPlaceholder": "Search awards, e.g. crystal award or medal"
     }
   ],
   "benefits": [
@@ -1380,7 +1402,16 @@
     "pens": "Pens",
     "name-tents": "Name Tents",
     "lanyards": "Lanyards",
-    "stickers": "Stickers"
+    "stickers": "Stickers",
+    "metal-keychains": "Metal Keychains",
+    "acrylic-keychains": "Acrylic Keychains",
+    "enamel-keychains": "Enamel Keychains",
+    "bag-charms": "Bag Charms",
+    "enamel-pins": "Enamel Pins",
+    "trophies": "Trophies",
+    "crystal-awards": "Crystal Awards",
+    "acrylic-awards": "Acrylic Awards",
+    "plaques": "Recognition Plaques"
   },
   "colourSwatches": {
     "White": "#ffffff",
@@ -2231,6 +2262,60 @@
         "id": "welcome-packs",
         "name": "Welcome Packs",
         "icon": "welcomePack"
+      }
+    ],
+    "keychains-accessories": [
+      {
+        "id": "metal-keychains",
+        "name": "Metal Keychains",
+        "icon": "keychain"
+      },
+      {
+        "id": "acrylic-keychains",
+        "name": "Acrylic Keychains",
+        "icon": "layers"
+      },
+      {
+        "id": "enamel-keychains",
+        "name": "Enamel Keychains",
+        "icon": "palette"
+      },
+      {
+        "id": "bag-charms",
+        "name": "Bag Charms",
+        "icon": "bag"
+      },
+      {
+        "id": "enamel-pins",
+        "name": "Enamel Pins",
+        "icon": "pin"
+      }
+    ],
+    "trophies-awards": [
+      {
+        "id": "trophies",
+        "name": "Trophies",
+        "icon": "trophy"
+      },
+      {
+        "id": "medals",
+        "name": "Medals",
+        "icon": "award"
+      },
+      {
+        "id": "crystal-awards",
+        "name": "Crystal Awards",
+        "icon": "crystal"
+      },
+      {
+        "id": "acrylic-awards",
+        "name": "Acrylic Awards",
+        "icon": "layers"
+      },
+      {
+        "id": "plaques",
+        "name": "Recognition Plaques",
+        "icon": "plaque"
       }
     ]
   },

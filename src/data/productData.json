@@ -929,7 +929,7 @@
       "public": {
         "slug": "custom-medal",
         "name": "Custom Medal",
-        "category": "corporate-gifts",
+        "category": "trophies-awards",
         "subcategory": "medals",
         "description": "Die-struck medals with custom ribbons for races and competitions.",
         "visible": true,
@@ -1108,6 +1108,267 @@
         "dtf",
         "silkscreen",
         "uv_printing"
+      ]
+    },
+    {
+      "id": "metal_keychain",
+      "public": {
+        "slug": "metal-keychain",
+        "name": "Metal Keychain",
+        "category": "keychains-accessories",
+        "subcategory": "metal-keychains",
+        "description": "A solid metal keychain, cut and finished to your shape.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "keychain-navy",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "acrylic_keychain",
+      "public": {
+        "slug": "acrylic-keychain",
+        "name": "Acrylic Keychain",
+        "category": "keychains-accessories",
+        "subcategory": "acrylic-keychains",
+        "description": "A printed acrylic keychain, cut to any outline.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "keychain-teal",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "enamel_keychain",
+      "public": {
+        "slug": "enamel-keychain",
+        "name": "Enamel Keychain",
+        "category": "keychains-accessories",
+        "subcategory": "enamel-keychains",
+        "description": "A metal keychain filled with colour, for crests and logos.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "keychain-green",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "bag_charm",
+      "public": {
+        "slug": "bag-charm",
+        "name": "Bag Charm",
+        "category": "keychains-accessories",
+        "subcategory": "bag-charms",
+        "description": "A charm for a bag or a lanyard, made to your artwork.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "keychain-sand",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "enamel_pin",
+      "public": {
+        "slug": "enamel-pin",
+        "name": "Enamel Pin",
+        "category": "keychains-accessories",
+        "subcategory": "enamel-pins",
+        "description": "A lapel pin in hard or soft enamel, for teams and events.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "keychain-blue",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 50,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "custom_trophy",
+      "public": {
+        "slug": "custom-trophy",
+        "name": "Custom Trophy",
+        "category": "trophies-awards",
+        "subcategory": "trophies",
+        "description": "A trophy for a competition, a season or a long service award.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "trophy-navy",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 1,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "crystal_award",
+      "public": {
+        "slug": "crystal-award",
+        "name": "Crystal Award",
+        "category": "trophies-awards",
+        "subcategory": "crystal-awards",
+        "description": "A crystal award, engraved with the name and the occasion.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "trophy-teal",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 1,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "acrylic_award",
+      "public": {
+        "slug": "acrylic-award",
+        "name": "Acrylic Award",
+        "category": "trophies-awards",
+        "subcategory": "acrylic-awards",
+        "description": "A printed acrylic award, cut to the shape you choose.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "trophy-blue",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 1,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
+      ]
+    },
+    {
+      "id": "recognition_plaque",
+      "public": {
+        "slug": "recognition-plaque",
+        "name": "Recognition Plaque",
+        "category": "trophies-awards",
+        "subcategory": "plaques",
+        "description": "A plaque for a presentation, a milestone or a thank you.",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "plaque-green",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "",
+        "minimumQuantity": 1,
+        "pricingModel": "enquiry"
+      },
+      "printingMethods": [
+        "uv_printing",
+        "silkscreen"
       ]
     }
   ],

@@ -1355,6 +1355,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-tile.tone-blue { background: #dde6fb; color: var(--ink); }
 .home-tile.tone-mint { background: #d9efe2; color: #0c3b28; }
 .home-tile.tone-lilac { background: #e6e6fa; color: var(--ink); }
+.home-tile.tone-sand { background: #f1e8d7; color: var(--ink); }
+.home-tile.tone-rose { background: #f7e3e3; color: var(--ink); }
 
 /* why mysos */
 .home-why { background: var(--navy); color: #fff; }

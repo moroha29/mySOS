@@ -22,6 +22,9 @@ const TYPE_VISUALS = {
   'gift-sets': 'gift-set', notebooks: 'notebook', lanyards: 'lanyard',
   towels: 'towel', medals: 'medal', mats: 'mat', pens: 'pen',
   'name-tents': 'name-tent', stickers: 'sticker',
+  'metal-keychains': 'keychain', 'acrylic-keychains': 'keychain', 'enamel-keychains': 'keychain',
+  'bag-charms': 'keychain', 'enamel-pins': 'keychain',
+  trophies: 'trophy', 'crystal-awards': 'trophy', 'acrylic-awards': 'trophy', plaques: 'plaque',
 };
 
 const prettyName = (id) => id.replace(/-/g, ' ').replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());

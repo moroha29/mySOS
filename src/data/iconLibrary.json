@@ -159,6 +159,36 @@
       "svg": "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.2 6.6h7.6v12.2a1.8 1.8 0 0 1-1.8 1.8h-4a1.8 1.8 0 0 1-1.8-1.8z\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.8 3.4h4.4v3.2H9.8z\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.2 11h7.6\"></path>"
     },
     {
+      "name": "keychain",
+      "label": "Keychain",
+      "group": "General",
+      "svg": "<circle fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" cx=\"8\" cy=\"8\" r=\"3.8\"></circle><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m10.7 10.7 8.4 8.4\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m15.4 15.4 2 2\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"m17.6 13.2 2 2\"></path>"
+    },
+    {
+      "name": "pin",
+      "label": "Pin",
+      "group": "General",
+      "svg": "<circle fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" cx=\"12\" cy=\"9.2\" r=\"5.6\"></circle><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 14.8v5.8\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9.4 20.6h5.2\"></path>"
+    },
+    {
+      "name": "trophy",
+      "label": "Trophy",
+      "group": "General",
+      "svg": "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7.8 3.6h8.4v5.6a4.2 4.2 0 0 1-8.4 0z\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7.8 5.2H5a2.6 2.6 0 0 0 2.8 4.2\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16.2 5.2H19a2.6 2.6 0 0 1-2.8 4.2\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 13.4v3.4\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.6 20.4h6.8v-3.6H8.6z\"></path>"
+    },
+    {
+      "name": "plaque",
+      "label": "Plaque",
+      "group": "General",
+      "svg": "<rect fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" x=\"5.6\" y=\"3.4\" width=\"12.8\" height=\"13.4\" rx=\"1.8\"></rect><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.4 7.8h7.2M8.4 11.2h4.8\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8.2 16.8v2.2h7.6v-2.2\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5.6 20.6h12.8\"></path>"
+    },
+    {
+      "name": "crystal",
+      "label": "Crystal",
+      "group": "General",
+      "svg": "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 3.2 17.2 9v11.4H6.8V9z\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.8 9h10.4\"></path><path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 3.2V9\"></path>"
+    },
+    {
       "name": "screwCap",
       "label": "Screw cap",
       "group": "General",
