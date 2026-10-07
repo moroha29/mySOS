@@ -3,10 +3,10 @@ import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
 import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } from '../../utils/solutionRequest';
-import { cms, contentPath, pagePath, pageText, picture } from '../cms';
+import { cms, contentPath, pagePath, pageText, picture, productPath } from '../cms';
 import BrandMark from '../components/BrandMarks';
 import Icon from '../components/Icons';
-import { ProductShot } from '../components/Ui';
+import { ProductShot, shotProps } from '../components/Ui';
 import { MeasureFigure, Product } from '../components/Visuals';
 
 /*
@@ -248,8 +248,13 @@ function Gallery({ product, category }) {
     <div className="pdp-shot">
       {product.public.featured && <span className="pdp-badge" data-cms-path={cms(contentPath('labels', 'featuredBadge'))}>{siteContent.labels?.featuredBadge ?? 'Most requested'}</span>}
       {views.length
-        ? <img src={views[Math.min(shown, views.length - 1)]} alt={product.public.name} />
-        : <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />}
+        ? <img
+          src={views[Math.min(shown, views.length - 1)]}
+          alt={product.public.name}
+          style={product.public.imageFit ? { objectFit: product.public.imageFit } : undefined}
+          data-cms-path={shown === 0 ? cms(productPath(product, 'public', 'image')) : undefined}
+        />
+        : <ProductShot {...shotProps(product)} />}
     </div>
     {views.length > 0 && <>
       <p className="pdp-thumbs-label" data-cms-path={wordPath('viewsLabel')}>{word('viewsLabel', 'Other views')}</p>
@@ -939,8 +944,8 @@ export default function ProductDetailPage({ slug }) {
       </div>
       <div className="pdp-copy" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <span className="eyebrow">{category?.name ?? product.public.category}</span>
-        <h1>{product.public.name}</h1>
-        <p className="pdp-lead">{product.public.description}</p>
+        <h1 data-cms-path={cms(productPath(product, 'public', 'name'))}>{product.public.name}</h1>
+        <p className="pdp-lead" data-cms-path={cms(productPath(product, 'public', 'description'))}>{product.public.description}</p>
         <ul className="pdp-promises">
           {/* The client's own mark where there is one for this promise, and
               the tick for anything they add later. */}

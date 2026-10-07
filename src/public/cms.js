@@ -1,3 +1,4 @@
+import productData from '../data/productData.json';
 import siteContent from '../data/siteContent.json';
 import solutions from '../data/solutions.json';
 import successStories from '../data/successStories.json';
@@ -53,6 +54,15 @@ export const storyPath = (story, ...path) =>
 
 export const categoryPath = (category, ...path) =>
   contentPath('categories', indexOf(siteContent.categories, (entry) => entry.id === category.id), ...path);
+
+/*
+ * A product. The catalogue is not part of the homepage content: the manager
+ * loads productData.json under `pricingData` for the prices editor, and writes
+ * it back on publish, so that is where a product's own words and pictures are
+ * addressed. Without these the manager could see a card but not its name.
+ */
+export const productPath = (product, ...path) =>
+  ['pricingData', 'productData', 'catalogue', indexOf(productData.catalogue, (entry) => entry.id === product.id), ...path];
 
 export const pagePath = (page, ...path) => contentPath('pages', page, ...path);
 export const scenePath = (...path) => contentPath('scenes', ...path);

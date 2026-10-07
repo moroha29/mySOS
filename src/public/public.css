@@ -2481,6 +2481,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* A catalogue photograph is shot on white; the soft grey tile behind it read
    as a frame around the picture. The drawn stand-ins keep the grey. */
 .product-card .product-visual.has-photo { background: #fff; }
+/* How a photograph sits in its frame, chosen per product: the whole thing
+   with room around it, or filling the frame and cropped to it. Last word
+   on the matter, so a product's own choice beats the card's default. */
+.product-visual.has-photo[data-fit="cover"] img { object-fit: cover; }
+.product-visual.has-photo[data-fit="contain"] img { object-fit: contain; }
 
 /* The apparel sub-categories, in the pills the category menu uses. */
 .tab-list { margin-bottom: 26px; justify-content: flex-start; gap: 10px; border-bottom: 0; }

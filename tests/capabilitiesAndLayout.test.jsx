@@ -115,6 +115,34 @@ describe('the products page, as the design has it', () => {
     expect(siteContent.pages.products.searchFound).toContain('{count}');
   });
 
+  it('lets the manager edit a product’s own name and picture', () => {
+    const html = markup();
+    const index = productData.catalogue.findIndex((item) => item.public.slug === 'premium-cotton-tee');
+    // The catalogue is not part of the homepage content: the manager loads it
+    // under pricingData for the prices editor and writes it back on publish,
+    // so that is where a product's words and pictures are addressed.
+    const path = (...rest) => JSON.stringify(['pricingData', 'productData', 'catalogue', index, 'public', ...rest]).replace(/"/g, '&quot;');
+    expect(html).toContain(`data-cms-path="${path('name')}"`);
+    expect(html).toContain(`data-cms-path="${path('image')}"`);
+    // Every product carries both fields, so none of them is the one that
+    // cannot be given a picture.
+    for (const item of productData.catalogue) {
+      expect(typeof item.public.image, item.id).toBe('string');
+      expect(typeof item.public.imageFit, item.id).toBe('string');
+    }
+  });
+
+  it('opens the picture field on a product drawn rather than photographed', () => {
+    // Marked as a background, so clicking it offers a picture instead of
+    // writing a file name over the artwork.
+    const source = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+    expect(source).toContain("'data-cms-background': 'true'");
+    expect(source).toContain('const src = picture(image, slug && `products/${slug}`);');
+    // And how the picture sits in its frame is a choice, not a constant.
+    expect(css).toContain('.product-visual.has-photo[data-fit="cover"] img { object-fit: cover; }');
+    expect(css).toContain('.product-visual.has-photo[data-fit="contain"] img { object-fit: contain; }');
+  });
+
   it('puts the kinds within a category in a row of their own', () => {
     const html = markup();
     expect(html).toContain('class="type-row"');

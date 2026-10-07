@@ -419,13 +419,13 @@ const plain = {
   keychain: Keychain, trophy: Trophy, award: Trophy, plaque: Plaque,
 };
 
-export function Product({ type = 'tee', color = 'navy', mark = 'MySOS', className = '' }) {
+export function Product({ type = 'tee', color = 'navy', mark = 'MySOS', className = '', ...rest }) {
   const Marked = marked[type];
   const Plain = plain[type];
   const art = Marked ? <Marked color={color} mark={mark} />
     : Plain ? <Plain color={color} />
       : <Garment type={garmentTypes.has(type) ? type : 'tee'} color={color} mark={mark} />;
-  return <div className={`product-visual ${className}`.trim()}>{art}</div>;
+  return <div className={`product-visual ${className}`.trim()} {...rest}>{art}</div>;
 }
 /* ------------------------------------------------------------------ scenes */
 
