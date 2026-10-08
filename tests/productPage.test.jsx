@@ -346,8 +346,12 @@ describe('the other views of this product, as a rail', () => {
   });
 
   it('fits four to a view, and a shade under three on a phone', () => {
-    expect(css).toContain('.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }');
-    expect(css).toMatch(/\.pdp-thumbs li \{ flex-basis: 37%; \}/);
+    // However many views there are, that is how many tiles the row is cut
+    // into, so six views are six tiles rather than four and an arrow to the
+    // rest. They stop shrinking at 48px, and below that the row scrolls.
+    expect(css).toContain('.pdp-thumbs li { flex: 1 1 0; min-width: 48px; scroll-snap-align: start; }');
+    // On a phone six tiles would be fingernails, so there it still scrolls.
+    expect(css).toMatch(/\.pdp-thumbs li \{ flex: 0 0 37%; \}/);
   });
 
   it('fits the picture and the views on a short screen together', () => {

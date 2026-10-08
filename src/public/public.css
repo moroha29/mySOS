@@ -1489,7 +1489,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   scrollbar-width: none; scroll-padding: 0 4px;
 }
 .pdp-thumbs::-webkit-scrollbar { display: none; }
-.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
+/* The row holds however many views there are, sharing the width between
+   them, so six views are six tiles and not four with an arrow to the rest.
+   Below the minimum they stop shrinking and the row scrolls again. */
+.pdp-thumbs li { flex: 1 1 0; min-width: 48px; scroll-snap-align: start; }
 /* The picture fills its tile. Nine pixels of padding and a picture fitted
    inside what was left of it left a stamp floating in a frame, with more
    white around it than photograph in it. */
@@ -1619,7 +1622,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-shot { border-radius: 20px; }
   /* A shade under three to a view, so the one peeking past the edge says the
      rail scrolls. */
-  .pdp-thumbs li { flex-basis: 37%; }
+  .pdp-thumbs li { flex: 0 0 37%; }
   .pdp-thumb-arrow.is-prev { left: -4px; }
   .pdp-thumb-arrow.is-next { right: -4px; }
   .pdp-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
