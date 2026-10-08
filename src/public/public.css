@@ -1779,10 +1779,13 @@ html.has-reveal [data-reveal].is-in { opacity: 1; transform: none; }
    motion (see the block at the end of this section). */
 
 /* how far down the page you are */
+/* Drawn full width and scaled down to the part read, rather than given a
+   width to grow: a width is laid out again every frame, a scale is not. */
 .site-announce::after {
   content: ""; position: absolute; left: 0; bottom: 0; height: 2px;
-  width: calc(var(--scrolled, 0) * 100%); background: var(--green-light);
-  transition: width .12s linear;
+  width: 100%; transform: scaleX(var(--scrolled, 0)); transform-origin: left;
+  background: var(--green-light);
+  transition: transform .12s linear;
 }
 .site-announce { position: relative; }
 

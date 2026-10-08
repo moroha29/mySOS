@@ -426,11 +426,26 @@ describe('the page moves as you read it', () => {
   const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
 
   it('fills a line across the top and tightens the header once you scroll', () => {
-    expect(chrome).toMatch(/page\.style\.setProperty\('--scrolled'/);
-    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', scrolled > 24\)/);
+    expect(chrome).toMatch(/bar\?\.style\.setProperty\('--scrolled', along\)/);
+    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', near\)/);
     expect(chrome).toMatch(/addEventListener\('scroll', onScroll, \{ passive: true \}\)/);
-    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?width: calc\(var\(--scrolled, 0\) \* 100%\)/);
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?transform: scaleX\(var\(--scrolled, 0\)\)/);
     expect(css).toMatch(/html\.is-scrolled \.site-header \{ height: 72px;/);
+  });
+
+  it('writes how far down the page you are where only the bar sees it', () => {
+    // On <html> the value is inherited by the whole document, so every element
+    // had its style worked out again on every frame of every scroll: 10ms a
+    // frame on the home page, out of the 16ms a frame has. On the bar itself
+    // the same write costs a seventh of a millisecond.
+    expect(chrome).toContain("const bar = root.querySelector('.site-announce');");
+    expect(chrome).not.toMatch(/page\.style\.setProperty\('--scrolled'/);
+    // And nothing is written at all unless the bar would be drawn differently.
+    expect(chrome).toContain("if (along !== last) {");
+    expect(chrome).toContain('if (near !== tight) {');
+    // A width is laid out again on every frame; a scale is not.
+    expect(css).not.toContain('width: calc(var(--scrolled, 0) * 100%)');
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?transition: transform \.12s linear/);
   });
 
   it('counts the review total up to itself, from the number the server drew', () => {
