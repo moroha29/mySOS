@@ -142,8 +142,17 @@ describe('one look across the pages', () => {
     expect(render('/mySOS/products/')).not.toContain('View all products');
   });
 
-  it('scrolls the strip sideways on a phone', () => {
-    expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*overflow-x: auto/);
+  it('wraps the strip on a screen and scrolls it on a phone', () => {
+    // Eight categories are wider than a laptop, and the eighth was cut off
+    // against the edge of a row that gave no sign it carried on.
+    expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*flex-wrap: wrap/);
+    expect(css).not.toMatch(/\.category-strip ul \{ flex: 1;[^}]*overflow-x: auto/);
+    // Wrapped, the two lines sit against each other: the pills carry the gap.
+    expect(css).toMatch(/\.category-strip ul \{[^}]*gap: 0 10px/);
+    // Four rows of pills is no menu, so a phone keeps the sideways scroller.
+    const nowrap = css.indexOf('.category-strip ul { flex-wrap: nowrap; overflow-x: auto;');
+    expect(nowrap).toBeGreaterThan(0);
+    expect(css.lastIndexOf('@media', nowrap)).toBe(css.lastIndexOf('@media (max-width: 860px)', nowrap));
     expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
   });
 
