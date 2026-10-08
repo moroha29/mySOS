@@ -147,10 +147,11 @@ describe('one look across the pages', () => {
     expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
   });
 
-  it('fills the row rather than stopping a card short of the edge', () => {
-    // Five columns for four cards left a card's width of nothing at the end.
-    const wide = css.slice(css.indexOf('@media (min-width: 1700px)'));
-    expect(wide.slice(0, 400)).toContain('.product-grid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }');
+  it('gives every card the same slot, whatever page it is on', () => {
+    // Four to a row everywhere: counting the cards to choose the columns made
+    // the same product bigger on a short category than on a full one.
+    expect(css).toContain('.product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));');
+    expect(css).not.toContain('@media (min-width: 1700px)');
   });
 });
 

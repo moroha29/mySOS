@@ -121,9 +121,16 @@ describe('the collection opens like a shelf', () => {
     expect(css).toMatch(/\.product-card \{ border-color: transparent; background: transparent;/);
   });
 
-  it('fits a fifth column on a wide screen', () => {
-    const wide = css.slice(css.indexOf('@media (min-width: 1700px)'));
-    expect(wide).toContain('.product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }');
+  it('keeps one slot size on every category, four to a row', () => {
+    // A fifth column on the widest screens made a card on one page a different
+    // size from the same card on another, and a category holding four cards
+    // left a card's width of nothing at the end of its only row.
+    expect(css).toContain('.product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));');
+    expect(css).not.toContain('.product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }');
+    expect(css).not.toContain('.product-grid:has(');
+    // Narrower screens still step down, because four on a phone is a thumbnail.
+    expect(css).toMatch(/\.product-grid, \.product-grid-3 \{ grid-template-columns: repeat\(3, minmax\(0, 1fr\)\); \}/);
+    expect(css).toMatch(/\.product-grid, \.product-grid-3, [^}]*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\)/);
   });
 
   it('does not let a minimum height stretch the banner picture sideways', () => {
