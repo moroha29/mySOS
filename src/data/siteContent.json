@@ -3046,137 +3046,180 @@
   },
   "productImages": {
     "premium-cotton-tee": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "cotton-round-neck-tee": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "cotton-v-neck-tee": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "dryfit-performance-tee": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "dryfit-v-neck": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "polo-cotton-pique": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "dryfit-polo": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "premium-cvc-polo": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "sublimation-jersey": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-snapback": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-dad-cap": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "trucker-mesh-cap": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "five-panel-cap": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-bucket-hat": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "fitted-cap": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-cut-and-sew": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "canvas-tote-bag": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "insulated-bottle": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "executive-gift-set": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "hardcover-notebook": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "event-lanyard": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "long-sleeve-tee": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "pullover-hoodie": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "windbreaker-jacket": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "bomber-jacket": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-singlet": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "drawstring-bag": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-towel": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-medal": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "picnic-mat": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "stationery-set": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "name-tent": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "die-cut-sticker": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "tattoo-sticker": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "navy-gift-set": {
       "image": "",
       "fit": "contain"
     },
     "metal-keychain": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "acrylic-keychain": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "enamel-keychain": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "bag-charm": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "enamel-pin": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "custom-trophy": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "crystal-award": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "acrylic-award": {
-      "image": ""
+      "image": "",
+      "fit": ""
     },
     "recognition-plaque": {
-      "image": ""
+      "image": "",
+      "fit": ""
     }
   }
 }
