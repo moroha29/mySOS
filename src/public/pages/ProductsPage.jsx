@@ -2,12 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, productImage } from '../cms';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, productImage, scenePath, shownCategories } from '../cms';
 import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/catalogue';
+import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, ProductCard, QuoteButton, SectionHeading } from '../components/Ui';
 import { Product } from '../components/Visuals';
+
+const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
 
 /*
  * What each kind of product is drawn as in the row that picks between them.
@@ -19,6 +22,9 @@ const TYPE_VISUALS = {
   'gift-sets': 'gift-set', notebooks: 'notebook', lanyards: 'lanyard',
   towels: 'towel', medals: 'medal', mats: 'mat', pens: 'pen',
   'name-tents': 'name-tent', stickers: 'sticker',
+  'metal-keychains': 'keychain', 'acrylic-keychains': 'keychain', 'enamel-keychains': 'keychain',
+  'bag-charms': 'keychain', 'enamel-pins': 'keychain',
+  trophies: 'trophy', 'crystal-awards': 'trophy', 'acrylic-awards': 'trophy', plaques: 'plaque',
 };
 
 const prettyName = (id) => id.replace(/-/g, ' ').replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
@@ -52,10 +58,7 @@ function typeRowFor(category, products, names) {
 
 
 /* The picture beside the banner: the category's own if one is uploaded, else
-   the first photograph among its products, else the drawn stand-in. A borrowed
-   product photograph still carries the category's own picture field, so the
-   banner can be given a picture of its own from the manager; unmarked, it was
-   the one picture on the page that could not be clicked. */
+   the first photograph among its products, else the drawn stand-in. */
 function categoryPicture(category, products) {
   const chosen = String(category?.image ?? '').trim();
   if (chosen) return { src: chosen, path: categoryPath(category, 'image') };
@@ -66,7 +69,7 @@ function categoryPicture(category, products) {
   return { src: picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero'), path: scenePath('productsHeroImage') };
 }
 
-const knownCategory = (id) => (siteContent.categories.some((item) => item.id === id) ? id : 'apparel');
+const knownCategory = (id) => (shownCategories().some((item) => item.id === id) ? id : 'apparel');
 
 export default function ProductsPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
@@ -76,6 +79,10 @@ export default function ProductsPage() {
   const [sort, setSort] = useState('featured');
   const [showAll, setShowAll] = useState(false);
   const collectionRef = useRef(null);
+  /* The shelf the search narrows is a screen below the box that narrows it.
+     Saying how many matched, and offering the way down, is the difference
+     between a search that looks broken and one that worked. */
+  const goToResults = () => collectionRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
 
   /*
    * Categories are swapped in place. They used to be plain links, so choosing
@@ -132,7 +139,7 @@ export default function ProductsPage() {
     return products;
   }, [products, sort]);
   const visible = showAll ? shelf : shelf.slice(0, 8);
-  const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
+  const activeCategory = shownCategories().find((item) => item.id === category) ?? shownCategories()[0];
   /*
    * The ways MySOS can put a brand on what is in this category, rather than
    * the whole list every time: a bottle is not embroidered. Which methods suit
@@ -170,7 +177,7 @@ export default function ProductsPage() {
           <p className="hero-lead" data-reveal style={{ '--reveal-delay': '250ms' }} data-cms-path={cms(categoryPath(activeCategory, 'description'))}>{activeCategory.description}</p>
           {/* Searching narrows what is on the shelf below rather than sending
               the reader to another page for the answer. */}
-          <form className="hero-search collection-search" role="search" data-reveal style={{ '--reveal-delay': '300ms' }} onSubmit={(event) => event.preventDefault()}>
+          <form className="hero-search collection-search" role="search" data-reveal style={{ '--reveal-delay': '300ms' }} onSubmit={(event) => { event.preventDefault(); goToResults(); }}>
             <Icon name="search" size={22} />
             <input
               type="search"
@@ -182,6 +189,23 @@ export default function ProductsPage() {
             />
             {query && <button type="button" aria-label="Clear search" onClick={() => setQuery('')}><Icon name="close" size={19} /></button>}
           </form>
+          {/* Read out as it changes, so it reaches someone who cannot see the
+              shelf move either. */}
+          {query.trim() && <p className={products.length ? 'collection-found' : 'collection-found is-none'} role="status" aria-live="polite">
+            {products.length
+              ? <button type="button" onClick={goToResults}>
+                <span data-cms-path={cms(pagePath('products', products.length === 1 ? 'searchFoundOne' : 'searchFound'))}>
+                  {products.length === 1
+                    ? pageText('products', 'searchFoundOne', '1 match below')
+                    : fill(pageText('products', 'searchFound', '{count} matches below'), { count: products.length })}
+                </span>
+                <Icon name="chevronDown" size={18} />
+              </button>
+              : <span>
+                <Icon name="search" size={18} />
+                <span data-cms-path={cms(pagePath('products', 'searchFoundNone'))}>{pageText('products', 'searchFoundNone', 'Nothing here matches')}</span>
+              </span>}
+          </p>}
           <div className="hero-actions" data-reveal style={{ '--reveal-delay': '360ms' }}>
             <QuoteButton showArrow />
             <Button href="/solutions/" variant="ghost">

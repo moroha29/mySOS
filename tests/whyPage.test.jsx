@@ -184,7 +184,7 @@ describe('scrolling, small screens and motion', () => {
     const html = render();
     expect(html).toMatch(/<div class="reason-scroller" role="region" aria-label="[^"]+" tabindex="0" style="--steps:5;--step:150px">/);
     expect([...html.matchAll(/class="reason-snap" style="top:(\d+)px"/g)].map((match) => Number(match[1]))).toEqual([0, 150, 300, 450, 600]);
-    expect(whyCss).toMatch(/\.reason-scroller \{ height: 560px; overflow-y: auto; overscroll-behavior-y: auto; scroll-snap-type: y mandatory;/);
+    expect(whyCss).toMatch(/\.reason-scroller \{ height: 420px; overflow-y: auto; overscroll-behavior-y: auto; scroll-snap-type: y mandatory;/);
     expect(whyCss).toMatch(/\.reason-stack \{ position: sticky; top: 0;/);
     // Phones list every reason instead.
     const listed = whyCss.slice(whyCss.indexOf('@media (max-width: 1080px) {'));

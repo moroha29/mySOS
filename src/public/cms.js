@@ -1,3 +1,4 @@
+import productData from '../data/productData.json';
 import siteContent from '../data/siteContent.json';
 import solutions from '../data/solutions.json';
 import successStories from '../data/successStories.json';
@@ -54,6 +55,25 @@ export const storyPath = (story, ...path) =>
 export const categoryPath = (category, ...path) =>
   contentPath('categories', indexOf(siteContent.categories, (entry) => entry.id === category.id), ...path);
 
+/*
+ * The categories the site offers. One can be held back — visible: false, with
+ * its products hidden alongside it — while MySOS settles what belongs in it,
+ * without being taken out of the content, where its wording and its place in
+ * the order are kept. Addresses are worked out against the whole list above,
+ * so nothing anyone has written moves when a category is held back or brought
+ * out again.
+ */
+export const shownCategories = () => siteContent.categories.filter((category) => category.visible !== false);
+
+/*
+ * A product. The catalogue is not part of the homepage content: the manager
+ * loads productData.json under `pricingData` for the prices editor, and writes
+ * it back on publish, so that is where a product's own words and pictures are
+ * addressed. Without these the manager could see a card but not its name.
+ */
+export const productPath = (product, ...path) =>
+  ['pricingData', 'productData', 'catalogue', indexOf(productData.catalogue, (entry) => entry.id === product.id), ...path];
+
 export const pagePath = (page, ...path) => contentPath('pages', page, ...path);
 export const scenePath = (...path) => contentPath('scenes', ...path);
 
@@ -79,6 +99,15 @@ export const productImage = (slug) => picture(siteContent.productImages?.[slug]?
 
 /** Where that picture lives in the manager's draft, or null for a product with no entry. */
 export const productImagePath = (slug) => (siteContent.productImages?.[slug] ? contentPath('productImages', slug, 'image') : null);
+
+/*
+ * How that picture sits in its frame: the whole of it with room around it
+ * ("contain"), or filling the frame and cropped at the edges, which is what a
+ * frame does when nothing says otherwise. A photograph that is not square --
+ * the gift set is wider than it is tall -- loses its ends to a square frame,
+ * so it is kept beside the picture it belongs to rather than somewhere else.
+ */
+export const productImageFit = (slug) => siteContent.productImages?.[slug]?.fit ?? '';
 
 /** Wording from content, with the shipped copy as the fallback. */
 export const pageText = (page, key, fallback = '') => siteContent.pages?.[page]?.[key] ?? fallback;

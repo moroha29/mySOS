@@ -254,7 +254,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* ========================================================== 6. trust strip */
 
-.trust-strip { max-width: var(--content); margin: 0 auto; padding: 34px var(--pad) 26px; }
+.trust-strip { max-width: var(--content); margin: 0 auto; padding: 30px var(--pad) 24px; }
 .trust-strip .mini-title { text-align: center; font-size: 16px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-light); }
 .trust-row { margin-top: 18px; display: flex; align-items: center; gap: 12px; }
 /* Marquee: the viewport masks, the track flows. Fixed-width cards keep the
@@ -294,7 +294,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* shown only until a real file is dropped into src/assets/images/logos/ */
 .crest-fallback { min-width: 0; display: block; text-align: center; }
 .crest-fallback b { display: block; font-size: 17.5px; font-weight: 800; letter-spacing: -.01em; color: #7d879b; }
-.crest-fallback small { display: block; margin-top: 2px; font-size: 15px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #aab3c3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.crest-fallback small { display: block; margin-top: 6px; font-size: 15px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #aab3c3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ======================================================= 7. category cards */
 
@@ -452,7 +452,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .story-meta div { display: flex; align-items: center; gap: 10px; }
 .story-meta .icon { color: #9fb8e6; }
 .story-meta dt { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fb8e6; }
-.story-meta dd { margin: 3px 0 0; font-size: 17px; font-weight: 700; }
+.story-meta dd { margin: 6px 0 0; font-size: 17px; font-weight: 700; }
 
 .gallery-strip { max-width: var(--content); margin: 0 auto; padding: 14px var(--pad) 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
 .gallery-strip .scene { height: 92px; border: 2px solid var(--line); border-radius: 8px; }
@@ -460,8 +460,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .gallery-more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 92px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--muted); }
 .gallery-more:hover { border-color: var(--navy); color: var(--navy); }
 
-.story-body { max-width: var(--content); margin: 0 auto; padding: 34px var(--pad) 54px; display: grid; grid-template-columns: 200px 1fr; gap: 34px; align-items: start; }
-.story-toc { position: sticky; top: 92px; display: grid; gap: 2px; padding: 14px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+.story-body { max-width: var(--content); margin: 0 auto; padding: 32px var(--pad) 48px; display: grid; grid-template-columns: 200px 1fr; gap: 34px; align-items: start; }
+.story-toc { position: sticky; top: 92px; display: grid; gap: 6px; padding: 14px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
 .story-toc > span { margin: 2px 0 10px 10px; font-size: 16.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--navy); }
 .story-toc a { padding: 9px 12px; border-left: 2px solid transparent; border-radius: 0 6px 6px 0; font-size: 17px; font-weight: 600; color: var(--muted); }
 .story-toc a:hover { color: var(--navy); }
@@ -486,7 +486,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .feedback-block { display: grid; grid-template-columns: 1.25fr .75fr; gap: 26px; align-items: center; }
 .feedback-quote { padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--soft); font-size: 17.5px; line-height: 1.7; color: var(--ink); }
 .feedback-author strong { display: block; font-size: 17.5px; }
-.feedback-author small { display: block; margin-top: 4px; font-size: 17px; color: var(--muted); }
+.feedback-author small { display: block; margin-top: 7px; font-size: 17px; color: var(--muted); }
 
 /* ==================================================== 17. solutions & why */
 
@@ -497,7 +497,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .solution-card .scene { height: 138px; border-radius: 0; }
 .solution-card > div { padding: 17px 18px 20px; }
 .solution-card h3 { font-size: 18px; font-weight: 800; }
-.solution-card p { margin: 8px 0 12px; min-height: 36px; font-size: 17px; line-height: 1.6; color: var(--muted); }
+.solution-card p { margin: 10px 0 16px; min-height: 36px; font-size: 17px; line-height: 1.6; color: var(--muted); }
 
 .popular-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
 .popular-grid article, .popular-card { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); text-align: center; }
@@ -519,7 +519,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 @keyframes scroll-nudge { 50% { transform: translateY(3px); } }
 
 /* why choose: the reasons stack, scrolling inside its own box */
-.why-choose { padding: 54px 24px 40px; background: linear-gradient(180deg, #fff, #f6f8fc); }
+.why-choose { padding: 48px 24px 36px; background: linear-gradient(180deg, #fff, #f6f8fc); }
 .why-choose .section-heading { margin-bottom: 18px; }
 .reason-stage { width: min(100%, 1260px); margin: 0 auto; display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 24px; align-items: end; }
 .step-rail { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-bottom: 30px; }
@@ -528,13 +528,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .step-dots button { position: relative; display: block; width: 12px; height: 12px; margin: 0 auto; padding: 0; border: 0; border-radius: 50%; background: #b8c2d3; cursor: pointer; transition: transform .25s, background-color .25s; }
 .step-dots button.is-active { background: var(--green); transform: scale(1.5); box-shadow: 0 0 0 4px rgba(0, 166, 81, .15); }
 
-.reason-scroller { height: 560px; overflow-y: auto; overscroll-behavior-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; border-radius: var(--radius); }
+.reason-scroller { height: 420px; overflow-y: auto; overscroll-behavior-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; border-radius: var(--radius); }
 .reason-scroller::-webkit-scrollbar { display: none; }
 .reason-scroll-space { position: relative; height: calc(100% + (var(--steps) - 1) * var(--step)); }
 .reason-snap { position: absolute; left: 0; width: 1px; height: 1px; scroll-snap-align: start; }
-.reason-stack { position: sticky; top: 0; height: 560px; }
+.reason-stack { position: sticky; top: 0; height: 420px; }
 .reason-card {
-  position: absolute; left: 12px; bottom: 20px; width: calc(100% - 200px); height: 345px;
+  position: absolute; left: 12px; bottom: 16px; width: calc(100% - 200px); height: 330px;
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: center; padding: 20px 22px 20px 42px;
   border: 1px solid var(--line-soft); border-radius: var(--radius); background: #fff; box-shadow: 0 14px 30px rgba(13, 42, 107, .12);
   transform-origin: right top; transition: transform .45s cubic-bezier(.2, .7, .2, 1), opacity .35s;
@@ -542,7 +542,9 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .reason-card[data-state="current"] { z-index: 10; }
 .reason-card[data-state="next"] {
   z-index: calc(10 - var(--depth));
-  transform: translate(calc(var(--depth) * 42px), calc(var(--depth) * -36px)) scale(calc(1 - var(--depth) * .039));
+  /* Two cards deep is a stack; four is a fan, and the room above the card
+     it needs is empty on the last reason, where nothing is still to come. */
+  transform: translate(calc(min(var(--depth), 2) * 38px), calc(min(var(--depth), 2) * -28px)) scale(calc(1 - min(var(--depth), 2) * .039));
 }
 .reason-card[data-state="past"] { z-index: 11; opacity: 0; transform: translate(-40px, 60px); pointer-events: none; }
 .reason-card-tab { position: absolute; top: 0; left: 30px; right: 30px; height: 36px; display: flex; align-items: center; gap: 14px; color: var(--navy); opacity: 0; transition: opacity .3s; }
@@ -558,7 +560,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .reason-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
 
 /* our process: the tracker and a row of cards that scrolls sideways */
-.process-band { padding: 50px 0 44px; background: #eef3fa; overflow: hidden; }
+.process-band { padding: 46px 0 40px; background: #eef3fa; overflow: hidden; }
 .process-band > .section-heading { margin-bottom: 26px; padding: 0 24px; }
 .journey-steps { position: relative; width: min(100% - 48px, 1420px); margin: 0 auto 10px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .journey-steps::before, .journey-steps::after { content: ""; position: absolute; top: 20px; left: calc(100% / 12); height: 3px; border-radius: 3px; }
@@ -572,7 +574,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .journey-steps .is-done .journey-node { background: var(--green); }
 .journey-steps .is-current .journey-node { background: #fff; box-shadow: inset 0 0 0 3px var(--green), 0 0 0 5px rgba(0, 166, 81, .14); }
 .journey-steps .is-current .journey-node::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--green); }
-.journey-number { font-size: 15px; font-weight: 700; color: var(--navy); }
+.journey-number { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 700; color: var(--navy); }
 .journey-label { font-size: 17.5px; font-weight: 700; color: var(--navy); }
 
 .journey-cards {
@@ -622,7 +624,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
    narrow every one of them broke its words over two lines. They are three
    plain lines now: what it is, then what it means. */
 .journey-card-photo.scene { height: 100%; border-radius: var(--radius-sm); }
-.journey-foot { position: relative; width: min(683px, 100% - 48px); margin: 4px auto 0; display: flex; justify-content: center; }
+.journey-foot { position: relative; width: min(683px, 100% - 48px); margin: 14px auto 0; display: flex; justify-content: center; }
 .journey-arrows { display: flex; gap: 14px; }
 .journey-arrows button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--navy); box-shadow: var(--shadow-sm); cursor: pointer; }
 .journey-arrows button:disabled { opacity: .4; cursor: default; }
@@ -649,11 +651,11 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .loyalty-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {
-  .why-choose { padding: 38px 18px 30px; }
+  .why-choose { padding: 36px 18px 28px; }
   .reason-card { grid-template-columns: minmax(0, 1fr); padding: 20px; }
   .reason-card-copy { grid-template-columns: 52px minmax(0, 1fr); gap: 14px; }
   .reason-card-icon { width: 44px; height: 44px; }
-  .process-band { padding: 38px 0 30px; }
+  .process-band { padding: 36px 0 30px; }
   /* Six labels do not fit across a phone: two rows of three. */
   .journey-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 16px; }
   .journey-steps::before, .journey-steps::after { display: none; }
@@ -709,16 +711,16 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .review-card .review-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 8; line-clamp: 8; overflow: hidden; }
 .review-author { flex: 1; min-width: 0; }
 .review-author strong { display: block; font-size: 17.5px; }
-.review-author small { display: block; margin-top: 2px; font-size: 15.5px; color: var(--muted); }
+.review-author small { display: block; margin-top: 5px; font-size: 15.5px; color: var(--muted); }
 .review-source { flex: none; display: grid; place-items: center; opacity: .75; }
 .review-source:hover { opacity: 1; }
 .review-source.is-static { pointer-events: none; }
 
-.empty-state { padding: 48px 24px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); }
+.empty-state { padding: 44px 24px; text-align: center; border: 1px dashed var(--line); border-radius: var(--radius); }
 .empty-state h3 { font-size: 20px; }
 .empty-state p { margin-top: 8px; font-size: 17.5px; color: var(--muted); }
 
-.not-found { max-width: 620px; margin: 0 auto; padding: 90px 24px; text-align: center; }
+.not-found { max-width: 620px; margin: 0 auto; padding: 76px 24px; text-align: center; }
 .not-found > span { font-size: 74px; font-weight: 900; color: var(--line); }
 .not-found h1 { margin: 10px 0 12px; font-size: 32.5px; }
 .not-found p { margin-bottom: 22px; color: var(--muted); }
@@ -729,7 +731,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
    slab, the wordmark and what MySOS is on the left, three columns of links,
    and every way to reach them gathered in the last column. */
 .site-footer { background: var(--paper); color: var(--muted); border-top: 1px solid var(--line); }
-.footer-grid { max-width: var(--content); margin: 0 auto; padding: 54px var(--pad) 34px; display: grid; grid-template-columns: 1.4fr repeat(3, .78fr) 1.35fr; gap: 28px; }
+.footer-grid { max-width: var(--content); margin: 0 auto; padding: 48px var(--pad) 32px; display: grid; grid-template-columns: 1.4fr repeat(3, .78fr) 1.35fr; gap: 28px; }
 .footer-grid h3 { margin-bottom: 12px; font-size: 20px; font-weight: 800; letter-spacing: -.02em; color: var(--navy); }
 .footer-grid a { display: block; padding: 8px 0; font-size: 17px; color: var(--muted); }
 .footer-grid a:hover { color: var(--navy); }
@@ -814,7 +816,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 }
 
 @media (max-width: 620px) {
-  .section { padding: 38px 18px; }
+  .section { padding: 36px 18px; }
   .hero-inner { padding: 38px 18px; }
   .hero h1 { font-size: 35px; }
   .product-grid, .product-grid-3, .story-grid, .story-grid-3, .solution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -859,7 +861,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .stories-review-avatar { width: 44px; height: 44px; flex: none; border-radius: 50%; object-fit: cover; }
 .stories-review-avatar.is-initials { display: grid; place-items: center; background: var(--navy); color: #fff; font-size: 16.5px; font-weight: 800; }
 .stories-review footer strong { display: block; font-size: 17px; font-weight: 700; color: var(--navy); }
-.stories-review footer small { display: block; margin-top: 3px; font-size: 16.5px; color: var(--muted); }
+.stories-review footer small { display: block; margin-top: 6px; font-size: 16.5px; color: var(--muted); }
 .stories-reviews-actions { grid-column: 3; display: grid; justify-items: center; gap: 22px; }
 .stories-reviews-arrows { display: flex; gap: 20px; }
 .stories-reviews-arrows button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--navy); box-shadow: var(--shadow-sm); cursor: pointer; }
@@ -1034,6 +1036,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .use-case-card.is-active .use-case-name .icon { color: var(--green); }
 .use-case-foot { max-width: none; margin: 10px 0 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
 .use-case-dots { grid-column: 2; display: flex; gap: 12px; }
+/* A dot is 12 pixels to the eye and 36 to a finger: the circle stays the
+   size it is drawn and the area that answers a tap reaches past it. */
+.step-dots button::before, .use-case-dots button::before { content: ""; position: absolute; inset: -12px; border-radius: 50%; }
+.use-case-dots button { position: relative; }
 .use-case-dots button { width: 12px; height: 12px; padding: 0; border: 1.5px solid var(--navy-soft); border-radius: 50%; background: #fff; cursor: pointer; }
 .use-case-dots button.is-active { background: var(--navy-soft); }
 .use-case-all { grid-column: 3; justify-self: end; display: inline-flex; align-items: center; gap: 6px; padding: 6px 0; border: 0; background: none; font-size: 17.5px; font-weight: 700; color: var(--navy); cursor: pointer; }
@@ -1053,16 +1059,18 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 
 .request-rows { display: grid; }
 .request-row { border-bottom: 1px solid var(--line-soft); }
-.request-row-main { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto auto; align-items: center; gap: 16px; padding: 12px 4px; }
+.request-row-main { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto auto; align-items: center; gap: 16px; padding: 18px 4px; }
 .request-thumb { width: 60px; height: 52px; display: grid; place-items: center; overflow: hidden; color: var(--navy); }
 .request-thumb .product-visual, .request-thumb svg.product { width: 100%; height: 100%; }
-.request-name { min-width: 0; }
+/* The name, the note under it and the question still open each get a line
+   and room, rather than running together down the left of the row. */
+.request-name { min-width: 0; display: grid; justify-items: start; gap: 8px; }
 .request-name strong { display: block; font-size: 18px; font-weight: 700; color: var(--navy); }
-.request-note { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 0 7px; max-width: 100%; margin-top: 5px; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.request-note { display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 0 7px; max-width: 100%; font-size: 16px; line-height: 1.4; color: var(--muted); }
 .request-note-label { font-weight: 800; color: var(--green-dark); white-space: nowrap; }
 .request-note-detail { min-width: 0; }
-.request-note.is-highlight { padding: 4px 9px; border-radius: 7px; background: #e5f6ed; color: #146c43; }
-.request-files { display: block; margin-top: 3px; font-size: 15px; color: var(--navy-soft); }
+.request-note.is-highlight { padding: 6px 11px; border-radius: 8px; background: #e5f6ed; color: #146c43; }
+.request-files { display: block; font-size: 15px; color: var(--navy-soft); }
 .qty-stepper { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
 .qty-stepper button { width: 38px; height: 38px; display: grid; place-items: center; border: 0; background: none; color: var(--navy); cursor: pointer; }
 .qty-stepper button:disabled { opacity: .35; cursor: default; }
@@ -1080,11 +1088,25 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-field { display: grid; gap: 6px; align-content: start; }
 .request-field-label { font-size: 16.5px; font-weight: 600; color: var(--ink); }
 .request-choices { display: flex; flex-wrap: wrap; gap: 8px; }
-.request-choices button { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; line-height: 1.25; color: var(--ink); cursor: pointer; }
-.request-choices button small { font-size: 14px; line-height: 1.2; opacity: .85; }
+.request-choices button { flex: 1 1 auto; min-width: 0; min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; line-height: 1.25; color: var(--ink); cursor: pointer; }
+/* What MySOS would pick, said with a mark on the one button rather than
+   a second line under it that made the whole row twice as tall. */
+.request-choice-pick { display: inline-flex; flex: none; color: var(--green-dark); }
+.request-choices button.is-chosen .request-choice-pick { color: #cdebdb; }
 .request-choices button.is-chosen { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
 .request-field select, .request-field input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; }
-.request-upload { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 8px 12px; border: 1.5px dashed #9fb6dc; border-radius: 8px; background: #fff; font-size: 16.5px; color: var(--navy); cursor: pointer; }
+/* The one box in this panel asking for something the quote cannot be firm
+   without. Everything else here is green or white, so it is blue, and it
+   turns green once there is a file in it. */
+.request-upload {
+  display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 10px 14px;
+  border: 2px dashed var(--navy-soft); border-radius: 10px; background: #dbe6fb;
+  box-shadow: 0 2px 10px rgba(13, 42, 107, .10);
+  font-size: 16.5px; font-weight: 700; color: var(--navy); cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.request-upload:hover { border-color: var(--navy); background: #cedcf8; }
+.request-upload.has-files { border-style: solid; border-color: var(--green); background: #effaf4; color: var(--green-dark); }
 .request-upload.is-dragging, .request-drop.is-dragging { border-color: var(--green); background: #effaf4; }
 .request-skip { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 16px; color: var(--muted); }
 
@@ -1103,12 +1125,12 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-search-results button:hover { border-color: var(--green); }
 .request-search-results .icon:last-child { margin-left: auto; color: var(--green); }
 .request-search-name strong { display: block; font-size: 15.5px; font-weight: 700; color: var(--navy); }
-.request-search-name small { display: block; margin-top: 2px; font-size: 13.5px; color: var(--muted); text-transform: capitalize; }
+.request-search-name small { display: block; margin-top: 6px; font-size: 13.5px; color: var(--muted); text-transform: capitalize; }
 .request-search-empty { margin-top: 10px; font-size: 16.5px; color: var(--muted); }
 
 /* How a thing should be printed is the one choice MySOS cannot guess, so a
    row that has not been told asks, and the summary says so before sending. */
-.request-printing-ask { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border: 1px solid #f0c98a; border-radius: 20px; background: #fff7e6; font-size: 16px; font-weight: 600; color: #7a4b00; cursor: pointer; }
+.request-printing-ask { display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px; border: 1px solid #f0c98a; border-radius: 20px; background: #fff7e6; font-size: 16px; font-weight: 600; color: #7a4b00; cursor: pointer; }
 .request-printing-ask:hover { border-color: #d9a441; }
 .request-field.is-asking { padding: 10px; margin: -10px; border-radius: 10px; background: #fff7e6; }
 .request-field-hint { display: block; margin-top: 6px; font-size: 15.5px; line-height: 1.45; color: #7a4b00; }
@@ -1138,7 +1160,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-custom { margin-top: 16px; }
 .request-custom label { display: grid; gap: 2px; }
 .request-custom strong, .request-files-block > strong { font-size: 18.5px; font-weight: 700; color: var(--navy); }
-.request-custom small, .request-files-block > small { display: block; font-size: 16px; color: var(--muted); }
+.request-custom small, .request-files-block > small { display: block; margin-top: 7px; font-size: 16px; color: var(--muted); }
 .request-custom-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin-top: 8px; }
 .request-custom-row input { padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; font-size: 16.5px; }
 .request-custom-row .btn { gap: 6px; border-color: var(--green); color: var(--green-dark); }
@@ -1146,7 +1168,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 
 .request-files-block { margin-top: 18px; }
 .request-files-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin-top: 8px; }
-.request-drop { display: grid; justify-items: center; align-content: center; gap: 4px; min-height: 110px; padding: 12px; border: 1.5px dashed #9fb6dc; border-radius: 10px; background: #fafcff; color: var(--navy); text-align: center; cursor: pointer; }
+.request-drop { display: grid; justify-items: center; align-content: center; gap: 7px; min-height: 118px; padding: 16px; border: 1.5px dashed #9fb6dc; border-radius: 10px; background: #fafcff; color: var(--navy); text-align: center; cursor: pointer; }
 .request-drop small { font-size: 15px; color: var(--muted); }
 .request-file-list { display: grid; gap: 8px; align-content: start; }
 .request-file-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
@@ -1155,13 +1177,36 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-file-list button { width: 30px; height: 30px; display: grid; place-items: center; border: 0; background: none; color: var(--muted); cursor: pointer; }
 
 /* the summary */
-.request-summary { position: sticky; top: 90px; padding: 20px 20px 22px; }
-.request-count { margin-top: 2px; font-size: 16.5px; color: var(--muted); }
-.request-summary-list { margin: 14px 0 18px; border: 1px solid var(--line-soft); border-radius: 10px; }
+/* The list grows with the request, and the button that sends it was being
+   pushed off the bottom of the screen with it. The panel is bounded by the
+   screen now: the part that grows scrolls inside it, and scrolling to the
+   end of that list does not then carry the whole page with it. */
+.request-summary { position: sticky; top: 90px; padding: 20px 20px 22px; display: flex; flex-direction: column; max-height: calc(100vh - 110px); }
+.request-summary-scroll {
+  flex: 1 1 auto; min-height: 0; margin-right: -8px; padding-right: 8px;
+  overflow-y: auto; overscroll-behavior: contain;
+  scrollbar-width: thin; scrollbar-color: #c7d2e5 transparent;
+  /* A shadow at the top once it has been scrolled, and one at the bottom
+     while there is more to come. The gradients ride the content, so they
+     appear and go without anything measuring the scroll. */
+  background:
+    linear-gradient(#fff 30%, rgba(255, 255, 255, 0)) top / 100% 14px no-repeat,
+    linear-gradient(rgba(255, 255, 255, 0), #fff 70%) bottom / 100% 14px no-repeat,
+    radial-gradient(farthest-side at 50% 0, rgba(13, 42, 107, .16), rgba(13, 42, 107, 0)) top / 100% 9px no-repeat,
+    radial-gradient(farthest-side at 50% 100%, rgba(13, 42, 107, .16), rgba(13, 42, 107, 0)) bottom / 100% 9px no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+/* Visible, unlike the rails elsewhere on the site: here it is the thing
+   that says there is more of the request below. */
+.request-summary-scroll::-webkit-scrollbar { width: 8px; }
+.request-summary-scroll::-webkit-scrollbar-thumb { border-radius: 999px; background: #c7d2e5; }
+.request-count { margin-top: 7px; font-size: 16.5px; color: var(--muted); }
+.request-summary-list { margin: 16px 0 20px; border: 1px solid var(--line-soft); border-radius: 10px; }
 .request-summary-list li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 12px; }
 .request-summary-list li + li { border-top: 1px solid var(--line-soft); }
 .request-summary-list .request-thumb { width: 42px; height: 38px; }
 .request-summary-list strong { display: block; font-size: 17px; font-weight: 600; color: var(--navy); }
+.request-summary-list small { margin-top: 6px; }
 .request-summary-list small { display: block; font-size: 15px; color: var(--muted); }
 .request-summary-list b { font-size: 17.5px; color: var(--navy); }
 .request-summary-label { display: block; margin: 14px 0 8px; font-size: 18.5px; font-weight: 700; color: var(--navy); }
@@ -1177,7 +1222,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .solution-hero-inner { grid-template-columns: minmax(0, 1fr); padding: 22px 24px 0; }
   .solution-collage { min-height: 340px; margin: 0 -24px; }
   .request-layout { grid-template-columns: minmax(0, 1fr); }
-  .request-summary { position: static; }
+  /* Stacked under the request rather than beside it: there is nothing to
+     stay in view of, so it is as tall as it needs to be. */
+  .request-summary { position: static; max-height: none; display: block; }
+  .request-summary-scroll { overflow: visible; margin-right: 0; padding-right: 0; }
   .request-details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 720px) {
@@ -1210,7 +1258,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
    itself. Washed tiles, roomy cards and one accent per band. */
 
 .home-page, .page-paper { background: var(--paper); }
-.home-page .section { padding-top: 64px; padding-bottom: 64px; }
+.home-page .section { padding-top: 52px; padding-bottom: 52px; }
 
 /* Edge to edge, above everything: it sits outside the page column, which used
    to cut it off halfway across a wide screen. */
@@ -1326,6 +1374,8 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-tile.tone-blue { background: #dde6fb; color: var(--ink); }
 .home-tile.tone-mint { background: #d9efe2; color: #0c3b28; }
 .home-tile.tone-lilac { background: #e6e6fa; color: var(--ink); }
+.home-tile.tone-sand { background: #f1e8d7; color: var(--ink); }
+.home-tile.tone-rose { background: #f7e3e3; color: var(--ink); }
 
 /* why mysos */
 .home-why { background: var(--navy); color: #fff; }
@@ -1356,7 +1406,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .home-budget-bands button.is-chosen { background: var(--navy); border-color: var(--navy); color: #fff; }
 .home-budget-result { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border-left: 4px solid var(--green); border-radius: 12px; background: #e9f6ef; }
 .home-budget-result strong { display: block; font-size: 18.5px; font-weight: 800; color: var(--ink); }
-.home-budget-result small { display: block; margin-top: 4px; font-size: 17px; color: var(--muted); }
+.home-budget-result small { display: block; margin-top: 6px; font-size: 17px; color: var(--muted); }
 .home-budget-result .btn { border-radius: 999px; }
 .home-budget-note { margin-top: 14px; font-size: 16px; line-height: 1.5; color: var(--muted-light); }
 
@@ -1398,7 +1448,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 }
 
 @media (max-width: 620px) {
-  .home-page .section { padding: 44px 18px; }
+  .home-page .section { padding: 42px 18px; }
   .home-hero-inner { padding: 32px var(--pad) 40px; }
   .site-announce { font-size: 15.5px; }
 
@@ -1430,6 +1480,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-breadcrumb span[aria-current] { color: var(--ink); font-weight: 700; }
 .pdp-top { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 64px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 
+/* The picture and the views beneath it have to fit on the screen together.
+   On a short monitor the column is bounded by the height rather than the
+   width, so the square shrinks instead of pushing the row off the bottom. */
+.pdp-gallery { max-width: min(100%, 560px); }
+@media (min-width: 981px) and (max-height: 940px) { .pdp-gallery { max-width: min(100%, 48vh); } }
 .pdp-shot { position: relative; display: grid; place-items: center; aspect-ratio: 1 / 1; border-radius: 26px; background: var(--soft); overflow: hidden; }
 .pdp-shot img { width: 100%; height: 100%; object-fit: cover; }
 .pdp-shot .product-visual { width: 70%; }
@@ -1443,8 +1498,18 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   scrollbar-width: none; scroll-padding: 0 4px;
 }
 .pdp-thumbs::-webkit-scrollbar { display: none; }
-.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
-.pdp-thumbs a { display: block; aspect-ratio: 1 / 1; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+/* The row holds however many views there are, sharing the width between
+   them, so six views are six tiles and not four with an arrow to the rest.
+   Below the minimum they stop shrinking and the row scrolls again. */
+.pdp-thumbs li { flex: 1 1 0; min-width: 48px; scroll-snap-align: start; }
+/* The picture fills its tile. Nine pixels of padding and a picture fitted
+   inside what was left of it left a stamp floating in a frame, with more
+   white around it than photograph in it. */
+.pdp-thumbs a, .pdp-thumbs button { display: block; width: 100%; aspect-ratio: 1 / 1; padding: 3px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; overflow: hidden; }
+.pdp-thumbs button.is-chosen { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+/* A view MySOS has not photographed yet: the place is held, plainly empty
+   rather than looking like a picture that failed to load. */
+.pdp-thumbs li.is-empty span { display: grid; place-items: center; aspect-ratio: 1 / 1; border: 1px dashed var(--line); border-radius: 15px; background: var(--paper); color: var(--line); }
 /* The edge fades where there is more to come, so the rail says so without a
    scrollbar. */
 .pdp-thumb-rail.has-more::after {
@@ -1463,12 +1528,12 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-thumb-arrow.is-next { right: -8px; }
 .pdp-thumb-arrow:disabled { opacity: 0; pointer-events: none; }
 .pdp-thumb-arrow:hover:not(:disabled) { border-color: var(--navy); }
-.pdp-thumbs a:hover { border-color: var(--green); }
-.pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
+.pdp-thumbs a:hover, .pdp-thumbs button:hover { border-color: var(--green); }
+.pdp-thumbs img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
 .pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
 .pdp-mockup .icon { flex: none; margin-top: 2px; color: var(--green-dark); }
 .pdp-mockup strong { display: block; font-size: 17.5px; font-weight: 700; }
-.pdp-mockup small { display: block; margin-top: 4px; font-size: 16.5px; line-height: 1.5; color: #2f5b48; }
+.pdp-mockup small { display: block; margin-top: 6px; font-size: 16.5px; line-height: 1.5; color: #2f5b48; }
 .pdp-category-link { margin-top: 18px; }
 
 .pdp-copy .eyebrow { color: var(--green-dark); font-size: 15px; letter-spacing: .15em; }
@@ -1477,39 +1542,45 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-promises { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
 .pdp-promises li { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 16.5px; font-weight: 600; color: var(--ink); }
 .pdp-promises .icon { color: var(--green); }
+/* The client's marks are drawn in their own two colours and carry more
+   detail than a tick, so they are given more room than one. */
+.brand-mark { flex: none; display: block; }
+.pdp-promises .brand-mark { margin: -7px -2px -7px -4px; }
 
 .pdp-build { margin-top: 26px; border: 1px solid var(--line); border-radius: 26px; background: #fff; box-shadow: var(--shadow); overflow: hidden; }
-.pdp-build-head { padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.pdp-build-head { padding: 22px 24px; border-bottom: 1px solid var(--line); }
 .pdp-build-head h2 { font-size: 21px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
-.pdp-step { padding: 20px 24px; border-bottom: 1px solid var(--line); }
-.pdp-step-head { display: flex; align-items: center; gap: 10px; font-size: 17.5px; font-weight: 700; color: var(--ink); }
+/* The number sits in a margin of its own and everything in the step lines
+   up with the question, rather than the number pushing one line across. */
+.pdp-step { --step-gutter: 40px; padding: 26px 24px; border-bottom: 1px solid var(--line); }
+.pdp-step > *:not(.pdp-step-head) { margin-left: var(--step-gutter); }
+.pdp-step-head { display: flex; align-items: center; gap: 12px; font-size: 17.5px; font-weight: 700; color: var(--ink); }
 .pdp-step-head small { margin-left: auto; font-size: 16px; font-weight: 600; color: var(--muted); }
 .pdp-step-number { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 13px; font-weight: 700; }
 
-.pdp-quantity { margin-top: 14px; display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 10px; }
+.pdp-quantity { margin-top: 16px; display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 10px; }
 .pdp-quantity button { display: grid; place-items: center; height: 52px; border: 1px solid var(--line); border-radius: 12px; background: var(--soft); color: var(--ink); cursor: pointer; }
 .pdp-quantity button:hover { border-color: var(--navy); }
 .pdp-quantity input { height: 52px; border: 1px solid var(--line); border-radius: 12px; text-align: center; font-size: 19px; font-weight: 700; }
-.pdp-presets { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.pdp-presets { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
 .pdp-presets button { min-width: 56px; min-height: 36px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer; }
 .pdp-presets button.is-chosen, .pdp-colours button.is-chosen { border-color: var(--green); background: #e9f6ef; color: var(--green-dark); }
 
-.pdp-colours { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 10px; }
+.pdp-colours { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
 .pdp-colours button { min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer; }
 .pdp-colours button:hover { border-color: var(--navy); }
 
-.pdp-methods { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+/* Three to a row where they fit, as the drawing has them: a choice between
+   three is made by comparing, which is harder two at a time. */
+.pdp-methods { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 /* A button centres what is inside it; in a row of cards of different
    heights that leaves every mark at a different height. */
-.pdp-methods button { padding: 14px 16px; display: grid; align-content: start; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
+.pdp-methods button { position: relative; padding: 14px 16px; display: grid; align-content: start; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
 .pdp-methods button:hover { border-color: var(--navy); }
 .pdp-methods button.is-chosen { border-color: var(--green); background: #e9f6ef; }
 .pdp-methods strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
-.pdp-methods small { display: block; margin-top: 4px; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.pdp-methods small { display: block; margin-top: 6px; font-size: 16px; line-height: 1.4; color: var(--muted); }
 
-.pdp-artwork { margin: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; border: 1.5px dashed #9fb6dc; border-radius: 14px; background: #f7f9fe; }
-.pdp-artwork strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
-.pdp-artwork small { display: block; margin-top: 3px; font-size: 16px; color: var(--muted); }
 
 .pdp-close { padding: 20px 24px 26px; border-top: 1px solid var(--line); background: var(--paper); }
 .pdp-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
@@ -1527,7 +1598,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-to-quote-actions .btn { flex: 1 1 auto; min-width: 150px; border-radius: 999px; }
 
 /* The line that says the request is kept, and the way to start a new one. */
-.request-kept { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 0 4px; padding: 12px 14px; border-radius: 12px; background: #e9f6ef; font-size: 16px; line-height: 1.5; color: #14543c; }
+.request-kept { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 0 12px; padding: 12px 14px; border-radius: 12px; background: #e9f6ef; font-size: 16px; line-height: 1.5; color: #14543c; }
 .request-kept .icon { flex: none; color: var(--green-dark); }
 .request-kept button { margin-left: auto; min-height: 34px; padding: 6px 12px; border: 1px solid #b9dcc9; border-radius: 999px; background: #fff; font-size: 15.5px; font-weight: 700; color: var(--green-dark); cursor: pointer; }
 .request-kept button:hover { border-color: var(--green-dark); }
@@ -1539,7 +1610,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-facts { margin-top: 26px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .pdp-facts li { padding: 16px 18px; border-radius: 14px; background: var(--soft); }
 .pdp-facts strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
-.pdp-facts small { display: block; margin-top: 4px; font-size: 16.5px; line-height: 1.45; color: var(--muted); }
+.pdp-facts small { display: block; margin-top: 6px; font-size: 16.5px; line-height: 1.45; color: var(--muted); }
 
 .pdp-accordion > div { border-top: 1px solid var(--line); }
 .pdp-accordion > div:last-child { border-bottom: 1px solid var(--line); }
@@ -1557,7 +1628,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-shot { border-radius: 20px; }
   /* A shade under three to a view, so the one peeking past the edge says the
      rail scrolls. */
-  .pdp-thumbs li { flex-basis: 37%; }
+  .pdp-thumbs li { flex: 0 0 37%; }
   .pdp-thumb-arrow.is-prev { left: -4px; }
   .pdp-thumb-arrow.is-next { right: -4px; }
   .pdp-methods { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -1567,7 +1638,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-methods small { font-size: 15px; }
   .pdp-facts { grid-template-columns: minmax(0, 1fr); }
   .pdp-build-head, .pdp-step, .pdp-close { padding-inline: 18px; }
-  .pdp-artwork { margin-inline: 18px; }
 }
 
 /* ============================================== 22. one look across the site
@@ -1631,7 +1701,7 @@ main:not(.home-page) { background: var(--paper); }
 .page-cta, .home-closing { background: #046b45; }
 .page-cta::before, .home-closing::before { display: none; }
 .page-cta-inner, .home-closing-inner {
-  max-width: var(--content); margin: 0 auto; padding: 84px var(--pad) 88px;
+  max-width: var(--content); margin: 0 auto; padding: 68px var(--pad) 72px;
   display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); gap: 40px; align-items: end;
 }
 .page-cta h2, .home-closing h2 { max-width: 12ch; font-size: clamp(44px, 5vw, 74px); font-weight: 800; line-height: .96; letter-spacing: -.05em; color: #fff; }
@@ -1645,7 +1715,7 @@ main:not(.home-page) { background: var(--paper); }
 .promo-band .btn { border-radius: 999px; height: 50px; padding: 0 26px; }
 
 @media (max-width: 860px) {
-  .page-cta-inner, .home-closing-inner { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 54px 18px 58px; align-items: start; }
+  .page-cta-inner, .home-closing-inner { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 50px 18px 52px; align-items: start; }
   .page-cta h2, .home-closing h2 { max-width: none; }
   .page-cta p, .home-closing p { margin-bottom: 18px; max-width: none; }
 }
@@ -1664,22 +1734,22 @@ main:not(.home-page) { background: var(--paper); }
 /* Navy, with white words: on white it read as part of the banner below it and
    a reader could not see it was the menu of categories. */
 .category-strip { background: var(--navy); border-bottom: 0; }
-.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; gap: 24px; }
-.category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; }
+/* Eight categories no longer fit on one line of a laptop and the last of
+   them was cut off against the edge, with nothing to say the row went on.
+   On a screen it wraps to a second line; on a phone it still scrolls. */
+.category-strip ul { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; scrollbar-width: none; }
 .category-strip ul::-webkit-scrollbar { display: none; }
 .category-strip li { flex: none; }
-.category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: #fff; }
+.category-strip ul a { display: inline-block; padding: 9px 15px; margin: 7px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: #fff; }
 .category-strip ul a:hover { background: var(--green); color: #fff; }
 .category-strip ul a.is-active { background: var(--green); color: #fff; }
-.category-strip-inner > .text-link { flex: none; white-space: nowrap; color: #fff; }
-.category-strip-inner > .text-link:hover { color: var(--green-light); }
 
 @media (max-width: 860px) {
   /* The row scrolls sideways on a phone, so the trailing link steps aside: it
      would eat the width the category names need, and the menu carries it. */
-  .category-strip-inner { padding-inline: 18px; gap: 0; }
-  .category-strip-inner > .text-link { display: none; }
-  .category-strip ul { gap: 6px; padding-right: 18px; }
+  .category-strip-inner { padding-inline: 18px; }
+  .category-strip ul { flex-wrap: nowrap; overflow-x: auto; gap: 6px; padding-right: 18px; }
   .category-strip ul a { padding: 11px 14px; font-size: 17.5px; }
 }
 
@@ -1701,7 +1771,7 @@ html.has-reveal [data-reveal] { opacity: 0; transform: translateY(18px); }
 html.has-reveal [data-reveal].is-in { opacity: 1; transform: none; }
 
 /* Cards and tiles lift a touch under the cursor. */
-.home-tile, .home-work-card, .product-card, .story-card, .solution-card, .hero-results li, .pdp-thumbs a {
+.home-tile, .home-work-card, .product-card, .story-card, .solution-card, .hero-results li, .pdp-thumbs a, .pdp-thumbs button {
   transition: transform .25s cubic-bezier(.4, 0, .2, 1), box-shadow .25s cubic-bezier(.4, 0, .2, 1), border-color .2s ease, background-color .2s ease;
 }
 .hero-results li:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
@@ -1720,10 +1790,13 @@ html.has-reveal [data-reveal].is-in { opacity: 1; transform: none; }
    motion (see the block at the end of this section). */
 
 /* how far down the page you are */
+/* Drawn full width and scaled down to the part read, rather than given a
+   width to grow: a width is laid out again every frame, a scale is not. */
 .site-announce::after {
   content: ""; position: absolute; left: 0; bottom: 0; height: 2px;
-  width: calc(var(--scrolled, 0) * 100%); background: var(--green-light);
-  transition: width .12s linear;
+  width: 100%; transform: scaleX(var(--scrolled, 0)); transform-origin: left;
+  background: var(--green-light);
+  transition: transform .12s linear;
 }
 .site-announce { position: relative; }
 
@@ -1788,11 +1861,11 @@ html.is-scrolled .wordmark { height: 36px; }
    rules carry that to every other page, which until now kept the older, tighter
    look and read as a different site. */
 
-.section { padding-top: 76px; padding-bottom: 76px; }
-.section-tight { padding-top: 48px; padding-bottom: 48px; }
+.section { padding-top: 58px; padding-bottom: 58px; }
+.section-tight { padding-top: 38px; padding-bottom: 38px; }
 
 /* Section heads: title left, the line about it right, as on the homepage. */
-.section-heading { margin-bottom: 36px; }
+.section-heading { margin-bottom: 30px; }
 .section-heading h2,
 .section-heading.eyebrow-title .eyebrow {
   font-size: clamp(34px, 3.8vw, 56px); font-weight: 800; line-height: 1.02;
@@ -1875,7 +1948,7 @@ html.is-scrolled .wordmark { height: 36px; }
 .industry-band .section-heading h2 { color: #fff; }
 
 @media (max-width: 860px) {
-  .section { padding-top: 54px; padding-bottom: 54px; }
+  .section { padding-top: 44px; padding-bottom: 44px; }
   .section-heading.align-left { grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
   .browse-row, .industry-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .browse-row a, .industry-nav a { min-height: 110px; padding: 16px; font-size: 17px; }
@@ -2038,7 +2111,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-specs-more { display: inline-flex; align-items: center; gap: 7px; padding: 8px 0; border: 0; background: none; font-size: 16.5px; font-weight: 700; color: var(--navy); cursor: pointer; }
 
 /* Sizes: two answers, and the second one is not a failure. */
-.pdp-sizing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.pdp-sizing { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 /* A kind made in several sizes lists them all, so the row holds more than
    the two it was built for. */
 .pdp-sizing.is-sizes { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); }
@@ -2050,18 +2123,87 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 .pdp-sizing button:hover { border-color: var(--green-dark); }
 .pdp-sizing button.is-chosen { border-color: var(--green); background: #effaf4; color: var(--green-dark); }
-.pdp-sizes-later { margin-top: 12px; display: flex; gap: 12px; padding: 14px 16px; border-radius: 14px; background: #effaf4; }
+.pdp-sizes-later { margin-top: 16px; display: flex; gap: 12px; padding: 14px 16px; border-radius: 14px; background: #effaf4; }
 .pdp-sizes-later .icon { flex: none; color: var(--green-dark); }
 .pdp-sizes-later strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
-.pdp-sizes-later small { display: block; margin-top: 2px; font-size: 15.5px; line-height: 1.5; color: #3d6b56; }
-.pdp-size-run { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(74px, 1fr)); gap: 10px; }
-.pdp-size-run li { display: grid; gap: 5px; }
+.pdp-sizes-later small { display: block; margin-top: 6px; font-size: 15.5px; line-height: 1.5; color: #3d6b56; }
+.pdp-size-run { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(74px, 1fr)); gap: 10px; }
+.pdp-size-run li { display: grid; gap: 7px; }
 .pdp-size-run label { font-size: 14.5px; font-weight: 800; letter-spacing: .06em; color: var(--muted); }
 .pdp-size-run input { width: 100%; height: 46px; padding: 0 10px; border: 1.5px solid var(--line); border-radius: 11px; background: #fff; font: inherit; font-size: 16.5px; text-align: center; color: var(--ink); }
 .pdp-size-run input:focus-visible { border-color: var(--green); outline: none; }
 .pdp-size-total { margin-top: 10px; font-size: 16px; color: var(--muted); }
 .pdp-size-total strong { font-size: 18px; font-weight: 800; color: var(--ink); }
-.pdp-chart-link { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: none; font-size: 16.5px; font-weight: 700; color: var(--green-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.pdp-chart-link { margin-top: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 0; border: 0; background: none; font-size: 16.5px; font-weight: 700; color: var(--green-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ------------------------------------------------------------- 39. the panel
+   A step as the client drew it: the number in its own margin, a row of named
+   choices, and a size picked from a list that shows its shape and its
+   measurements rather than typed in as three numbers. */
+
+/* The head of the specifications table: the same two columns, said once. */
+.pdp-specs-head dt, .pdp-specs-head dd { font-size: 16px; font-weight: 700; color: var(--navy); }
+.pdp-specs-head { background: var(--paper); }
+
+.pdp-choice-row { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 12px; }
+.pdp-choice-row button {
+  position: relative; min-height: 50px; padding: 12px 14px;
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fff;
+  font-size: 17px; font-weight: 600; color: var(--ink); cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.pdp-choice-row button:hover { border-color: var(--navy); }
+.pdp-choice-row button.is-chosen { border-color: var(--green); background: #effaf4; color: var(--green-dark); }
+/* The usual one says so, on a tab under its own edge. */
+.pdp-choice-tag {
+  position: absolute; left: 50%; bottom: -11px; transform: translateX(-50%);
+  padding: 2px 11px; border-radius: 999px; background: var(--green-dark);
+  font-size: 14px; font-style: normal; font-weight: 700; color: #fff; white-space: nowrap;
+}
+/* A tag hangs under its own button, so a row that carries one needs room
+   under it -- and under the row above, when they wrap. */
+.pdp-choice-row:has(.pdp-choice-tag) { row-gap: 26px; margin-bottom: 14px; }
+
+.pdp-sizepick { margin-top: 18px; }
+.pdp-sizepick-label { display: block; margin-bottom: 8px; font-size: 16px; font-weight: 600; color: var(--muted); }
+.pdp-sizepick-toggle {
+  width: 100%; min-height: 52px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fff;
+  font-size: 17px; font-weight: 600; text-align: left; color: var(--ink); cursor: pointer;
+}
+.pdp-sizepick-toggle:hover, .pdp-sizepick-toggle[aria-expanded="true"] { border-color: var(--green); }
+.pdp-sizepick-list { margin-top: 8px; border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; }
+.pdp-sizepick-list li + li { border-top: 1px solid var(--line-soft); }
+.pdp-sizepick-list button {
+  width: 100%; padding: 12px 16px; display: grid; grid-template-columns: 38px minmax(0, 1fr) 22px; align-items: center; gap: 14px;
+  border: 0; background: #fff; text-align: left; cursor: pointer;
+}
+.pdp-sizepick-list button:hover { background: var(--paper); }
+.pdp-sizepick-list button.is-chosen { background: #effaf4; }
+.pdp-sizepick-mark { display: grid; place-items: center; color: var(--navy); }
+.pdp-sizepick-words strong { display: block; font-size: 16.5px; font-weight: 600; color: var(--ink); }
+.pdp-sizepick-words small { display: block; margin-top: 6px; font-size: 15px; color: var(--muted); }
+.pdp-sizepick-dot { width: 20px; height: 20px; border: 2px solid var(--line); border-radius: 50%; }
+.pdp-sizepick-list button.is-chosen .pdp-sizepick-dot { border-color: var(--green); box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 10px var(--green); }
+
+/* The lines under a step, and the way to the guide, on one row. */
+.pdp-step-foot { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 20px; }
+.pdp-step-notes { flex: 1 1 240px; display: grid; align-content: start; gap: 2px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.pdp-step-foot .pdp-chart-link { flex: none; margin-top: 0; }
+
+/* A card is one of a set, so it carries the mark of one. */
+.pdp-pick-dot { position: absolute; top: 12px; left: 12px; width: 20px; height: 20px; border: 2px solid var(--line); border-radius: 50%; }
+.pdp-methods button.is-chosen .pdp-pick-dot { border-color: var(--green); box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 10px var(--green); }
+.pdp-methods button .pdp-method-shot { margin-top: 2px; }
+
+@media (max-width: 620px) {
+  .pdp-step { --step-gutter: 0px; }
+  .pdp-sizepick-list button { grid-template-columns: 32px minmax(0, 1fr) 20px; gap: 10px; padding: 12px; }
+  /* Stacked, the basis that shares the row sideways would stretch the
+     lines down the page instead. */
+  .pdp-step-foot { flex-direction: column; align-items: flex-start; }
+  .pdp-step-notes { flex: none; }
+}
 
 /* A colour, drawn as itself. */
 .pdp-colours { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -2114,7 +2256,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .size-measure-key li { display: flex; gap: 10px; }
 .size-measure-badge { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--green-dark); font-size: 13.5px; font-weight: 800; color: #fff; }
 .size-measure-key strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
-.size-measure-key small { display: block; margin-top: 2px; font-size: 15px; line-height: 1.45; color: var(--muted); }
+.size-measure-key small { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--muted); }
 .size-measure-tip { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 16.5px; font-weight: 700; text-align: center; color: var(--ink); }
 
 .size-chart-table { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }.size-chart-table table { width: 100%; border-collapse: collapse; }
@@ -2160,18 +2302,24 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    the panel they sit in is section 37's. */
 
 .pdp-step-optional { font-style: normal; font-weight: 500; color: var(--muted); }
-.pdp-step-note { margin-top: 8px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
+.pdp-step-note { margin-top: 10px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
 
 /* A size, either the standard one or typed in. */
-.pdp-dimensions { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
-.pdp-dimensions li { display: grid; gap: 5px; }
+/* A list to choose from, and the line under it that says what to do when
+   what you want is not on the list. */
+.pdp-field { margin-top: 16px; width: 100%; height: 48px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font: inherit; font-size: 16.5px; color: var(--ink); }
+.pdp-field:focus-visible { border-color: var(--green); outline: none; }
+/* The usual choice, said on the card rather than left to the order. */
+.pdp-method-tag { position: absolute; top: 10px; right: 10px; padding: 3px 9px; border-radius: 999px; background: var(--green-dark); font-size: 14px; font-style: normal; font-weight: 700; color: #fff; }
+.pdp-dimensions { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.pdp-dimensions li { display: grid; gap: 7px; }
 .pdp-dimensions label { font-size: 15px; font-weight: 600; color: var(--muted); }
 .pdp-dimensions input { height: 46px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 11px; background: #fff; font: inherit; font-size: 16.5px; color: var(--ink); }
 .pdp-dimensions input:read-only { background: var(--paper); color: var(--muted); }
 .pdp-dimensions input:focus-visible { border-color: var(--green); outline: none; }
 
 /* Add-ons: several at once, and one of them can open a panel of its own. */
-.pdp-addons { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
+.pdp-addons { margin-top: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
 .pdp-addons label {
   position: relative; display: block; padding: 12px 12px 14px; border: 1px solid var(--line); border-radius: 14px;
   background: #fff; cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
@@ -2180,8 +2328,8 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-addons label.is-chosen { border-color: var(--green); background: #effaf4; }
 .pdp-addons input { position: absolute; top: 12px; right: 12px; width: 18px; height: 18px; accent-color: var(--green-dark); }
 .pdp-addons strong { display: block; margin-top: 4px; font-size: 16px; font-weight: 700; color: var(--ink); }
-.pdp-addons small { display: block; margin-top: 3px; font-size: 14.5px; line-height: 1.4; color: var(--muted); }
-.pdp-addon-panel { margin-top: 12px; padding: 16px; border-radius: 14px; background: #effaf4; }
+.pdp-addons small { display: block; margin-top: 6px; font-size: 14.5px; line-height: 1.4; color: var(--muted); }
+.pdp-addon-panel { margin-top: 16px; padding: 16px; border-radius: 14px; background: #effaf4; }
 .pdp-addon-panel ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
 .pdp-addon-panel li { display: grid; gap: 5px; align-content: start; }
 .pdp-addon-panel label { font-size: 15px; font-weight: 700; color: var(--ink); }
@@ -2200,16 +2348,16 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* Somewhere to put a logo, and somewhere to say the rest. */
 .pdp-dropzone {
-  margin-top: 12px; display: grid; justify-items: center; gap: 4px; padding: 26px 18px;
+  margin-top: 16px; display: grid; justify-items: center; gap: 4px; padding: 26px 18px;
   border: 1.5px dashed var(--navy-soft); border-radius: 16px; background: var(--paper); text-align: center;
   transition: border-color .2s ease, background-color .2s ease;
 }
 .pdp-dropzone:hover { border-color: var(--green); background: #f7fbf9; }
 .pdp-dropzone .icon { color: var(--navy); }
 .pdp-dropzone strong { font-size: 17px; font-weight: 700; color: var(--navy); }
-.pdp-dropzone small { font-size: 15px; color: var(--muted); }
+.pdp-dropzone small { margin-top: 6px; font-size: 15px; color: var(--muted); }
 .pdp-notes {
-  margin-top: 12px; width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px;
+  margin-top: 16px; width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px;
   background: #fff; font: inherit; font-size: 16.5px; line-height: 1.5; color: var(--ink); resize: vertical;
 }
 .pdp-notes:focus-visible { border-color: var(--green); outline: none; }
@@ -2218,7 +2366,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-assurance { margin: 0 24px; display: flex; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #effaf4; }
 .pdp-assurance .icon { flex: none; color: var(--green-dark); }
 .pdp-assurance strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--green-dark); }
-.pdp-assurance small { display: block; margin-top: 3px; font-size: 15.5px; line-height: 1.5; color: #3d6b56; }
+.pdp-assurance small { display: block; margin-top: 6px; font-size: 15.5px; line-height: 1.5; color: #3d6b56; }
 
 /* What is in the box. */
 .pdp-includes { margin-top: 18px; padding: 22px 24px 20px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }
@@ -2227,8 +2375,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-includes li { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
 .pdp-includes li:last-child { border-bottom: 0; }
 .pdp-includes .product-visual { flex: none; width: 56px; height: 56px; border-radius: 12px; background: var(--soft); }
+/* A photograph of the part sits in the same tile the drawing did, whole
+   rather than cropped: these are objects, not scenes. */
+.pdp-includes-shot { flex: none; width: 56px; height: 56px; border-radius: 12px; background: var(--soft); object-fit: contain; }
 .pdp-includes strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
-.pdp-includes small { display: block; margin-top: 2px; font-size: 15.5px; line-height: 1.45; color: var(--muted); }
+.pdp-includes small { display: block; margin-top: 6px; font-size: 15.5px; line-height: 1.45; color: var(--muted); }
 
 @media (max-width: 620px) {
   .pdp-assurance { margin-inline: 18px; }
@@ -2431,6 +2582,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 /* A catalogue photograph is shot on white; the soft grey tile behind it read
    as a frame around the picture. The drawn stand-ins keep the grey. */
 .product-card .product-visual.has-photo { background: #fff; }
+/* How a photograph sits in its frame, chosen per product: the whole thing
+   with room around it, or filling the frame and cropped to it. Last word
+   on the matter, so a product's own choice beats the card's default. */
+.product-visual.has-photo[data-fit="cover"] img { object-fit: cover; }
+.product-visual.has-photo[data-fit="contain"] img { object-fit: contain; }
 
 /* The apparel sub-categories, in the pills the category menu uses. */
 .tab-list { margin-bottom: 26px; justify-content: flex-start; gap: 10px; border-bottom: 0; }
@@ -2555,7 +2711,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .home-tile { min-height: 172px; padding: 16px; }
   .home-tile-body { margin-top: 34px; }
   .home-tile strong { font-size: 17px; }
-  .home-tile small { margin-top: 4px; font-size: 15px; line-height: 1.4; }
+  .home-tile small { margin-top: 6px; font-size: 15px; line-height: 1.4; }
 }
 
 /* ====================================== 29. the banner picture, not a slideshow
@@ -2630,6 +2786,25 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
    narrow it down; the cards carry the price and the things MySOS is asked
    for most, on the picture, so the grid has something to read. */
 
+/* The shelf a search narrows is a screen below the box that narrows it, so
+   the box says what it did and offers the way down. Without this a search
+   that worked looks exactly like a search that found nothing. */
+.collection-found { margin-top: 12px; animation: found-in .22s ease-out both; }
+.collection-found button, .collection-found > span {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px;
+  border: 1.5px solid var(--green); border-radius: 999px; background: #fff; box-shadow: var(--shadow-sm);
+  font-size: 16.5px; font-weight: 700; color: var(--green-dark);
+}
+/* It reports, it does not ask: the button under it is the thing to press. */
+.collection-found button { cursor: pointer; transition: background .2s, transform .2s; }
+.collection-found button:hover { background: #effaf4; transform: translateY(-1px); }
+.collection-found.is-none > span { border-color: var(--line); color: var(--ink); }
+@keyframes found-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .collection-found { animation: none; }
+  .collection-found button:hover { transform: none; }
+}
+
 .collection-bar {
   margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line);
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
@@ -2659,11 +2834,11 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 }
 .product-card:hover .product-card-go, .product-card:focus-visible .product-card-go { opacity: 1; transform: none; background: var(--green-dark); color: #fff; }
 
-/* Room for a fifth column on a wide screen: four cards were 416px across,
-   which is a poster, not a product tile. */
-@media (min-width: 1700px) {
-  .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-}
+/* Four to a row on every category, however many the category holds and
+   however wide the screen. A fifth column on the wide screens made a card
+   on one page a different size from the same card on another, and a row
+   of four in a grid of five stopped short of the edge. One slot, one
+   size, everywhere. */
 
 @media (max-width: 860px) {
   .collection-bar { padding-bottom: 14px; margin-bottom: 20px; gap: 12px; }
@@ -2879,15 +3054,20 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .resources-empty { font-size: 18px; line-height: 1.6; color: var(--muted); }
 
 /* --------------------------------------------------------------- one guide */
-.article-page > .breadcrumb { padding-top: 22px; }
-.article-layout { max-width: var(--content); margin: 0 auto; padding: 8px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 54px; align-items: start; }
+/* A guide is read at 760px however wide the screen is, so the full site
+   width left a band of nothing between the words and the contents list. The
+   page is narrower here and the list is wider, so the two sit together. */
+.article-page { --article: 1300px; }
+.article-page > .breadcrumb { max-width: var(--article); padding-top: 22px; }
+.article-page .resources-cta { max-width: var(--article); }
+.article-layout { max-width: var(--article); margin: 0 auto; padding: 8px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 56px; align-items: start; }
 .article-body { max-width: 760px; }
 .article-body h1 { margin-top: 14px; font-size: clamp(34px, 3.6vw, 52px); font-weight: 800; line-height: 1.04; letter-spacing: -.04em; color: var(--ink); }
 .article-lead { margin-top: 16px; font-size: 19px; line-height: 1.6; color: var(--muted); }
 .article-byline { margin-top: 22px; display: flex; align-items: center; gap: 12px; }
 .article-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: #d9efe2; color: var(--green-dark); }
 .article-byline strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
-.article-byline small { display: block; margin-top: 2px; font-size: 15.5px; color: var(--muted); }
+.article-byline small { display: block; margin-top: 6px; font-size: 15.5px; color: var(--muted); }
 .article-figure { margin-top: 26px; }
 .article-figure .scene { height: 360px; border-radius: 20px; }
 .article-figure figcaption { margin-top: 10px; font-size: 15.5px; line-height: 1.5; color: var(--muted); }
@@ -2936,10 +3116,12 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .article-nearby strong { display: block; margin-top: 6px; font-size: 17px; font-weight: 700; color: var(--ink); }
 .article-nearby a:hover strong { color: var(--green-dark); }
 
-.article-toc { position: sticky; top: calc(var(--header-h) + 24px); }
-.article-toc > p { font-size: 17px; font-weight: 800; color: var(--ink); }
-.article-toc ol { margin-top: 14px; display: grid; gap: 4px; }
-.article-toc a { display: block; padding: 7px 0 7px 14px; border-left: 2px solid var(--line); font-size: 16.5px; line-height: 1.4; color: var(--muted); }
+/* The list is a panel of its own rather than words floating in the margin:
+   it is the only thing in that column and it should look like it. */
+.article-toc { position: sticky; top: calc(var(--header-h) + 24px); padding: 24px 26px 26px; border: 1px solid var(--line); border-radius: 22px; background: var(--paper); }
+.article-toc > p { font-size: 19px; font-weight: 800; color: var(--ink); }
+.article-toc ol { margin-top: 16px; display: grid; gap: 2px; }
+.article-toc a { display: block; padding: 11px 0 11px 18px; border-left: 3px solid var(--line); font-size: 17.5px; line-height: 1.4; color: var(--muted); }
 .article-toc a:hover { color: var(--ink); }
 .article-toc a.is-active { border-left-color: var(--green); color: var(--green-dark); font-weight: 700; }
 

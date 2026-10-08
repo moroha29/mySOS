@@ -273,6 +273,29 @@
       "image": "",
       "typeWord": "event essentials",
       "searchPlaceholder": "Search event products, e.g. lanyards or stickers"
+    },
+    {
+      "id": "keychains-accessories",
+      "name": "Keychains & Accessories",
+      "icon": "keychain",
+      "visual": "keychain",
+      "colour": "teal",
+      "description": "Keychains, bag charms & enamel pins",
+      "image": "",
+      "typeWord": "keychain",
+      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin",
+      "visible": false
+    },
+    {
+      "id": "trophies-awards",
+      "name": "Trophies & Awards",
+      "icon": "trophy",
+      "visual": "trophy",
+      "colour": "navy",
+      "description": "Trophies, medals, awards & plaques",
+      "image": "",
+      "typeWord": "award",
+      "searchPlaceholder": "Search awards, e.g. crystal award or medal"
     }
   ],
   "benefits": [
@@ -513,11 +536,16 @@
       "sortLabel": "Sort by",
       "sortFeatured": "Featured",
       "sortName": "Name A–Z",
-      "sortPrice": "Price, low to high"
+      "sortPrice": "Price, low to high",
+      "searchFoundOne": "1 match below",
+      "searchFound": "{count} matches below",
+      "searchFoundNone": "Nothing here matches",
+      "searchSeeLabel": "See them",
+      "searchNoneHint": "Try a different word, or browse every category."
     },
     "product": {
       "buildTitle": "Build your request",
-      "quantityQuestion": "How many pieces?",
+      "quantityQuestion": "Quantity",
       "quantityHint": "Minimum {min}",
       "colourQuestion": "Choose a product colour",
       "colourHint": "Optional",
@@ -545,10 +573,10 @@
       "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
       "relatedTitle": "More in this category",
       "addedButton": "In your request",
-      "specsTitle": "Product details",
+      "specsTitle": "Product specifications",
       "specsMoreLabel": "View full specifications",
       "specsLessLabel": "Hide full specifications",
-      "sizeChartLabel": "View size chart",
+      "sizeChartLabel": "View measurement guide",
       "sizesQuestion": "Choose sizes",
       "sizesEnterLabel": "Enter size breakdown",
       "sizesLaterLabel": "Sizes not confirmed yet",
@@ -566,7 +594,15 @@
       "standardLabel": "Standard size",
       "customLabel": "Enter my own",
       "addonsHint": "Select any add ons",
-      "customSizeLabel": "Enter my own"
+      "customSizeLabel": "Enter my own",
+      "promiseMarks": {
+        "Small & Bulk Orders": "quantities",
+        "Product Recommendations": "guidance",
+        "One-Stop Sourcing": "mockup"
+      },
+      "viewsLabel": "Other views",
+      "specsColumnLabel": "Specification",
+      "specsColumnValue": "Details"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -724,7 +760,8 @@
       "addDialogTitle": "Add another product",
       "addDialogLead": "Search the catalogue, or step through it a category at a time.",
       "addDialogAllLabel": "All products",
-      "addDialogAddLabel": "Add product"
+      "addDialogAddLabel": "Add product",
+      "recommendedLabel": "Recommended"
     }
   },
   "printingMethods": {
@@ -812,13 +849,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -859,13 +910,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -906,13 +971,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -953,13 +1032,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1000,13 +1093,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1033,13 +1140,27 @@
         "label": "Main colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1078,13 +1199,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1127,13 +1262,24 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1155,8 +1301,21 @@
         "type": "select",
         "options": [
           "Natural",
-          "Black",
+          "Cream",
+          "Beige",
+          "Sage green",
+          "Olive",
+          "Forest green",
           "Navy",
+          "Royal blue",
+          "Sky blue",
+          "Red",
+          "Maroon",
+          "Pink",
+          "Yellow",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1177,13 +1336,22 @@
         "label": "Bag colour",
         "type": "select",
         "options": [
+          "Natural",
+          "Cream",
+          "Beige",
+          "Sage green",
+          "Olive",
+          "Forest green",
           "Navy",
-          "Black",
-          "White",
-          "Grey",
+          "Royal blue",
+          "Sky blue",
           "Red",
-          "Blue",
-          "Green",
+          "Maroon",
+          "Pink",
+          "Yellow",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1194,23 +1362,35 @@
         "label": "Decoration",
         "type": "choice",
         "options": [
-          "Print",
+          "Let MySOS recommend",
+          "UV printing",
           "Laser engraving"
         ],
-        "recommended": "Print"
+        "recommended": "Let MySOS recommend"
       },
       {
         "id": "colour",
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1221,14 +1401,38 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
+        ]
+      }
+    ],
+    "medals": [
+      {
+        "id": "colour",
+        "label": "Finish",
+        "type": "select",
+        "options": [
+          "Gold",
+          "Silver",
+          "Bronze",
+          "All three (gold, silver and bronze)"
         ]
       }
     ]
@@ -1356,7 +1560,16 @@
     "pens": "Pens",
     "name-tents": "Name Tents",
     "lanyards": "Lanyards",
-    "stickers": "Stickers"
+    "stickers": "Stickers",
+    "metal-keychains": "Metal Keychains",
+    "acrylic-keychains": "Acrylic Keychains",
+    "enamel-keychains": "Enamel Keychains",
+    "bag-charms": "Bag Charms",
+    "enamel-pins": "Enamel Pins",
+    "trophies": "Trophies",
+    "crystal-awards": "Crystal Awards",
+    "acrylic-awards": "Acrylic Awards",
+    "plaques": "Recognition Plaques"
   },
   "colourSwatches": {
     "White": "#ffffff",
@@ -1372,7 +1585,23 @@
     "Pink": "#e87fa8",
     "Natural": "#e8e0cd",
     "Sage green": "#9cab8a",
-    "Cream": "#f2ead9"
+    "Cream": "#f2ead9",
+    "Gold": "#c9a227",
+    "Silver": "#b4b9c1",
+    "Bronze": "#a9713c",
+    "Beige": "#d9c8a9",
+    "Brown": "#6b4a33",
+    "Mustard": "#d39b1f",
+    "Orange": "#e8732a",
+    "Purple": "#6b4ea8",
+    "Lilac": "#b9a7dd",
+    "Royal blue": "#1a3fa0",
+    "Sky blue": "#7fb6e8",
+    "Teal": "#11867f",
+    "Mint": "#a9ddc4",
+    "Forest green": "#19603c",
+    "Olive": "#6f7a44",
+    "Charcoal": "#3f454f"
   },
   "productSpecs": {
     "tshirts": [
@@ -1445,6 +1674,54 @@
       {
         "label": "Mockup",
         "value": "Sent for approval before production"
+      }
+    ],
+    "bottles": [
+      {
+        "label": "Material",
+        "value": "Stainless steel, double walled"
+      },
+      {
+        "label": "Construction",
+        "value": "Vacuum insulated"
+      },
+      {
+        "label": "Capacity",
+        "value": "350 ml to 1 litre, or a volume you ask for"
+      },
+      {
+        "label": "Cap type",
+        "value": "Screw cap, straw lid or carry handle cap"
+      },
+      {
+        "label": "Colour",
+        "value": "Choose from the range or ask for your own"
+      },
+      {
+        "label": "Customisation",
+        "value": "UV printing or laser engraving"
+      }
+    ],
+    "medals": [
+      {
+        "label": "Material",
+        "value": "Die-struck metal"
+      },
+      {
+        "label": "Finish",
+        "value": "Gold, silver or bronze"
+      },
+      {
+        "label": "Size",
+        "value": "50 mm to 80 mm, or a diameter you ask for"
+      },
+      {
+        "label": "Ribbon",
+        "value": "Plain or printed with your logo"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printed or engraved to your artwork"
       }
     ]
   },
@@ -1892,23 +2169,23 @@
       ],
       "rows": [
         [
-          "Small",
-          "30",
+          "Flat tote",
+          "40",
           "35",
-          "8",
-          "22"
+          "-",
+          "25"
         ],
         [
-          "Standard",
-          "35",
+          "Gusset tote",
           "40",
+          "35",
           "10",
           "25"
         ],
         [
-          "Large",
-          "40",
+          "Large gusset tote",
           "45",
+          "40",
           "12",
           "28"
         ]
@@ -2157,27 +2434,123 @@
         "name": "Welcome Packs",
         "icon": "welcomePack"
       }
+    ],
+    "keychains-accessories": [
+      {
+        "id": "metal-keychains",
+        "name": "Metal Keychains",
+        "icon": "keychain"
+      },
+      {
+        "id": "acrylic-keychains",
+        "name": "Acrylic Keychains",
+        "icon": "layers"
+      },
+      {
+        "id": "enamel-keychains",
+        "name": "Enamel Keychains",
+        "icon": "palette"
+      },
+      {
+        "id": "bag-charms",
+        "name": "Bag Charms",
+        "icon": "bag"
+      },
+      {
+        "id": "enamel-pins",
+        "name": "Enamel Pins",
+        "icon": "pin"
+      }
+    ],
+    "trophies-awards": [
+      {
+        "id": "trophies",
+        "name": "Trophies",
+        "icon": "trophy"
+      },
+      {
+        "id": "medals",
+        "name": "Medals",
+        "icon": "award"
+      },
+      {
+        "id": "crystal-awards",
+        "name": "Crystal Awards",
+        "icon": "crystal"
+      },
+      {
+        "id": "acrylic-awards",
+        "name": "Acrylic Awards",
+        "icon": "layers"
+      },
+      {
+        "id": "plaques",
+        "name": "Recognition Plaques",
+        "icon": "plaque"
+      }
     ]
   },
   "productSteps": {
     "totes": [
       {
+        "type": "choice",
+        "id": "weight",
+        "question": "Canvas weight",
+        "options": [
+          {
+            "name": "8 oz"
+          },
+          {
+            "name": "10 oz",
+            "tag": "Standard"
+          },
+          {
+            "name": "12 oz"
+          }
+        ]
+      },
+      {
         "type": "dimensions",
-        "id": "dimensions",
-        "question": "Choose dimensions",
-        "standardLabel": "Standard size",
-        "customLabel": "Enter my own",
+        "id": "size",
+        "question": "Bag size",
+        "standardLabel": "Standard sizes",
+        "customLabel": "Custom size",
+        "listLabel": "Choose a standard size",
+        "defaultSize": "Gusset tote",
+        "standardSizes": [
+          {
+            "name": "Flat tote",
+            "dims": "40 × 35 cm",
+            "note": "No depth",
+            "icon": "tote"
+          },
+          {
+            "name": "Gusset tote",
+            "dims": "40 × 35 × 10 cm",
+            "icon": "tote"
+          },
+          {
+            "name": "Large gusset tote",
+            "dims": "45 × 40 × 12 cm",
+            "icon": "tote"
+          }
+        ],
+        "notes": [
+          "Dimensions: Length × Breadth × Depth.",
+          "Example sizes for layout preview.",
+          "Available sizes depend on the selected canvas weight."
+        ],
         "fields": [
           {
             "id": "width",
             "label": "Width (cm)",
-            "standard": "35",
+            "standard": "40",
             "column": "Width"
           },
           {
             "id": "height",
             "label": "Height (cm)",
-            "standard": "40",
+            "standard": "35",
             "column": "Height"
           },
           {
@@ -2187,8 +2560,7 @@
             "column": "Depth"
           }
         ],
-        "sizesFromChart": true,
-        "defaultSize": "Standard"
+        "sizesFromChart": true
       },
       {
         "type": "colour",
@@ -2199,6 +2571,20 @@
         "type": "methods",
         "id": "printing",
         "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
       }
     ],
     "drawstring": [
@@ -2234,6 +2620,20 @@
         "type": "methods",
         "id": "printing",
         "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
       }
     ],
     "lanyards": [
@@ -2402,6 +2802,170 @@
         "optional": true,
         "placeholder": "Tell us about any logo placement preferences or special requests."
       }
+    ],
+    "bottles": [
+      {
+        "type": "select",
+        "id": "capacity",
+        "question": "Choose capacity",
+        "allowCustom": true,
+        "standardLabel": "Available capacities",
+        "customLabel": "Custom capacity",
+        "placeholder": "Choose an available capacity",
+        "options": [
+          "350 ml",
+          "500 ml",
+          "650 ml",
+          "750 ml",
+          "1 litre"
+        ],
+        "customPlaceholder": "Enter your preferred volume, for example 600 ml",
+        "note": "Need a custom capacity? Enter your preferred volume for us to check availability."
+      },
+      {
+        "type": "cards",
+        "id": "cap",
+        "question": "Choose your cap",
+        "hint": "Choose one cap for your bottle.",
+        "options": [
+          {
+            "name": "Screw cap",
+            "tag": "Standard",
+            "icon": "screwCap"
+          },
+          {
+            "name": "Straw lid",
+            "icon": "strawLid"
+          },
+          {
+            "name": "Carry handle cap",
+            "icon": "handleCap"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "cards",
+        "id": "decoration",
+        "question": "Choose a customisation option",
+        "asPrinting": true,
+        "options": [
+          {
+            "name": "UV printing",
+            "note": "Full colour, wrapped around the bottle",
+            "icon": "palette"
+          },
+          {
+            "name": "Laser engraving",
+            "note": "A permanent mark in the steel",
+            "icon": "design"
+          },
+          {
+            "name": "Help me decide",
+            "value": "Let MySOS recommend",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "packaging",
+        "question": "Packaging preference",
+        "optional": true,
+        "placeholder": "No preference",
+        "options": [
+          "Individual boxes",
+          "Gift packaging",
+          "Bulk packed"
+        ],
+        "hint": "Ask about individual boxes or gift packaging."
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "PNG, JPG or PDF. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request."
+      }
+    ],
+    "medals": [
+      {
+        "type": "select",
+        "id": "size",
+        "question": "Medal size",
+        "allowCustom": true,
+        "standardLabel": "Standard sizes",
+        "customLabel": "Another size",
+        "placeholder": "Choose a diameter",
+        "options": [
+          "50 mm",
+          "60 mm",
+          "70 mm",
+          "80 mm"
+        ],
+        "customPlaceholder": "Enter the diameter you need, for example 65 mm",
+        "note": "Measured across the face of the medal, ribbon excluded."
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Finish",
+        "hint": "Gold, silver and bronze can be ordered together."
+      },
+      {
+        "type": "cards",
+        "id": "ribbon",
+        "question": "Ribbon",
+        "options": [
+          {
+            "name": "Standard ribbon",
+            "tag": "Standard",
+            "note": "A plain ribbon in a colour you choose",
+            "icon": "lanyard"
+          },
+          {
+            "name": "Printed ribbon",
+            "note": "Your logo repeated along the ribbon",
+            "icon": "palette"
+          },
+          {
+            "name": "No ribbon",
+            "note": "The medal on its own",
+            "icon": "award"
+          }
+        ]
+      },
+      {
+        "type": "methods",
+        "id": "branding",
+        "question": "Branding"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Upload your artwork",
+        "optional": true,
+        "hint": "PNG, JPG, PDF or AI. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us about the event, the engraving or anything else."
+      }
     ]
   },
   "productUnit": {
@@ -2420,22 +2984,26 @@
         {
           "name": "Notebook",
           "note": "A hardcover notebook for everyday notes.",
-          "visual": "notebook"
+          "visual": "notebook",
+          "image": ""
         },
         {
           "name": "Pen",
           "note": "A matching pen for the set.",
-          "visual": "pen"
+          "visual": "pen",
+          "image": ""
         },
         {
           "name": "Insulated bottle",
           "note": "A reusable bottle for daily use.",
-          "visual": "bottle"
+          "visual": "bottle",
+          "image": ""
         },
         {
           "name": "Gift box",
           "note": "The set comes neatly arranged in a matching box.",
-          "visual": "gift-set"
+          "visual": "gift-set",
+          "image": ""
         }
       ]
     },
@@ -2445,22 +3013,26 @@
         {
           "name": "Notebook",
           "note": "A hardcover notebook for everyday notes.",
-          "visual": "notebook"
+          "visual": "notebook",
+          "image": ""
         },
         {
           "name": "Pen",
           "note": "A matching pen for the set.",
-          "visual": "pen"
+          "visual": "pen",
+          "image": ""
         },
         {
           "name": "Insulated bottle",
           "note": "A reusable bottle for daily use.",
-          "visual": "bottle"
+          "visual": "bottle",
+          "image": ""
         },
         {
           "name": "Gift box",
           "note": "The set comes neatly arranged in a matching box.",
-          "visual": "gift-set"
+          "visual": "gift-set",
+          "image": ""
         }
       ]
     }
@@ -2569,6 +3141,34 @@
       "image": ""
     },
     "navy-gift-set": {
+      "image": "",
+      "fit": "contain"
+    },
+    "metal-keychain": {
+      "image": ""
+    },
+    "acrylic-keychain": {
+      "image": ""
+    },
+    "enamel-keychain": {
+      "image": ""
+    },
+    "bag-charm": {
+      "image": ""
+    },
+    "enamel-pin": {
+      "image": ""
+    },
+    "custom-trophy": {
+      "image": ""
+    },
+    "crystal-award": {
+      "image": ""
+    },
+    "acrylic-award": {
+      "image": ""
+    },
+    "recognition-plaque": {
       "image": ""
     }
   }

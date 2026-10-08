@@ -1,12 +1,13 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import productData from '../src/data/productData.json';
 import siteConfig from '../src/data/siteConfig.json';
 import siteContent from '../src/data/siteContent.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
-import { makeLine } from '../src/utils/solutionRequest';
+import iconLibrary from '../src/data/iconLibrary.json';
+import { detailFieldsFor, makeLine, printingFieldFor } from '../src/utils/solutionRequest';
 
 /*
  * A product's own page: the picture, and everything needed to ask for that
@@ -53,8 +54,10 @@ describe('a product has a page of its own', () => {
       const method = siteContent.printingMethods?.[id];
       if (method?.bestFor) expect(markup).toContain(method.bestFor);
     }
-    // The quantity presets and the facts panel.
-    for (const preset of siteContent.quantityPresets) expect(markup).toContain(`>${preset}<`);
+    // The quantity is the bar alone now: the row of set amounts under it was
+    // a second way of doing what the bar already does.
+    expect(markup).not.toContain('class="pdp-presets"');
+    expect(markup).toContain('id="pdp-quantity"');
     for (const fact of siteContent.productFacts.default) expect(markup).toContain(fact.value);
     // The sections below are the questions the client already answers, in
     // their own words — not specifications we would be inventing for them.
@@ -120,6 +123,11 @@ describe('one look across the pages', () => {
     const products = render('/products/', '?category=bags');
     for (const markup of [home, products]) expect(markup).toContain('class="category-strip"');
     for (const category of siteContent.categories) {
+      // A category held back is in neither strip, and in nothing else either.
+      if (category.visible === false) {
+        for (const markup of [home, products]) expect(markup).not.toContain(`?category=${category.id}`);
+        continue;
+      }
       expect(home).toContain(`/products/?category=${category.id}`);
       expect(products).toContain(`?category=${category.id}`);
     }
@@ -129,19 +137,35 @@ describe('one look across the pages', () => {
     expect(homeStrip).not.toContain('is-active');
   });
 
-  it('puts the arrow beside "View all products", not under it', () => {
-    // The pill rules used to catch the trailing link as well, turning it into a
-    // block and stacking its arrow below the words.
-    expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
-    expect(css).not.toMatch(/\.category-strip a \{ display: inline-block;/);
-    expect(css).toMatch(/\.text-link > \.icon, \.btn > \.icon \{ display: block; align-self: center; \}/);
-    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; color: #fff; \}/);
+  it('ends with the last category, not a link that promises everything', () => {
+    // "View all products" went to the products page, and the products page
+    // opens on apparel: the one link that offered all of them delivered one.
+    const strip = readFileSync(new URL('../src/public/components/CategoryStrip.jsx', import.meta.url), 'utf8');
+    expect(strip).not.toContain('text-link');
+    expect(strip).not.toContain('quickNavAllLabel');
+    expect(css).not.toContain('.category-strip-inner > .text-link');
+    expect(render('/products/')).not.toContain('View all products');
   });
 
-  it('scrolls the strip sideways on a phone, with the link out of the way', () => {
-    const phone = css.slice(css.indexOf('@media (max-width: 860px)', css.indexOf('.category-strip {')));
-    expect(phone).toMatch(/\.category-strip-inner > \.text-link \{ display: none; \}/);
-    expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*overflow-x: auto/);
+  it('wraps the strip on a screen and scrolls it on a phone', () => {
+    // Eight categories are wider than a laptop, and the eighth was cut off
+    // against the edge of a row that gave no sign it carried on.
+    expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*flex-wrap: wrap/);
+    expect(css).not.toMatch(/\.category-strip ul \{ flex: 1;[^}]*overflow-x: auto/);
+    // Wrapped, the two lines sit against each other: the pills carry the gap.
+    expect(css).toMatch(/\.category-strip ul \{[^}]*gap: 0 10px/);
+    // Four rows of pills is no menu, so a phone keeps the sideways scroller.
+    const nowrap = css.indexOf('.category-strip ul { flex-wrap: nowrap; overflow-x: auto;');
+    expect(nowrap).toBeGreaterThan(0);
+    expect(css.lastIndexOf('@media', nowrap)).toBe(css.lastIndexOf('@media (max-width: 860px)', nowrap));
+    expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
+  });
+
+  it('gives every card the same slot, whatever page it is on', () => {
+    // Four to a row everywhere: counting the cards to choose the columns made
+    // the same product bigger on a short category than on a full one.
+    expect(css).toContain('.product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));');
+    expect(css).not.toContain('@media (min-width: 1700px)');
   });
 });
 
@@ -215,6 +239,29 @@ describe('the product page, as the client marked it up', () => {
     }
   });
 
+  it('offers a real range of colours, every one with ink of its own', () => {
+    // Three swatches on a canvas tote was a shorter list than the bag is made
+    // in. A colour with no ink falls back to a word in a pill among a row of
+    // circles, so every one offered anywhere has to be drawable.
+    const lists = Object.values(siteContent.requestOptions)
+      .flat()
+      .filter((field) => /colour/i.test(field.id));
+    expect(lists.length).toBeGreaterThan(8);
+    for (const field of lists) {
+      for (const name of field.options) {
+        if (/^Other/.test(name) || /^All three/.test(name)) continue;
+        expect(siteContent.colourSwatches[name], name).toMatch(/^#[0-9a-f]{6}$/i);
+      }
+    }
+    const of = (kind) => siteContent.requestOptions[kind].find((field) => /colour/i.test(field.id)).options;
+    expect(of('totes').length).toBeGreaterThan(12);
+    expect(of('tshirts').length).toBeGreaterThan(16);
+    // "Other" stays last, because it is the answer for anything not above it.
+    for (const field of lists) {
+      if (field.options.some((name) => /^Other/.test(name))) expect(field.options.at(-1)).toMatch(/^Other/);
+    }
+  });
+
   it('keeps "Other" in the row of colours rather than on a line of its own', () => {
     // It is still a colour answer; a pill under a row of circles reads as
     // something else. The full name stays on the button for a screen reader.
@@ -252,16 +299,44 @@ describe('the product page, as the client marked it up', () => {
   });
 });
 
-describe('the rest of the category, as a rail', () => {
+describe('the other views of this product, as a rail', () => {
   const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
   const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
 
-  it('offers the whole category rather than the first three of it', () => {
-    expect(source).toContain('.slice(0, 12)');
+  it('shows other views of this product, not other products', () => {
+    // products/<slug>-2.jpg and so on, beside the main photograph.
+    expect(source).toContain('`products/${product.public.slug}-${n}`');
     expect(source).toContain('className="pdp-thumbs" ref={railRef}');
+    // The rest of the category is a different question, answered at the foot
+    // of the page; the rail no longer links away.
+    const gallery = source.slice(source.indexOf('function Gallery('), source.indexOf('function ProductInfo('));
+    expect(gallery).not.toContain('/products/${');
     const rail = css.slice(css.indexOf('.pdp-thumbs {'), css.indexOf('}', css.indexOf('.pdp-thumbs {')));
     expect(rail).toContain('overflow-x: auto');
     expect(rail).toContain('scroll-snap-type: x proximity');
+  });
+
+  it('brings a view up rather than opening a page', () => {
+    expect(source).toContain('onClick={() => setShown(index)}');
+    expect(source).toContain('aria-pressed={index === shown}');
+    expect(source).toContain('views[Math.min(shown, views.length - 1)]');
+    expect(css).toContain('.pdp-thumbs button.is-chosen');
+  });
+
+  it('fills the tile with the picture rather than floating it in white', () => {
+    // Nine pixels of padding, and then the picture fitted inside what was left
+    // of that, left a stamp in a frame: 63px of photograph in an 83px tile.
+    expect(css).toMatch(/\.pdp-thumbs a, \.pdp-thumbs button \{[^}]*padding: 3px/);
+    expect(css).toMatch(/\.pdp-thumbs a, \.pdp-thumbs button \{[^}]*overflow: hidden/);
+    expect(css).toContain('.pdp-thumbs img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }');
+  });
+
+  it('holds a place open for a photograph that has not arrived', () => {
+    expect(source).toContain('const VIEW_SLOTS = 4;');
+    expect(source).toContain('Math.max(0, VIEW_SLOTS - views.length)');
+    // Plainly empty, rather than looking like a picture that failed to load.
+    expect(css).toContain('.pdp-thumbs li.is-empty span');
+    expect(css).toMatch(/\.pdp-thumbs li\.is-empty span \{[^}]*dashed/);
   });
 
   it('shows the way on only while there is something past the edge', () => {
@@ -276,8 +351,19 @@ describe('the rest of the category, as a rail', () => {
   });
 
   it('fits four to a view, and a shade under three on a phone', () => {
-    expect(css).toContain('.pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }');
-    expect(css).toMatch(/\.pdp-thumbs li \{ flex-basis: 37%; \}/);
+    // However many views there are, that is how many tiles the row is cut
+    // into, so six views are six tiles rather than four and an arrow to the
+    // rest. They stop shrinking at 48px, and below that the row scrolls.
+    expect(css).toContain('.pdp-thumbs li { flex: 1 1 0; min-width: 48px; scroll-snap-align: start; }');
+    // On a phone six tiles would be fingernails, so there it still scrolls.
+    expect(css).toMatch(/\.pdp-thumbs li \{ flex: 0 0 37%; \}/);
+  });
+
+  it('fits the picture and the views on a short screen together', () => {
+    // A smaller monitor at 100% could only show part of the picture, with the
+    // row of views below the fold.
+    expect(css).toContain('.pdp-gallery { max-width: min(100%, 560px); }');
+    expect(css).toMatch(/max-height: 940px\).*\.pdp-gallery \{ max-width: min\(100%, 48vh\); \}/);
   });
 });
 
@@ -337,10 +423,20 @@ describe('the size guide, as the drawing has it', () => {
     }
     expect(siteContent.sizeCharts.totes.diagram).toBe('tote');
     expect(siteContent.sizeCharts.totes.columns).toContain('Depth');
-    // The standard tote the build panel offers is the standard row of the chart.
+    // The bags the panel offers and the rows of the guide are the same bags,
+    // named the same way, measured the same way.
     const dimensions = siteContent.productSteps.totes.find((step) => step.type === 'dimensions');
-    const standard = siteContent.sizeCharts.totes.rows.find((row) => row[0] === 'Standard');
-    expect(dimensions.fields.map((field) => field.standard)).toEqual(standard.slice(1, 4));
+    const chart = siteContent.sizeCharts.totes;
+    expect(chart.rows.map((row) => row[0])).toEqual(dimensions.standardSizes.map((size) => size.name));
+    for (const size of dimensions.standardSizes) {
+      const row = chart.rows.find((item) => item[0] === size.name);
+      const parts = dimensions.fields
+        .map((field) => row[chart.columns.indexOf(field.column)])
+        .filter((value) => value && value !== '-');
+      expect(size.dims, size.name).toBe(`${parts.join(' × ')} cm`);
+    }
+    // And the one it opens on is one of them.
+    expect(dimensions.standardSizes.map((size) => size.name)).toContain(dimensions.defaultSize);
   });
 
   it('puts the guide beside the question it answers', () => {
@@ -358,6 +454,117 @@ describe('the size guide, as the drawing has it', () => {
     // And the note carries the unit, so it changes with the tab.
     expect(source).toContain("tab === 'inch' ? chart.noteInch : chart.note");
     expect(siteContent.sizeCharts.tshirts.noteInch).toMatch(/inches/);
+  });
+});
+
+describe("the client's own marks, and the medal's own questions", () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const marks = readFileSync(new URL('../src/public/components/BrandMarks.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it("keeps the client's artwork as the client drew it", () => {
+    // Two colours, filled: not the single stroke the rest of the icons are,
+    // so it is a component of its own rather than a entry in Icons.jsx.
+    expect(marks).toContain("const NAVY = '#21348c';");
+    expect(marks).toContain("const GREEN = '#006451';");
+    expect(marks).toContain('viewBox="0 0 98.561 98.919"');
+    for (const name of ['mockup', 'guidance', 'quantities']) {
+      expect(marks, name).toContain(`${name}: <>`);
+    }
+    // Decoration beside a word that already says it: nothing to read aloud.
+    expect(marks).toContain('aria-hidden="true"');
+    expect(css).toContain('.brand-mark {');
+  });
+
+  it('gives a promise its mark by name, so a reworded one keeps the tick', () => {
+    const promises = siteContent.pages.product.promises;
+    const promiseMarks = siteContent.pages.product.promiseMarks;
+    expect(promises.every((promise) => promiseMarks[promise]), 'every promise marked').toBe(true);
+    // Keyed by the promise rather than its place in the list: reorder the
+    // promises and each keeps its own mark.
+    expect(Object.keys(promiseMarks)).toEqual(promises);
+    expect(source).toContain('siteContent.pages?.product?.promiseMarks?.[promise]');
+    expect(source).toContain('<Icon name="check" size={18} />');
+  });
+
+  it('asks a medal what a medal needs', () => {
+    const steps = siteContent.productSteps.medals;
+    expect(steps.map((step) => step.question)).toEqual([
+      'Medal size', 'Finish', 'Ribbon', 'Branding', 'Upload your artwork', 'Add any other notes',
+    ]);
+    // Its finish is its colour, so it arrives in a field of its own rather
+    // than buried in the note.
+    const field = detailFieldsFor('custom_medal').find((item) => item.id === 'colour');
+    expect(field.label).toBe('Finish');
+    expect(steps[1].type).toBe('colour');
+    for (const finish of ['Gold', 'Silver', 'Bronze']) {
+      expect(siteContent.colourSwatches[finish], finish).toMatch(/^#[0-9a-f]{6}$/i);
+      expect(field.options, finish).toContain(finish);
+    }
+    // One ribbon is the usual one and says so.
+    const ribbon = steps.find((step) => step.id === 'ribbon');
+    expect(ribbon.options.filter((option) => option.tag)).toHaveLength(1);
+  });
+});
+
+describe('the bottle chooses its capacity and its cap', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const request = readFileSync(new URL('../src/public/pages/RequestPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const steps = siteContent.productSteps.bottles;
+  const stepFor = (id) => steps.find((step) => step.id === id);
+
+  it('asks what the drawing asks, in that order', () => {
+    expect(steps.map((step) => step.id)).toEqual(['capacity', 'cap', 'colour', 'decoration', 'packaging', 'artwork', 'notes']);
+    expect(steps.filter((step) => step.optional).map((step) => step.id)).toEqual(['packaging', 'artwork', 'notes']);
+  });
+
+  it('offers the capacities it stocks and a way to ask for another', () => {
+    const capacity = stepFor('capacity');
+    expect(capacity.type).toBe('select');
+    expect(capacity.allowCustom).toBe(true);
+    expect(capacity.options.length).toBeGreaterThan(2);
+    expect(capacity.note).toMatch(/custom capacity/i);
+    // One list and one typed answer, both under the same name, so the request
+    // carries whichever was given without having to know which.
+    expect(source).toContain("if (step.type === 'select') {");
+    expect(source).toContain('answers[`${step.id}Mode`]');
+    expect(css).toContain('.pdp-field {');
+  });
+
+  it('names the cap most people take rather than leaving it to the order', () => {
+    const cap = stepFor('cap');
+    expect(cap.options.map((option) => option.name)).toEqual(['Screw cap', 'Straw lid', 'Carry handle cap']);
+    expect(cap.options.filter((option) => option.tag)).toHaveLength(1);
+    expect(cap.options[0].tag).toBe('Standard');
+    expect(source).toContain('className="pdp-method-tag"');
+    expect(css).toContain('.pdp-method-tag {');
+    // Each cap has a mark of its own, not the same one three times.
+    const icons = cap.options.map((option) => option.icon);
+    expect(new Set(icons).size).toBe(3);
+    const drawn = new Set(iconLibrary.icons.map((item) => item.name));
+    for (const icon of icons) expect(drawn.has(icon), icon).toBe(true);
+  });
+
+  it('sends the customisation under the name this product gives it', () => {
+    // A bottle calls its printing choice "decoration". Sent as "printing" it
+    // would be filtered out of the row and lost.
+    const decoration = stepFor('decoration');
+    expect(decoration.asPrinting).toBe(true);
+    expect(decoration.id).toBe(printingFieldFor('insulated_bottle').id);
+    expect(request).toContain('const printingField = (wanted && printingFieldFor(wanted)?.id)');
+    expect(request).toContain('[printingField]: chosen.printing');
+    // And every card's answer is one the field will accept.
+    const accepted = printingFieldFor('insulated_bottle').options;
+    for (const option of decoration.options) {
+      expect(accepted, option.name).toContain(option.value ?? option.name);
+    }
+  });
+
+  it('keeps two answers given in quick succession', () => {
+    // Added to whatever has been answered rather than to a copy taken when
+    // the step was drawn, or the second click drops the first.
+    expect(source).toContain('onAnswer((said) => ({ ...said, [key]: value }))');
   });
 });
 
@@ -418,6 +625,85 @@ describe('the gift sets in the catalogue', () => {
   it('counts a set in sets where it says what the price buys', () => {
     expect(readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8'))
       .toContain("${unitFor(product) || 'pieces'}");
+  });
+
+  it('is photographed, from its box down to the parts inside it', () => {
+    const files = readdirSync(new URL('../src/assets/images/products/', import.meta.url));
+    // The set itself, five more views of it, and one of each thing in the box.
+    expect(files).toContain('navy-gift-set.jpg');
+    for (let n = 2; n <= 6; n += 1) expect(files).toContain(`navy-gift-set-${n}.jpg`);
+    const parts = siteContent.productIncludes.navy_gift_set.items;
+    for (let n = 1; n <= parts.length; n += 1) expect(files).toContain(`navy-gift-set-part-${n}.jpg`);
+    // Landscape in a square frame: whole, rather than cut down the sides.
+    const navy = sets.find((item) => item.id === 'navy_gift_set');
+    expect(siteContent.productImages['navy-gift-set'].fit).toBe('contain');
+    // And no price, because nobody has quoted one.
+    expect(navy.public.displayPricing.show).toBe(false);
+  });
+});
+
+describe('one product page is built like every other', () => {
+  const every = visible.map((product) => [product.public.slug, render(`/products/${product.public.slug}/`)]);
+
+  it('asks for artwork the same way on all of them', () => {
+    // Six kinds had a drop box as a numbered step and the rest had a line of
+    // text with a small button beside it, so the same job looked like two
+    // different ones on two pages of the same catalogue.
+    expect(every.length).toBeGreaterThan(30);
+    for (const [slug, html] of every) {
+      expect(html, slug).toContain('class="pdp-dropzone"');
+      expect(html, slug).toContain('Upload your logo or drop it here');
+    }
+    const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+    expect(source).not.toContain('pdp-artwork');
+    expect(readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8')).not.toContain('.pdp-artwork');
+  });
+
+  it('carries the same furniture on all of them', () => {
+    for (const [slug, html] of every) {
+      for (const mark of ['class="breadcrumb', 'class="pdp-shot"', 'class="pdp-step"',
+        'Build your request', 'class="btn btn-primary pdp-add"', 'class="pdp-price-note"']) {
+        expect(html, `${slug} / ${mark}`).toContain(mark);
+      }
+    }
+  });
+
+  it('ends a drawn set of questions the same way, whatever the kind', () => {
+    // Every kind with questions of its own closes on the artwork and then the
+    // notes; the drawstring bag stopped at the printing method.
+    for (const [kind, steps] of Object.entries(siteContent.productSteps)) {
+      const types = steps.map((step) => step.type);
+      expect(types, kind).toContain('upload');
+      expect(types[types.length - 1], kind).toBe('notes');
+      expect(types[types.length - 2], kind).toBe('upload');
+    }
+  });
+});
+
+describe('the pictures a product is given', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('shows the one chosen in the manager, not only the one dropped in', () => {
+    // The main shot carried the content path of product.public.image, so the
+    // manager offered to change it — and the gallery then read the file on
+    // disk and nothing else, so choosing a picture did nothing at all.
+    expect(source).toContain('const found = [productImage(product.public.slug)];');
+  });
+
+  it('photographs the parts of a set where there is a photograph', () => {
+    expect(source).toContain('function IncludedShot({ product, item, index })');
+    expect(source).toContain('picture(item.image, `products/${product.public.slug}-part-${index + 1}`)');
+    // No photograph, and the drawing stands in exactly as it did before.
+    expect(source).toContain('if (!shot) return <Product type={item.visual} color="navy" mark=""');
+    expect(source).toContain('<IncludedShot product={product} item={item} index={index} />');
+    // Whole rather than cropped: these are objects on a tile, not scenes.
+    expect(css).toContain('.pdp-includes-shot { flex: none; width: 56px; height: 56px;');
+    expect(css).toMatch(/\.pdp-includes-shot \{[^}]*object-fit: contain/);
+    // Every part can be given one, and the manager can change each.
+    for (const set of Object.values(siteContent.productIncludes)) {
+      for (const item of set.items) expect(item).toHaveProperty('image');
+    }
   });
 });
 
