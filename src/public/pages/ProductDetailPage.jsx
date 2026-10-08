@@ -6,7 +6,7 @@ import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } fr
 import { cms, contentPath, pagePath, pageText, productImage, productImagePath } from '../cms';
 import Icon from '../components/Icons';
 import { ProductShot } from '../components/Ui';
-import { MeasureGarment, Product } from '../components/Visuals';
+import { MeasureFigure, Product } from '../components/Visuals';
 
 /*
  * One product, as the 2026 concept draws it: the photograph on the left, and on
@@ -171,7 +171,7 @@ function SizeChart({ product, open, onClose }) {
 
     {tab === 'measure'
       ? <div className="size-measure">
-        <MeasureGarment type={chart.diagram ?? 'tee'} />
+        <MeasureFigure type={chart.diagram ?? 'tee'} />
         <ul className="size-measure-key">
           {(chart.measure ?? []).map((row, index) => <li key={row.key}>
             <span className="size-measure-badge" aria-hidden="true">{row.key}</span>
@@ -277,7 +277,7 @@ const assuranceFor = (product) => siteContent.productAssurance?.[product.public.
  * add-ons that can open a panel of their own, somewhere to put a logo and
  * somewhere to say the rest.
  */
-function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href }) {
+function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
   const set = (key, value) => onAnswer({ ...answers, [key]: value });
   const mine = answers[step.id] ?? '';
   const head = <p className="pdp-step-head">
@@ -308,6 +308,10 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           />
         </li>)}
       </ul>
+      {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
+        <Icon name="design" size={19} />
+        <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
+      </button>}
     </section>;
   }
 
@@ -580,6 +584,7 @@ function BuildPanel({ product, onChart }) {
         methods={methods}
         printing={printing}
         href={href}
+        onChart={chartFor(product) ? onChart : null}
       />)
       : <>
     {sizeRun.length > 0 && <section className="pdp-step">

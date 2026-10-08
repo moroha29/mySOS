@@ -287,6 +287,84 @@ export function MeasureGarment({ type = 'tee' }) {
   );
 }
 
+/*
+ * The same four lines, on a bag. A tote is drawn flat with its gusset as a
+ * strip down the side, because the gusset is the one measurement a reader
+ * cannot see on a photograph of the front.
+ */
+function MeasureTote() {
+  return (
+    <svg viewBox="6 2 188 198" className="measure-figure" role="img" aria-label="Where each measurement is taken on the bag">
+      {/* the bag: front panel, the gusset beside it, then the handles */}
+      <path d="M136 78 H160 V166 H136 Z" fill="#eef2f7" stroke="#c9d2e0" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M50 78 H136 V166 H50 Z" fill="#fbfcfd" stroke="#c9d2e0" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M60 78 C 60 2 126 2 126 78 H114 C 114 22 72 22 72 78 Z" fill="#fbfcfd" stroke="#c9d2e0" strokeWidth="2" strokeLinejoin="round" />
+
+      {/* Every line first, then every letter, so no arrow is struck through
+          the badge that names it. */}
+      <path d="M50 78 H28 M50 166 H28 M136 166 V182 M160 166 V182" stroke="#c9d2e0" strokeWidth="1.5" strokeDasharray="4 4" />
+
+      <path d="M59 110 H127" {...ARROW} />
+      <path d="M56 110 l7 -4 v8 z" {...HEAD} />
+      <path d="M130 110 l-7 -4 v8 z" {...HEAD} />
+
+      <path d="M32 81 V163" {...ARROW} />
+      <path d="M32 78 l-4 7 h8 z" {...HEAD} />
+      <path d="M32 166 l-4 -7 h8 z" {...HEAD} />
+
+      <path d="M139 176 H157" {...ARROW} />
+      <path d="M136 176 l7 -4 v8 z" {...HEAD} />
+      <path d="M160 176 l-7 -4 v8 z" {...HEAD} />
+
+      <path d="M93 39 V75" {...ARROW} />
+      <path d="M93 36 l-4 7 h8 z" {...HEAD} />
+      <path d="M93 78 l-4 -7 h8 z" {...HEAD} />
+
+      <Badge x={93} y={110} letter="A" />
+      <Badge x={32} y={122} letter="B" />
+      <Badge x={178} y={176} letter="C" />
+      <Badge x={93} y={57} letter="D" />
+    </svg>
+  );
+}
+
+/* A drawstring bag: the cord runs corner to corner over the top, so the cord
+   is drawn as the measured line itself rather than a line beside it. */
+function MeasureDrawstring() {
+  return (
+    <svg viewBox="6 2 188 198" className="measure-figure" role="img" aria-label="Where each measurement is taken on the bag">
+      <path d="M60 92 H128 V162 a8 8 0 0 1 -8 8 H68 a8 8 0 0 1 -8 -8 Z" fill="#fbfcfd" stroke="#c9d2e0" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M60 106 H128" stroke="#c9d2e0" strokeWidth="2" />
+
+      <path d="M60 92 H32 M60 170 H32" stroke="#c9d2e0" strokeWidth="1.5" strokeDasharray="4 4" />
+
+      <path d="M69 126 H119" {...ARROW} />
+      <path d="M66 126 l7 -4 v8 z" {...HEAD} />
+      <path d="M122 126 l-7 -4 v8 z" {...HEAD} />
+
+      <path d="M36 95 V167" {...ARROW} />
+      <path d="M36 92 l-4 7 h8 z" {...HEAD} />
+      <path d="M36 170 l-4 -7 h8 z" {...HEAD} />
+
+      <path d="M76 104 C 64 72 76 56 94 56 C 112 56 124 72 112 104" {...ARROW} />
+      <path d="M76 110 l-4 -7 h8 z" {...HEAD} />
+      <path d="M112 110 l-4 -7 h8 z" {...HEAD} />
+
+      <Badge x={94} y={126} letter="A" />
+      <Badge x={36} y={131} letter="B" />
+      <Badge x={94} y={44} letter="C" />
+    </svg>
+  );
+}
+
+/* The drawing the guide opens on, by what the chart asks for. */
+const measureFigures = { tote: MeasureTote, bag: MeasureTote, drawstring: MeasureDrawstring };
+
+export function MeasureFigure({ type = 'tee' }) {
+  const Bag = measureFigures[type];
+  return Bag ? <Bag /> : <MeasureGarment type={type} />;
+}
+
 /* A drawing per kind. The chain of ternaries this replaced had grown to
    thirteen branches and its indentation no longer said which was which. */
 const marked = { cap: Cap, bucket: Cap, tote: Tote, bag: Tote, bottle: Bottle };

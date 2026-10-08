@@ -2093,7 +2093,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* Where to hold the tape. */
 .measure-figure { display: block; width: 100%; max-width: 330px; margin: 0 auto; height: auto; }
-.size-measure-key { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+.size-measure-key { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; }
 .size-measure-key li { display: flex; gap: 10px; }
 .size-measure-badge { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--green-dark); font-size: 13.5px; font-weight: 800; color: #fff; }
 .size-measure-key strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
