@@ -1499,7 +1499,9 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-colours button:hover { border-color: var(--navy); }
 
 .pdp-methods { margin-top: 14px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.pdp-methods button { padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
+/* A button centres what is inside it; in a row of cards of different
+   heights that leaves every mark at a different height. */
+.pdp-methods button { padding: 14px 16px; display: grid; align-content: start; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; cursor: pointer; }
 .pdp-methods button:hover { border-color: var(--navy); }
 .pdp-methods button.is-chosen { border-color: var(--green); background: #e9f6ef; }
 .pdp-methods strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
@@ -2070,9 +2072,21 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-colours button.is-swatch.is-chosen { border-color: var(--green); }
 .pdp-colours button.is-word { min-height: 44px; padding: 10px 16px; border: 1.5px solid var(--line); border-radius: 999px; background: #fff; font-size: 16px; font-weight: 600; color: var(--ink); cursor: pointer; }
 .pdp-colours button.is-word.is-chosen { border-color: var(--green); background: #effaf4; color: var(--green-dark); }
+/* "Other" is a colour answer too, so it keeps its place in the row of
+   circles rather than dropping to a pill on a line of its own. */
+.pdp-colours button.is-other { width: auto; padding: 3px 16px 3px 3px; display: inline-flex; align-items: center; gap: 9px; border-radius: 999px; }
+.pdp-colours button.is-other em { width: 38px; height: 38px; flex: none; background: conic-gradient(from .25turn, #e23b3b, #f0a32b, #0f9a55, #2f6fe4, #7b3ff2, #e23b3b); }
+.pdp-colours button.is-other span { font-size: 16px; font-weight: 600; color: var(--ink); }
+.pdp-colours button.is-other.is-chosen span { color: var(--green-dark); }
 
 /* Each way of printing keeps room for a picture of itself. */
 .pdp-method-shot { display: grid; place-items: center; width: 100%; height: 54px; margin-bottom: 8px; border-radius: 10px; background: var(--soft); color: var(--navy); }
+/* A material comes in a colour, so the card shows the colour rather than a
+   mark standing in for one. The sheen is what tells it from a flat block. */
+.pdp-method-shot.is-swatch { background: linear-gradient(145deg, rgba(255,255,255,.34), rgba(0,0,0,.14)), var(--ink); box-shadow: inset 0 0 0 1px rgba(13, 42, 107, .14); }
+/* Where they fit on one line they go on one line: a choice between four is
+   easier to make side by side than two at a time. */
+.pdp-methods.is-row { grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); }
 .pdp-methods button.is-chosen .pdp-method-shot { background: #dff2e8; color: var(--green-dark); }
 
 /* The chart, in a window: the reader is mid-way through choosing and should
@@ -2153,7 +2167,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-dimensions input:focus-visible { border-color: var(--green); outline: none; }
 
 /* Add-ons: several at once, and one of them can open a panel of its own. */
-.pdp-addons { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.pdp-addons { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
 .pdp-addons label {
   position: relative; display: block; padding: 12px 12px 14px; border: 1px solid var(--line); border-radius: 14px;
   background: #fff; cursor: pointer; transition: border-color .2s ease, background-color .2s ease;
