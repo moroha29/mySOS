@@ -3,7 +3,7 @@ import googleReviews from '../../data/googleReviews.json';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, hasGoogleReviews, initials, isFresh } from '../../utils/googleReviews';
-import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, productImage, productImagePath, scenePath, solutionPath, storyPath } from '../cms';
+import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, productImage, productImageFit, productImagePath, productPath, scenePath, solutionPath, storyPath } from '../cms';
 import { REQUEST_PATH, requestPathFor } from '../../utils/catalogue';
 import useSavedRequest from '../useSavedRequest';
 import { firstImage, getImage } from '../../utils/imageRegistry';
@@ -94,21 +94,36 @@ export function Photo({ style, label, className = '', image, imageKey, imagePath
 }
 
 /*
- * A product's picture: its photograph, or the drawn stand-in when it has none.
- *
- * Either way it carries the path of the product's picture in the manager's
- * draft, so clicking it there opens that picture. The drawn stand-in has no
- * <img> to hang the path on, so it goes on the box, marked as a background the
- * way the hero panels are: a picture chosen for it is painted over the drawing
- * until the published page renders it as a photograph.
+ * A product's picture: the one chosen in the manager, else the file dropped in
+ * beside the others, else the drawing. `fit` is how it sits in its frame --
+ * the whole product with room around it, or filling the frame and cropped.
  */
-export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '' }) {
+export function ProductShot({ imageStyle, slug, mark = 'MySOS', className = '', fit = '' }) {
   const src = productImage(slug);
   const path = productImagePath(slug);
-  if (src) return <div className={`product-visual has-photo ${className}`.trim()}><img src={src} alt="" loading="lazy" data-cms-path={path && cms(path)} /></div>;
+  if (src) {
+    return <div className={`product-visual has-photo ${className}`.trim()} data-fit={(fit || productImageFit(slug)) || undefined}>
+      <img src={src} alt="" loading="lazy" data-cms-path={path && cms(path)} />
+    </div>;
+  }
   const { type, colour } = parseProductVisual(imageStyle);
-  return <Product type={type} color={colour} mark={mark} className={className} attrs={path ? { 'data-cms-path': cms(path), 'data-cms-background': 'true' } : undefined} />;
+  /*
+   * No photograph yet. The drawing still carries the picture's path, marked as
+   * a background so the manager opens the picture field rather than writing a
+   * file name over the artwork -- otherwise a product with no photograph is
+   * the one product you cannot give a photograph to.
+   */
+  return <Product
+    type={type}
+    color={colour}
+    mark={mark}
+    className={className}
+    {...(path ? { 'data-cms-path': cms(path), 'data-cms-background': 'true' } : {})}
+  />;
 }
+
+/** Everything a product's picture needs, wherever one is drawn. */
+export const shotProps = (product) => ({ imageStyle: product.public.imageStyle, slug: product.public.slug });
 
 /* -------------------------------------------------------------------- cards */
 
@@ -124,9 +139,9 @@ export function ProductCard({ product, reveal }) {
         on the card: the price and what is asked for most are on the product's
         own page, where a reader is deciding rather than browsing. */}
     <span className="product-card-shot">
-      <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />
+      <ProductShot {...shotProps(product)} />
     </span>
-    <h3>{product.public.name}</h3>
+    <h3 data-cms-path={cms(productPath(product, 'public', 'name'))}>{product.public.name}</h3>
   </a>;
 }
 

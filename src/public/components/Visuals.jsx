@@ -182,6 +182,51 @@ function Medal({ color = 'navy' }) {
   );
 }
 
+function Keychain({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="46 26 108 148" className="garment" role="presentation" aria-hidden="true">
+      <circle cx="100" cy="48" r="17" fill="none" stroke={p.shade} strokeWidth="8" />
+      <rect x="94" y="62" width="12" height="16" rx="5" fill={p.shade} />
+      <rect x="62" y="74" width="76" height="92" rx="16" fill={p.base} />
+      <rect x="62" y="74" width="76" height="30" rx="16" fill={p.light} />
+      <rect x="62" y="94" width="76" height="10" fill={p.light} />
+      <rect x="80" y="118" width="40" height="9" rx="4.5" fill="rgba(255,255,255,.62)" />
+      <rect x="80" y="136" width="26" height="8" rx="4" fill="rgba(255,255,255,.34)" />
+    </svg>
+  );
+}
+
+function Trophy({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="44 22 112 156" className="garment" role="presentation" aria-hidden="true">
+      <path d="M72 30 h56 v36 a28 28 0 0 1 -56 0 z" fill={p.base} />
+      <path d="M72 38 H56 a19 19 0 0 0 18 26" fill="none" stroke={p.shade} strokeWidth="8" strokeLinecap="round" />
+      <path d="M128 38 h16 a19 19 0 0 1 -18 26" fill="none" stroke={p.shade} strokeWidth="8" strokeLinecap="round" />
+      <path d="M72 30 h18 v36 a28 28 0 0 0 10 22 28 28 0 0 1 -28 -22 z" fill="rgba(255,255,255,.14)" />
+      <rect x="92" y="96" width="16" height="24" fill={p.shade} />
+      <rect x="70" y="120" width="60" height="14" rx="4" fill={p.light} />
+      <rect x="60" y="134" width="80" height="20" rx="5" fill={p.shade} />
+      <path d="M100 42 l5.4 11 12.2 1.8 -8.8 8.6 2 12.2 -10.8 -5.7 -10.8 5.7 2 -12.2 -8.8 -8.6 12.2 -1.8 z" fill="#0f9a55" />
+    </svg>
+  );
+}
+
+function Plaque({ color = 'navy' }) {
+  const p = paletteFor(color);
+  return (
+    <svg viewBox="44 28 112 142" className="garment" role="presentation" aria-hidden="true">
+      <rect x="58" y="34" width="84" height="106" rx="9" fill={p.shade} />
+      <rect x="68" y="44" width="64" height="86" rx="5" fill={p.base} />
+      <rect x="80" y="58" width="40" height="9" rx="4.5" fill="rgba(255,255,255,.62)" />
+      <rect x="80" y="74" width="26" height="7" rx="3.5" fill="rgba(255,255,255,.38)" />
+      <path d="M100 92 l4.8 9.8 10.8 1.6 -7.8 7.6 1.8 10.8 -9.6 -5.1 -9.6 5.1 1.8 -10.8 -7.8 -7.6 10.8 -1.6 z" fill="#0f9a55" />
+      <rect x="50" y="144" width="100" height="18" rx="5" fill={p.light} />
+    </svg>
+  );
+}
+
 function Mat({ color = 'navy' }) {
   const p = paletteFor(color);
   return (
@@ -371,15 +416,16 @@ const marked = { cap: Cap, bucket: Cap, tote: Tote, bag: Tote, bottle: Bottle };
 const plain = {
   'gift-set': GiftSet, notebook: Notebook, lanyard: Lanyard, towel: Towel,
   medal: Medal, mat: Mat, pen: Pen, 'name-tent': NameTent, sticker: Sticker,
+  keychain: Keychain, trophy: Trophy, award: Trophy, plaque: Plaque,
 };
 
-export function Product({ type = 'tee', color = 'navy', mark = 'MySOS', className = '', attrs }) {
+export function Product({ type = 'tee', color = 'navy', mark = 'MySOS', className = '', ...rest }) {
   const Marked = marked[type];
   const Plain = plain[type];
   const art = Marked ? <Marked color={color} mark={mark} />
     : Plain ? <Plain color={color} />
       : <Garment type={garmentTypes.has(type) ? type : 'tee'} color={color} mark={mark} />;
-  return <div className={`product-visual ${className}`.trim()} {...attrs}>{art}</div>;
+  return <div className={`product-visual ${className}`.trim()} {...rest}>{art}</div>;
 }
 /* ------------------------------------------------------------------ scenes */
 

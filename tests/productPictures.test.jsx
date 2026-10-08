@@ -13,7 +13,14 @@ const drawn = products.find((item) => !getImage(`products/${item.public.slug}`))
 
 describe('a product has a picture the manager can change', () => {
   it('has an entry for every product, so none is left without a field', () => {
-    for (const item of products) expect(siteContent.productImages?.[item.public.slug], item.public.slug).toEqual({ image: expect.any(String) });
+    for (const item of products) {
+      const entry = siteContent.productImages?.[item.public.slug];
+      expect(entry, item.public.slug).toBeTruthy();
+      expect(typeof entry.image, item.public.slug).toBe('string');
+      // A picture that is not square can say how it sits in its frame.
+      if ('fit' in entry) expect(['', 'cover', 'contain'], item.public.slug).toContain(entry.fit);
+      expect(Object.keys(entry).every((key) => key === 'image' || key === 'fit'), item.public.slug).toBe(true);
+    }
   });
 
   it('marks a photograph with where the picture lives', () => {

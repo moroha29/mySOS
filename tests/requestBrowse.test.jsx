@@ -72,7 +72,8 @@ describe('the Get a Quote page', () => {
     // category beneath the rows already chosen.
     expect(html).toContain('class="add-product"');
     expect(html).not.toContain('class="request-browse"');
-    for (const category of browseCategories()) expect(html).toContain(category.name);
+    // A category whose name carries an ampersand arrives escaped.
+    for (const category of browseCategories()) expect(html).toContain(category.name.replace(/&/g, '&amp;'));
     // Products that are not featured used to be reachable only by search.
     const plain = visible.filter((item) => !item.public.featured);
     expect(plain.length).toBeGreaterThan(20);
@@ -117,6 +118,48 @@ describe('the window that adds a product', () => {
 
 describe('the request itself', () => {
   const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
+
+  it('marks what MySOS would pick rather than writing it under one button', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // The word sat on a second line under one choice, and every button in the
+    // row grew to match it.
+    expect(builder).toContain('className="request-choice-pick"');
+    expect(builder).toContain('<Icon name="thumbUp" size={18} />');
+    expect(builder).not.toContain('<small>Recommended</small>');
+    // Still said, for anyone who cannot see the mark.
+    expect(builder).toContain("data-cms-path={wordPath('recommendedLabel')}");
+    expect(css).toMatch(/\.request-choices button \{[^}]*min-height: 46px/);
+    expect(css).not.toMatch(/\.request-choices button \{[^}]*flex-direction: column/);
+  });
+
+  it('keeps the send button on screen however long the request gets', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // The summary grows with every product added, and the button that sends
+    // it was being pushed off the bottom of the screen along with it.
+    expect(css).toMatch(/\.request-summary \{ position: sticky;[^}]*max-height: calc\(100vh - 110px\)/);
+    expect(css).toMatch(/\.request-summary \{[^}]*flex-direction: column/);
+    expect(css).toMatch(/\.request-summary-scroll \{[^}]*overflow-y: auto/);
+    // Reaching the end of that list does not then carry the page with it.
+    expect(css).toMatch(/\.request-summary-scroll \{[^}]*overscroll-behavior: contain/);
+    expect(builder).toContain('className="request-summary-scroll"');
+    // Stacked under the request on a narrow screen, it is as tall as it needs.
+    const narrow = css.slice(css.indexOf('.request-summary { position: static;'));
+    expect(narrow.slice(0, 200)).toContain('max-height: none');
+    expect(narrow.slice(0, 300)).toContain('.request-summary-scroll { overflow: visible;');
+  });
+
+  it('makes the one box that changes the quote look like it', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // Everything else in that panel is green or white and the upload box read
+    // as part of the furniture. Blue, bolder and larger; green once it holds
+    // a file, so it is obvious the artwork arrived.
+    expect(css).toMatch(/\.request-upload \{[^}]*border: 2px dashed var\(--navy-soft\)/);
+    expect(css).toMatch(/\.request-upload \{[^}]*background: #dbe6fb/);
+    expect(css).toMatch(/\.request-upload \{[^}]*font-weight: 700/);
+    expect(css).toContain('.request-upload.has-files { border-style: solid; border-color: var(--green);');
+    expect(builder).toContain("className={line.files.length ? 'request-upload has-files' : 'request-upload'}");
+    expect(builder).toContain("name={line.files.length ? 'checkCircle' : 'upload'}");
+  });
 
   it('lists no products under the button that opens the catalogue', () => {
     // A list of suggestions under it put the catalogue back beneath the

@@ -95,6 +95,56 @@ describe('the products page, as the design has it', () => {
     expect(source).toContain('.toLowerCase().includes(asked)');
   });
 
+  it('says the search worked, because the shelf it filters is a screen away', () => {
+    // Nothing happened on screen when someone typed: the grid that changed
+    // was below the fold, so a search that worked looked like one that broke.
+    expect(source).toContain("className={products.length ? 'collection-found' : 'collection-found is-none'}");
+    expect(source).toContain("role=\"status\"");
+    expect(source).toContain('aria-live="polite"');
+    // And it offers the way down, as does pressing enter.
+    expect(source).toContain('const goToResults = () => collectionRef.current?.scrollIntoView');
+    expect(source).toContain('onSubmit={(event) => { event.preventDefault(); goToResults(); }}');
+    expect(source).toContain('onClick={goToResults}');
+    // It is not shown until there is something to say.
+    expect(source).toContain('{query.trim() && <p');
+    expect(markup()).not.toContain('collection-found');
+    expect(css).toContain('.collection-found {');
+    for (const key of ['searchFound', 'searchFoundOne', 'searchFoundNone']) {
+      expect(siteContent.pages.products[key], key).toBeTruthy();
+    }
+    expect(siteContent.pages.products.searchFound).toContain('{count}');
+  });
+
+  it('lets the manager edit a product’s own name and picture', () => {
+    const html = markup();
+    const index = productData.catalogue.findIndex((item) => item.public.slug === 'premium-cotton-tee');
+    // A product's words are addressed under pricingData, because the manager
+    // loads the catalogue there for the prices editor and writes it back on
+    // publish. Its picture is content, kept with the others under
+    // productImages, so there is one place a picture is chosen.
+    const words = JSON.stringify(['pricingData', 'productData', 'catalogue', index, 'public', 'name']).replace(/"/g, '&quot;');
+    const shot = JSON.stringify(['homepage', 'productImages', 'premium-cotton-tee', 'image']).replace(/"/g, '&quot;');
+    expect(html).toContain(`data-cms-path="${words}"`);
+    expect(html).toContain(`data-cms-path="${shot}"`);
+    // Every product has a line of its own, so none of them is the one that
+    // cannot be given a picture.
+    for (const item of productData.catalogue) {
+      expect(siteContent.productImages[item.public.slug], item.id).toBeTruthy();
+      expect(typeof siteContent.productImages[item.public.slug].image, item.id).toBe('string');
+    }
+  });
+
+  it('opens the picture field on a product drawn rather than photographed', () => {
+    // Marked as a background, so clicking it offers a picture instead of
+    // writing a file name over the artwork.
+    const source = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+    expect(source).toContain("'data-cms-background': 'true'");
+    expect(source).toContain('const src = productImage(slug);');
+    // And how the picture sits in its frame is a choice, not a constant.
+    expect(css).toContain('.product-visual.has-photo[data-fit="cover"] img { object-fit: cover; }');
+    expect(css).toContain('.product-visual.has-photo[data-fit="contain"] img { object-fit: contain; }');
+  });
+
   it('puts the kinds within a category in a row of their own', () => {
     const html = markup();
     expect(html).toContain('class="type-row"');
@@ -175,9 +225,16 @@ describe('the home banner and the sections under it', () => {
   it('gives every category a tile, one for one, each in its own wash', () => {
     const markup = render(HomePage, '/');
     const tiles = [...markup.matchAll(/class="home-tile tone-(\w+)"/g)].map(([, tone]) => tone);
-    expect(tiles).toHaveLength(siteContent.categories.length);
-    expect(new Set(tiles).size).toBe(siteContent.categories.length);
-    for (const category of siteContent.categories) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
+    // The categories the site is offering. One held back has no tile, and the
+    // washes still run one to a tile rather than two tiles sharing one.
+    const shown = siteContent.categories.filter((category) => category.visible !== false);
+    expect(shown.length).toBeGreaterThan(0);
+    expect(tiles).toHaveLength(shown.length);
+    expect(new Set(tiles).size).toBe(shown.length);
+    for (const category of shown) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
+    for (const category of siteContent.categories) {
+      if (category.visible === false) expect(markup).not.toContain(`?category=${category.id}`);
+    }
     expect(css).toMatch(/\.home-tile-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
     const phone = css.slice(css.indexOf('@media (max-width: 620px)', css.indexOf('20. homepage')));
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);
@@ -383,11 +440,26 @@ describe('the page moves as you read it', () => {
   const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
 
   it('fills a line across the top and tightens the header once you scroll', () => {
-    expect(chrome).toMatch(/page\.style\.setProperty\('--scrolled'/);
-    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', scrolled > 24\)/);
+    expect(chrome).toMatch(/bar\?\.style\.setProperty\('--scrolled', along\)/);
+    expect(chrome).toMatch(/page\.classList\.toggle\('is-scrolled', near\)/);
     expect(chrome).toMatch(/addEventListener\('scroll', onScroll, \{ passive: true \}\)/);
-    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?width: calc\(var\(--scrolled, 0\) \* 100%\)/);
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?transform: scaleX\(var\(--scrolled, 0\)\)/);
     expect(css).toMatch(/html\.is-scrolled \.site-header \{ height: 72px;/);
+  });
+
+  it('writes how far down the page you are where only the bar sees it', () => {
+    // On <html> the value is inherited by the whole document, so every element
+    // had its style worked out again on every frame of every scroll: 10ms a
+    // frame on the home page, out of the 16ms a frame has. On the bar itself
+    // the same write costs a seventh of a millisecond.
+    expect(chrome).toContain("const bar = root.querySelector('.site-announce');");
+    expect(chrome).not.toMatch(/page\.style\.setProperty\('--scrolled'/);
+    // And nothing is written at all unless the bar would be drawn differently.
+    expect(chrome).toContain("if (along !== last) {");
+    expect(chrome).toContain('if (near !== tight) {');
+    // A width is laid out again on every frame; a scale is not.
+    expect(css).not.toContain('width: calc(var(--scrolled, 0) * 100%)');
+    expect(css).toMatch(/\.site-announce::after \{[\s\S]*?transition: transform \.12s linear/);
   });
 
   it('counts the review total up to itself, from the number the server drew', () => {

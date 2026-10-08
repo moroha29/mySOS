@@ -3,9 +3,10 @@ import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
 import { getDisplayPrice, getPublicProducts, REQUEST_PATH } from '../../utils/catalogue';
 import { clampQuantity, detailFieldsFor, LET_MYSOS_CHOOSE, printingFieldFor } from '../../utils/solutionRequest';
-import { cms, contentPath, pagePath, pageText, productImage, productImagePath } from '../cms';
+import { cms, contentPath, pagePath, pageText, picture, productImage, productImageFit, productImagePath, productPath } from '../cms';
+import BrandMark from '../components/BrandMarks';
 import Icon from '../components/Icons';
-import { ProductShot } from '../components/Ui';
+import { ProductShot, shotProps } from '../components/Ui';
 import { MeasureFigure, Product } from '../components/Visuals';
 
 /*
@@ -55,6 +56,16 @@ const methodIcon = (id) => siteContent.printingMethods?.[id]?.icon ?? METHOD_ICO
  * specifications and the way to the size chart. It used to be an accordion at
  * the foot of the page, a screen and a half below the picture it described.
  */
+/* One part of a set: its photograph, or the drawing that stands in for it. */
+function IncludedShot({ product, item, index }) {
+  const marks = {
+    'data-cms-path': cms(contentPath('productIncludes', product.id, 'items', index, 'image')),
+  };
+  const shot = picture(item.image, `products/${product.public.slug}-part-${index + 1}`);
+  if (!shot) return <Product type={item.visual} color="navy" mark="" {...marks} data-cms-background="true" />;
+  return <img className="pdp-includes-shot" src={shot} alt="" loading="lazy" decoding="async" {...marks} />;
+}
+
 /* What a set is made of, where the product is a set rather than one thing. */
 function Includes({ product }) {
   const set = siteContent.productIncludes?.[product.id];
@@ -63,7 +74,9 @@ function Includes({ product }) {
     <h2 data-cms-path={cms(contentPath('productIncludes', product.id, 'title'))}>{set.title}</h2>
     <ul>
       {set.items.map((item, index) => <li key={item.name}>
-        <Product type={item.visual} color="navy" mark="" />
+        {/* A photograph of the part where there is one, the drawing where
+            there is not, and either way the manager can change it. */}
+        <IncludedShot product={product} item={item} index={index} />
         <span>
           <strong data-cms-path={cms(contentPath('productIncludes', product.id, 'items', index, 'name'))}>{item.name}</strong>
           <small data-cms-path={cms(contentPath('productIncludes', product.id, 'items', index, 'note'))}>{item.note}</small>
@@ -84,6 +97,12 @@ function ProductDetails({ product, onChart }) {
     <h2 data-cms-path={wordPath('specsTitle')}>{word('specsTitle', 'Product details')}</h2>
     <p className="pdp-details-lead">{product.public.description}</p>
     <dl className="pdp-specs">
+      {/* The two words at the top say what the two columns are, as the
+          drawing has it. */}
+      <div className="pdp-specs-head" aria-hidden="true">
+        <dt data-cms-path={wordPath('specsColumnLabel')}>{word('specsColumnLabel', 'Specification')}</dt>
+        <dd data-cms-path={wordPath('specsColumnValue')}>{word('specsColumnValue', 'Details')}</dd>
+      </div>
       {shown.map((row, index) => <div key={row.label}>
         <dt data-cms-path={cms(contentPath('productSpecs', key, index, 'label'))}>{row.label}</dt>
         <dd data-cms-path={cms(contentPath('productSpecs', key, index, 'value'))}>{row.value}</dd>
@@ -198,18 +217,28 @@ function SizeChart({ product, open, onClose }) {
   </dialog>;
 }
 
+/*
+ * The product's own photographs: the big one, and the other views of the same
+ * thing in a row beneath it. Clicking one brings it up rather than opening
+ * another page -- the row used to be the rest of the category, which is a
+ * different question and is already answered at the foot of this page.
+ *
+ * MySOS drops products/<slug>-2.jpg and so on in beside the main photograph
+ * and they appear here. Until then the places are held open, so it is obvious
+ * where they go.
+ */
+const VIEW_SLOTS = 4;
+
 function Gallery({ product, category }) {
-  const photos = useMemo(() => {
-    const own = productImage(product.public.slug);
-    // Everything else in the category, not the first three: the row scrolls,
-    // so there is room for all of them.
-    const others = getPublicProducts({ category: product.public.category })
-      .filter((item) => item.id !== product.id)
-      .map((item) => ({ slug: item.public.slug, src: productImage(item.public.slug), name: item.public.name }))
-      .filter((item) => item.src)
-      .slice(0, 12);
-    return { own, others };
+  const views = useMemo(() => {
+    // The picture chosen in the manager is the first view, the same one the
+    // cards and the search results show.
+    const found = [productImage(product.public.slug)];
+    for (let n = 2; n <= 6; n += 1) found.push(picture('', `products/${product.public.slug}-${n}`));
+    return found.filter(Boolean);
   }, [product]);
+  const [shown, setShown] = useState(0);
+  const empty = Math.max(0, VIEW_SLOTS - views.length);
 
   const railRef = useRef(null);
   const [reach, setReach] = useState({ prev: false, next: false });
@@ -227,7 +256,7 @@ function Gallery({ product, category }) {
     if (!rail) return undefined;
     globalThis.addEventListener('resize', measure);
     return () => globalThis.removeEventListener('resize', measure);
-  }, [photos.others.length]);
+  }, [views.length]);
   const nudge = (by) => {
     const rail = railRef.current;
     if (!rail) return;
@@ -238,26 +267,44 @@ function Gallery({ product, category }) {
   return <div className="pdp-gallery" data-reveal>
     <div className="pdp-shot">
       {product.public.featured && <span className="pdp-badge" data-cms-path={cms(contentPath('labels', 'featuredBadge'))}>{siteContent.labels?.featuredBadge ?? 'Most requested'}</span>}
-      {photos.own
-        ? <img src={photos.own} alt={product.public.name} data-cms-path={productImagePath(product.public.slug) && cms(productImagePath(product.public.slug))} />
-        : <ProductShot imageStyle={product.public.imageStyle} slug={product.public.slug} />}
+      {views.length
+        ? <img
+          src={views[Math.min(shown, views.length - 1)]}
+          alt={product.public.name}
+          style={productImageFit(product.public.slug) ? { objectFit: productImageFit(product.public.slug) } : undefined}
+          data-cms-path={shown === 0 && productImagePath(product.public.slug) ? cms(productImagePath(product.public.slug)) : undefined}
+        />
+        : <ProductShot {...shotProps(product)} />}
     </div>
-    {photos.others.length > 0 && <p className="pdp-thumbs-label">{`More ${(category?.name ?? '').toLowerCase()}`.trim()}</p>}
-    {photos.others.length > 0 && <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
-      <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
-        {photos.others.map((other) => <li key={other.slug}>
-          <a href={`/products/${other.slug}/`} aria-label={other.name}><img src={other.src} alt="" loading="lazy" /></a>
-        </li>)}
-      </ul>
-      {(reach.prev || reach.next) && <>
-        <button type="button" className="pdp-thumb-arrow is-prev" aria-label="Previous products" disabled={!reach.prev} onClick={() => nudge(-1)}>
-          <Icon name="chevronLeft" size={20} />
-        </button>
-        <button type="button" className="pdp-thumb-arrow is-next" aria-label="More products" disabled={!reach.next} onClick={() => nudge(1)}>
-          <Icon name="chevronRight" size={20} />
-        </button>
-      </>}
-    </div>}
+    {views.length > 0 && <>
+      <p className="pdp-thumbs-label" data-cms-path={wordPath('viewsLabel')}>{word('viewsLabel', 'Other views')}</p>
+      <div className={reach.prev || reach.next ? 'pdp-thumb-rail has-more' : 'pdp-thumb-rail'}>
+        <ul className="pdp-thumbs" ref={railRef} onScroll={measure}>
+          {views.map((src, index) => <li key={src}>
+            <button
+              type="button"
+              className={index === shown ? 'is-chosen' : ''}
+              aria-label={`${product.public.name}, view ${index + 1}`}
+              aria-pressed={index === shown}
+              onClick={() => setShown(index)}
+            ><img src={src} alt="" loading="lazy" /></button>
+          </li>)}
+          {/* A photograph that has not been supplied yet keeps its place
+              rather than the row closing up around it. */}
+          {Array.from({ length: empty }, (_, index) => <li key={`slot-${index}`} className="is-empty" aria-hidden="true">
+            <span><Icon name="photos" size={22} /></span>
+          </li>)}
+        </ul>
+        {(reach.prev || reach.next) && <>
+          <button type="button" className="pdp-thumb-arrow is-prev" aria-label="Previous views" disabled={!reach.prev} onClick={() => nudge(-1)}>
+            <Icon name="chevronLeft" size={20} />
+          </button>
+          <button type="button" className="pdp-thumb-arrow is-next" aria-label="More views" disabled={!reach.next} onClick={() => nudge(1)}>
+            <Icon name="chevronRight" size={20} />
+          </button>
+        </>}
+      </div>
+    </>}
     <span className="sr-only">{`${category?.name ?? product.public.category} product`}</span>
   </div>;
 }
@@ -282,6 +329,19 @@ function sizeOptionsFor(step, product) {
       return [field.id, (at > 0 ? row[at] : null) ?? field.standard ?? ''];
     })),
   }));
+}
+
+/*
+ * How this thing should be printed, from whichever step asks. A card can
+ * travel under a different name than the one written on it: "Help me decide"
+ * reaches the quote as "Let MySOS recommend", which is what the builder's own
+ * list calls it.
+ */
+function printingAnswer(drawn, answers) {
+  const step = drawn?.find((item) => item.type === 'methods' || item.asPrinting);
+  if (!step) return '';
+  const said = answers[step.id] ?? '';
+  return step.options?.find((item) => item.name === said)?.value ?? said;
 }
 
 /** Which size is being asked for, and what it measures. */
@@ -336,7 +396,12 @@ function ColourChoice({ name, chosen, onPick }) {
  * somewhere to say the rest.
  */
 function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
-  const set = (key, value) => onAnswer({ ...answers, [key]: value });
+  // Whether a list of named sizes is showing. Declared before anything is
+  // drawn, because a step returns early once it knows which kind it is.
+  const [listOpen, setListOpen] = useState(false);
+  // Added to whatever has been answered so far rather than to a copy taken
+  // when this step was drawn: two answers in quick succession both stick.
+  const set = (key, value) => onAnswer((said) => ({ ...said, [key]: value }));
   const mine = answers[step.id] ?? '';
   const head = <p className="pdp-step-head">
     <span className="pdp-step-number" aria-hidden="true">{number}</span>
@@ -346,25 +411,54 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
 
   if (step.type === 'dimensions') {
     const { sizes, picked, custom, valueOf } = sizePick(step, product, answers);
+    const named = step.standardSizes ?? [];
+    const chosen = named.find((size) => size.name === picked) ?? named[0];
     return <section className="pdp-step">
       {head}
-      {/* The sizes this kind is made in, then the way to ask for one it is
-          not. A kind with no chart behind it keeps the single standard it
-          always had. */}
-      <div className={`pdp-sizing${sizes.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
-        {sizes.length
-          ? sizes.map((size) => <button
+      {/* What it is made in, then the way to ask for something it is not. */}
+      <div className={`pdp-sizing${sizes.length && !named.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
+        {named.length || !sizes.length
+          ? <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, named.length ? (chosen?.name ?? 'standard') : 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>
+          : sizes.map((size) => <button
             key={size.name}
             type="button"
             role="radio"
             aria-checked={picked === size.name}
             className={picked === size.name ? 'is-chosen' : ''}
             onClick={() => set(step.id, size.name)}
-          >{size.name}</button>)
-          : <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>}
+          >{size.name}</button>)}
         <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(step.id, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
       </div>
-      <ul className="pdp-dimensions">
+
+      {/* A size with a name and a shape of its own is chosen from a list that
+          shows both, rather than typed in as three numbers. */}
+      {named.length > 0 && !custom && <div className="pdp-sizepick">
+        {step.listLabel && <span className="pdp-sizepick-label">{step.listLabel}</span>}
+        <button type="button" className="pdp-sizepick-toggle" aria-expanded={listOpen} onClick={() => setListOpen(!listOpen)}>
+          <span>{chosen ? `${chosen.name} \u00b7 ${chosen.dims}` : (step.listPlaceholder ?? '')}</span>
+          <Icon name={listOpen ? 'chevronUp' : 'chevronDown'} size={20} />
+        </button>
+        {listOpen && <ul className="pdp-sizepick-list" role="radiogroup" aria-label={step.listLabel ?? step.question}>
+          {named.map((size) => <li key={size.name}>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={chosen?.name === size.name}
+              className={chosen?.name === size.name ? 'is-chosen' : ''}
+              onClick={() => { set(step.id, size.name); setListOpen(false); }}
+            >
+              <span className="pdp-sizepick-mark"><Icon name={size.icon ?? 'tote'} size={26} /></span>
+              <span className="pdp-sizepick-words">
+                <strong>{`${size.name} \u00b7 ${size.dims}`}</strong>
+                {size.note && <small>{size.note}</small>}
+              </span>
+              <em className="pdp-sizepick-dot" aria-hidden="true" />
+            </button>
+          </li>)}
+        </ul>}
+      </div>}
+
+      {(!named.length || custom) && <ul className="pdp-dimensions">
         {step.fields.map((field) => <li key={field.id}>
           <label htmlFor={`pdp-${field.id}`}>{field.label}</label>
           <input
@@ -372,16 +466,40 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
             type="text"
             inputMode="decimal"
             placeholder={field.standard ?? ''}
-            readOnly={!custom}
+            readOnly={!custom && !named.length}
             value={valueOf(field)}
             onChange={(event) => set(field.id, event.target.value)}
           />
         </li>)}
-      </ul>
-      {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
-        <Icon name="design" size={19} />
-        <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
-      </button>}
+      </ul>}
+
+      {(step.notes?.length || onChart) && <div className="pdp-step-foot">
+        {step.notes?.length > 0 && <p className="pdp-step-notes">{step.notes.map((line) => <span key={line}>{line}</span>)}</p>}
+        {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
+          <Icon name="design" size={19} />
+          <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
+        </button>}
+      </div>}
+    </section>;
+  }
+
+  /* A row of named choices, one of which may be the usual one. */
+  if (step.type === 'choice') {
+    return <section className="pdp-step">
+      {head}
+      <div className="pdp-choice-row" role="radiogroup" aria-label={step.question}>
+        {step.options.map((option) => <button
+          key={option.name}
+          type="button"
+          role="radio"
+          aria-checked={mine === option.name}
+          className={mine === option.name ? 'is-chosen' : ''}
+          onClick={() => set(step.id, option.name)}
+        >
+          <span>{option.name}</span>
+          {option.tag && <em className="pdp-choice-tag">{option.tag}</em>}
+        </button>)}
+      </div>
     </section>;
   }
 
@@ -404,6 +522,10 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           <span className={`pdp-method-shot${option.swatch ? ' is-swatch' : ''}`} style={option.swatch ? { '--ink': option.swatch } : undefined}>
             {option.swatch ? null : <Icon name={option.icon ?? 'spark'} size={30} />}
           </span>
+          {/* The one most people take, said once rather than left to be
+              guessed from the order. */}
+          {option.tag && <em className="pdp-method-tag">{option.tag}</em>}
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <strong>{option.name}</strong>
           {option.note && <small>{option.note}</small>}
         </button>)}
@@ -439,6 +561,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === item.name ? 'is-chosen' : ''}
           onClick={() => set(step.id, item.name)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name={methodIcon(item.id)} size={30} /></span>
           <strong>{item.name}</strong>
           {item.note && <small>{item.note}</small>}
@@ -450,6 +573,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === LET_MYSOS_CHOOSE ? 'is-chosen' : ''}
           onClick={() => set(step.id, LET_MYSOS_CHOOSE)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name="spark" size={30} /></span>
           <strong data-cms-path={wordPath('methodHelpTitle')}>{word('methodHelpTitle', 'Help me decide')}</strong>
           <small data-cms-path={wordPath('methodHelpNote')}>{word('methodHelpNote')}</small>
@@ -497,6 +621,33 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
         </ul>
         {option.fieldsNote && <p className="pdp-addon-note">{option.fieldsNote}</p>}
       </div>)}
+    </section>;
+  }
+
+  if (step.type === 'select') {
+    const custom = Boolean(step.allowCustom) && answers[`${step.id}Mode`] === 'custom';
+    return <section className="pdp-step">
+      {head}
+      {/* What is stocked, and the way to ask for something that is not. The
+          two are the same answer, so they share one line on the request. */}
+      {step.allowCustom && <div className="pdp-sizing" role="radiogroup" aria-label={step.question}>
+        <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(`${step.id}Mode`, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard')}</button>
+        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(`${step.id}Mode`, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
+      </div>}
+      {custom
+        ? <input
+          className="pdp-field"
+          type="text"
+          aria-label={step.question}
+          placeholder={step.customPlaceholder ?? ''}
+          value={mine}
+          onChange={(event) => set(step.id, event.target.value)}
+        />
+        : <select className="pdp-field" aria-label={step.question} value={mine} onChange={(event) => set(step.id, event.target.value)}>
+          <option value="">{step.placeholder ?? ''}</option>
+          {step.options.map((option) => <option key={option} value={option}>{option}</option>)}
+        </select>}
+      {step.note && <p className="pdp-step-note">{step.note}</p>}
     </section>;
   }
 
@@ -571,7 +722,8 @@ function BuildPanel({ product, onChart }) {
     if (!drawn) return '';
     const said = [];
     for (const step of drawn) {
-      if (step.type === 'colour' || step.type === 'methods' || step.type === 'upload') continue;
+      // The colour and the printing have fields of their own on the request.
+      if (step.type === 'colour' || step.type === 'methods' || step.type === 'upload' || step.asPrinting) continue;
       const value = answers[step.id];
       if (step.type === 'addons') {
         const chosen = Array.isArray(value) ? value : [];
@@ -607,7 +759,7 @@ function BuildPanel({ product, onChart }) {
   const href = useMemo(() => {
     const params = new URLSearchParams({ product: product.id, qty: String(clampQuantity(quantity)) });
     const saidColour = drawn ? answers[drawn.find((step) => step.type === 'colour')?.id] : colour;
-    const saidMethod = drawn ? answers[drawn.find((step) => step.type === 'methods')?.id] : method;
+    const saidMethod = drawn ? printingAnswer(drawn, answers) : method;
     if (saidColour) params.set('colour', saidColour);
     if (saidMethod) params.set('printing', saidMethod);
     if (sizing === 'enter' && sizesLine) params.set('sizes', sizesLine);
@@ -631,16 +783,13 @@ function BuildPanel({ product, onChart }) {
         </label>
         <small data-cms-path={wordPath('quantityHint')}>{fill(word('quantityHint', 'Minimum {min}'), { min: minimum })}</small>
       </p>
+      {/* The bar and nothing under it: the row of set quantities was a second
+          way of doing what the bar already does. */}
       <div className="pdp-quantity">
         <button type="button" aria-label="Fewer pieces" onClick={() => step(-10)}><Icon name="minus" size={22} /></button>
         <input id="pdp-quantity" type="number" inputMode="numeric" min={minimum} value={quantity} onChange={(event) => setQuantity(event.target.value)} onBlur={() => setQuantity((current) => Math.max(minimum, clampQuantity(current)))} />
         <button type="button" aria-label="More pieces" onClick={() => step(10)}><Icon name="plus" size={22} /></button>
       </div>
-      {presets.length > 0 && <ul className="pdp-presets">
-        {presets.map((preset, index) => <li key={preset}>
-          <button type="button" className={Number(quantity) === Number(preset) ? 'is-chosen' : ''} onClick={() => setQuantity(preset)} data-cms-path={cms(contentPath('quantityPresets', index))}>{preset}</button>
-        </li>)}
-      </ul>}
     </section>
 
     {/* A kind the client drew their own steps for is asked those, in that
@@ -746,6 +895,7 @@ function BuildPanel({ product, onChart }) {
         >
           {/* Room for a picture of the method; the mark stands in until MySOS
               uploads one. */}
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name={methodIcon(item.id)} size={30} cmsPath={contentPath('printingMethods', item.id, 'icon')} /></span>
           <strong>{item.name}</strong>
           {item.note && <small data-cms-path={cms(contentPath('printingMethods', item.id, 'bestFor'))}>{item.note}</small>}
@@ -758,6 +908,7 @@ function BuildPanel({ product, onChart }) {
           className={method === LET_MYSOS_CHOOSE ? 'is-chosen' : ''}
           onClick={() => setMethod(LET_MYSOS_CHOOSE)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name="spark" size={30} /></span>
           <strong data-cms-path={wordPath('methodHelpTitle')}>{word('methodHelpTitle', 'Help me decide')}</strong>
           <small data-cms-path={wordPath('methodHelpNote')}>{word('methodHelpNote')}</small>
@@ -765,16 +916,22 @@ function BuildPanel({ product, onChart }) {
       </div>
     </section>}
 
-    <div className="pdp-artwork">
-      <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0) + (methods.length > 0 ? 1 : 0)}</span>
-      <span>
-        <strong data-cms-path={wordPath('artworkTitle')}>{word('artworkTitle', 'Have artwork or a reference?')}</strong>
+    {/* The same step, and the same box, as the kinds with steps of their own
+        are given. It was a line of text with a small button beside it here and
+        a drop box there, so asking for artwork looked like two different jobs
+        on two pages of the same catalogue. Either way the file itself is
+        attached on the request page, where the message is put together. */}
+    <section className="pdp-step">
+      <p className="pdp-step-head">
+        <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0) + (methods.length > 0 ? 1 : 0)}</span>
+        <span data-cms-path={wordPath('artworkTitle')}>{word('artworkTitle', 'Have artwork or a reference?')}</span>
+      </p>
+      <a className="pdp-dropzone" href={href}>
+        <Icon name="upload" size={30} />
+        <strong data-cms-path={wordPath('uploadCta')}>{word('uploadCta', 'Upload your logo or drop it here')}</strong>
         <small data-cms-path={wordPath('artworkHint')}>{word('artworkHint', 'PNG, JPG or PDF')}</small>
-      </span>
-      {/* Files are attached on the request page, where the message that carries
-          them is put together. */}
-      <a className="btn btn-outline btn-sm" href={href}><Icon name="upload" size={19} /> <span data-cms-path={wordPath('artworkButton')}>{word('artworkButton', 'Add on the next step')}</span></a>
-    </div>
+      </a>
+    </section>
       </>}
 
     {assurance && <p className="pdp-assurance">
@@ -871,11 +1028,15 @@ export default function ProductDetailPage({ slug }) {
       </div>
       <div className="pdp-copy" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <span className="eyebrow">{category?.name ?? product.public.category}</span>
-        <h1>{product.public.name}</h1>
-        <p className="pdp-lead">{product.public.description}</p>
+        <h1 data-cms-path={cms(productPath(product, 'public', 'name'))}>{product.public.name}</h1>
+        <p className="pdp-lead" data-cms-path={cms(productPath(product, 'public', 'description'))}>{product.public.description}</p>
         <ul className="pdp-promises">
+          {/* The client's own mark where there is one for this promise, and
+              the tick for anything they add later. */}
           {(siteContent.pages?.product?.promises ?? []).map((promise, index) => <li key={promise}>
-            <Icon name="check" size={18} />
+            {siteContent.pages?.product?.promiseMarks?.[promise]
+              ? <BrandMark name={siteContent.pages.product.promiseMarks[promise]} size={30} />
+              : <Icon name="check" size={18} />}
             <span data-cms-path={cms(pagePath('product', 'promises', index))}>{promise}</span>
           </li>)}
         </ul>

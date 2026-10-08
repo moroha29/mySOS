@@ -98,7 +98,12 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
               onClick={() => set(field.id, option)}
             >
               {option}
-              {field.recommended === option && <small>Recommended</small>}
+              {/* A mark rather than a second line: the word stood under one
+                  choice and made every button in the row as tall as two. */}
+              {field.recommended === option && <em className="request-choice-pick" title={word('recommendedLabel', 'Recommended')}>
+                <Icon name="thumbUp" size={18} />
+                <span className="sr-only" data-cms-path={wordPath('recommendedLabel')}>{word('recommendedLabel', 'Recommended')}</span>
+              </em>}
             </button>)}
           </div>}
           {!isPrinting && field.type === 'select' && <select aria-labelledby={`field-${index}-${field.id}`} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)}>
@@ -110,8 +115,11 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
       })}
       <div className="request-field">
         <span className="request-field-label" data-cms-path={wordPath('uploadReferenceLabel')}>{word('uploadReferenceLabel', 'Upload Reference')}</span>
-        <FilePicker id={`reference-${index}`} label={`Upload a reference for ${line.name}`} className="request-upload" onFiles={onFiles}>
-          <Icon name="upload" size={24} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
+        {/* Blue, where everything else on this page is green: it is the one
+            box here asking for something the quote cannot be firm without,
+            and it was reading as part of the furniture. */}
+        <FilePicker id={`reference-${index}`} label={`Upload a reference for ${line.name}`} className={line.files.length ? 'request-upload has-files' : 'request-upload'} onFiles={onFiles}>
+          <Icon name={line.files.length ? 'checkCircle' : 'upload'} size={24} /> {line.files.length ? line.files.join(', ') : `Upload ${line.name.toLowerCase()} artwork`}
         </FilePicker>
       </div>
       <div className="request-field">
@@ -393,6 +401,9 @@ export default function RequestBuilder({
       <aside className="request-summary" aria-labelledby="summary-title" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <h3 id="summary-title" data-cms-path={wordPath('summaryTitle')}>{word('summaryTitle', 'Your Request')}</h3>
         <p className="request-count">{fill(word('summaryCountLabel', '{count} products selected'), { count: lines.length })}</p>
+        {/* The part that grows with the request scrolls inside the panel;
+            the title above it and the button that sends it stay put. */}
+        <div className="request-summary-scroll">
         <ul className="request-summary-list">
           {lines.map((line) => {
             const product = productFor(line.productId);
@@ -417,6 +428,7 @@ export default function RequestBuilder({
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
+        </div>
 
         {/*
           * A recommended package. It can join the quote the customer is
