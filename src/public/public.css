@@ -1490,7 +1490,10 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 }
 .pdp-thumbs::-webkit-scrollbar { display: none; }
 .pdp-thumbs li { flex: 0 0 calc((100% - 36px) / 4); scroll-snap-align: start; }
-.pdp-thumbs a, .pdp-thumbs button { display: block; width: 100%; aspect-ratio: 1 / 1; padding: 9px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; }
+/* The picture fills its tile. Nine pixels of padding and a picture fitted
+   inside what was left of it left a stamp floating in a frame, with more
+   white around it than photograph in it. */
+.pdp-thumbs a, .pdp-thumbs button { display: block; width: 100%; aspect-ratio: 1 / 1; padding: 3px; border: 1px solid var(--line); border-radius: 15px; background: #fff; cursor: pointer; overflow: hidden; }
 .pdp-thumbs button.is-chosen { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
 /* A view MySOS has not photographed yet: the place is held, plainly empty
    rather than looking like a picture that failed to load. */
@@ -1514,7 +1517,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-thumb-arrow:disabled { opacity: 0; pointer-events: none; }
 .pdp-thumb-arrow:hover:not(:disabled) { border-color: var(--navy); }
 .pdp-thumbs a:hover, .pdp-thumbs button:hover { border-color: var(--green); }
-.pdp-thumbs img { width: 100%; height: 100%; object-fit: contain; }
+.pdp-thumbs img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
 .pdp-mockup { margin-top: 20px; display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; border-radius: 16px; background: #e9f6ef; color: #0c3b28; }
 .pdp-mockup .icon { flex: none; margin-top: 2px; color: var(--green-dark); }
 .pdp-mockup strong { display: block; font-size: 17.5px; font-weight: 700; }

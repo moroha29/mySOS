@@ -318,6 +318,14 @@ describe('the other views of this product, as a rail', () => {
     expect(css).toContain('.pdp-thumbs button.is-chosen');
   });
 
+  it('fills the tile with the picture rather than floating it in white', () => {
+    // Nine pixels of padding, and then the picture fitted inside what was left
+    // of that, left a stamp in a frame: 63px of photograph in an 83px tile.
+    expect(css).toMatch(/\.pdp-thumbs a, \.pdp-thumbs button \{[^}]*padding: 3px/);
+    expect(css).toMatch(/\.pdp-thumbs a, \.pdp-thumbs button \{[^}]*overflow: hidden/);
+    expect(css).toContain('.pdp-thumbs img { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }');
+  });
+
   it('holds a place open for a photograph that has not arrived', () => {
     expect(source).toContain('const VIEW_SLOTS = 4;');
     expect(source).toContain('Math.max(0, VIEW_SLOTS - views.length)');
