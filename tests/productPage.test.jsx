@@ -132,19 +132,25 @@ describe('one look across the pages', () => {
     expect(homeStrip).not.toContain('is-active');
   });
 
-  it('puts the arrow beside "View all products", not under it', () => {
-    // The pill rules used to catch the trailing link as well, turning it into a
-    // block and stacking its arrow below the words.
-    expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
-    expect(css).not.toMatch(/\.category-strip a \{ display: inline-block;/);
-    expect(css).toMatch(/\.text-link > \.icon, \.btn > \.icon \{ display: block; align-self: center; \}/);
-    expect(css).toMatch(/\.category-strip-inner > \.text-link \{ flex: none; white-space: nowrap; color: #fff; \}/);
+  it('ends with the last category, not a link that promises everything', () => {
+    // "View all products" went to the products page, and the products page
+    // opens on apparel: the one link that offered all of them delivered one.
+    const strip = readFileSync(new URL('../src/public/components/CategoryStrip.jsx', import.meta.url), 'utf8');
+    expect(strip).not.toContain('text-link');
+    expect(strip).not.toContain('quickNavAllLabel');
+    expect(css).not.toContain('.category-strip-inner > .text-link');
+    expect(render('/mySOS/products/')).not.toContain('View all products');
   });
 
-  it('scrolls the strip sideways on a phone, with the link out of the way', () => {
-    const phone = css.slice(css.indexOf('@media (max-width: 860px)', css.indexOf('.category-strip {')));
-    expect(phone).toMatch(/\.category-strip-inner > \.text-link \{ display: none; \}/);
+  it('scrolls the strip sideways on a phone', () => {
     expect(css).toMatch(/\.category-strip ul \{ flex: 1; min-width: 0;[^}]*overflow-x: auto/);
+    expect(css).toMatch(/\.category-strip ul a \{ display: inline-block;/);
+  });
+
+  it('fills the row rather than stopping a card short of the edge', () => {
+    // Five columns for four cards left a card's width of nothing at the end.
+    const wide = css.slice(css.indexOf('@media (min-width: 1700px)'));
+    expect(wide.slice(0, 400)).toContain('.product-grid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }');
   });
 });
 

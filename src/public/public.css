@@ -1717,21 +1717,18 @@ main:not(.home-page) { background: var(--paper); }
 /* Navy, with white words: on white it read as part of the banner below it and
    a reader could not see it was the menu of categories. */
 .category-strip { background: var(--navy); border-bottom: 0; }
-.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; gap: 24px; }
+.category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; }
 .category-strip ul { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
 .category-strip ul::-webkit-scrollbar { display: none; }
 .category-strip li { flex: none; }
 .category-strip ul a { display: inline-block; padding: 11px 16px; margin: 10px 0; border-radius: 999px; font-size: 17.5px; font-weight: 600; white-space: nowrap; color: #fff; }
 .category-strip ul a:hover { background: var(--green); color: #fff; }
 .category-strip ul a.is-active { background: var(--green); color: #fff; }
-.category-strip-inner > .text-link { flex: none; white-space: nowrap; color: #fff; }
-.category-strip-inner > .text-link:hover { color: var(--green-light); }
 
 @media (max-width: 860px) {
   /* The row scrolls sideways on a phone, so the trailing link steps aside: it
      would eat the width the category names need, and the menu carries it. */
-  .category-strip-inner { padding-inline: 18px; gap: 0; }
-  .category-strip-inner > .text-link { display: none; }
+  .category-strip-inner { padding-inline: 18px; }
   .category-strip ul { gap: 6px; padding-right: 18px; }
   .category-strip ul a { padding: 11px 14px; font-size: 17.5px; }
 }
@@ -2812,9 +2809,12 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .product-card:hover .product-card-go, .product-card:focus-visible .product-card-go { opacity: 1; transform: none; background: var(--green-dark); color: #fff; }
 
 /* Room for a fifth column on a wide screen: four cards were 416px across,
-   which is a poster, not a product tile. */
+   which is a poster, not a product tile. A category holding exactly four
+   keeps four, because five columns for four cards leaves the row stopping a
+   card short of the edge with nothing in the gap. */
 @media (min-width: 1700px) {
   .product-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .product-grid:has(> :nth-child(4):last-child) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (max-width: 860px) {
