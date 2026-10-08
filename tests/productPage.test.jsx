@@ -54,8 +54,10 @@ describe('a product has a page of its own', () => {
       const method = siteContent.printingMethods?.[id];
       if (method?.bestFor) expect(markup).toContain(method.bestFor);
     }
-    // The quantity presets and the facts panel.
-    for (const preset of siteContent.quantityPresets) expect(markup).toContain(`>${preset}<`);
+    // The quantity is the bar alone now: the row of set amounts under it was
+    // a second way of doing what the bar already does.
+    expect(markup).not.toContain('class="pdp-presets"');
+    expect(markup).toContain('id="pdp-quantity"');
     for (const fact of siteContent.productFacts.default) expect(markup).toContain(fact.value);
     // The sections below are the questions the client already answers, in
     // their own words — not specifications we would be inventing for them.
@@ -365,10 +367,20 @@ describe('the size guide, as the drawing has it', () => {
     }
     expect(siteContent.sizeCharts.totes.diagram).toBe('tote');
     expect(siteContent.sizeCharts.totes.columns).toContain('Depth');
-    // The standard tote the build panel offers is the standard row of the chart.
+    // The bags the panel offers and the rows of the guide are the same bags,
+    // named the same way, measured the same way.
     const dimensions = siteContent.productSteps.totes.find((step) => step.type === 'dimensions');
-    const standard = siteContent.sizeCharts.totes.rows.find((row) => row[0] === 'Standard');
-    expect(dimensions.fields.map((field) => field.standard)).toEqual(standard.slice(1, 4));
+    const chart = siteContent.sizeCharts.totes;
+    expect(chart.rows.map((row) => row[0])).toEqual(dimensions.standardSizes.map((size) => size.name));
+    for (const size of dimensions.standardSizes) {
+      const row = chart.rows.find((item) => item[0] === size.name);
+      const parts = dimensions.fields
+        .map((field) => row[chart.columns.indexOf(field.column)])
+        .filter((value) => value && value !== '-');
+      expect(size.dims, size.name).toBe(`${parts.join(' × ')} cm`);
+    }
+    // And the one it opens on is one of them.
+    expect(dimensions.standardSizes.map((size) => size.name)).toContain(dimensions.defaultSize);
   });
 
   it('puts the guide beside the question it answers', () => {

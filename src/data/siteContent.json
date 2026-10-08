@@ -544,7 +544,7 @@
     },
     "product": {
       "buildTitle": "Build your request",
-      "quantityQuestion": "How many pieces?",
+      "quantityQuestion": "Quantity",
       "quantityHint": "Minimum {min}",
       "colourQuestion": "Choose a product colour",
       "colourHint": "Optional",
@@ -572,10 +572,10 @@
       "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
       "relatedTitle": "More in this category",
       "addedButton": "In your request",
-      "specsTitle": "Product details",
+      "specsTitle": "Product specifications",
       "specsMoreLabel": "View full specifications",
       "specsLessLabel": "Hide full specifications",
-      "sizeChartLabel": "View size chart",
+      "sizeChartLabel": "View measurement guide",
       "sizesQuestion": "Choose sizes",
       "sizesEnterLabel": "Enter size breakdown",
       "sizesLaterLabel": "Sizes not confirmed yet",
@@ -599,7 +599,9 @@
         "Product Recommendations": "guidance",
         "One-Stop Sourcing": "mockup"
       },
-      "viewsLabel": "Other views"
+      "viewsLabel": "Other views",
+      "specsColumnLabel": "Specification",
+      "specsColumnValue": "Details"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -1998,23 +2000,23 @@
       ],
       "rows": [
         [
-          "Small",
-          "30",
+          "Flat tote",
+          "40",
           "35",
-          "8",
-          "22"
+          "-",
+          "25"
         ],
         [
-          "Standard",
-          "35",
+          "Gusset tote",
           "40",
+          "35",
           "10",
           "25"
         ],
         [
-          "Large",
-          "40",
+          "Large gusset tote",
           "45",
+          "40",
           "12",
           "28"
         ]
@@ -2322,22 +2324,64 @@
   "productSteps": {
     "totes": [
       {
+        "type": "choice",
+        "id": "weight",
+        "question": "Canvas weight",
+        "options": [
+          {
+            "name": "8 oz"
+          },
+          {
+            "name": "10 oz",
+            "tag": "Standard"
+          },
+          {
+            "name": "12 oz"
+          }
+        ]
+      },
+      {
         "type": "dimensions",
-        "id": "dimensions",
-        "question": "Choose dimensions",
-        "standardLabel": "Standard size",
-        "customLabel": "Enter my own",
+        "id": "size",
+        "question": "Bag size",
+        "standardLabel": "Standard sizes",
+        "customLabel": "Custom size",
+        "listLabel": "Choose a standard size",
+        "defaultSize": "Gusset tote",
+        "standardSizes": [
+          {
+            "name": "Flat tote",
+            "dims": "40 × 35 cm",
+            "note": "No depth",
+            "icon": "tote"
+          },
+          {
+            "name": "Gusset tote",
+            "dims": "40 × 35 × 10 cm",
+            "icon": "tote"
+          },
+          {
+            "name": "Large gusset tote",
+            "dims": "45 × 40 × 12 cm",
+            "icon": "tote"
+          }
+        ],
+        "notes": [
+          "Dimensions: Length × Breadth × Depth.",
+          "Example sizes for layout preview.",
+          "Available sizes depend on the selected canvas weight."
+        ],
         "fields": [
           {
             "id": "width",
             "label": "Width (cm)",
-            "standard": "35",
+            "standard": "40",
             "column": "Width"
           },
           {
             "id": "height",
             "label": "Height (cm)",
-            "standard": "40",
+            "standard": "35",
             "column": "Height"
           },
           {
@@ -2347,8 +2391,7 @@
             "column": "Depth"
           }
         ],
-        "sizesFromChart": true,
-        "defaultSize": "Standard"
+        "sizesFromChart": true
       },
       {
         "type": "colour",
@@ -2359,6 +2402,20 @@
         "type": "methods",
         "id": "printing",
         "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
       }
     ],
     "drawstring": [

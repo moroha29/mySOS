@@ -85,6 +85,12 @@ function ProductDetails({ product, onChart }) {
     <h2 data-cms-path={wordPath('specsTitle')}>{word('specsTitle', 'Product details')}</h2>
     <p className="pdp-details-lead">{product.public.description}</p>
     <dl className="pdp-specs">
+      {/* The two words at the top say what the two columns are, as the
+          drawing has it. */}
+      <div className="pdp-specs-head" aria-hidden="true">
+        <dt data-cms-path={wordPath('specsColumnLabel')}>{word('specsColumnLabel', 'Specification')}</dt>
+        <dd data-cms-path={wordPath('specsColumnValue')}>{word('specsColumnValue', 'Details')}</dd>
+      </div>
       {shown.map((row, index) => <div key={row.label}>
         <dt data-cms-path={cms(contentPath('productSpecs', key, index, 'label'))}>{row.label}</dt>
         <dd data-cms-path={cms(contentPath('productSpecs', key, index, 'value'))}>{row.value}</dd>
@@ -376,6 +382,9 @@ function ColourChoice({ name, chosen, onPick }) {
  * somewhere to say the rest.
  */
 function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
+  // Whether a list of named sizes is showing. Declared before anything is
+  // drawn, because a step returns early once it knows which kind it is.
+  const [listOpen, setListOpen] = useState(false);
   // Added to whatever has been answered so far rather than to a copy taken
   // when this step was drawn: two answers in quick succession both stick.
   const set = (key, value) => onAnswer((said) => ({ ...said, [key]: value }));
@@ -388,25 +397,54 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
 
   if (step.type === 'dimensions') {
     const { sizes, picked, custom, valueOf } = sizePick(step, product, answers);
+    const named = step.standardSizes ?? [];
+    const chosen = named.find((size) => size.name === picked) ?? named[0];
     return <section className="pdp-step">
       {head}
-      {/* The sizes this kind is made in, then the way to ask for one it is
-          not. A kind with no chart behind it keeps the single standard it
-          always had. */}
-      <div className={`pdp-sizing${sizes.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
-        {sizes.length
-          ? sizes.map((size) => <button
+      {/* What it is made in, then the way to ask for something it is not. */}
+      <div className={`pdp-sizing${sizes.length && !named.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
+        {named.length || !sizes.length
+          ? <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, named.length ? (chosen?.name ?? 'standard') : 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>
+          : sizes.map((size) => <button
             key={size.name}
             type="button"
             role="radio"
             aria-checked={picked === size.name}
             className={picked === size.name ? 'is-chosen' : ''}
             onClick={() => set(step.id, size.name)}
-          >{size.name}</button>)
-          : <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>}
+          >{size.name}</button>)}
         <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(step.id, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
       </div>
-      <ul className="pdp-dimensions">
+
+      {/* A size with a name and a shape of its own is chosen from a list that
+          shows both, rather than typed in as three numbers. */}
+      {named.length > 0 && !custom && <div className="pdp-sizepick">
+        {step.listLabel && <span className="pdp-sizepick-label">{step.listLabel}</span>}
+        <button type="button" className="pdp-sizepick-toggle" aria-expanded={listOpen} onClick={() => setListOpen(!listOpen)}>
+          <span>{chosen ? `${chosen.name} \u00b7 ${chosen.dims}` : (step.listPlaceholder ?? '')}</span>
+          <Icon name={listOpen ? 'chevronUp' : 'chevronDown'} size={20} />
+        </button>
+        {listOpen && <ul className="pdp-sizepick-list" role="radiogroup" aria-label={step.listLabel ?? step.question}>
+          {named.map((size) => <li key={size.name}>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={chosen?.name === size.name}
+              className={chosen?.name === size.name ? 'is-chosen' : ''}
+              onClick={() => { set(step.id, size.name); setListOpen(false); }}
+            >
+              <span className="pdp-sizepick-mark"><Icon name={size.icon ?? 'tote'} size={26} /></span>
+              <span className="pdp-sizepick-words">
+                <strong>{`${size.name} \u00b7 ${size.dims}`}</strong>
+                {size.note && <small>{size.note}</small>}
+              </span>
+              <em className="pdp-sizepick-dot" aria-hidden="true" />
+            </button>
+          </li>)}
+        </ul>}
+      </div>}
+
+      {(!named.length || custom) && <ul className="pdp-dimensions">
         {step.fields.map((field) => <li key={field.id}>
           <label htmlFor={`pdp-${field.id}`}>{field.label}</label>
           <input
@@ -414,16 +452,40 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
             type="text"
             inputMode="decimal"
             placeholder={field.standard ?? ''}
-            readOnly={!custom}
+            readOnly={!custom && !named.length}
             value={valueOf(field)}
             onChange={(event) => set(field.id, event.target.value)}
           />
         </li>)}
-      </ul>
-      {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
-        <Icon name="design" size={19} />
-        <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
-      </button>}
+      </ul>}
+
+      {(step.notes?.length || onChart) && <div className="pdp-step-foot">
+        {step.notes?.length > 0 && <p className="pdp-step-notes">{step.notes.map((line) => <span key={line}>{line}</span>)}</p>}
+        {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
+          <Icon name="design" size={19} />
+          <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
+        </button>}
+      </div>}
+    </section>;
+  }
+
+  /* A row of named choices, one of which may be the usual one. */
+  if (step.type === 'choice') {
+    return <section className="pdp-step">
+      {head}
+      <div className="pdp-choice-row" role="radiogroup" aria-label={step.question}>
+        {step.options.map((option) => <button
+          key={option.name}
+          type="button"
+          role="radio"
+          aria-checked={mine === option.name}
+          className={mine === option.name ? 'is-chosen' : ''}
+          onClick={() => set(step.id, option.name)}
+        >
+          <span>{option.name}</span>
+          {option.tag && <em className="pdp-choice-tag">{option.tag}</em>}
+        </button>)}
+      </div>
     </section>;
   }
 
@@ -449,6 +511,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           {/* The one most people take, said once rather than left to be
               guessed from the order. */}
           {option.tag && <em className="pdp-method-tag">{option.tag}</em>}
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <strong>{option.name}</strong>
           {option.note && <small>{option.note}</small>}
         </button>)}
@@ -484,6 +547,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === item.name ? 'is-chosen' : ''}
           onClick={() => set(step.id, item.name)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name={methodIcon(item.id)} size={30} /></span>
           <strong>{item.name}</strong>
           {item.note && <small>{item.note}</small>}
@@ -495,6 +559,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === LET_MYSOS_CHOOSE ? 'is-chosen' : ''}
           onClick={() => set(step.id, LET_MYSOS_CHOOSE)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name="spark" size={30} /></span>
           <strong data-cms-path={wordPath('methodHelpTitle')}>{word('methodHelpTitle', 'Help me decide')}</strong>
           <small data-cms-path={wordPath('methodHelpNote')}>{word('methodHelpNote')}</small>
@@ -704,16 +769,13 @@ function BuildPanel({ product, onChart }) {
         </label>
         <small data-cms-path={wordPath('quantityHint')}>{fill(word('quantityHint', 'Minimum {min}'), { min: minimum })}</small>
       </p>
+      {/* The bar and nothing under it: the row of set quantities was a second
+          way of doing what the bar already does. */}
       <div className="pdp-quantity">
         <button type="button" aria-label="Fewer pieces" onClick={() => step(-10)}><Icon name="minus" size={22} /></button>
         <input id="pdp-quantity" type="number" inputMode="numeric" min={minimum} value={quantity} onChange={(event) => setQuantity(event.target.value)} onBlur={() => setQuantity((current) => Math.max(minimum, clampQuantity(current)))} />
         <button type="button" aria-label="More pieces" onClick={() => step(10)}><Icon name="plus" size={22} /></button>
       </div>
-      {presets.length > 0 && <ul className="pdp-presets">
-        {presets.map((preset, index) => <li key={preset}>
-          <button type="button" className={Number(quantity) === Number(preset) ? 'is-chosen' : ''} onClick={() => setQuantity(preset)} data-cms-path={cms(contentPath('quantityPresets', index))}>{preset}</button>
-        </li>)}
-      </ul>}
     </section>
 
     {/* A kind the client drew their own steps for is asked those, in that
@@ -819,6 +881,7 @@ function BuildPanel({ product, onChart }) {
         >
           {/* Room for a picture of the method; the mark stands in until MySOS
               uploads one. */}
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name={methodIcon(item.id)} size={30} cmsPath={contentPath('printingMethods', item.id, 'icon')} /></span>
           <strong>{item.name}</strong>
           {item.note && <small data-cms-path={cms(contentPath('printingMethods', item.id, 'bestFor'))}>{item.note}</small>}
@@ -831,6 +894,7 @@ function BuildPanel({ product, onChart }) {
           className={method === LET_MYSOS_CHOOSE ? 'is-chosen' : ''}
           onClick={() => setMethod(LET_MYSOS_CHOOSE)}
         >
+          <em className="pdp-pick-dot" aria-hidden="true" />
           <span className="pdp-method-shot"><Icon name="spark" size={30} /></span>
           <strong data-cms-path={wordPath('methodHelpTitle')}>{word('methodHelpTitle', 'Help me decide')}</strong>
           <small data-cms-path={wordPath('methodHelpNote')}>{word('methodHelpNote')}</small>
