@@ -123,6 +123,11 @@ describe('one look across the pages', () => {
     const products = render('/mySOS/products/', '?category=bags');
     for (const markup of [home, products]) expect(markup).toContain('class="category-strip"');
     for (const category of siteContent.categories) {
+      // A category held back is in neither strip, and in nothing else either.
+      if (category.visible === false) {
+        for (const markup of [home, products]) expect(markup).not.toContain(`?category=${category.id}`);
+        continue;
+      }
       expect(home).toContain(`/mySOS/products/?category=${category.id}`);
       expect(products).toContain(`?category=${category.id}`);
     }
@@ -634,6 +639,44 @@ describe('the gift sets in the catalogue', () => {
     expect(navy.public.imageFit).toBe('contain');
     // And no price, because nobody has quoted one.
     expect(navy.public.displayPricing.show).toBe(false);
+  });
+});
+
+describe('one product page is built like every other', () => {
+  const every = visible.map((product) => [product.public.slug, render(`/mySOS/products/${product.public.slug}/`)]);
+
+  it('asks for artwork the same way on all of them', () => {
+    // Six kinds had a drop box as a numbered step and the rest had a line of
+    // text with a small button beside it, so the same job looked like two
+    // different ones on two pages of the same catalogue.
+    expect(every.length).toBeGreaterThan(30);
+    for (const [slug, html] of every) {
+      expect(html, slug).toContain('class="pdp-dropzone"');
+      expect(html, slug).toContain('Upload your logo or drop it here');
+    }
+    const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+    expect(source).not.toContain('pdp-artwork');
+    expect(readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8')).not.toContain('.pdp-artwork');
+  });
+
+  it('carries the same furniture on all of them', () => {
+    for (const [slug, html] of every) {
+      for (const mark of ['class="breadcrumb', 'class="pdp-shot"', 'class="pdp-step"',
+        'Build your request', 'class="btn btn-primary pdp-add"', 'class="pdp-price-note"']) {
+        expect(html, `${slug} / ${mark}`).toContain(mark);
+      }
+    }
+  });
+
+  it('ends a drawn set of questions the same way, whatever the kind', () => {
+    // Every kind with questions of its own closes on the artwork and then the
+    // notes; the drawstring bag stopped at the printing method.
+    for (const [kind, steps] of Object.entries(siteContent.productSteps)) {
+      const types = steps.map((step) => step.type);
+      expect(types, kind).toContain('upload');
+      expect(types[types.length - 1], kind).toBe('notes');
+      expect(types[types.length - 2], kind).toBe('upload');
+    }
   });
 });
 

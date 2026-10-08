@@ -3,7 +3,7 @@ import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { REQUEST_PATH } from '../../utils/catalogue';
-import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, solutionPath } from '../cms';
+import { categoryPath, cms, cmsAll, configPath, contentPath, labelPath, picture, shownCategories, solutionPath } from '../cms';
 import Icon from './Icons';
 import useSavedRequest from '../useSavedRequest';
 
@@ -60,7 +60,7 @@ const resourceLinks = footer.resourceLinks ?? [];
 // wording is content. The Resources list is written here, so it has none.
 function dropdownFor(label) {
   if (label === 'Products') {
-    return siteContent.categories.map((item) => ({ label: item.name, href: `/mySOS/products/?category=${item.id}`, path: categoryPath(item, 'name') }));
+    return shownCategories().map((item) => ({ label: item.name, href: `/mySOS/products/?category=${item.id}`, path: categoryPath(item, 'name') }));
   }
   if (label === 'Solutions') {
     return solutions.map((item) => ({ label: item.name, href: `/mySOS/solutions/${item.id}/`, path: solutionPath(item, 'name') }));
@@ -151,7 +151,7 @@ export function SiteFooter() {
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'productsHeading'))}>{footerText('productsHeading', 'Products')}</h3>
-        {siteContent.categories.map((item) => <a key={item.id} href={`/mySOS/products/?category=${item.id}`} data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</a>)}
+        {shownCategories().map((item) => <a key={item.id} href={`/mySOS/products/?category=${item.id}`} data-cms-path={cms(categoryPath(item, 'name'))}>{item.name}</a>)}
       </div>
       <div>
         <h3 data-cms-path={cms(contentPath('footer', 'solutionsHeading'))}>{footerText('solutionsHeading', 'Solutions')}</h3>

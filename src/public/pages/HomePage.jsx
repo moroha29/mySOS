@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
-import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, solutionPath } from '../cms';
+import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, shownCategories, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
 import { getStories, REQUEST_PATH } from '../../utils/catalogue';
 import { mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
@@ -84,7 +84,7 @@ function HeroCard({ slides }) {
       <span className="hero-card-eyebrow" data-cms-path={cms(solutionPath(current.solution, 'name'))}>{current.solution?.name}</span>
       <p className="hero-card-title" data-cms-path={cms(solutionPath(current.solution, 'description'))}>{current.solution?.description}</p>
       <ul className="hero-card-tags">
-        {siteContent.categories.slice(0, 5).map((category) => <li key={category.id}>
+        {shownCategories().slice(0, 5).map((category) => <li key={category.id}>
           <a href={`/mySOS/products/?category=${category.id}`} data-cms-path={cms(contentPath('categories', siteContent.categories.indexOf(category), 'name'))}>{category.name}</a>
         </li>)}
       </ul>
@@ -304,7 +304,7 @@ function CategoryTiles() {
       <p data-cms-path={cms(headingPath('homeTilesLead'))}>{heading('homeTilesLead')}</p>
     </div>
     <div className="home-tile-grid">
-      {siteContent.categories.map((category, index) => <a
+      {shownCategories().map((category, index) => <a
         key={category.id}
         className={`home-tile tone-${TILE_TONES[index % TILE_TONES.length]}`}
         href={`/mySOS/products/?category=${category.id}`}

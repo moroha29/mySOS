@@ -223,9 +223,16 @@ describe('the home banner and the sections under it', () => {
   it('gives every category a tile, one for one, each in its own wash', () => {
     const markup = render(HomePage, '/mySOS/');
     const tiles = [...markup.matchAll(/class="home-tile tone-(\w+)"/g)].map(([, tone]) => tone);
-    expect(tiles).toHaveLength(siteContent.categories.length);
-    expect(new Set(tiles).size).toBe(siteContent.categories.length);
-    for (const category of siteContent.categories) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
+    // The categories the site is offering. One held back has no tile, and the
+    // washes still run one to a tile rather than two tiles sharing one.
+    const shown = siteContent.categories.filter((category) => category.visible !== false);
+    expect(shown.length).toBeGreaterThan(0);
+    expect(tiles).toHaveLength(shown.length);
+    expect(new Set(tiles).size).toBe(shown.length);
+    for (const category of shown) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
+    for (const category of siteContent.categories) {
+      if (category.visible === false) expect(markup).not.toContain(`?category=${category.id}`);
+    }
     expect(css).toMatch(/\.home-tile-grid \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\)/);
     const phone = css.slice(css.indexOf('@media (max-width: 620px)', css.indexOf('20. homepage')));
     expect(phone).toMatch(/\.home-tile-grid \{ grid-template-columns: minmax\(0, 1fr\)/);

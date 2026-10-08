@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import printData from '../../data/printData.json';
 import siteContent from '../../data/siteContent.json';
-import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath } from '../cms';
+import { categoryPath, cms, contentPath, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, shownCategories } from '../cms';
 import { enquiryLinkProps, getPublicProducts, messageHref } from '../../utils/catalogue';
 import { getImage } from '../../utils/imageRegistry';
 import CategoryStrip from '../components/CategoryStrip';
@@ -69,7 +69,7 @@ function categoryPicture(category, products) {
   return { src: picture(siteContent.scenes?.productsHeroImage, 'scenes/products-hero'), path: scenePath('productsHeroImage') };
 }
 
-const knownCategory = (id) => (siteContent.categories.some((item) => item.id === id) ? id : 'apparel');
+const knownCategory = (id) => (shownCategories().some((item) => item.id === id) ? id : 'apparel');
 
 export default function ProductsPage() {
   const params = new URLSearchParams(globalThis.location?.search ?? '');
@@ -139,7 +139,7 @@ export default function ProductsPage() {
     return products;
   }, [products, sort]);
   const visible = showAll ? shelf : shelf.slice(0, 8);
-  const activeCategory = siteContent.categories.find((item) => item.id === category) ?? siteContent.categories[0];
+  const activeCategory = shownCategories().find((item) => item.id === category) ?? shownCategories()[0];
   /*
    * The ways MySOS can put a brand on what is in this category, rather than
    * the whole list every time: a bottle is not embroidered. Which methods suit

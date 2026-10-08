@@ -1,6 +1,5 @@
-import siteContent from '../../data/siteContent.json';
 import { REQUEST_PATH } from '../../utils/catalogue';
-import { categoryPath, cms } from '../cms';
+import { categoryPath, cms, shownCategories } from '../cms';
 
 /*
  * The strip of product categories under the header. The homepage and the
@@ -17,7 +16,7 @@ export default function CategoryStrip({ activeId = '', onChoose }) {
   return <nav className="category-strip" aria-label="Product categories">
     <div className="category-strip-inner">
       <ul>
-        {siteContent.categories.map((category) => {
+        {shownCategories().map((category) => {
           const active = category.id === activeId;
           return <li key={category.id}>
             <a

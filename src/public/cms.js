@@ -56,6 +56,16 @@ export const categoryPath = (category, ...path) =>
   contentPath('categories', indexOf(siteContent.categories, (entry) => entry.id === category.id), ...path);
 
 /*
+ * The categories the site offers. One can be held back — visible: false, with
+ * its products hidden alongside it — while MySOS settles what belongs in it,
+ * without being taken out of the content, where its wording and its place in
+ * the order are kept. Addresses are worked out against the whole list above,
+ * so nothing anyone has written moves when a category is held back or brought
+ * out again.
+ */
+export const shownCategories = () => siteContent.categories.filter((category) => category.visible !== false);
+
+/*
  * A product. The catalogue is not part of the homepage content: the manager
  * loads productData.json under `pricingData` for the prices editor, and writes
  * it back on publish, so that is where a product's own words and pictures are

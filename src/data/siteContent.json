@@ -283,7 +283,8 @@
       "description": "Keychains, bag charms & enamel pins",
       "image": "",
       "typeWord": "keychain",
-      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin"
+      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin",
+      "visible": false
     },
     {
       "id": "trophies-awards",
@@ -2618,6 +2619,20 @@
         "type": "methods",
         "id": "printing",
         "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
       }
     ],
     "lanyards": [

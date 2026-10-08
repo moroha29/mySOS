@@ -1202,7 +1202,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-summary-list li + li { border-top: 1px solid var(--line-soft); }
 .request-summary-list .request-thumb { width: 42px; height: 38px; }
 .request-summary-list strong { display: block; font-size: 17px; font-weight: 600; color: var(--navy); }
-.request-summary-list small { margin-top: 4px; }
+.request-summary-list small { margin-top: 6px; }
 .request-summary-list small { display: block; font-size: 15px; color: var(--muted); }
 .request-summary-list b { font-size: 17.5px; color: var(--navy); }
 .request-summary-label { display: block; margin: 14px 0 8px; font-size: 18.5px; font-weight: 700; color: var(--navy); }
@@ -1572,9 +1572,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .pdp-methods strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
 .pdp-methods small { display: block; margin-top: 6px; font-size: 16px; line-height: 1.4; color: var(--muted); }
 
-.pdp-artwork { margin: 16px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; border: 1.5px dashed #9fb6dc; border-radius: 14px; background: #f7f9fe; }
-.pdp-artwork strong { display: block; font-size: 17.5px; font-weight: 700; color: var(--ink); }
-.pdp-artwork small { display: block; margin-top: 6px; font-size: 16px; color: var(--muted); }
 
 .pdp-close { padding: 20px 24px 26px; border-top: 1px solid var(--line); background: var(--paper); }
 .pdp-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
@@ -1632,7 +1629,6 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .pdp-methods small { font-size: 15px; }
   .pdp-facts { grid-template-columns: minmax(0, 1fr); }
   .pdp-build-head, .pdp-step, .pdp-close { padding-inline: 18px; }
-  .pdp-artwork { margin-inline: 18px; }
 }
 
 /* ============================================== 22. one look across the site
@@ -2350,7 +2346,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-dropzone:hover { border-color: var(--green); background: #f7fbf9; }
 .pdp-dropzone .icon { color: var(--navy); }
 .pdp-dropzone strong { font-size: 17px; font-weight: 700; color: var(--navy); }
-.pdp-dropzone small { margin-top: 2px; font-size: 15px; color: var(--muted); }
+.pdp-dropzone small { margin-top: 6px; font-size: 15px; color: var(--muted); }
 .pdp-notes {
   margin-top: 16px; width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px;
   background: #fff; font: inherit; font-size: 16.5px; line-height: 1.5; color: var(--ink); resize: vertical;
@@ -2706,7 +2702,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .home-tile { min-height: 172px; padding: 16px; }
   .home-tile-body { margin-top: 34px; }
   .home-tile strong { font-size: 17px; }
-  .home-tile small { margin-top: 4px; font-size: 15px; line-height: 1.4; }
+  .home-tile small { margin-top: 6px; font-size: 15px; line-height: 1.4; }
 }
 
 /* ====================================== 29. the banner picture, not a slideshow

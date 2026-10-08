@@ -916,16 +916,22 @@ function BuildPanel({ product, onChart }) {
       </div>
     </section>}
 
-    <div className="pdp-artwork">
-      <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0) + (methods.length > 0 ? 1 : 0)}</span>
-      <span>
-        <strong data-cms-path={wordPath('artworkTitle')}>{word('artworkTitle', 'Have artwork or a reference?')}</strong>
+    {/* The same step, and the same box, as the kinds with steps of their own
+        are given. It was a line of text with a small button beside it here and
+        a drop box there, so asking for artwork looked like two different jobs
+        on two pages of the same catalogue. Either way the file itself is
+        attached on the request page, where the message is put together. */}
+    <section className="pdp-step">
+      <p className="pdp-step-head">
+        <span className="pdp-step-number" aria-hidden="true">{2 + (sizeRun.length > 0 ? 1 : 0) + (colours.length > 0 ? 1 : 0) + (methods.length > 0 ? 1 : 0)}</span>
+        <span data-cms-path={wordPath('artworkTitle')}>{word('artworkTitle', 'Have artwork or a reference?')}</span>
+      </p>
+      <a className="pdp-dropzone" href={href}>
+        <Icon name="upload" size={30} />
+        <strong data-cms-path={wordPath('uploadCta')}>{word('uploadCta', 'Upload your logo or drop it here')}</strong>
         <small data-cms-path={wordPath('artworkHint')}>{word('artworkHint', 'PNG, JPG or PDF')}</small>
-      </span>
-      {/* Files are attached on the request page, where the message that carries
-          them is put together. */}
-      <a className="btn btn-outline btn-sm" href={href}><Icon name="upload" size={19} /> <span data-cms-path={wordPath('artworkButton')}>{word('artworkButton', 'Add on the next step')}</span></a>
-    </div>
+      </a>
+    </section>
       </>}
 
     {assurance && <p className="pdp-assurance">

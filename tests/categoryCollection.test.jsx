@@ -244,17 +244,28 @@ describe('every category the menu offers has something behind it', () => {
   const drawn = new Set(icons.icons.map((item) => item.name));
   const visible = productData.catalogue.filter((item) => item.public.visible);
 
+  const offered = siteContent.categories.filter((category) => category.visible !== false);
+
   it('lists keychains and awards beside the six that were there', () => {
     const ids = siteContent.categories.map((category) => category.id);
     expect(ids).toContain('keychains-accessories');
     expect(ids).toContain('trophies-awards');
+    // Keychains are held back for now: kept in the content, with its products,
+    // but off the website until MySOS settles what goes in it.
+    const keychains = siteContent.categories.find((category) => category.id === 'keychains-accessories');
+    expect(keychains.visible).toBe(false);
+    const theirs = productData.catalogue.filter((item) => item.public.category === 'keychains-accessories');
+    expect(theirs.length).toBeGreaterThan(0);
+    for (const item of theirs) expect(item.public.visible, item.id).toBe(false);
+    // Awards are not held back, and are shown.
+    expect(offered.map((category) => category.id)).toContain('trophies-awards');
     // The client's own list puts medals with the awards rather than the gifts.
     const medal = productData.catalogue.find((item) => item.id === 'custom_medal');
     expect(medal.public.category).toBe('trophies-awards');
   });
 
   it('gives each one a mark, a row of kinds and products to show', () => {
-    for (const category of siteContent.categories) {
+    for (const category of offered) {
       expect(drawn.has(category.icon), `${category.id} icon`).toBe(true);
       const kinds = siteContent.categoryTypes[category.id];
       if (kinds) for (const kind of kinds) expect(drawn.has(kind.icon), `${category.id}/${kind.id}`).toBe(true);
