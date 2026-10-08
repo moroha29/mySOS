@@ -31,7 +31,8 @@
     "addToQuoteLabel": "Add to quote",
     "addedToQuoteLabel": "In your quote",
     "homeStartButton": "Start your project",
-    "categoryTitlePrefix": "Custom"
+    "categoryTitlePrefix": "Custom",
+    "featuredBadge": "Most requested"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
@@ -768,32 +769,38 @@
     "silkscreen": {
       "description": "Vibrant, durable prints for larger quantities.",
       "bestFor": "Caps, t-shirts, corporate gifts",
-      "image": ""
+      "image": "",
+      "icon": "layers"
     },
     "dtf": {
       "description": "Full-colour prints with a soft, flexible finish.",
       "bestFor": "Caps, t-shirts, polos",
-      "image": ""
+      "image": "",
+      "icon": "transfer"
     },
     "dtg": {
       "description": "Detailed garment printing with rich gradients.",
       "bestFor": "T-shirts, polos, jackets",
-      "image": ""
+      "image": "",
+      "icon": "droplet"
     },
     "embroidery": {
       "description": "Premium and durable stitching for apparel and caps.",
       "bestFor": "Caps, t-shirts, polos",
-      "image": ""
+      "image": "",
+      "icon": "thread"
     },
     "sublimation": {
       "description": "Vibrant edge-to-edge colour for custom sportswear.",
       "bestFor": "Jerseys, event essentials",
-      "image": ""
+      "image": "",
+      "icon": "sun"
     },
     "uv_printing": {
       "description": "High-quality prints on acrylic and hard gifts.",
       "bestFor": "Corporate gifts, stationery, event essentials",
-      "image": ""
+      "image": "",
+      "icon": "palette"
     }
   },
   "loyalty": [

@@ -8,8 +8,15 @@ import Icon from '../components/Icons';
 const PAGE_SIZE = 6;
 
 export const hub = (key, fallback = '') => resources.hub?.[key] ?? fallback;
-export const hubPath = (key) => ['homepage', 'resources', 'hub', key];
-export const articlePath = (index, ...rest) => ['homepage', 'resources', 'articles', index, ...rest];
+/*
+ * The guides are a file of their own, resources.json, which the manager loads
+ * beside the solutions and the success stories rather than among the homepage
+ * blocks. Addressed under homepage they pointed into siteContent.json, where
+ * no guide has ever lived: the editor opened every heading and paragraph of
+ * every guide and found nothing there to edit.
+ */
+export const hubPath = (...keys) => ['additionalContent', 'resources', 'hub', ...keys];
+export const articlePath = (index, ...rest) => ['additionalContent', 'resources', 'articles', index, ...rest];
 export const topicName = (id) => resources.topics.find((topic) => topic.id === id)?.name ?? id;
 export const articleHref = (article) => `/resources/${article.slug}/`;
 
@@ -98,7 +105,7 @@ export default function ResourcesPage() {
               key={term}
               type="button"
               onClick={() => { setQuery(term); setTopic('all'); setShown(PAGE_SIZE); }}
-              data-cms-path={cms(hubPath('popular'))}
+              data-cms-path={cms(hubPath('popular', index))}
               data-cms-index={index}
             >{term}</button>)}
           </p>
@@ -118,7 +125,7 @@ export default function ResourcesPage() {
         type="button"
         className={topic === entry.id ? 'is-active' : undefined}
         onClick={() => { setTopic(entry.id); setShown(PAGE_SIZE); }}
-        data-cms-path={cms(['homepage', 'resources', 'topics', index, 'name'])}
+        data-cms-path={cms(['additionalContent', 'resources', 'topics', index, 'name'])}
       >{entry.name}</button>)}
     </nav>
 
