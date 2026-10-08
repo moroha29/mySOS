@@ -218,6 +218,29 @@ describe('the product page, as the client marked it up', () => {
     }
   });
 
+  it('offers a real range of colours, every one with ink of its own', () => {
+    // Three swatches on a canvas tote was a shorter list than the bag is made
+    // in. A colour with no ink falls back to a word in a pill among a row of
+    // circles, so every one offered anywhere has to be drawable.
+    const lists = Object.values(siteContent.requestOptions)
+      .flat()
+      .filter((field) => /colour/i.test(field.id));
+    expect(lists.length).toBeGreaterThan(8);
+    for (const field of lists) {
+      for (const name of field.options) {
+        if (/^Other/.test(name) || /^All three/.test(name)) continue;
+        expect(siteContent.colourSwatches[name], name).toMatch(/^#[0-9a-f]{6}$/i);
+      }
+    }
+    const of = (kind) => siteContent.requestOptions[kind].find((field) => /colour/i.test(field.id)).options;
+    expect(of('totes').length).toBeGreaterThan(12);
+    expect(of('tshirts').length).toBeGreaterThan(16);
+    // "Other" stays last, because it is the answer for anything not above it.
+    for (const field of lists) {
+      if (field.options.some((name) => /^Other/.test(name))) expect(field.options.at(-1)).toMatch(/^Other/);
+    }
+  });
+
   it('keeps "Other" in the row of colours rather than on a line of its own', () => {
     // It is still a colour answer; a pill under a row of circles reads as
     // something else. The full name stays on the button for a screen reader.
