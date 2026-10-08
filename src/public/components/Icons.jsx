@@ -29,6 +29,8 @@ const paths = {
   travelCup: <><path {...S} d="M6.6 8.2h10.8l-1.2 11.2a1.6 1.6 0 0 1-1.6 1.4H9.4a1.6 1.6 0 0 1-1.6-1.4z" /><path {...S} d="M5.6 5h12.8v3.2H5.6z" /><path {...S} d="M7.8 12.8h8.4" /></>,
   glassware: <><path {...S} d="M6.6 3.6h10.8l-1.2 5.2a4.4 4.4 0 0 1-8.4 0z" /><path {...S} d="M12 13.2v7.2M8.6 20.4h6.8" /></>,
   flask: <><path {...S} d="M8.2 6.6h7.6v12.2a1.8 1.8 0 0 1-1.8 1.8h-4a1.8 1.8 0 0 1-1.8-1.8z" /><path {...S} d="M9.8 3.4h4.4v3.2H9.8z" /><path {...S} d="M8.2 11h7.6" /></>,
+  // what MySOS would pick
+  thumbUp: <><path {...S} d="M7.4 10.6h3.2l2.6-6.2a2.3 2.3 0 0 1 3.1 3l-1.2 3.2h3.6a2 2 0 0 1 2 2.4l-1.3 6a2 2 0 0 1-2 1.6h-10z" /><rect {...S} x="3.4" y="10.6" width="4" height="10" rx="1.2" /></>,
   // keychains, pins and awards
   keychain: <><circle {...S} cx="8" cy="8" r="3.8" /><path {...S} d="m10.7 10.7 8.4 8.4" /><path {...S} d="m15.4 15.4 2 2" /><path {...S} d="m17.6 13.2 2 2" /></>,
   pin: <><circle {...S} cx="12" cy="9.2" r="5.6" /><path {...S} d="M12 14.8v5.8" /><path {...S} d="M9.4 20.6h5.2" /></>,

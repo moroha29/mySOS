@@ -98,7 +98,12 @@ function DetailsPanel({ line, index, onChange, onFiles }) {
               onClick={() => set(field.id, option)}
             >
               {option}
-              {field.recommended === option && <small>Recommended</small>}
+              {/* A mark rather than a second line: the word stood under one
+                  choice and made every button in the row as tall as two. */}
+              {field.recommended === option && <em className="request-choice-pick" title={word('recommendedLabel', 'Recommended')}>
+                <Icon name="thumbUp" size={18} />
+                <span className="sr-only" data-cms-path={wordPath('recommendedLabel')}>{word('recommendedLabel', 'Recommended')}</span>
+              </em>}
             </button>)}
           </div>}
           {!isPrinting && field.type === 'select' && <select aria-labelledby={`field-${index}-${field.id}`} value={line.details[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)}>

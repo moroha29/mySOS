@@ -119,6 +119,19 @@ describe('the window that adds a product', () => {
 describe('the request itself', () => {
   const builder = readFileSync(new URL('../src/public/components/RequestBuilder.jsx', import.meta.url), 'utf8');
 
+  it('marks what MySOS would pick rather than writing it under one button', () => {
+    const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+    // The word sat on a second line under one choice, and every button in the
+    // row grew to match it.
+    expect(builder).toContain('className="request-choice-pick"');
+    expect(builder).toContain('<Icon name="thumbUp" size={18} />');
+    expect(builder).not.toContain('<small>Recommended</small>');
+    // Still said, for anyone who cannot see the mark.
+    expect(builder).toContain("data-cms-path={wordPath('recommendedLabel')}");
+    expect(css).toMatch(/\.request-choices button \{[^}]*min-height: 46px/);
+    expect(css).not.toMatch(/\.request-choices button \{[^}]*flex-direction: column/);
+  });
+
   it('keeps the send button on screen however long the request gets', () => {
     const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
     // The summary grows with every product added, and the button that sends

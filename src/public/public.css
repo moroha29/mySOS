@@ -1084,8 +1084,11 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 .request-field { display: grid; gap: 6px; align-content: start; }
 .request-field-label { font-size: 16.5px; font-weight: 600; color: var(--ink); }
 .request-choices { display: flex; flex-wrap: wrap; gap: 8px; }
-.request-choices button { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; line-height: 1.25; color: var(--ink); cursor: pointer; }
-.request-choices button small { font-size: 14px; line-height: 1.2; opacity: .85; }
+.request-choices button { flex: 1 1 auto; min-width: 0; min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; line-height: 1.25; color: var(--ink); cursor: pointer; }
+/* What MySOS would pick, said with a mark on the one button rather than
+   a second line under it that made the whole row twice as tall. */
+.request-choice-pick { display: inline-flex; flex: none; color: var(--green-dark); }
+.request-choices button.is-chosen .request-choice-pick { color: #cdebdb; }
 .request-choices button.is-chosen { border-color: var(--green-dark); background: var(--green-dark); color: #fff; }
 .request-field select, .request-field input[type="text"] { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: 16.5px; }
 /* The one box in this panel asking for something the quote cannot be firm

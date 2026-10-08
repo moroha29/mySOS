@@ -759,7 +759,8 @@
       "addDialogTitle": "Add another product",
       "addDialogLead": "Search the catalogue, or step through it a category at a time.",
       "addDialogAllLabel": "All products",
-      "addDialogAddLabel": "Add product"
+      "addDialogAddLabel": "Add product",
+      "recommendedLabel": "Recommended"
     }
   },
   "printingMethods": {
