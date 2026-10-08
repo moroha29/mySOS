@@ -2364,6 +2364,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 .pdp-includes li { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
 .pdp-includes li:last-child { border-bottom: 0; }
 .pdp-includes .product-visual { flex: none; width: 56px; height: 56px; border-radius: 12px; background: var(--soft); }
+/* A photograph of the part sits in the same tile the drawing did, whole
+   rather than cropped: these are objects, not scenes. */
+.pdp-includes-shot { flex: none; width: 56px; height: 56px; border-radius: 12px; background: var(--soft); object-fit: contain; }
 .pdp-includes strong { display: block; font-size: 16.5px; font-weight: 700; color: var(--ink); }
 .pdp-includes small { display: block; margin-top: 6px; font-size: 15.5px; line-height: 1.45; color: var(--muted); }
 

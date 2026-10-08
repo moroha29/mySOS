@@ -1,5 +1,5 @@
 import React from 'react';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import productData from '../src/data/productData.json';
@@ -608,6 +608,47 @@ describe('the gift sets in the catalogue', () => {
   it('counts a set in sets where it says what the price buys', () => {
     expect(readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8'))
       .toContain("${unitFor(product) || 'pieces'}");
+  });
+
+  it('is photographed, from its box down to the parts inside it', () => {
+    const files = readdirSync(new URL('../src/assets/images/products/', import.meta.url));
+    // The set itself, five more views of it, and one of each thing in the box.
+    expect(files).toContain('navy-gift-set.jpg');
+    for (let n = 2; n <= 6; n += 1) expect(files).toContain(`navy-gift-set-${n}.jpg`);
+    const parts = siteContent.productIncludes.navy_gift_set.items;
+    for (let n = 1; n <= parts.length; n += 1) expect(files).toContain(`navy-gift-set-part-${n}.jpg`);
+    // Landscape in a square frame: whole, rather than cut down the sides.
+    const navy = sets.find((item) => item.id === 'navy_gift_set');
+    expect(navy.public.imageFit).toBe('contain');
+    // And no price, because nobody has quoted one.
+    expect(navy.public.displayPricing.show).toBe(false);
+  });
+});
+
+describe('the pictures a product is given', () => {
+  const source = readFileSync(new URL('../src/public/pages/ProductDetailPage.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('shows the one chosen in the manager, not only the one dropped in', () => {
+    // The main shot carried the content path of product.public.image, so the
+    // manager offered to change it — and the gallery then read the file on
+    // disk and nothing else, so choosing a picture did nothing at all.
+    expect(source).toContain('const found = [picture(product.public.image, `products/${product.public.slug}`)];');
+  });
+
+  it('photographs the parts of a set where there is a photograph', () => {
+    expect(source).toContain('function IncludedShot({ product, item, index })');
+    expect(source).toContain('picture(item.image, `products/${product.public.slug}-part-${index + 1}`)');
+    // No photograph, and the drawing stands in exactly as it did before.
+    expect(source).toContain('if (!shot) return <Product type={item.visual} color="navy" mark=""');
+    expect(source).toContain('<IncludedShot product={product} item={item} index={index} />');
+    // Whole rather than cropped: these are objects on a tile, not scenes.
+    expect(css).toContain('.pdp-includes-shot { flex: none; width: 56px; height: 56px;');
+    expect(css).toMatch(/\.pdp-includes-shot \{[^}]*object-fit: contain/);
+    // Every part can be given one, and the manager can change each.
+    for (const set of Object.values(siteContent.productIncludes)) {
+      for (const item of set.items) expect(item).toHaveProperty('image');
+    }
   });
 });
 

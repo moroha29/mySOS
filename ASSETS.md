@@ -83,6 +83,21 @@ light tile so the background should be near-white.
 | `hardcover-notebook` | Hardcover Notebook |
 | `event-lanyard` | Event Lanyard |
 
+**Optional** — more views of the same product, shown as thumbnails under the
+main picture on its own page. Same square 800×800 treatment:
+
+`products/<slug>-2` … `products/<slug>-6`
+
+A slot with no file keeps its place in the row rather than the row closing up,
+so views can be added one at a time.
+
+**Optional** — the parts of a gift set, shown beside each line of "What is
+included". Square, 200×200, the part alone on near-white:
+
+`products/<slug>-part-1` … one per item, in the order the parts are listed
+
+Without these the drawn icon stands in, as it always did.
+
 **Optional** — home-page category tiles. Without these the tile reuses the drawn
 art. Square, 400×400:
 

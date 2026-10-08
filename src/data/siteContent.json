@@ -2968,22 +2968,26 @@
         {
           "name": "Notebook",
           "note": "A hardcover notebook for everyday notes.",
-          "visual": "notebook"
+          "visual": "notebook",
+          "image": ""
         },
         {
           "name": "Pen",
           "note": "A matching pen for the set.",
-          "visual": "pen"
+          "visual": "pen",
+          "image": ""
         },
         {
           "name": "Insulated bottle",
           "note": "A reusable bottle for daily use.",
-          "visual": "bottle"
+          "visual": "bottle",
+          "image": ""
         },
         {
           "name": "Gift box",
           "note": "The set comes neatly arranged in a matching box.",
-          "visual": "gift-set"
+          "visual": "gift-set",
+          "image": ""
         }
       ]
     },
@@ -2993,22 +2997,26 @@
         {
           "name": "Notebook",
           "note": "A hardcover notebook for everyday notes.",
-          "visual": "notebook"
+          "visual": "notebook",
+          "image": ""
         },
         {
           "name": "Pen",
           "note": "A matching pen for the set.",
-          "visual": "pen"
+          "visual": "pen",
+          "image": ""
         },
         {
           "name": "Insulated bottle",
           "note": "A reusable bottle for daily use.",
-          "visual": "bottle"
+          "visual": "bottle",
+          "image": ""
         },
         {
           "name": "Gift box",
           "note": "The set comes neatly arranged in a matching box.",
-          "visual": "gift-set"
+          "visual": "gift-set",
+          "image": ""
         }
       ]
     }

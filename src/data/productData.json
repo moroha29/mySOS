@@ -670,9 +670,9 @@
         "featured": false,
         "imageStyle": "gift-set-navy",
         "image": "",
-        "imageFit": "",
+        "imageFit": "contain",
         "displayPricing": {
-          "show": true,
+          "show": false,
           "prefix": "From",
           "amount": 25,
           "unit": "set"

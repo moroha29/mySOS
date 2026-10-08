@@ -56,6 +56,16 @@ const methodIcon = (id) => siteContent.printingMethods?.[id]?.icon ?? METHOD_ICO
  * specifications and the way to the size chart. It used to be an accordion at
  * the foot of the page, a screen and a half below the picture it described.
  */
+/* One part of a set: its photograph, or the drawing that stands in for it. */
+function IncludedShot({ product, item, index }) {
+  const marks = {
+    'data-cms-path': cms(contentPath('productIncludes', product.id, 'items', index, 'image')),
+  };
+  const shot = picture(item.image, `products/${product.public.slug}-part-${index + 1}`);
+  if (!shot) return <Product type={item.visual} color="navy" mark="" {...marks} data-cms-background="true" />;
+  return <img className="pdp-includes-shot" src={shot} alt="" loading="lazy" decoding="async" {...marks} />;
+}
+
 /* What a set is made of, where the product is a set rather than one thing. */
 function Includes({ product }) {
   const set = siteContent.productIncludes?.[product.id];
@@ -64,7 +74,9 @@ function Includes({ product }) {
     <h2 data-cms-path={cms(contentPath('productIncludes', product.id, 'title'))}>{set.title}</h2>
     <ul>
       {set.items.map((item, index) => <li key={item.name}>
-        <Product type={item.visual} color="navy" mark="" />
+        {/* A photograph of the part where there is one, the drawing where
+            there is not, and either way the manager can change it. */}
+        <IncludedShot product={product} item={item} index={index} />
         <span>
           <strong data-cms-path={cms(contentPath('productIncludes', product.id, 'items', index, 'name'))}>{item.name}</strong>
           <small data-cms-path={cms(contentPath('productIncludes', product.id, 'items', index, 'note'))}>{item.note}</small>
@@ -219,7 +231,9 @@ const VIEW_SLOTS = 4;
 
 function Gallery({ product, category }) {
   const views = useMemo(() => {
-    const found = [picture('', `products/${product.public.slug}`)];
+    // The picture chosen in the manager is the first view. It was offered on
+    // the main shot and then never read, so setting one did nothing.
+    const found = [picture(product.public.image, `products/${product.public.slug}`)];
     for (let n = 2; n <= 6; n += 1) found.push(picture('', `products/${product.public.slug}-${n}`));
     return found.filter(Boolean);
   }, [product]);
