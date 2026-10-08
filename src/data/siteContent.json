@@ -565,7 +565,8 @@
       "uploadOnNext": "Files are attached on the next step",
       "standardLabel": "Standard size",
       "customLabel": "Enter my own",
-      "addonsHint": "Select any add ons"
+      "addonsHint": "Select any add ons",
+      "customSizeLabel": "Enter my own"
     },
     "request": {
       "breadcrumb": "Get a Quote",
@@ -2170,19 +2171,24 @@
           {
             "id": "width",
             "label": "Width (cm)",
-            "standard": "35"
+            "standard": "35",
+            "column": "Width"
           },
           {
             "id": "height",
             "label": "Height (cm)",
-            "standard": "40"
+            "standard": "40",
+            "column": "Height"
           },
           {
             "id": "depth",
             "label": "Depth (cm)",
-            "standard": "10"
+            "standard": "10",
+            "column": "Depth"
           }
-        ]
+        ],
+        "sizesFromChart": true,
+        "defaultSize": "Standard"
       },
       {
         "type": "colour",
@@ -2206,14 +2212,18 @@
           {
             "id": "width",
             "label": "Width (cm)",
-            "standard": "35"
+            "standard": "35",
+            "column": "Width"
           },
           {
             "id": "height",
             "label": "Height (cm)",
-            "standard": "45"
+            "standard": "45",
+            "column": "Height"
           }
-        ]
+        ],
+        "sizesFromChart": true,
+        "defaultSize": "Standard"
       },
       {
         "type": "colour",

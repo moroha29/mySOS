@@ -2039,6 +2039,9 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* Sizes: two answers, and the second one is not a failure. */
 .pdp-sizing { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+/* A kind made in several sizes lists them all, so the row holds more than
+   the two it was built for. */
+.pdp-sizing.is-sizes { grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); }
 .pdp-sizing button {
   min-height: 48px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff;
@@ -2128,6 +2131,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .pdp-details { padding: 18px 16px 16px; }
   .pdp-specs > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   .pdp-sizing { grid-template-columns: minmax(0, 1fr); }
+  .pdp-sizing.is-sizes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .size-chart { width: 100%; max-width: none; margin: auto 0 0; border-radius: 22px 22px 0 0; }
   .size-chart-tabs { grid-template-columns: minmax(0, 1fr); }
   .size-chart-tabs button { min-height: 44px; border-bottom: 1px solid var(--line); }
