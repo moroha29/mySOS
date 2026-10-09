@@ -6,6 +6,10 @@ import resources from '../src/data/resources.json';
 import siteContent from '../src/data/siteContent.json';
 import siteConfig from '../src/data/siteConfig.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
+import { siteRoutes } from '../scripts/sitePages.mjs';
+import productData from '../src/data/productData.json';
+import solutions from '../src/data/solutions.json';
+import successStories from '../src/data/successStories.json';
 
 /*
  * The knowledge hub: a page of guides, and a page for each guide.
@@ -91,9 +95,9 @@ describe('the hub', () => {
   });
 
   it('is prerendered, hub and guides alike', () => {
-    const prerender = readFileSync(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8');
-    expect(prerender).toContain("'/resources/',");
-    expect(prerender).toContain('...resources.articles.map((article) => `/resources/${article.slug}/`)');
+    const routes = siteRoutes({ productData, solutions, successStories, resources });
+    expect(routes).toContain('/resources/');
+    for (const article of resources.articles) expect(routes, article.slug).toContain(`/resources/${article.slug}/`);
   });
 });
 

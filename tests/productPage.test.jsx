@@ -8,6 +8,10 @@ import siteContent from '../src/data/siteContent.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
 import iconLibrary from '../src/data/iconLibrary.json';
 import { detailFieldsFor, makeLine, printingFieldFor } from '../src/utils/solutionRequest';
+import { siteRoutes } from '../scripts/sitePages.mjs';
+import solutions from '../src/data/solutions.json';
+import successStories from '../src/data/successStories.json';
+import resources from '../src/data/resources.json';
 
 /*
  * A product's own page: the picture, and everything needed to ask for that
@@ -40,9 +44,14 @@ describe('a product has a page of its own', () => {
   });
 
   it('is prerendered for every product the site shows', () => {
-    const prerender = readFileSync(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8');
-    expect(prerender).toContain('...products.map((product) => `/products/${product.public.slug}/`)');
-    expect(prerender).toContain("productData.catalogue.filter((item) => item.public.visible)");
+    const routes = siteRoutes({ productData, solutions, successStories, resources });
+    for (const product of productData.catalogue.filter((item) => item.public.visible)) {
+      expect(routes, product.public.name).toContain(`/products/${product.public.slug}/`);
+    }
+    // A product hidden from the website has no page of its own.
+    for (const product of productData.catalogue.filter((item) => !item.public.visible)) {
+      expect(routes, product.public.name).not.toContain(`/products/${product.public.slug}/`);
+    }
   });
 
   it('shows the product, what it is and how it can be customised', () => {
