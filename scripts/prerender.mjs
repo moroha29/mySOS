@@ -18,6 +18,7 @@
 
 import { createServer } from 'vite';
 import { resolveAssetUrls } from './prerenderAssets.mjs';
+import { siteRoutes } from './sitePages.mjs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import React from 'react';
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
@@ -32,20 +33,8 @@ const stories = JSON.parse(await readFile(path.join(root, 'src/data/successStori
 const solutions = JSON.parse(await readFile(path.join(root, 'src/data/solutions.json'), 'utf8'));
 const productData = JSON.parse(await readFile(path.join(root, 'src/data/productData.json'), 'utf8'));
 const resources = JSON.parse(await readFile(path.join(root, 'src/data/resources.json'), 'utf8'));
-const products = productData.catalogue.filter((item) => item.public.visible);
-const routes = [
-  '/',
-  '/products/',
-  ...products.map((product) => `/products/${product.public.slug}/`),
-  '/request/',
-  '/solutions/',
-  ...solutions.map((solution) => `/solutions/${solution.id}/`),
-  '/why-mysos/',
-  '/success-stories/',
-  ...stories.map((story) => `/success-stories/${story.slug}/`),
-  '/resources/',
-  ...resources.articles.map((article) => `/resources/${article.slug}/`),
-];
+// One list of pages, shared with the website manager (see sitePages.mjs).
+const routes = siteRoutes({ productData, solutions, successStories: stories, resources });
 
 /*
  * Vite's dev SSR pipeline resolves `import.meta.glob(..., '?url')` to source

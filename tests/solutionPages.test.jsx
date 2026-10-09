@@ -6,6 +6,9 @@ import productData from '../src/data/productData.json';
 import siteContent from '../src/data/siteContent.json';
 import solutions from '../src/data/solutions.json';
 import PublicApp, { resolvePublicRoute } from '../src/public/PublicApp';
+import { siteRoutes } from '../scripts/sitePages.mjs';
+import successStories from '../src/data/successStories.json';
+import resources from '../src/data/resources.json';
 import {
   buildRequestMessage, clampQuantity, detailFieldsFor, formatNeededBy, makeLine, needsPrintingChoice,
   OTHER_PRINTING, packageLines, printingFieldFor, productFor, recommendedDetails, searchProducts, suggestionsFor,
@@ -28,7 +31,7 @@ const text = (markup) => markup.replace(/<[^>]+>/g, ' ');
 describe('a page for every solution', () => {
   it.each(solutions.map((solution) => solution.id))('/solutions/%s/ resolves and is prerendered', (id) => {
     expect(resolvePublicRoute(`/solutions/${id}/`)).toEqual({ page: 'solution', id });
-    expect(readFileSync(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8')).toContain('...solutions.map((solution) => `/solutions/${solution.id}/`)');
+    expect(siteRoutes({ productData, solutions, successStories, resources })).toContain(`/solutions/${id}/`);
   });
 
   it('an unknown solution is not found', () => {
