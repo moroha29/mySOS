@@ -15,11 +15,28 @@
     "menuToggleLabel": "Menu",
     "reviewsFallbackLabel": "Reviews from Google",
     "reviewsCountPrefix": "Based on",
-    "reviewsCountSuffix": "reviews"
+    "reviewsCountSuffix": "reviews",
+    "heroSearchPlaceholder": "Try: 200 event kits under $15 each",
+    "heroSearchButton": "Find it for me",
+    "quickNavAllLabel": "View all products",
+    "workDiscussLabel": "Discuss your project",
+    "budgetQuantityLabel": "Estimated quantity",
+    "budgetQuestionLabel": "What is your budget per person?",
+    "budgetSeeIdeasLabel": "See matching ideas",
+    "budgetFootnote": "Estimates shift with quantity. Final pricing depends on artwork, print method, colours, packaging and delivery.",
+    "returnToQuoteButton": "Return to quote",
+    "heroSuggestTitle": "Suggested products for",
+    "heroSearchEmpty": "No product goes by that name. Tell us what you are planning and we will find it.",
+    "heroSearchAskButton": "Tell us about it",
+    "addToQuoteLabel": "Add to quote",
+    "addedToQuoteLabel": "In your quote",
+    "homeStartButton": "Start your project",
+    "categoryTitlePrefix": "Custom",
+    "featuredBadge": "Most requested"
   },
   "headings": {
     "heroTitle": "Custom Merchandise,",
-    "heroTitleAccent": "Made Simple (QA).",
+    "heroTitleAccent": "Made Simple.",
     "heroLead": "We source, customise and deliver premium merchandise for your organisation, event or business.",
     "categoriesHeading": "What can we make for you?",
     "industryHeading": "Don't know what you need?",
@@ -31,49 +48,61 @@
     "trustedByHeading": "Trusted by organisations across Singapore",
     "closingCtaTitle": "Bring your ideas to life with MySOS.",
     "closingCtaDescription": "We're ready to help.",
-    "chooseIndustryHeading": "Choose your industry",
+    "chooseIndustryHeading": "Find solutions for your industry",
     "popularSolutionsHeading": "Popular solutions",
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
-    "whyProcessHeading": "Our process"
+    "whyProcessHeading": "Our process",
+    "budgetEyebrow": "Find by budget",
+    "budgetHeading": "Know the budget, not the product?",
+    "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size.",
+    "heroEyebrow": "Custom printing and merchandise solutions in Singapore",
+    "heroTitleLead": "Tell us what you need.",
+    "heroTitleAccentLong": "We'll source the rest.",
+    "heroSearchLead": "Search by product, occasion, budget or deadline. You do not need to know the exact product name.",
+    "homeTilesEyebrow": "Explore products",
+    "homeTilesLead": "Start with a category or describe the project in the search above. We will guide you to the right specifications.",
+    "homeWhyEyebrow": "Why MySOS",
+    "homeWhyHeading": "One team. Every step handled.",
+    "homeWhyLead": "Four things customers should understand immediately about working with MySOS.",
+    "homeWorkEyebrow": "Selected work",
+    "homeWorkHeading": "Complex orders. Simple solutions.",
+    "homeProcessEyebrow": "How it works",
+    "homeProcessHeading": "From brief to delivery.",
+    "homeProcessLead": "Move through each stage to see how your project progresses.",
+    "homeClosingTitle": "Have a difficult request? That's our thing.",
+    "homeClosingLead": "Share what you know. We will help with the rest."
   },
   "footer": {
     "productsHeading": "Products",
     "solutionsHeading": "Solutions",
     "resourcesHeading": "Resources",
-    "connectHeading": "Connect with us",
+    "connectHeading": "Get in touch",
     "resourceLinks": [
       {
         "label": "Printing Guides",
-        "href": "/mySOS/products/#faq"
+        "href": "/resources/dtf-or-silkscreen/"
       },
       {
         "label": "Materials",
-        "href": "/mySOS/products/#printing"
+        "href": "/resources/choosing-t-shirt-fabric/"
       },
       {
-        "label": "Design Tips",
-        "href": "/mySOS/why-mysos/"
+        "label": "Artwork Tips",
+        "href": "/resources/prepare-artwork-for-printing/"
       },
       {
         "label": "Buying Guides",
-        "href": "/mySOS/products/"
+        "href": "/resources/before-ordering-in-bulk/"
+      },
+      {
+        "label": "All Guides",
+        "href": "/resources/"
       }
     ],
-    "legalLinks": [
-      {
-        "label": "Privacy Policy",
-        "href": "/mySOS/"
-      },
-      {
-        "label": "Terms & Conditions",
-        "href": "/mySOS/"
-      },
-      {
-        "label": "Refund Policy",
-        "href": "/mySOS/"
-      }
-    ]
+    "tagline": "One source. Infinite solutions.",
+    "taglineNote": "Custom merchandise made simple.",
+    "whatsappLabel": "WhatsApp us"
   },
   "heroPromises": [
     "Small & Bulk Orders",
@@ -187,7 +216,9 @@
       "visual": "tee",
       "colour": "navy",
       "description": "T-Shirts, polos, jerseys & more",
-      "image": ""
+      "image": "/assets/uploads/st-andrew-navy-tee-white-background-7c1a69f7.png",
+      "typeWord": "apparel",
+      "searchPlaceholder": "Search apparel, e.g. oversized tee or jersey"
     },
     {
       "id": "bags",
@@ -196,7 +227,9 @@
       "visual": "tote",
       "colour": "sand",
       "description": "Tote bags, backpacks & more",
-      "image": ""
+      "image": "",
+      "typeWord": "bag",
+      "searchPlaceholder": "Search bags, e.g. canvas tote or drawstring bag"
     },
     {
       "id": "drinkware",
@@ -205,7 +238,9 @@
       "visual": "bottle",
       "colour": "green",
       "description": "Bottles, tumblers, mugs & more",
-      "image": ""
+      "image": "",
+      "typeWord": "drinkware",
+      "searchPlaceholder": "Search drinkware, e.g. insulated bottle or mug"
     },
     {
       "id": "corporate-gifts",
@@ -214,7 +249,9 @@
       "visual": "gift-set",
       "colour": "navy",
       "description": "Premium gifts for every occasion",
-      "image": ""
+      "image": "",
+      "typeWord": "corporate gift",
+      "searchPlaceholder": "Search gifts, e.g. gift sets or desk accessories"
     },
     {
       "id": "stationery",
@@ -223,7 +260,9 @@
       "visual": "notebook",
       "colour": "navy",
       "description": "Notebooks, pens, desks & more",
-      "image": ""
+      "image": "",
+      "typeWord": "stationery",
+      "searchPlaceholder": "Search stationery, e.g. notebooks or pens"
     },
     {
       "id": "event-essentials",
@@ -232,11 +271,37 @@
       "visual": "lanyard",
       "colour": "blue",
       "description": "Lanyards, badges, banners & more",
-      "image": ""
+      "image": "",
+      "typeWord": "event essentials",
+      "searchPlaceholder": "Search event products, e.g. lanyards or stickers"
+    },
+    {
+      "id": "keychains-accessories",
+      "name": "Keychains & Accessories",
+      "icon": "keychain",
+      "visual": "keychain",
+      "colour": "teal",
+      "description": "Keychains, bag charms & enamel pins",
+      "image": "",
+      "typeWord": "keychain",
+      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin",
+      "visible": false
+    },
+    {
+      "id": "trophies-awards",
+      "name": "Trophies & Awards",
+      "icon": "trophy",
+      "visual": "trophy",
+      "colour": "navy",
+      "description": "Trophies, medals, awards & plaques",
+      "image": "",
+      "typeWord": "award",
+      "searchPlaceholder": "Search awards, e.g. crystal award or medal"
     }
   ],
   "benefits": [
     {
+      "key": "supplier",
       "title": "One Supplier",
       "shortTitle": "One Supplier, Endless Possibilities.",
       "icon": "supplier",
@@ -248,6 +313,7 @@
       "cardIcon": "sample"
     },
     {
+      "key": "value",
       "title": "Better Value",
       "shortTitle": "Premium Quality Without Premium Pricing.",
       "icon": "value",
@@ -259,6 +325,7 @@
       "cardIcon": "award"
     },
     {
+      "key": "flexible",
       "title": "Flexible Quantities",
       "shortTitle": "Flexible Order Quantities.",
       "icon": "flexible",
@@ -270,6 +337,7 @@
       "cardIcon": "flexible"
     },
     {
+      "key": "expert",
       "title": "Expert Guidance",
       "shortTitle": "Expert Recommendations.",
       "icon": "expert",
@@ -281,6 +349,7 @@
       "cardIcon": "expert"
     },
     {
+      "key": "tailored",
       "title": "Built Around You",
       "shortTitle": "Tailored To Your Needs.",
       "icon": "tailored",
@@ -299,24 +368,7 @@
       "description": "Tell us what you need.",
       "headline": "Tell Us What You Need",
       "detail": "Share your idea, quantities, timeline and budget, and we take it from there.",
-      "image": "",
-      "points": [
-        {
-          "icon": "consult",
-          "label": "Brief",
-          "text": "Your idea and quantities."
-        },
-        {
-          "icon": "calendar",
-          "label": "Timeline",
-          "text": "When you need it by."
-        },
-        {
-          "icon": "tag",
-          "label": "Budget",
-          "text": "What you would like to spend."
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Recommend",
@@ -324,24 +376,7 @@
       "description": "We recommend the best solutions.",
       "headline": "Expert Recommendations",
       "detail": "We suggest the right products, materials and printing methods for your goals.",
-      "image": "",
-      "points": [
-        {
-          "icon": "shirt",
-          "label": "Products",
-          "text": "Options that suit your use."
-        },
-        {
-          "icon": "layers",
-          "label": "Materials",
-          "text": "Fabrics and finishes."
-        },
-        {
-          "icon": "palette",
-          "label": "Methods",
-          "text": "The right print or embroidery."
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Quote",
@@ -349,24 +384,7 @@
       "description": "You receive a clear quotation.",
       "headline": "A Clear, Detailed Quote",
       "detail": "We break down the product, customisation and delivery so you know exactly what you are paying for.",
-      "image": "",
-      "points": [
-        {
-          "icon": "sample",
-          "label": "Product",
-          "text": "Clear product specifications."
-        },
-        {
-          "icon": "tag",
-          "label": "Pricing",
-          "text": "A transparent quote."
-        },
-        {
-          "icon": "delivery",
-          "label": "Delivery",
-          "text": "Timelines and shipping options."
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Sample",
@@ -374,24 +392,7 @@
       "description": "We provide a sample for your approval.",
       "headline": "Approve Your Sample",
       "detail": "Check the quality, fit, materials and branding before full production.",
-      "image": "",
-      "points": [
-        {
-          "icon": "shirt",
-          "label": "Sample",
-          "text": "Check quality, fit and branding."
-        },
-        {
-          "icon": "search",
-          "label": "Adjust",
-          "text": "Request changes if needed."
-        },
-        {
-          "icon": "checkCircle",
-          "label": "Finalise",
-          "text": "Approve for full production."
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Produce",
@@ -399,24 +400,7 @@
       "description": "We produce with quality and care.",
       "headline": "Production & Quality Check",
       "detail": "We manage production and run quality checks to ensure everything meets your standards.",
-      "image": "",
-      "points": [
-        {
-          "icon": "production",
-          "label": "Produce",
-          "text": "Oversee manufacturing."
-        },
-        {
-          "icon": "search",
-          "label": "Quality",
-          "text": "In-line and final checks."
-        },
-        {
-          "icon": "sample",
-          "label": "Pack",
-          "text": "Prepared for safe delivery."
-        }
-      ]
+      "image": ""
     },
     {
       "title": "Deliver",
@@ -424,24 +408,7 @@
       "description": "We deliver on time, every time.",
       "headline": "Delivered On Time",
       "detail": "We deliver your order on schedule, and stay on hand after it arrives.",
-      "image": "",
-      "points": [
-        {
-          "icon": "calendar",
-          "label": "Schedule",
-          "text": "Planned around your date."
-        },
-        {
-          "icon": "delivery",
-          "label": "Deliver",
-          "text": "Handed over on time."
-        },
-        {
-          "icon": "support",
-          "label": "Follow-up",
-          "text": "Help after delivery."
-        }
-      ]
+      "image": ""
     }
   ],
   "popularSolutions": [
@@ -449,37 +416,43 @@
       "name": "Orientation Pack",
       "icon": "school",
       "visual": "tee",
-      "colour": "navy"
+      "colour": "navy",
+      "href": "/solutions/schools/"
     },
     {
       "name": "Welcome Kit",
       "icon": "bag",
       "visual": "tote",
-      "colour": "sand"
+      "colour": "sand",
+      "href": "/solutions/businesses/"
     },
     {
       "name": "Graduation Pack",
       "icon": "school",
       "visual": "bottle",
-      "colour": "teal"
+      "colour": "teal",
+      "href": "/solutions/schools/"
     },
     {
       "name": "Sports Pack",
       "icon": "sports",
       "visual": "jersey",
-      "colour": "green"
+      "colour": "green",
+      "href": "/solutions/sports-teams/"
     },
     {
       "name": "Event Pack",
       "icon": "lanyard",
       "visual": "lanyard",
-      "colour": "blue"
+      "colour": "blue",
+      "href": "/solutions/events/"
     },
     {
       "name": "Corporate Gifts",
       "icon": "gift",
       "visual": "gift-set",
-      "colour": "black"
+      "colour": "black",
+      "href": "/products/?category=corporate-gifts"
     }
   ],
   "faq": [
@@ -537,19 +510,16 @@
     ],
     "storiesHeroBackgroundImage": "",
     "requestHeroBackgroundImage": "",
-    "requestHeroImage": ""
+    "requestHeroImage": "",
+    "resourcesHeroImage": ""
   },
   "pages": {
     "products": {
       "heroTitle": "Custom Merchandise,",
       "heroTitleAccent": "Made Simple",
       "heroLead": "Explore our wide range of products that can be customised for your organisation, event or business.",
-      "collectionSuffix": "collection",
       "viewAllPrefix": "View All",
       "showLessLabel": "Show Less",
-      "methodsEyebrow": "Our capabilities",
-      "methodsTitle": "How we bring your brand to life",
-      "methodsBestForLabel": "Best for",
       "promoEyebrow": "Need help deciding?",
       "promoTitle": "We'll match you to the right product.",
       "promoDescription": "Our experts can recommend the best products, materials and printing methods for your needs.",
@@ -557,14 +527,90 @@
       "emptyTitle": "No products are published in this category yet.",
       "emptyDescription": "Contact MySOS and we will help source what you need.",
       "ctaTitle": "Ready to start your order?",
-      "ctaDescription": "Let's get in touch with us today."
+      "ctaDescription": "Let's get in touch with us today.",
+      "searchPlaceholder": "What are you looking for? Try oversized tees or jerseys",
+      "searchLabel": "Search this category",
+      "exploreTitle": "Explore all",
+      "typesPrefix": "Browse",
+      "typesSuffix": "types",
+      "allTypesLabel": "All",
+      "sortLabel": "Sort by",
+      "sortFeatured": "Featured",
+      "sortName": "Name A–Z",
+      "sortPrice": "Price, low to high",
+      "searchFoundOne": "1 match below",
+      "searchFound": "{count} matches below",
+      "searchFoundNone": "Nothing here matches",
+      "searchSeeLabel": "See them",
+      "searchNoneHint": "Try a different word, or browse every category."
+    },
+    "product": {
+      "buildTitle": "Build your request",
+      "quantityQuestion": "Quantity",
+      "quantityHint": "Minimum {min}",
+      "colourQuestion": "Choose a product colour",
+      "colourHint": "Optional",
+      "methodQuestion": "Choose a customisation option",
+      "methodHint": "Choose one",
+      "methodHelpTitle": "Help me decide",
+      "methodHelpNote": "We will recommend one",
+      "artworkTitle": "Have artwork or a reference?",
+      "artworkHint": "PNG, JPG or PDF",
+      "addButton": "Add to my request",
+      "askPrefix": "Need something different?",
+      "askLabel": "Ask MySOS for help",
+      "estimateLabel": "Indicative price",
+      "estimateNote": "A guide only. Your quote depends on artwork, quantity, sizes, colours, packaging and delivery.",
+      "noPriceNote": "We will quote once we know the artwork, quantity and finishing.",
+      "mockupTitle": "Free visual mockup before production",
+      "mockupNote": "Your logo placement and print size are confirmed before we proceed.",
+      "promises": [
+        "Small & Bulk Orders",
+        "Product Recommendations",
+        "One-Stop Sourcing"
+      ],
+      "infoEyebrow": "Product information",
+      "infoTitle": "Everything important, kept simple.",
+      "infoLead": "The details are confirmed with you before production, and you get a visual mockup and a final quotation first.",
+      "relatedTitle": "More in this category",
+      "addedButton": "In your request",
+      "specsTitle": "Product specifications",
+      "specsMoreLabel": "View full specifications",
+      "specsLessLabel": "Hide full specifications",
+      "sizeChartLabel": "View measurement guide",
+      "sizesQuestion": "Choose sizes",
+      "sizesEnterLabel": "Enter size breakdown",
+      "sizesLaterLabel": "Sizes not confirmed yet",
+      "sizesLaterTitle": "No worries, you can share your size breakdown later.",
+      "sizesLaterNote": "We will confirm sizes before production.",
+      "sizesTotalLabel": "pieces across the sizes",
+      "sizeChartTitle": "Size guide",
+      "sizeChartClose": "Back to my request",
+      "sizeGuideTitle": "Size guide",
+      "measureTab": "Measurement guide",
+      "chartCmTab": "Size chart (cm)",
+      "chartInchTab": "Size chart (inch)",
+      "uploadCta": "Upload your logo or drop it here",
+      "uploadOnNext": "Files are attached on the next step",
+      "standardLabel": "Standard size",
+      "customLabel": "Enter my own",
+      "addonsHint": "Select any add ons",
+      "customSizeLabel": "Enter my own",
+      "promiseMarks": {
+        "Small & Bulk Orders": "quantities",
+        "Product Recommendations": "guidance",
+        "One-Stop Sourcing": "mockup"
+      },
+      "viewsLabel": "Other views",
+      "specsColumnLabel": "Specification",
+      "specsColumnValue": "Details"
     },
     "request": {
       "breadcrumb": "Get a Quote",
       "heroTitle": "Tell Us What You Need",
       "heroLead": "Build your request, add your artwork and send it over. We will come back with options and pricing.",
       "builderTitle": "Build Your Request",
-      "builderLead": "Search for what you need, set the quantities and tell us how it should be printed.",
+      "builderLead": "Add what you need, set the quantities and tell us how it should be printed.",
       "includedTitle": "Your Products"
     },
     "solutions": {
@@ -574,7 +620,10 @@
       "recommendedPrefix": "Recommended for",
       "promoEyebrow": "Not sure where to start?",
       "promoTitle": "Share your requirements and we'll recommend the best solutions for you.",
-      "promoDescription": "Tell us about your industry, timeline and budget. We will come back with a shortlist that fits."
+      "promoDescription": "Tell us about your industry, timeline and budget. We will come back with a shortlist that fits.",
+      "industryLead": "Choose who you are shopping for to see the ideas that suit them.",
+      "productsBandTitle": "Have a specific product in mind?",
+      "productsBandLead": "Browse the products on their own and build your own combination."
     },
     "stories": {
       "heroTitle": "Real Projects.",
@@ -681,7 +730,6 @@
       "skipDetailsHint": "Skip this section and we'll confirm the details with you on WhatsApp.",
       "addMoreTitle": "Add More Products",
       "customTitle": "Looking for something else?",
-      "customLead": "Describe any product you need and we'll help source it.",
       "customPlaceholder": "e.g. Custom umbrella, towel or welcome gift",
       "customButton": "Add Custom Product",
       "filesTitle": "General Event Files",
@@ -697,72 +745,62 @@
       "sendHint": "We'll open WhatsApp with your selected products, quantities and notes already included.",
       "sendFilesHint": "WhatsApp links cannot carry files: after the chat opens, attach {files} there.",
       "emptyRequest": "Add at least one product to send a request.",
-      "searchTitle": "Search all products",
       "searchPlaceholder": "Search for a product, e.g. tote bag",
       "searchEmpty": "Nothing matched. Add it as a custom product below and we will source it.",
       "printingPrompt": "Choose a printing method",
       "printingSummaryPrompt": "Tell us how to print {items}, or we will recommend a method.",
       "showFewerLabel": "Show fewer",
       "printingPlaceholder": "Choose a printing method…",
-      "printingOtherHint": "Describe the printing you have in mind in the notes below."
+      "printingOtherHint": "Describe the printing you have in mind in the notes below.",
+      "keptNote": "Your request is kept on this device, so you can leave and come back to it.",
+      "startOverButton": "Start a new request",
+      "addToQuoteButton": "Add to quote",
+      "replaceQuoteButton": "Replace quote",
+      "quoteHasItemsNote": "You already have {count} in your quote.",
+      "addedToQuoteNote": "Added to your quote.",
+      "addDialogTitle": "Add another product",
+      "addDialogLead": "Search the catalogue, or step through it a category at a time.",
+      "addDialogAllLabel": "All products",
+      "addDialogAddLabel": "Add product",
+      "recommendedLabel": "Recommended"
     }
   },
-  "apparelTabs": [
-    {
-      "id": "all",
-      "name": "All"
-    },
-    {
-      "id": "tshirts",
-      "name": "T-Shirts"
-    },
-    {
-      "id": "polos",
-      "name": "Polos"
-    },
-    {
-      "id": "jerseys",
-      "name": "Jerseys"
-    },
-    {
-      "id": "hoodies",
-      "name": "Hoodies"
-    },
-    {
-      "id": "jackets",
-      "name": "Jackets"
-    }
-  ],
   "printingMethods": {
     "silkscreen": {
       "description": "Vibrant, durable prints for larger quantities.",
       "bestFor": "Caps, t-shirts, corporate gifts",
-      "image": ""
+      "image": "",
+      "icon": "layers"
     },
     "dtf": {
       "description": "Full-colour prints with a soft, flexible finish.",
       "bestFor": "Caps, t-shirts, polos",
-      "image": ""
+      "image": "",
+      "icon": "transfer"
     },
     "dtg": {
       "description": "Detailed garment printing with rich gradients.",
       "bestFor": "T-shirts, polos, jackets",
-      "image": ""
+      "image": "",
+      "icon": "droplet"
     },
     "embroidery": {
       "description": "Premium and durable stitching for apparel and caps.",
       "bestFor": "Caps, t-shirts, polos",
-      "image": ""
+      "image": "",
+      "icon": "thread"
     },
     "sublimation": {
       "description": "Vibrant edge-to-edge colour for custom sportswear.",
       "bestFor": "Jerseys, event essentials",
-      "image": ""
+      "image": "",
+      "icon": "sun"
     },
     "uv_printing": {
       "description": "High-quality prints on acrylic and hard gifts.",
       "bestFor": "Corporate gifts, stationery, event essentials",
-      "image": ""
+      "image": "",
+      "icon": "palette"
     }
   },
   "loyalty": [
@@ -818,13 +856,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -865,13 +917,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -912,13 +978,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -959,13 +1039,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1006,13 +1100,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1039,13 +1147,27 @@
         "label": "Main colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       },
@@ -1084,13 +1206,27 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Beige",
+          "Yellow",
+          "Mustard",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Forest green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1133,13 +1269,24 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1161,8 +1308,21 @@
         "type": "select",
         "options": [
           "Natural",
-          "Black",
+          "Cream",
+          "Beige",
+          "Sage green",
+          "Olive",
+          "Forest green",
           "Navy",
+          "Royal blue",
+          "Sky blue",
+          "Red",
+          "Maroon",
+          "Pink",
+          "Yellow",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1183,13 +1343,22 @@
         "label": "Bag colour",
         "type": "select",
         "options": [
+          "Natural",
+          "Cream",
+          "Beige",
+          "Sage green",
+          "Olive",
+          "Forest green",
           "Navy",
-          "Black",
-          "White",
-          "Grey",
+          "Royal blue",
+          "Sky blue",
           "Red",
-          "Blue",
-          "Green",
+          "Maroon",
+          "Pink",
+          "Yellow",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1200,23 +1369,35 @@
         "label": "Decoration",
         "type": "choice",
         "options": [
-          "Print",
+          "Let MySOS recommend",
+          "UV printing",
           "Laser engraving"
         ],
-        "recommended": "Print"
+        "recommended": "Let MySOS recommend"
       },
       {
         "id": "colour",
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
@@ -1227,26 +1408,1848 @@
         "label": "Colour",
         "type": "select",
         "options": [
-          "Navy",
-          "Black",
           "White",
-          "Grey",
+          "Cream",
+          "Yellow",
+          "Orange",
           "Red",
+          "Maroon",
+          "Pink",
+          "Purple",
+          "Navy",
+          "Royal blue",
           "Blue",
+          "Sky blue",
+          "Teal",
           "Green",
+          "Olive",
+          "Grey",
+          "Charcoal",
+          "Black",
           "Other (tell us in the notes)"
         ]
       }
+    ],
+    "medals": [
+      {
+        "id": "colour",
+        "label": "Finish",
+        "type": "select",
+        "options": [
+          "Gold",
+          "Silver",
+          "Bronze",
+          "All three (gold, silver and bronze)"
+        ]
+      }
     ]
+  },
+  "announcement": "You're One Step Away From Your Solution!",
+  "heroSearchChips": [
+    "Company welcome packs",
+    "School camp tees",
+    "Last minute event gifts"
+  ],
+  "homeStats": [
+    {
+      "icon": "award",
+      "value": "Quality assured",
+      "note": "Verified production errors replaced or reimbursed"
+    },
+    {
+      "icon": "calendar",
+      "value": "Within 1 day",
+      "note": "Response time, excluding Sundays"
+    },
+    {
+      "icon": "design",
+      "value": "Free",
+      "note": "Visual mockups before production"
+    }
+  ],
+  "budgetBands": [
+    {
+      "id": "under-10",
+      "label": "$5 to $10",
+      "title": "Smart essentials for larger groups",
+      "description": "Tote bags, simple tees, stationery and practical event items"
+    },
+    {
+      "id": "10-20",
+      "label": "$10 to $20",
+      "title": "Everyday branded favourites",
+      "description": "Cotton tees, drawstring bags, bottles and lanyard sets"
+    },
+    {
+      "id": "20-35",
+      "label": "$20 to $35",
+      "title": "Pieces people keep",
+      "description": "Polos, hoodies, insulated bottles and gift sets"
+    },
+    {
+      "id": "35-plus",
+      "label": "$35+",
+      "title": "Premium gifting and kit-outs",
+      "description": "Jackets, full uniform sets and curated welcome packs"
+    }
+  ],
+  "quantityPresets": [
+    20,
+    50,
+    100,
+    250
+  ],
+  "productMinimum": 10,
+  "productFacts": {
+    "default": [
+      {
+        "label": "Branding",
+        "value": "Printed or embroidered with your artwork"
+      },
+      {
+        "label": "Quantities",
+        "value": "Small runs to bulk orders"
+      },
+      {
+        "label": "Mockup",
+        "value": "Sent for approval before production"
+      },
+      {
+        "label": "Support",
+        "value": "One team from enquiry to delivery"
+      }
+    ]
+  },
+  "productInfoSections": [
+    {
+      "title": "What is the minimum order quantity?",
+      "body": "Minimum quantities vary by product and customisation method. The quotation engine shows accurate options for the selected product."
+    },
+    {
+      "title": "How long is the production lead time?",
+      "body": "Most projects take two to four weeks after artwork and sample approval. Complex custom products may take longer."
+    },
+    {
+      "title": "Can you help with design?",
+      "body": "Yes. We can advise on product selection, print placement and artwork preparation."
+    },
+    {
+      "title": "Do you ship internationally?",
+      "body": "International delivery can be arranged. Shipping is quoted separately based on destination and order size."
+    },
+    {
+      "title": "What file formats do you accept?",
+      "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
+    }
+  ],
+  "homeFigure": {
+    "value": "∞",
+    "image": "",
+    "label": "Products",
+    "note": "One source. Infinite solutions."
+  },
+  "subcategoryNames": {
+    "tshirts": "T-Shirts",
+    "polos": "Polos",
+    "jerseys": "Jerseys",
+    "hoodies": "Hoodies",
+    "jackets": "Jackets",
+    "singlets": "Singlets",
+    "caps": "Caps",
+    "totes": "Tote Bags",
+    "drawstring": "Drawstring Bags",
+    "bottles": "Bottles",
+    "gift-sets": "Gift Sets",
+    "towels": "Towels",
+    "medals": "Medals",
+    "mats": "Mats",
+    "notebooks": "Notebooks",
+    "pens": "Pens",
+    "name-tents": "Name Tents",
+    "lanyards": "Lanyards",
+    "stickers": "Stickers",
+    "metal-keychains": "Metal Keychains",
+    "acrylic-keychains": "Acrylic Keychains",
+    "enamel-keychains": "Enamel Keychains",
+    "bag-charms": "Bag Charms",
+    "enamel-pins": "Enamel Pins",
+    "trophies": "Trophies",
+    "crystal-awards": "Crystal Awards",
+    "acrylic-awards": "Acrylic Awards",
+    "plaques": "Recognition Plaques"
+  },
+  "colourSwatches": {
+    "White": "#ffffff",
+    "Black": "#2b2f36",
+    "Grey": "#c9ced6",
+    "Navy": "#1f3b6e",
+    "Red": "#d13b3b",
+    "Blue": "#1a6fe0",
+    "Green": "#0f7a4d",
+    "Sand": "#e5dcc8",
+    "Maroon": "#7a2230",
+    "Yellow": "#f2b722",
+    "Pink": "#e87fa8",
+    "Natural": "#e8e0cd",
+    "Sage green": "#9cab8a",
+    "Cream": "#f2ead9",
+    "Gold": "#c9a227",
+    "Silver": "#b4b9c1",
+    "Bronze": "#a9713c",
+    "Beige": "#d9c8a9",
+    "Brown": "#6b4a33",
+    "Mustard": "#d39b1f",
+    "Orange": "#e8732a",
+    "Purple": "#6b4ea8",
+    "Lilac": "#b9a7dd",
+    "Royal blue": "#1a3fa0",
+    "Sky blue": "#7fb6e8",
+    "Teal": "#11867f",
+    "Mint": "#a9ddc4",
+    "Forest green": "#19603c",
+    "Olive": "#6f7a44",
+    "Charcoal": "#3f454f"
+  },
+  "productSpecs": {
+    "tshirts": [
+      {
+        "label": "Material",
+        "value": "Cotton"
+      },
+      {
+        "label": "Fit",
+        "value": "Regular and oversized"
+      },
+      {
+        "label": "Fabric weight",
+        "value": "Varies by selected tee"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      },
+      {
+        "label": "Sizes",
+        "value": "See size chart"
+      }
+    ],
+    "polos": [
+      {
+        "label": "Material",
+        "value": "Cotton pique"
+      },
+      {
+        "label": "Fit",
+        "value": "Regular"
+      },
+      {
+        "label": "Customisation",
+        "value": "Embroidery or printing"
+      },
+      {
+        "label": "Sizes",
+        "value": "See size chart"
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      }
+    ],
+    "totes": [
+      {
+        "label": "Material",
+        "value": "Canvas"
+      },
+      {
+        "label": "Fabric weight",
+        "value": "8 oz, 10 oz and 12 oz"
+      },
+      {
+        "label": "Bag size",
+        "value": "Standard sizes or custom dimensions"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      }
+    ],
+    "default": [
+      {
+        "label": "Customisation",
+        "value": "Printing or embroidery"
+      },
+      {
+        "label": "Quantities",
+        "value": "Small runs to bulk orders"
+      },
+      {
+        "label": "Mockup",
+        "value": "Sent for approval before production"
+      }
+    ],
+    "bottles": [
+      {
+        "label": "Material",
+        "value": "Stainless steel, double walled"
+      },
+      {
+        "label": "Construction",
+        "value": "Vacuum insulated"
+      },
+      {
+        "label": "Capacity",
+        "value": "350 ml to 1 litre, or a volume you ask for"
+      },
+      {
+        "label": "Cap type",
+        "value": "Screw cap, straw lid or carry handle cap"
+      },
+      {
+        "label": "Colour",
+        "value": "Choose from the range or ask for your own"
+      },
+      {
+        "label": "Customisation",
+        "value": "UV printing or laser engraving"
+      }
+    ],
+    "medals": [
+      {
+        "label": "Material",
+        "value": "Die-struck metal"
+      },
+      {
+        "label": "Finish",
+        "value": "Gold, silver or bronze"
+      },
+      {
+        "label": "Size",
+        "value": "50 mm to 80 mm, or a diameter you ask for"
+      },
+      {
+        "label": "Ribbon",
+        "value": "Plain or printed with your logo"
+      },
+      {
+        "label": "Customisation",
+        "value": "Printed or engraved to your artwork"
+      }
+    ]
+  },
+  "sizeCharts": {
+    "tshirts": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "polos": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "hoodies": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "jerseys": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "singlets": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "jackets": {
+      "note": "Measurements are of the garment laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Chest width",
+        "Body length",
+        "Shoulder"
+      ],
+      "rows": [
+        [
+          "XS",
+          "46",
+          "66",
+          "41"
+        ],
+        [
+          "S",
+          "48",
+          "69",
+          "43"
+        ],
+        [
+          "M",
+          "51",
+          "71",
+          "45"
+        ],
+        [
+          "L",
+          "54",
+          "74",
+          "47"
+        ],
+        [
+          "XL",
+          "57",
+          "76",
+          "49"
+        ],
+        [
+          "2XL",
+          "60",
+          "79",
+          "51"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Chest width",
+          "note": "Measure across the chest (flat width, not circumference)"
+        },
+        {
+          "key": "B",
+          "label": "Body length",
+          "note": "Measure from shoulder to hem"
+        },
+        {
+          "key": "C",
+          "label": "Shoulder width",
+          "note": "Measure from shoulder seam to shoulder seam"
+        },
+        {
+          "key": "D",
+          "label": "Sleeve length",
+          "note": "Measure from sleeve seam to sleeve hem"
+        }
+      ],
+      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "diagram": "tee",
+      "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
+    },
+    "totes": {
+      "note": "Measurements are of the bag laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Width",
+        "Height",
+        "Depth",
+        "Handle drop"
+      ],
+      "rows": [
+        [
+          "Flat tote",
+          "40",
+          "35",
+          "-",
+          "25"
+        ],
+        [
+          "Gusset tote",
+          "40",
+          "35",
+          "10",
+          "25"
+        ],
+        [
+          "Large gusset tote",
+          "45",
+          "40",
+          "12",
+          "28"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Width",
+          "note": "Measure across the front of the bag at its widest"
+        },
+        {
+          "key": "B",
+          "label": "Height",
+          "note": "Measure from the top edge down to the base, handles excluded"
+        },
+        {
+          "key": "C",
+          "label": "Depth",
+          "note": "Measure the base gusset, the width of the side panel"
+        },
+        {
+          "key": "D",
+          "label": "Handle drop",
+          "note": "Measure from the top edge to the inside of the handle"
+        }
+      ],
+      "tip": "Not sure which size? Tell us what has to fit inside and we will match it to the nearest standard bag.",
+      "diagram": "tote",
+      "noteInch": "Measurements are of the bag laid flat, in inches. Allow half an inch either way."
+    },
+    "drawstring": {
+      "note": "Measurements are of the bag laid flat, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Width",
+        "Height",
+        "Cord length"
+      ],
+      "rows": [
+        [
+          "Small",
+          "30",
+          "40",
+          "110"
+        ],
+        [
+          "Standard",
+          "35",
+          "45",
+          "120"
+        ],
+        [
+          "Large",
+          "40",
+          "50",
+          "130"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Width",
+          "note": "Measure across the front of the bag at its widest"
+        },
+        {
+          "key": "B",
+          "label": "Height",
+          "note": "Measure from the top edge down to the base"
+        },
+        {
+          "key": "C",
+          "label": "Cord length",
+          "note": "Measure the drawcord end to end, pulled straight"
+        }
+      ],
+      "tip": "Not sure which size? Tell us what has to fit inside and we will match it to the nearest standard bag.",
+      "diagram": "drawstring",
+      "noteInch": "Measurements are of the bag laid flat, in inches. Allow half an inch either way."
+    }
+  },
+  "sizeRun": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2XL"
+  ],
+  "categoryTypes": {
+    "bags": [
+      {
+        "id": "totes",
+        "name": "Tote Bags",
+        "icon": "tote"
+      },
+      {
+        "id": "drawstring",
+        "name": "Drawstring Bags",
+        "icon": "drawstring"
+      },
+      {
+        "id": "backpacks",
+        "name": "Backpacks",
+        "icon": "backpack"
+      },
+      {
+        "id": "pouches",
+        "name": "Pouches",
+        "icon": "pouch"
+      },
+      {
+        "id": "laptop-bags",
+        "name": "Laptop Bags",
+        "icon": "laptopBag"
+      },
+      {
+        "id": "cooler-bags",
+        "name": "Cooler Bags",
+        "icon": "coolerBag"
+      }
+    ],
+    "stationery": [
+      {
+        "id": "notebooks",
+        "name": "Notebooks",
+        "icon": "book"
+      },
+      {
+        "id": "pens",
+        "name": "Pens",
+        "icon": "pen"
+      },
+      {
+        "id": "planners",
+        "name": "Planners",
+        "icon": "calendar"
+      },
+      {
+        "id": "sticky-notes",
+        "name": "Sticky Notes",
+        "icon": "stickyNote"
+      },
+      {
+        "id": "folders",
+        "name": "Folders",
+        "icon": "folder"
+      },
+      {
+        "id": "desk-supplies",
+        "name": "Desk Supplies",
+        "icon": "paperclip"
+      }
+    ],
+    "corporate-gifts": [
+      {
+        "id": "gift-sets",
+        "name": "Gift Sets",
+        "icon": "gift"
+      },
+      {
+        "id": "tech-gifts",
+        "name": "Tech Gifts",
+        "icon": "headphones"
+      },
+      {
+        "id": "desk-accessories",
+        "name": "Desk Accessories",
+        "icon": "deskLamp"
+      },
+      {
+        "id": "lifestyle-gifts",
+        "name": "Lifestyle Gifts",
+        "icon": "leaf"
+      },
+      {
+        "id": "eco-gifts",
+        "name": "Eco Gifts",
+        "icon": "eco"
+      },
+      {
+        "id": "premium-gifts",
+        "name": "Premium Gifts",
+        "icon": "starOutline"
+      }
+    ],
+    "drinkware": [
+      {
+        "id": "bottles",
+        "name": "Water Bottles",
+        "icon": "bottle"
+      },
+      {
+        "id": "tumblers",
+        "name": "Tumblers",
+        "icon": "tumbler"
+      },
+      {
+        "id": "mugs",
+        "name": "Mugs",
+        "icon": "mug"
+      },
+      {
+        "id": "travel-cups",
+        "name": "Travel Cups",
+        "icon": "travelCup"
+      },
+      {
+        "id": "glassware",
+        "name": "Glassware",
+        "icon": "glassware"
+      },
+      {
+        "id": "flasks",
+        "name": "Flasks",
+        "icon": "flask"
+      }
+    ],
+    "event-essentials": [
+      {
+        "id": "lanyards",
+        "name": "Lanyards",
+        "icon": "lanyard"
+      },
+      {
+        "id": "badges",
+        "name": "Badges",
+        "icon": "badge"
+      },
+      {
+        "id": "wristbands",
+        "name": "Wristbands",
+        "icon": "wristband"
+      },
+      {
+        "id": "tote-bags",
+        "name": "Tote Bags",
+        "icon": "tote"
+      },
+      {
+        "id": "signage",
+        "name": "Signage",
+        "icon": "signage"
+      },
+      {
+        "id": "welcome-packs",
+        "name": "Welcome Packs",
+        "icon": "welcomePack"
+      }
+    ],
+    "keychains-accessories": [
+      {
+        "id": "metal-keychains",
+        "name": "Metal Keychains",
+        "icon": "keychain"
+      },
+      {
+        "id": "acrylic-keychains",
+        "name": "Acrylic Keychains",
+        "icon": "layers"
+      },
+      {
+        "id": "enamel-keychains",
+        "name": "Enamel Keychains",
+        "icon": "palette"
+      },
+      {
+        "id": "bag-charms",
+        "name": "Bag Charms",
+        "icon": "bag"
+      },
+      {
+        "id": "enamel-pins",
+        "name": "Enamel Pins",
+        "icon": "pin"
+      }
+    ],
+    "trophies-awards": [
+      {
+        "id": "trophies",
+        "name": "Trophies",
+        "icon": "trophy"
+      },
+      {
+        "id": "medals",
+        "name": "Medals",
+        "icon": "award"
+      },
+      {
+        "id": "crystal-awards",
+        "name": "Crystal Awards",
+        "icon": "crystal"
+      },
+      {
+        "id": "acrylic-awards",
+        "name": "Acrylic Awards",
+        "icon": "layers"
+      },
+      {
+        "id": "plaques",
+        "name": "Recognition Plaques",
+        "icon": "plaque"
+      }
+    ]
+  },
+  "productSteps": {
+    "totes": [
+      {
+        "type": "choice",
+        "id": "weight",
+        "question": "Canvas weight",
+        "options": [
+          {
+            "name": "8 oz"
+          },
+          {
+            "name": "10 oz",
+            "tag": "Standard"
+          },
+          {
+            "name": "12 oz"
+          }
+        ]
+      },
+      {
+        "type": "dimensions",
+        "id": "size",
+        "question": "Bag size",
+        "standardLabel": "Standard sizes",
+        "customLabel": "Custom size",
+        "listLabel": "Choose a standard size",
+        "defaultSize": "Gusset tote",
+        "standardSizes": [
+          {
+            "name": "Flat tote",
+            "dims": "40 × 35 cm",
+            "note": "No depth",
+            "icon": "tote"
+          },
+          {
+            "name": "Gusset tote",
+            "dims": "40 × 35 × 10 cm",
+            "icon": "tote"
+          },
+          {
+            "name": "Large gusset tote",
+            "dims": "45 × 40 × 12 cm",
+            "icon": "tote"
+          }
+        ],
+        "notes": [
+          "Dimensions: Length × Breadth × Depth.",
+          "Example sizes for layout preview.",
+          "Available sizes depend on the selected canvas weight."
+        ],
+        "fields": [
+          {
+            "id": "width",
+            "label": "Width (cm)",
+            "standard": "40",
+            "column": "Width"
+          },
+          {
+            "id": "height",
+            "label": "Height (cm)",
+            "standard": "35",
+            "column": "Height"
+          },
+          {
+            "id": "depth",
+            "label": "Depth (cm)",
+            "standard": "10",
+            "column": "Depth"
+          }
+        ],
+        "sizesFromChart": true
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "methods",
+        "id": "printing",
+        "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
+      }
+    ],
+    "drawstring": [
+      {
+        "type": "dimensions",
+        "id": "dimensions",
+        "question": "Choose dimensions",
+        "standardLabel": "Standard size",
+        "customLabel": "Enter my own",
+        "fields": [
+          {
+            "id": "width",
+            "label": "Width (cm)",
+            "standard": "35",
+            "column": "Width"
+          },
+          {
+            "id": "height",
+            "label": "Height (cm)",
+            "standard": "45",
+            "column": "Height"
+          }
+        ],
+        "sizesFromChart": true,
+        "defaultSize": "Standard"
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "methods",
+        "id": "printing",
+        "question": "Choose a customisation option"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "Add your file (PNG, JPG or PDF)"
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request"
+      }
+    ],
+    "lanyards": [
+      {
+        "type": "dimensions",
+        "id": "size",
+        "question": "Lanyard size",
+        "hint": "See standard dimensions in the product description.",
+        "standardLabel": "Standard size",
+        "customLabel": "Enter my own",
+        "fields": [
+          {
+            "id": "lanyardWidth",
+            "label": "Lanyard width (mm)",
+            "standard": "20"
+          },
+          {
+            "id": "lanyardLength",
+            "label": "Lanyard length (cm)",
+            "standard": "90"
+          }
+        ]
+      },
+      {
+        "type": "cards",
+        "id": "material",
+        "question": "Material",
+        "hint": "Options subject to supplier confirmation.",
+        "options": [
+          {
+            "name": "Polyester",
+            "icon": "layers",
+            "swatch": "#1f3a7a"
+          },
+          {
+            "name": "Nylon",
+            "icon": "thread",
+            "swatch": "#1d1f24"
+          },
+          {
+            "name": "Recycled PET",
+            "icon": "leaf",
+            "swatch": "#117a4d"
+          },
+          {
+            "name": "Help me decide",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Colour"
+      },
+      {
+        "type": "cards",
+        "id": "branding",
+        "question": "Branding",
+        "options": [
+          {
+            "name": "Sublimation",
+            "note": "Full colour, edge to edge branding",
+            "icon": "droplet"
+          },
+          {
+            "name": "Silkscreen",
+            "note": "Durable and vibrant single colour print",
+            "icon": "layers"
+          },
+          {
+            "name": "Help me decide",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "addons",
+        "id": "addons",
+        "question": "Add ons",
+        "optional": true,
+        "hint": "Select any add ons for your lanyard.",
+        "options": [
+          {
+            "name": "Safety breakaway",
+            "note": "Release clasp at the neck",
+            "icon": "flexible"
+          },
+          {
+            "name": "Detachable buckle",
+            "note": "Detach without removing the lanyard",
+            "icon": "transfer"
+          },
+          {
+            "name": "Retractable badge reel",
+            "note": "Extend your badge for scanning",
+            "icon": "quantity"
+          },
+          {
+            "name": "Badge holder",
+            "note": "Add a holder for your ID or event pass",
+            "icon": "badge",
+            "fields": [
+              {
+                "id": "holderType",
+                "label": "Holder type",
+                "type": "select",
+                "options": [
+                  "Clear soft PVC",
+                  "Rigid plastic",
+                  "PU leather"
+                ],
+                "note": "Also available: rigid plastic or PU, subject to confirmation."
+              },
+              {
+                "id": "orientation",
+                "label": "Orientation",
+                "type": "choice",
+                "options": [
+                  "Portrait",
+                  "Landscape"
+                ]
+              },
+              {
+                "id": "cardWidth",
+                "label": "Card width (mm)"
+              },
+              {
+                "id": "cardHeight",
+                "label": "Card height (mm)"
+              }
+            ],
+            "fieldsNote": "Enter the size of the card that needs to fit inside."
+          }
+        ]
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Upload logo or artwork",
+        "optional": true,
+        "hint": "PNG, JPG or PDF. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request."
+      }
+    ],
+    "gift-sets": [
+      {
+        "type": "upload",
+        "id": "logo",
+        "question": "Upload your logo",
+        "hint": "PNG, JPG, PDF or AI",
+        "note": "You can share your logo later if it is not ready."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Additional notes",
+        "optional": true,
+        "placeholder": "Tell us about any logo placement preferences or special requests."
+      }
+    ],
+    "bottles": [
+      {
+        "type": "select",
+        "id": "capacity",
+        "question": "Choose capacity",
+        "allowCustom": true,
+        "standardLabel": "Available capacities",
+        "customLabel": "Custom capacity",
+        "placeholder": "Choose an available capacity",
+        "options": [
+          "350 ml",
+          "500 ml",
+          "650 ml",
+          "750 ml",
+          "1 litre"
+        ],
+        "customPlaceholder": "Enter your preferred volume, for example 600 ml",
+        "note": "Need a custom capacity? Enter your preferred volume for us to check availability."
+      },
+      {
+        "type": "cards",
+        "id": "cap",
+        "question": "Choose your cap",
+        "hint": "Choose one cap for your bottle.",
+        "options": [
+          {
+            "name": "Screw cap",
+            "tag": "Standard",
+            "icon": "screwCap"
+          },
+          {
+            "name": "Straw lid",
+            "icon": "strawLid"
+          },
+          {
+            "name": "Carry handle cap",
+            "icon": "handleCap"
+          }
+        ]
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Choose a product colour"
+      },
+      {
+        "type": "cards",
+        "id": "decoration",
+        "question": "Choose a customisation option",
+        "asPrinting": true,
+        "options": [
+          {
+            "name": "UV printing",
+            "note": "Full colour, wrapped around the bottle",
+            "icon": "palette"
+          },
+          {
+            "name": "Laser engraving",
+            "note": "A permanent mark in the steel",
+            "icon": "design"
+          },
+          {
+            "name": "Help me decide",
+            "value": "Let MySOS recommend",
+            "note": "We will recommend the best option",
+            "icon": "spark"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "packaging",
+        "question": "Packaging preference",
+        "optional": true,
+        "placeholder": "No preference",
+        "options": [
+          "Individual boxes",
+          "Gift packaging",
+          "Bulk packed"
+        ],
+        "hint": "Ask about individual boxes or gift packaging."
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Have artwork or a reference?",
+        "optional": true,
+        "hint": "PNG, JPG or PDF. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us more about your request."
+      }
+    ],
+    "medals": [
+      {
+        "type": "select",
+        "id": "size",
+        "question": "Medal size",
+        "allowCustom": true,
+        "standardLabel": "Standard sizes",
+        "customLabel": "Another size",
+        "placeholder": "Choose a diameter",
+        "options": [
+          "50 mm",
+          "60 mm",
+          "70 mm",
+          "80 mm"
+        ],
+        "customPlaceholder": "Enter the diameter you need, for example 65 mm",
+        "note": "Measured across the face of the medal, ribbon excluded."
+      },
+      {
+        "type": "colour",
+        "id": "colour",
+        "question": "Finish",
+        "hint": "Gold, silver and bronze can be ordered together."
+      },
+      {
+        "type": "cards",
+        "id": "ribbon",
+        "question": "Ribbon",
+        "options": [
+          {
+            "name": "Standard ribbon",
+            "tag": "Standard",
+            "note": "A plain ribbon in a colour you choose",
+            "icon": "lanyard"
+          },
+          {
+            "name": "Printed ribbon",
+            "note": "Your logo repeated along the ribbon",
+            "icon": "palette"
+          },
+          {
+            "name": "No ribbon",
+            "note": "The medal on its own",
+            "icon": "award"
+          }
+        ]
+      },
+      {
+        "type": "methods",
+        "id": "branding",
+        "question": "Branding"
+      },
+      {
+        "type": "upload",
+        "id": "artwork",
+        "question": "Upload your artwork",
+        "optional": true,
+        "hint": "PNG, JPG, PDF or AI. Our team will prepare a free visual mockup for your approval."
+      },
+      {
+        "type": "notes",
+        "id": "notes",
+        "question": "Add any other notes",
+        "optional": true,
+        "placeholder": "Tell us about the event, the engraving or anything else."
+      }
+    ]
+  },
+  "productUnit": {
+    "gift-sets": "sets"
+  },
+  "productAssurance": {
+    "gift-sets": {
+      "title": "We will handle the branding",
+      "note": "Our team will recommend logo placement and prepare a visual mockup for your approval before production."
+    }
+  },
+  "productIncludes": {
+    "executive_gift_set": {
+      "title": "What is included",
+      "items": [
+        {
+          "name": "Notebook",
+          "note": "A hardcover notebook for everyday notes.",
+          "visual": "notebook",
+          "image": ""
+        },
+        {
+          "name": "Pen",
+          "note": "A matching pen for the set.",
+          "visual": "pen",
+          "image": ""
+        },
+        {
+          "name": "Insulated bottle",
+          "note": "A reusable bottle for daily use.",
+          "visual": "bottle",
+          "image": ""
+        },
+        {
+          "name": "Gift box",
+          "note": "The set comes neatly arranged in a matching box.",
+          "visual": "gift-set",
+          "image": ""
+        }
+      ]
+    },
+    "navy_gift_set": {
+      "title": "What is included",
+      "items": [
+        {
+          "name": "Notebook",
+          "note": "A hardcover notebook for everyday notes.",
+          "visual": "notebook",
+          "image": ""
+        },
+        {
+          "name": "Pen",
+          "note": "A matching pen for the set.",
+          "visual": "pen",
+          "image": ""
+        },
+        {
+          "name": "Insulated bottle",
+          "note": "A reusable bottle for daily use.",
+          "visual": "bottle",
+          "image": ""
+        },
+        {
+          "name": "Gift box",
+          "note": "The set comes neatly arranged in a matching box.",
+          "visual": "gift-set",
+          "image": ""
+        }
+      ]
+    }
+  },
+  "productImages": {
+    "premium-cotton-tee": {
+      "image": "/assets/uploads/coaches-club-tee-back-7f54ab6e.png",
+      "fit": ""
+    },
+    "cotton-round-neck-tee": {
+      "image": "/assets/uploads/waikiki-tee-back-print-white-background-2116db51.png",
+      "fit": ""
+    },
+    "cotton-v-neck-tee": {
+      "image": "",
+      "fit": ""
+    },
+    "dryfit-performance-tee": {
+      "image": "/assets/uploads/lefonse-rm01-white-dri-fit-b8f74220.png",
+      "fit": ""
+    },
+    "dryfit-v-neck": {
+      "image": "/assets/uploads/st-andrew-navy-tee-white-background-7c1a69f7.png",
+      "fit": ""
+    },
+    "polo-cotton-pique": {
+      "image": "/assets/uploads/qd56-interlock-dri-fit-qd-5630-dark-purple-d2aef79c.png",
+      "fit": ""
+    },
+    "dryfit-polo": {
+      "image": "/assets/uploads/suss-tee-mannequin-back-6e17b268.png",
+      "fit": "cover"
+    },
+    "premium-cvc-polo": {
+      "image": "/assets/uploads/temasek-custom-tee-front-white-background-d28e2385.png",
+      "fit": ""
+    },
+    "sublimation-jersey": {
+      "image": "/assets/uploads/lefonse-rc02-03-black-09914269.png",
+      "fit": ""
+    },
+    "custom-snapback": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-dad-cap": {
+      "image": "",
+      "fit": ""
+    },
+    "trucker-mesh-cap": {
+      "image": "",
+      "fit": ""
+    },
+    "five-panel-cap": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-bucket-hat": {
+      "image": "",
+      "fit": ""
+    },
+    "fitted-cap": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-cut-and-sew": {
+      "image": "",
+      "fit": ""
+    },
+    "canvas-tote-bag": {
+      "image": "",
+      "fit": ""
+    },
+    "insulated-bottle": {
+      "image": "",
+      "fit": ""
+    },
+    "executive-gift-set": {
+      "image": "",
+      "fit": ""
+    },
+    "hardcover-notebook": {
+      "image": "",
+      "fit": ""
+    },
+    "event-lanyard": {
+      "image": "",
+      "fit": ""
+    },
+    "long-sleeve-tee": {
+      "image": "",
+      "fit": ""
+    },
+    "pullover-hoodie": {
+      "image": "",
+      "fit": ""
+    },
+    "windbreaker-jacket": {
+      "image": "",
+      "fit": ""
+    },
+    "bomber-jacket": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-singlet": {
+      "image": "",
+      "fit": ""
+    },
+    "drawstring-bag": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-towel": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-medal": {
+      "image": "",
+      "fit": ""
+    },
+    "picnic-mat": {
+      "image": "",
+      "fit": ""
+    },
+    "stationery-set": {
+      "image": "",
+      "fit": ""
+    },
+    "name-tent": {
+      "image": "",
+      "fit": ""
+    },
+    "die-cut-sticker": {
+      "image": "",
+      "fit": ""
+    },
+    "tattoo-sticker": {
+      "image": "",
+      "fit": ""
+    },
+    "navy-gift-set": {
+      "image": "",
+      "fit": "contain"
+    },
+    "metal-keychain": {
+      "image": "",
+      "fit": ""
+    },
+    "acrylic-keychain": {
+      "image": "",
+      "fit": ""
+    },
+    "enamel-keychain": {
+      "image": "",
+      "fit": ""
+    },
+    "bag-charm": {
+      "image": "",
+      "fit": ""
+    },
+    "enamel-pin": {
+      "image": "",
+      "fit": ""
+    },
+    "custom-trophy": {
+      "image": "",
+      "fit": ""
+    },
+    "crystal-award": {
+      "image": "",
+      "fit": ""
+    },
+    "acrylic-award": {
+      "image": "",
+      "fit": ""
+    },
+    "recognition-plaque": {
+      "image": "",
+      "fit": ""
+    }
   },
   "appearance": {
     "overrides": [
       {
         "page": "homepage",
-        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"heroTitleAccent\"]']",
-        "route": "/mySOS/",
-        "label": "Hero Title Accent",
-        "fontScale": 1.2
+        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"heroTitleLead\"]']",
+        "route": "/",
+        "label": "Hero Title Lead",
+        "fontScale": 0.95
       }
     ]
   }
