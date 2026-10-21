@@ -383,9 +383,43 @@ describe('the bar at the top of every page', () => {
     expect(css).toMatch(/--header-h: 88px;/);
     expect(css).toMatch(/\.site-header \{[^}]*height: var\(--header-h\)/);
     expect(css).not.toMatch(/top: 72px|scroll-(margin|padding)-top: 72px/);
-    for (const rule of [/\.primary-nav \{[\s\S]{0,200}?top: var\(--header-h\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: (?:var|calc)\(var?\(?--header-h/]) {
+    // What it measures right now, which is the resting height until the page
+    // moves under it. The menu hangs off that, so it cannot leave a gap.
+    expect(css).toContain('--header-now: var(--header-h);');
+    for (const rule of [/\.primary-nav \{[\s\S]{0,400}?top: var\(--header-now\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: (?:var|calc)\(var?\(?--header-(h|now)/]) {
       expect(css).toMatch(rule);
     }
+  });
+
+  it('folds into a menu that can always be reached to the end', () => {
+    const shell = readFileSync(new URL('../src/public/components/SiteShell.jsx', import.meta.url), 'utf8');
+    const narrow = css.slice(css.indexOf('@media (max-width: 1080px)'));
+
+    // Every list was open at once: nineteen rows under five, so Success
+    // Stories, Why MySOS and Resources sat below the bottom of the screen,
+    // and the menu could not be scrolled to reach them.
+    expect(narrow).toContain('.nav-group.is-open > .nav-dropdown { display: grid; }');
+    expect(narrow).toMatch(/\.nav-dropdown \{[\s\S]{0,200}?display: none;/);
+
+    // And whatever is opened, the menu stops at the bottom of the screen and
+    // scrolls inside itself rather than running off the end of the page.
+    expect(narrow).toMatch(/max-height: calc\(100dvh - var\(--header-now\) - 54px\); overflow-y: auto/);
+    expect(narrow).toMatch(/overscroll-behavior: contain/);
+
+    // The chevron is what opens one, and says whether it is open.
+    expect(shell).toContain('className="nav-toggle"');
+    expect(shell).toContain('aria-expanded={open}');
+    expect(shell).toContain('aria-controls={listId}');
+    expect(shell).toContain("const [open, setOpen] = useState(false);");
+    // Pressed again, or left behind, it closes.
+    expect(shell).toContain("if (event.key === 'Escape') setOpen(false);");
+    expect(shell).toContain('if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);');
+  });
+
+  it('opens a list on a wide screen without a pointer to hover with', () => {
+    // Hovering was the only way in, so there was no way in from a keyboard.
+    expect(css).toMatch(/\.nav-group:hover \.nav-dropdown, \.nav-group:focus-within \.nav-dropdown,\s*\r?\n\.nav-group\.is-open \.nav-dropdown \{ visibility: visible;/);
+    expect(css).toContain('.nav-group.is-open > .nav-toggle .nav-chevron { transform: rotate(180deg); }');
   });
 
   it('carries bigger wording and controls than the text under it', () => {
