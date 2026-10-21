@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import siteContent from '../src/data/siteContent.json';
 import successStories from '../src/data/successStories.json';
+import { getStories } from '../src/utils/catalogue';
 import StoriesPage from '../src/public/pages/StoriesPage';
 
 const originalLocation = globalThis.location;
@@ -49,9 +50,22 @@ describe('Success Stories: All Projects', () => {
 });
 
 describe('Success Stories: a category tab', () => {
-  const schools = successStories.filter((story) => story.category === 'schools');
+  /*
+   * In the order the page puts them in, not the order the file lists them.
+   *
+   * These read the category's stories straight out of successStories.json and
+   * expected the first of them to be the one featured. The page shows the most
+   * recent first, and the file happened to list the newest schools project
+   * first too, so the two agreed and nobody noticed they were different
+   * questions. Adding a project for a later year -- which the website manager
+   * now does from a template -- correctly moved the feature to it, and this
+   * test failed on a page that was behaving exactly as designed. A test that
+   * breaks when the website is used is worse than no test: this is the third
+   * time one has stood between MySOS and a publish.
+   */
+  const schools = getStories({ category: 'schools' });
 
-  it('features the first project with its facts and a link to the full story', () => {
+  it('features the most recent project with its facts and a link to the full story', () => {
     const html = render('?category=schools');
     expect(html).toContain('class="project-feature"');
     expect(html).toContain(schools[0].title);
