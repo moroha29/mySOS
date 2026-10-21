@@ -1118,7 +1118,7 @@
         "category": "keychains-accessories",
         "subcategory": "metal-keychains",
         "description": "A solid metal keychain, cut and finished to your shape.",
-        "visible": false,
+        "visible": true,
         "featured": false,
         "imageStyle": "keychain-navy",
         "displayPricing": {
@@ -1147,7 +1147,7 @@
         "category": "keychains-accessories",
         "subcategory": "acrylic-keychains",
         "description": "A printed acrylic keychain, cut to any outline.",
-        "visible": false,
+        "visible": true,
         "featured": false,
         "imageStyle": "keychain-teal",
         "displayPricing": {
@@ -1176,7 +1176,7 @@
         "category": "keychains-accessories",
         "subcategory": "enamel-keychains",
         "description": "A metal keychain filled with colour, for crests and logos.",
-        "visible": false,
+        "visible": true,
         "featured": false,
         "imageStyle": "keychain-green",
         "displayPricing": {
@@ -1205,7 +1205,7 @@
         "category": "keychains-accessories",
         "subcategory": "bag-charms",
         "description": "A charm for a bag or a lanyard, made to your artwork.",
-        "visible": false,
+        "visible": true,
         "featured": false,
         "imageStyle": "keychain-sand",
         "displayPricing": {
@@ -1234,7 +1234,7 @@
         "category": "keychains-accessories",
         "subcategory": "enamel-pins",
         "description": "A lapel pin in hard or soft enamel, for teams and events.",
-        "visible": false,
+        "visible": true,
         "featured": false,
         "imageStyle": "keychain-blue",
         "displayPricing": {
