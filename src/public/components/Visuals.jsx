@@ -551,7 +551,7 @@ function Foreground({ kind, width }) {
  * `wide` widens the viewBox so a scene stretched across a full-width hero keeps
  * its figures at a believable size instead of cropping into abstract blobs.
  */
-export function Scene({ kind = 'field', shirt = '#0d2a6b', people, wide = false, className = '', label }) {
+export function Scene({ kind = 'field', shirt = '#0d2a6b', people, wide = false, className = '', label, marks }) {
   const width = wide ? 560 : 260;
   const count = people ?? (wide ? 15 : 7);
   const backCount = Math.max(2, Math.round(count * 0.7));
@@ -561,7 +561,7 @@ export function Scene({ kind = 'field', shirt = '#0d2a6b', people, wide = false,
   const base = kind === 'studio' ? 1.3 : 1;
 
   return (
-    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}>
+    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''} {...marks}>
       <svg viewBox={`0 0 ${width} 150`} preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <filter id={`soft-${id}`} x="-6%" y="-6%" width="112%" height="112%">
@@ -621,9 +621,9 @@ export function Scene({ kind = 'field', shirt = '#0d2a6b', people, wide = false,
   );
 }
 
-export function Workshop({ className = '', label }) {
+export function Workshop({ className = '', label, marks }) {
   return (
-    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}>
+    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''} {...marks}>
       <svg viewBox="0 0 260 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <filter id="ws-soft" x="-6%" y="-6%" width="112%" height="112%"><feGaussianBlur stdDeviation="2.6" /></filter>
@@ -658,9 +658,9 @@ export function Workshop({ className = '', label }) {
   );
 }
 
-export function Sketch({ className = '', label }) {
+export function Sketch({ className = '', label, marks }) {
   return (
-    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''}>
+    <div className={`scene ${className}`.trim()} role="img" aria-label={label || ''} {...marks}>
       <svg viewBox="0 0 260 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         <defs>
           <radialGradient id="sk-vig" cx="50%" cy="45%" r="72%">

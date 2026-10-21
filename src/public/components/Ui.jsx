@@ -87,10 +87,19 @@ export function Photo({ style, label, className = '', image, imageKey, imagePath
       <img src={src} alt="" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined} data-cms-path={imagePath && cms(imagePath)} />
     </div>;
   }
+  /*
+   * No picture yet, so a drawing stands in — and the drawing carries the
+   * picture's field the same way a product's does, marked as a background so
+   * the manager offers a picture rather than writing a file name over the
+   * artwork. Without this the field was offered only once a picture had been
+   * chosen, which is the one moment nobody needs it: every drawn stand-in on
+   * the site, the guides' among them, could not be clicked to give it one.
+   */
+  const marks = imagePath ? { 'data-cms-path': cms(imagePath), 'data-cms-background': 'true' } : undefined;
   const scene = parseSceneVisual(style);
-  if (scene.kind === 'workshop') return <Workshop className={className} label={label} />;
-  if (scene.kind === 'sketch') return <Sketch className={className} label={label} />;
-  return <Scene kind={scene.kind} shirt={scene.shirt} wide={wide} className={className} label={label} />;
+  if (scene.kind === 'workshop') return <Workshop className={className} label={label} marks={marks} />;
+  if (scene.kind === 'sketch') return <Sketch className={className} label={label} marks={marks} />;
+  return <Scene kind={scene.kind} shirt={scene.shirt} wide={wide} className={className} label={label} marks={marks} />;
 }
 
 /*
