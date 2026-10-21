@@ -476,8 +476,12 @@ describe("the client's own marks, and the medal's own questions", () => {
     // so it is a component of its own rather than a entry in Icons.jsx.
     expect(marks).toContain("const NAVY = '#21348c';");
     expect(marks).toContain("const GREEN = '#006451';");
-    expect(marks).toContain('viewBox="0 0 98.561 98.919"');
-    for (const name of ['mockup', 'guidance', 'quantities']) {
+    // Each in the box it was drawn in: the first three arrived on one canvas,
+    // the four home-page promises on another.
+    expect(marks).toContain("const DEFAULT_BOX = '0 0 98.561 98.919';");
+    expect(marks).toContain("products: '0 0 140.584 125.253',");
+    expect(marks).toContain('viewBox={BOXES[name] ?? DEFAULT_BOX}');
+    for (const name of ['mockup', 'guidance', 'quantities', 'products', 'quality', 'oneDay', 'mockupFree']) {
       expect(marks, name).toContain(`${name}: <>`);
     }
     // Decoration beside a word that already says it: nothing to read aloud.

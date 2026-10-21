@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import printData from '../src/data/printData.json';
 import productData from '../src/data/productData.json';
 import siteContent from '../src/data/siteContent.json';
+import { brandMarkNames } from '../src/public/components/BrandMarks';
 import HomePage from '../src/public/pages/HomePage';
 import ProductsPage from '../src/public/pages/ProductsPage';
 import StoriesPage from '../src/public/pages/StoriesPage';
@@ -246,9 +247,8 @@ describe('the home banner and the sections under it', () => {
       'homeWorkEyebrow', 'homeWorkHeading', 'homeProcessEyebrow', 'homeProcessHeading', 'homeClosingTitle']) {
       expect(markup, key).toContain(siteContent.headings[key].replaceAll("'", '&#x27;'));
     }
-    // The four facts it leads with: a figure, then three plain ones.
-    expect(siteContent.homeFigure.value).toBe('∞');
-    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(['Quality assured', 'Within 1 day', 'Free']);
+    // The four promises it leads with, all four the same kind of thing.
+    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(['Products', 'Quality assured', 'Within 1 day', 'Free']);
   });
 
   it('sets the banner the way the concept sets it: small line, huge headline', () => {
@@ -268,38 +268,38 @@ describe('the home banner and the sections under it', () => {
     expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
   });
 
-  it('opens the promises with a figure that counts up, then each with its mark', () => {
+  it('sets the four promises in one row, each with its own mark', () => {
     const markup = render(HomePage, '/');
-    // The figure the server draws is the mark itself, so a reader with no
-    // JavaScript — or one who asked for less motion — sees it, not a zero.
-    // That mark is the MySOS logo now, where it was "∞"; the figure in words
-    // still names it for a screen reader.
-    expect(markup).toMatch(/<strong class="home-figure-value has-mark" aria-label="∞"><img class="home-figure-mark" src="[^"]*mark[^"]*\.png" alt=""/);
-    expect(markup).toContain('data-cms-path="[&quot;homepage&quot;,&quot;homeFigure&quot;,&quot;image&quot;]"');
-    expect(siteContent.homeFigure.image).toBe('');
-    expect(home).toMatch(/setShown\(null\);\s+node\.classList\.add\('is-settled'\);/);
-    expect(markup).toContain(siteContent.homeFigure.label);
-    expect(home).toMatch(/setShown\(String\(Math\.round\(eased \* 99\)\)\)/);
-    expect(home).toMatch(/\(prefers-reduced-motion: reduce\)'\)\.matches\) return undefined;/);
-    // Each promise keeps its own mark, and the row is a plain divided row now.
+    // "Products" used to stand apart from the other three, under a MySOS logo
+    // that counted up to itself: a heading over the row rather than the first
+    // thing in it. There is one row now and Products is a column of it.
     expect([...markup.matchAll(/class="home-stat-list"/g)]).toHaveLength(1);
+    expect(markup).not.toContain('home-figure');
+    expect(home).not.toContain('CountToInfinity');
+    expect(siteContent.homeFigure).toBeUndefined();
+    expect(css).toContain('.home-stat-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));');
+
+    // Each one is drawn as the client drew it: two-colour artwork, in the box
+    // it was drawn in, not a line icon taking the colour of the text.
+    const marks = [...markup.matchAll(/class="brand-mark"/g)];
+    expect(marks).toHaveLength(siteContent.homeStats.length);
     for (const stat of siteContent.homeStats) {
-      expect(stat.icon, stat.value).toBeTruthy();
+      expect(brandMarkNames, stat.value).toContain(stat.mark);
       expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
+      // The line icon stays behind it, for anything added here later.
+      expect(stat.icon, stat.value).toBeTruthy();
     }
+    expect(markup).toContain('viewBox="0 0 140.584 125.253"');
   });
 
-  it('writes the figure at the size of the promises beside it', () => {
-    // "∞ Products" is one line of type with "Quality assured", not a small
-    // number over a large word; it used to be set at 22px and then scaled up
-    // as it landed, which left it in neither size for most of the count.
-    const rule = css.match(/\.home-figure-value,\s*\r?\n\.home-figure-label \{([^}]*)\}/)[1];
+  it('writes a promise at the size of the promises beside it', () => {
+    // One row of type, not a small mark over a large word.
     const promise = css.match(/\.home-stat-list strong \{([^}]*)\}/)[1];
-    for (const property of ['font-size', 'font-weight', 'letter-spacing', 'line-height']) {
-      const of = (text) => text.match(new RegExp(`${property}: ([^;]+);`))[1];
-      expect(of(rule), property).toBe(of(promise));
-    }
-    expect(css).not.toMatch(/\.home-figure-value\.is-settled/);
+    expect(promise).toMatch(/font-size: clamp\(/);
+    expect(css).toContain('.home-stat-list .brand-mark { display: block;');
+    // Two to a row on a narrow screen, as the three were.
+    const narrow = css.slice(css.indexOf('@media (max-width: 1080px)', css.indexOf('20. homepage')));
+    expect(narrow.slice(0, 900)).toContain('.home-stat-list { grid-template-columns: repeat(2, minmax(0, 1fr));');
   });
 
   it('brings sections in as they are reached, and never leaves them hidden', () => {

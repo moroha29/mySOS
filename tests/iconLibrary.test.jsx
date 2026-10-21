@@ -82,9 +82,11 @@ describe('an uploaded picture can stand in for an icon', () => {
 describe('icons on the page carry their content path', () => {
   it('on the home page', () => {
     const html = renderAt('/', HomePage);
-    // The reasons in the navy band, and the mark beside each figure.
+    // The reasons in the navy band. The four promises above them are the
+    // client's own two-colour marks, which are artwork rather than icons:
+    // they are not drawn from the library and not offered in its picker.
     expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
-    expect(html).toContain('data-cms-path="[&quot;homepage&quot;,&quot;homeStats&quot;,0,&quot;icon&quot;]" data-cms-icon="true"');
+    expect(html).not.toContain('&quot;homeStats&quot;,0,&quot;icon&quot;');
   });
 
   it('on the Why MySOS page', () => {
