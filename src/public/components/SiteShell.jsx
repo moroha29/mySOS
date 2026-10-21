@@ -76,18 +76,49 @@ function dropdownFor(label) {
   return null;
 }
 
+/*
+ * One entry of the main navigation, and the list under it where it has one.
+ *
+ * The chevron is a button rather than a mark inside the link. Folded into the
+ * menu on a phone, all three lists were open at once — nineteen rows under
+ * five — and the menu ran off the bottom of the screen with Success Stories,
+ * Why MySOS and Resources below the fold and no way to reach them. The lists
+ * start closed there, and the chevron is what opens one.
+ *
+ * It opens them on a wide screen too, where until now only hovering did, so
+ * the menu can be worked from the keyboard without a pointer.
+ */
 function NavigationItem({ item, index, onNavigate }) {
   const links = dropdownFor(item.label);
+  const [open, setOpen] = useState(false);
   // The entry carries both its wording and its destination, so selecting it in
   // the manager offers the pair.
   const entry = cmsAll(configPath('navigation', index, 'label'), configPath('navigation', index, 'href'));
   if (!links) return <a className="nav-link" href={item.href} onClick={onNavigate} data-cms-paths={entry}>{item.label}</a>;
-  return <div className="nav-group">
-    <a className="nav-link" href={item.href} onClick={onNavigate} data-cms-paths={entry}>{item.label}<Icon name="chevronDown" size={18} className="nav-chevron" /></a>
-    <div className="nav-dropdown">{links.map((link) => <a
+  const listId = `nav-${item.label.toLowerCase().replace(/[^a-z]+/g, '-')}`;
+  const close = () => { setOpen(false); onNavigate(); };
+  return <div
+    className={open ? 'nav-group is-open' : 'nav-group'}
+    // Opened by the chevron, it would otherwise stay open until pressed
+    // again. Moving on closes it, as letting go of a hover always did.
+    onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}
+    onKeyDown={(event) => { if (event.key === 'Escape') setOpen(false); }}
+  >
+    <a className="nav-link" href={item.href} onClick={close} data-cms-paths={entry}>{item.label}</a>
+    <button
+      type="button"
+      className="nav-toggle"
+      aria-expanded={open}
+      aria-controls={listId}
+      onClick={() => setOpen(!open)}
+    >
+      <Icon name="chevronDown" size={18} className="nav-chevron" />
+      <span className="sr-only">{item.label}</span>
+    </button>
+    <div className="nav-dropdown" id={listId}>{links.map((link) => <a
       key={link.label}
       href={link.href}
-      onClick={onNavigate}
+      onClick={close}
       data-cms-path={link.path && cms(link.path)}
       data-cms-paths={link.paths && cmsAll(...link.paths)}
     >{link.label}</a>)}</div>
