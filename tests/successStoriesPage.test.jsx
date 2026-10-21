@@ -113,3 +113,52 @@ describe('page wording and styling', () => {
     expect(css).not.toMatch(/\.quote-panel|\.sort-select/);
   });
 });
+
+describe('the chapters of one story', () => {
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+  const page = readFileSync(new URL('../src/public/pages/StoryDetailPage.jsx', import.meta.url), 'utf8');
+
+  it('stays within reach on a narrow screen', () => {
+    // Stacked above the story rather than beside it, the row of chapters
+    // scrolled away with the first one and there was no way back to the
+    // others without scrolling the whole story. It is pinned under the
+    // header now, as it already was beside the story on a wide screen.
+    const narrow = css.slice(css.indexOf('  .story-toc {', css.indexOf('@media (max-width: 1080px)')));
+    expect(narrow.slice(0, 460)).toContain('position: sticky; top: var(--header-now);');
+    // Under the header, never over it.
+    expect(narrow.slice(0, 460)).toMatch(/z-index: 40/);
+    expect(css).toMatch(/\.site-header \{ position: sticky; top: 0; z-index: 60/);
+    // Something to sit on, so the story does not read through it.
+    expect(narrow.slice(0, 460)).toContain('background: var(--surface)');
+    // One line of the screen, not two: the label no longer wraps.
+    expect(narrow).toContain('.story-toc > span { margin: 0 8px 0 0; white-space: nowrap; }');
+  });
+
+  it('follows the header down as it tightens', () => {
+    // The header is 88px at rest and 72px once the page moves under it.
+    // Pinned to the resting height, a strip of the story showed through the
+    // gap between the two.
+    expect(css).toContain('--header-now: var(--header-h);');
+    expect(css).toContain('html.is-scrolled { --header-now: 72px; }');
+    expect(css).toMatch(/html\.is-scrolled \.site-header \{ height: 72px/);
+  });
+
+  it('keeps the chapter being read in view along the row', () => {
+    // The row is wider than a phone: by the fourth chapter the marked one was
+    // off the right-hand end, so the row said you were on the first.
+    expect(page).toContain('function useChapterInView(active)');
+    expect(page).toContain("const marked = row?.querySelector('a.is-active');");
+    // The row is scrolled, never the page.
+    expect(page).toContain('row.scrollTo({ left: to');
+    expect(page).not.toContain('.scrollIntoView(');
+    // Beside the story there is nothing to scroll, so it does nothing there.
+    expect(page).toContain('if (room < 4) return;');
+    expect(page).toContain('<aside className="story-toc" ref={tocRef}>');
+  });
+
+  it('lands a chapter below the chrome rather than behind it', () => {
+    expect(css).toContain('.narrative-block { scroll-margin-top: calc(var(--header-now) + 20px); }');
+    const narrow = css.slice(css.indexOf('@media (max-width: 1080px)'));
+    expect(narrow).toContain('.narrative-block { scroll-margin-top: calc(var(--header-now) + 72px); }');
+  });
+});
