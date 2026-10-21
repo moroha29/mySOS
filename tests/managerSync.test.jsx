@@ -1,5 +1,6 @@
 import React from 'react';
 import { afterEach, describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { renderToStaticMarkup } from 'react-dom/server';
 import PublicApp from '../src/public/PublicApp';
 import siteConfig from '../src/data/siteConfig.json';
@@ -138,5 +139,53 @@ describe('what the site offers to the manager', () => {
     // did not exist, so the editor opened an empty box either way.
     for (const method of Object.values(siteContent.printingMethods)) expect(typeof method.icon).toBe('string');
     expect(typeof siteContent.labels.featuredBadge).toBe('string');
+  });
+});
+
+/*
+ * The other direction.
+ *
+ * The test above asks whether every address on the page leads somewhere. This
+ * asks whether a picture that has not been chosen yet can be chosen at all: a
+ * drawn stand-in with no address is a picture field nobody can reach, and it
+ * reads as the site simply not offering one. Every guide on the site was in
+ * that state — the drawing is what you see until a photograph is chosen, and
+ * the drawing was the one thing you could not click.
+ */
+describe('a picture that has not been chosen yet', () => {
+  const ui = readFileSync(new URL('../src/public/components/Ui.jsx', import.meta.url), 'utf8');
+  const visuals = readFileSync(new URL('../src/public/components/Visuals.jsx', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/public/public.css', import.meta.url), 'utf8');
+
+  it('is offered on the drawing standing in for it', () => {
+    // Marked as a background, as a product's drawing already was, so the
+    // manager opens a picture field rather than writing a file name over art.
+    expect(ui).toContain("const marks = imagePath ? { 'data-cms-path': cms(imagePath), 'data-cms-background': 'true' } : undefined;");
+    for (const scene of ['Workshop', 'Sketch']) expect(ui, scene).toContain(`<${scene} className={className} label={label} marks={marks} />`);
+    expect(ui).toContain('<Scene kind={scene.kind} shirt={scene.shirt} wide={wide} className={className} label={label} marks={marks} />');
+    // And the drawings take it.
+    expect(visuals.match(/role="img" aria-label=\{label \|\| ''\} \{\.\.\.marks\}>/g)).toHaveLength(3);
+  });
+
+  it('previews the chosen picture the way the published page draws it', () => {
+    // Without this the manager painted the file at its own size and showed a
+    // corner of it, the way an unsized background always does.
+    expect(css).toContain('.scene.has-background { background-size: cover;');
+    expect(css).toContain('.scene.has-background > svg { visibility: hidden; }');
+    expect(css).toMatch(/\.scene svg, \.scene img \{[^}]*object-fit: cover/);
+  });
+
+  it('reaches every guide, which is where it was noticed', () => {
+    const marked = new Set();
+    for (const [pathname, search] of routes) {
+      for (const [, raw] of render(pathname, search).matchAll(/data-cms-path="([^"]*)" data-cms-background/g)) {
+        marked.add(unescape(raw));
+      }
+    }
+    const guides = [...marked].filter((key) => key.includes('"resources"'));
+    expect(guides.length).toBe(resources.articles.length);
+    for (const key of guides) expect(valueAt(JSON.parse(key))).toBeDefined();
+    // And the success stories, which were in the same state.
+    expect([...marked].filter((key) => key.includes('"successStories"')).length).toBe(successStories.length);
   });
 });
