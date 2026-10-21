@@ -250,18 +250,34 @@ describe('every category the menu offers has something behind it', () => {
     const ids = siteContent.categories.map((category) => category.id);
     expect(ids).toContain('keychains-accessories');
     expect(ids).toContain('trophies-awards');
-    // Keychains are held back for now: kept in the content, with its products,
-    // but off the website until MySOS settles what goes in it.
-    const keychains = siteContent.categories.find((category) => category.id === 'keychains-accessories');
-    expect(keychains.visible).toBe(false);
-    const theirs = productData.catalogue.filter((item) => item.public.category === 'keychains-accessories');
-    expect(theirs.length).toBeGreaterThan(0);
-    for (const item of theirs) expect(item.public.visible, item.id).toBe(false);
-    // Awards are not held back, and are shown.
-    expect(offered.map((category) => category.id)).toContain('trophies-awards');
+    // Both are offered, and both have something behind them. Keychains was
+    // held back for a while and is back; what a held-back category does is
+    // tested below, on whichever one is held back, rather than on this one.
+    for (const id of ['keychains-accessories', 'trophies-awards']) {
+      expect(offered.map((category) => category.id)).toContain(id);
+      const theirs = productData.catalogue.filter((item) => item.public.category === id && item.public.visible);
+      expect(theirs.length, id).toBeGreaterThan(0);
+    }
     // The client's own list puts medals with the awards rather than the gifts.
     const medal = productData.catalogue.find((item) => item.id === 'custom_medal');
     expect(medal.public.category).toBe('trophies-awards');
+  });
+
+  it('keeps a held-back category whole, and off the website entirely', () => {
+    // A category can be set aside while MySOS settles what goes in it: it
+    // stays in the content with its wording and its place in the order, and
+    // its products are hidden with it, so nothing is half there.
+    const held = siteContent.categories.filter((category) => category.visible === false);
+    for (const category of held) {
+      expect(offered.map((entry) => entry.id)).not.toContain(category.id);
+      const theirs = productData.catalogue.filter((item) => item.public.category === category.id);
+      for (const item of theirs) expect(item.public.visible, `${item.id} is held back with its category`).toBe(false);
+    }
+    // And a product is never shown under a category that is not.
+    for (const item of visible) {
+      const its = siteContent.categories.find((category) => category.id === item.public.category);
+      if (its) expect(its.visible, `${item.id} is shown under ${item.public.category}`).not.toBe(false);
+    }
   });
 
   it('gives each one a mark, a row of kinds and products to show', () => {

@@ -284,8 +284,7 @@
       "description": "Keychains, bag charms & enamel pins",
       "image": "",
       "typeWord": "keychain",
-      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin",
-      "visible": false
+      "searchPlaceholder": "Search keychains, e.g. metal keychain or enamel pin"
     },
     {
       "id": "trophies-awards",
