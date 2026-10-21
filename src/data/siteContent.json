@@ -3048,7 +3048,7 @@
   },
   "productImages": {
     "premium-cotton-tee": {
-      "image": "",
+      "image": "/assets/uploads/coaches-tee-front-with-mannequin-2b37e56f.png",
       "fit": ""
     },
     "cotton-round-neck-tee": {
@@ -3060,15 +3060,15 @@
       "fit": ""
     },
     "dryfit-performance-tee": {
-      "image": "",
+      "image": "/assets/uploads/lefonse-rm01-white-dri-fit-b8f74220.png",
       "fit": ""
     },
     "dryfit-v-neck": {
-      "image": "",
+      "image": "/assets/uploads/qd04-dri-fit-0472-army-green-052a46f7.png",
       "fit": ""
     },
     "polo-cotton-pique": {
-      "image": "",
+      "image": "/assets/uploads/qd56-interlock-dri-fit-qd-5630-dark-purple-d2aef79c.png",
       "fit": ""
     },
     "dryfit-polo": {
@@ -3223,5 +3223,16 @@
       "image": "",
       "fit": ""
     }
+  },
+  "appearance": {
+    "overrides": [
+      {
+        "page": "homepage",
+        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"heroTitleLead\"]']",
+        "route": "/",
+        "label": "Hero Title Lead",
+        "fontScale": 0.95
+      }
+    ]
   }
 }
