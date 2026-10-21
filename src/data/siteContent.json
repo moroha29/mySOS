@@ -1451,17 +1451,26 @@
   ],
   "homeStats": [
     {
+      "icon": "layers",
+      "mark": "products",
+      "value": "Products",
+      "note": "One source. Infinite solutions."
+    },
+    {
       "icon": "award",
+      "mark": "quality",
       "value": "Quality assured",
       "note": "Verified production errors replaced or reimbursed"
     },
     {
       "icon": "calendar",
+      "mark": "oneDay",
       "value": "Within 1 day",
       "note": "Response time, excluding Sundays"
     },
     {
       "icon": "design",
+      "mark": "mockupFree",
       "value": "Free",
       "note": "Visual mockups before production"
     }
@@ -1541,12 +1550,6 @@
       "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
   ],
-  "homeFigure": {
-    "value": "∞",
-    "image": "",
-    "label": "Products",
-    "note": "One source. Infinite solutions."
-  },
   "subcategoryNames": {
     "tshirts": "T-Shirts",
     "polos": "Polos",

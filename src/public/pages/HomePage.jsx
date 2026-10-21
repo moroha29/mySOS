@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import siteConfig from '../../data/siteConfig.json';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
@@ -10,6 +10,7 @@ import { searchProducts } from '../../utils/solutionRequest';
 import useSavedRequest from '../useSavedRequest';
 import { hasGoogleReviews } from '../../utils/googleReviews';
 import Icon from '../components/Icons';
+import BrandMark from '../components/BrandMarks';
 import { Button, CategoryMark, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
 import ProcessJourney from '../components/ProcessJourney';
@@ -180,63 +181,6 @@ function HeroSearch() {
     </ul>
     {query.length > 1 && <SearchResults query={query} onAdd={addProduct} added={added} />}
   </>;
-}
-
-/*
- * The figure at the head of the promises: counts up from nothing and settles
- * on the MySOS mark, where it used to settle on "∞". The mark is what the
- * server draws, so it is what a reader sees with no JavaScript, or one who
- * asked for less motion; the count only replaces it while it runs.
- *
- * `value` is still the figure in words: it names the mark for a screen reader,
- * and is what is drawn if the picture is ever missing.
- */
-const COUNT_MS = 1400;
-
-function CountToInfinity({ value = '∞' }) {
-  // null is the settled state: the mark, not a number.
-  const [shown, setShown] = useState(null);
-  const ref = useRef(null);
-  const mark = picture(siteContent.homeFigure?.image, 'brand/mark');
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || typeof IntersectionObserver === 'undefined') return undefined;
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return undefined;
-
-    let frame = 0;
-    let started = 0;
-    const tick = (now) => {
-      started ||= now;
-      const part = Math.min(1, (now - started) / COUNT_MS);
-      // Fast at first, easing into the last few, then the mark itself.
-      const eased = 1 - (1 - part) ** 3;
-      if (part < 1) {
-        setShown(String(Math.round(eased * 99)));
-        frame = requestAnimationFrame(tick);
-      } else {
-        setShown(null);
-        node.classList.add('is-settled');
-      }
-    };
-
-    const watcher = new IntersectionObserver((entries) => {
-      if (!entries.some((entry) => entry.isIntersecting)) return;
-      watcher.disconnect();
-      setShown('0');
-      frame = requestAnimationFrame(tick);
-    }, { threshold: 0.4 });
-    watcher.observe(node);
-
-    return () => { watcher.disconnect(); cancelAnimationFrame(frame); };
-  }, [value]);
-
-  if (!mark) {
-    return <strong className="home-figure-value" ref={ref} aria-label={value} data-cms-path={cms(contentPath('homeFigure', 'value'))}>{shown ?? value}</strong>;
-  }
-  return <strong className="home-figure-value has-mark" ref={ref} aria-label={value}>
-    {shown ?? <img className="home-figure-mark" src={mark} alt="" data-cms-path={cms(contentPath('homeFigure', 'image'))} />}
-  </strong>;
 }
 
 /* ------------------------------------------------------- proof and logos */
@@ -475,7 +419,6 @@ export default function HomePage() {
   const featuredStories = useMemo(() => getStories().filter((story) => story.featured).slice(0, 2), []);
   const slides = heroSlides();
   const stats = siteContent.homeStats ?? [];
-  const figure = siteContent.homeFigure ?? null;
 
   return <main className="home-page">
     <CategoryStrip />
@@ -498,15 +441,18 @@ export default function HomePage() {
       </div>
     </section>
 
+    {/* Four promises, each one a column of the same row. "Products" used to
+        stand apart from the other three, under a MySOS logo that counted up
+        to itself, which read as a heading over the row rather than the first
+        thing in it. */}
     {stats.length > 0 && <section className="home-stats">
-      {figure && <div className="home-figure" data-reveal>
-        <CountToInfinity value={figure.value} />
-        <span className="home-figure-label" data-cms-path={cms(contentPath('homeFigure', 'label'))}>{figure.label}</span>
-        {figure.note && <small data-cms-path={cms(contentPath('homeFigure', 'note'))}>{figure.note}</small>}
-      </div>}
       <ul className="home-stat-list">
         {stats.map((stat, index) => <li key={stat.value} data-reveal style={{ '--reveal-delay': `${(index + 1) * 80}ms` }}>
-          {stat.icon && <Icon name={stat.icon} size={23} cmsPath={contentPath('homeStats', index, 'icon')} />}
+          {/* The client's own mark where they have drawn one, and the line
+              icon for anything added here later. */}
+          {stat.mark
+            ? <BrandMark name={stat.mark} size={52} />
+            : stat.icon && <Icon name={stat.icon} size={23} cmsPath={contentPath('homeStats', index, 'icon')} />}
           <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
           {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
         </li>)}
