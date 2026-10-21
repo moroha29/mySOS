@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import { cms, cmsAll, configPath, pagePath, pageText, picture, storyPath } from '../cms';
 import { getPublicProduct, getStoryBySlug } from '../../utils/catalogue';
@@ -72,9 +72,34 @@ function useActiveSection() {
   return active;
 }
 
+/*
+ * Keep the chapter being read in view along the row.
+ *
+ * Pinned under the header on a narrow screen, the row is wider than the
+ * screen: by the fourth chapter the one marked as yours was off the right-hand
+ * end, so the row said you were on the first. The row is scrolled, never the
+ * page — scrollIntoView would carry the whole page with it.
+ */
+function useChapterInView(active) {
+  const rail = useRef(null);
+  useEffect(() => {
+    const row = rail.current;
+    const marked = row?.querySelector('a.is-active');
+    if (!row || !marked) return;
+    const room = row.scrollWidth - row.clientWidth;
+    if (room < 4) return;
+    const middle = marked.offsetLeft - (row.clientWidth - marked.offsetWidth) / 2;
+    const to = Math.max(0, Math.min(room, middle));
+    if (Math.abs(to - row.scrollLeft) < 4) return;
+    row.scrollTo({ left: to, behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  }, [active]);
+  return rail;
+}
+
 export default function StoryDetailPage({ slug }) {
   const story = getStoryBySlug(slug);
   const active = useActiveSection();
+  const tocRef = useChapterInView(active);
 
   if (!story) {
     return <main className="not-found">
@@ -142,7 +167,7 @@ export default function StoryDetailPage({ slug }) {
     </div>
 
     <div className="story-body">
-      <aside className="story-toc">
+      <aside className="story-toc" ref={tocRef}>
         <span data-cms-path={cms(pagePath('story', 'tocLabel'))}>{pageText('story', 'tocLabel', 'The Story')}</span>
         {sections.map((section, index) => <a
           key={section.id}

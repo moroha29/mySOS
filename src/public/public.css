@@ -35,6 +35,10 @@
   --gutter: max(var(--pad), calc((100% - var(--content)) / 2 + var(--pad)));
   /* The bar at the top of every page, and anything that has to clear it. */
   --header-h: 88px;
+  /* What it measures at this moment: it tightens to 72px once the page moves
+     under it. Anything pinned below the header follows this rather than the
+     resting height, or a strip of the page shows through the gap between. */
+  --header-now: var(--header-h);
 
   /* DM Sans, as the concept sets it: rounder and a touch wider than Inter,
      which is why the headlines read differently. Inter stays as the fallback
@@ -468,6 +472,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .story-toc a.is-active { border-left-color: var(--navy); background: #eff4fc; color: var(--navy); font-weight: 700; }
 
 .story-narrative { display: grid; gap: 26px; }
+/* Clicking a chapter used to put its heading behind the header. */
+.narrative-block { scroll-margin-top: calc(var(--header-now) + 20px); }
 .narrative-block { display: grid; grid-template-columns: 1fr 268px; gap: 26px; align-items: start; padding-bottom: 26px; border-bottom: 1px solid var(--line-soft); }
 .narrative-block:last-child { border-bottom: 0; }
 .narrative-block.is-wide { grid-template-columns: 1fr; }
@@ -769,7 +775,25 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
   .solution-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .popular-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .story-body { grid-template-columns: 1fr; }
-  .story-toc { position: static; grid-auto-flow: column; overflow-x: auto; }
+  /* The chapters stay in reach. Stacked above the story rather than
+     beside it, the row scrolled away with the first chapter and there
+     was no way back to the others without scrolling the whole story.
+     It is one line here, and the label does not wrap, so pinning it
+     costs a line of the screen rather than two. */
+  .story-toc {
+    position: sticky; top: var(--header-now); z-index: 40;
+    grid-auto-flow: column; justify-content: start; align-items: center;
+    overflow-x: auto; scrollbar-width: none;
+    padding: 8px 12px; border-radius: 0; background: var(--surface);
+    margin-inline: calc(var(--pad) * -1); padding-inline: var(--pad);
+    border-width: 0 0 1px;
+  }
+  .story-toc::-webkit-scrollbar { display: none; }
+  .story-toc > span { margin: 0 8px 0 0; white-space: nowrap; }
+  .story-toc a { padding: 7px 12px; white-space: nowrap; border-left: 0; border-radius: 6px; }
+  .story-toc a.is-active { border-left: 0; }
+  /* and the heading it jumps to clears the pinned row as well */
+  .narrative-block { scroll-margin-top: calc(var(--header-now) + 72px); }
   .footer-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -1793,6 +1817,7 @@ html.has-reveal [data-reveal].is-in { opacity: 1; transform: none; }
 
 /* the header tightens and lifts once the page moves under it */
 .site-header { transition: height .3s cubic-bezier(.4, 0, .2, 1), box-shadow .3s ease, background-color .3s ease; }
+html.is-scrolled { --header-now: 72px; }
 html.is-scrolled .site-header { height: 72px; box-shadow: 0 10px 30px rgba(13, 42, 107, .10); background: rgba(255, 255, 255, .92); }
 html.is-scrolled .wordmark { height: 36px; }
 .wordmark { transition: height .3s cubic-bezier(.4, 0, .2, 1); }
