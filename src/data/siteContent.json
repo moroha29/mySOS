@@ -52,7 +52,7 @@
     "popularSolutionsHeading": "Popular solutions",
     "browseCategoryHeading": "Browse by category",
     "faqHeading": "Frequently asked questions",
-    "whyProcessHeading": "Our process",
+    "whyProcessHeading": "Our Process",
     "budgetEyebrow": "Find by budget",
     "budgetHeading": "Know the budget, not the product?",
     "budgetLead": "Give us your quantity and the budget per person. We will suggest realistic starting points for that order size.",
@@ -216,7 +216,7 @@
       "visual": "tee",
       "colour": "navy",
       "description": "T-Shirts, polos, jerseys & more",
-      "image": "",
+      "image": "/assets/uploads/st-andrew-navy-tee-white-background-7c1a69f7.png",
       "typeWord": "apparel",
       "searchPlaceholder": "Search apparel, e.g. oversized tee or jersey"
     },
@@ -307,9 +307,9 @@
       "description": "Source multiple products through one point of contact.",
       "longDescription": "Source multiple products through one reliable partner.",
       "scene": "office",
-      "image": "",
+      "image": "/assets/uploads/01-one-supplier-endless-possibilities-d78f1a90.png",
       "stackLabel": "One Supplier",
-      "cardIcon": "sample"
+      "cardIcon": "/assets/uploads/icon-guidance-30-sept-2026-05-9a4592c9.png"
     },
     {
       "key": "value",
@@ -319,9 +319,9 @@
       "description": "Quality recommendations without unnecessary premium pricing.",
       "longDescription": "We deliver quality that exceeds expectations without the hefty price tag.",
       "scene": "studio",
-      "image": "",
+      "image": "/assets/uploads/02-premium-quality-539d0e63.png",
       "stackLabel": "Premium Quality",
-      "cardIcon": "award"
+      "cardIcon": "/assets/uploads/icon-guidance-30-sept-2026-06-c6bfee76.png"
     },
     {
       "key": "flexible",
@@ -331,9 +331,9 @@
       "description": "From small projects to larger scale orders.",
       "longDescription": "Small or large, we cater to your needs.",
       "scene": "hall",
-      "image": "",
+      "image": "/assets/uploads/03-flexible-quantities-b7a77768.png",
       "stackLabel": "Flexible Quantities",
-      "cardIcon": "flexible"
+      "cardIcon": "/assets/uploads/icon-guidance-30-sept-2026-07-052568b5.png"
     },
     {
       "key": "expert",
@@ -343,9 +343,9 @@
       "description": "We'll recommend the best materials, methods and finishes.",
       "longDescription": "We guide you to the right products, materials and methods.",
       "scene": "outdoor",
-      "image": "",
+      "image": "/assets/uploads/04-expert-recommendations-1b32eca0.png",
       "stackLabel": "Expert Recommendations",
-      "cardIcon": "expert"
+      "cardIcon": "/assets/uploads/icon-guidance-30-sept-2026-08-bd21e7ad.png"
     },
     {
       "key": "tailored",
@@ -355,7 +355,7 @@
       "description": "Solutions based on your requirements, timeline and budget.",
       "longDescription": "Solutions customised for your industry, goals and budget.",
       "scene": "field",
-      "image": "",
+      "image": "/assets/uploads/05-tailored-your-needs-a11d46b1.png",
       "stackLabel": "Tailored to Your Needs",
       "cardIcon": "design"
     }
@@ -367,7 +367,7 @@
       "description": "Tell us what you need.",
       "headline": "Tell Us What You Need",
       "detail": "Share your idea, quantities, timeline and budget, and we take it from there.",
-      "image": ""
+      "image": "/assets/uploads/01-tell-us-what-you-need-38f2e839.png"
     },
     {
       "title": "Recommend",
@@ -375,7 +375,7 @@
       "description": "We recommend the best solutions.",
       "headline": "Expert Recommendations",
       "detail": "We suggest the right products, materials and printing methods for your goals.",
-      "image": ""
+      "image": "/assets/uploads/02-expert-recommendation-71a1c716.png"
     },
     {
       "title": "Quote",
@@ -383,7 +383,7 @@
       "description": "You receive a clear quotation.",
       "headline": "A Clear, Detailed Quote",
       "detail": "We break down the product, customisation and delivery so you know exactly what you are paying for.",
-      "image": ""
+      "image": "/assets/uploads/03-a-clear-detailed-quote-3e3f0181.png"
     },
     {
       "title": "Sample",
@@ -391,7 +391,7 @@
       "description": "We provide a sample for your approval.",
       "headline": "Approve Your Sample",
       "detail": "Check the quality, fit, materials and branding before full production.",
-      "image": ""
+      "image": "/assets/uploads/04-approve-your-sample-f9a9686b.png"
     },
     {
       "title": "Produce",
@@ -399,7 +399,7 @@
       "description": "We produce with quality and care.",
       "headline": "Production & Quality Check",
       "detail": "We manage production and run quality checks to ensure everything meets your standards.",
-      "image": ""
+      "image": "/assets/uploads/05-production-quality-check-5c7f669f.png"
     },
     {
       "title": "Deliver",
@@ -407,7 +407,7 @@
       "description": "We deliver on time, every time.",
       "headline": "Delivered On Time",
       "detail": "We deliver your order on schedule, and stay on hand after it arrives.",
-      "image": ""
+      "image": "/assets/uploads/06-delivered-on-time-208c536f.png"
     }
   ],
   "popularSolutions": [
@@ -509,7 +509,7 @@
     ],
     "storiesHeroBackgroundImage": "",
     "requestHeroBackgroundImage": "",
-    "requestHeroImage": "",
+    "requestHeroImage": "/assets/uploads/st-andrew-event-photo-footage-1-7a3f1c20.png",
     "resourcesHeroImage": ""
   },
   "pages": {
@@ -654,7 +654,7 @@
       "ctaDescription": "We're ready to help.",
       "benefitsEyebrow": "Why choose MySOS",
       "benefitsTitle": "Everything You Need, Without the Sourcing Headache.",
-      "benefitsLead": "From one item to an entire event collection, we coordinate the factories, quality checks and delivery—so you only deal with one reliable team.",
+      "benefitsLead": "From one item to an entire event collection, we coordinate everything from factories to quality checks and delivery",
       "processLead": "Follow your order from first enquiry to final delivery.",
       "loyaltyEyebrow": "Built for the long term",
       "loyaltyTitle": "Why Clients Come Back",
@@ -1451,26 +1451,17 @@
   ],
   "homeStats": [
     {
-      "icon": "layers",
-      "mark": "products",
-      "value": "Products",
-      "note": "One source. Infinite solutions."
-    },
-    {
-      "icon": "award",
-      "mark": "quality",
+      "icon": "/assets/uploads/icon-guidance-30-sept-2026-11-6b87b651.png",
       "value": "Quality assured",
       "note": "Verified production errors replaced or reimbursed"
     },
     {
-      "icon": "calendar",
-      "mark": "oneDay",
+      "icon": "/assets/uploads/icon-guidance-30-sept-2026-12-f8ce18ad.png",
       "value": "Within 1 day",
       "note": "Response time, excluding Sundays"
     },
     {
-      "icon": "design",
-      "mark": "mockupFree",
+      "icon": "/assets/uploads/icon-guidance-30-sept-2026-13-2ea29703.png",
       "value": "Free",
       "note": "Visual mockups before production"
     }
@@ -1550,6 +1541,12 @@
       "body": "Vector artwork is preferred. High-resolution PNG and PDF files may also be suitable depending on the print method."
     }
   ],
+  "homeFigure": {
+    "value": "∞",
+    "image": "/assets/uploads/icon-guidance-30-sept-2026-10-034e23c1.png",
+    "label": "Products",
+    "note": "One source. Infinite solutions."
+  },
   "subcategoryNames": {
     "tshirts": "T-Shirts",
     "polos": "Polos",
@@ -1651,6 +1648,26 @@
       {
         "label": "Sizes",
         "value": "See size chart"
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
+      },
+      {
+        "label": "",
+        "value": ""
       }
     ],
     "totes": [
@@ -2705,7 +2722,7 @@
         "question": "Branding",
         "options": [
           {
-            "name": "Sublimation",
+            "name": "Multiple",
             "note": "Full colour, edge to edge branding",
             "icon": "droplet"
           },
@@ -3048,11 +3065,11 @@
   },
   "productImages": {
     "premium-cotton-tee": {
-      "image": "/assets/uploads/coaches-tee-front-with-mannequin-2b37e56f.png",
+      "image": "/assets/uploads/coaches-club-tee-back-7f54ab6e.png",
       "fit": ""
     },
     "cotton-round-neck-tee": {
-      "image": "",
+      "image": "/assets/uploads/waikiki-tee-back-print-white-background-2116db51.png",
       "fit": ""
     },
     "cotton-v-neck-tee": {
@@ -3064,7 +3081,7 @@
       "fit": ""
     },
     "dryfit-v-neck": {
-      "image": "/assets/uploads/qd04-dri-fit-0472-army-green-052a46f7.png",
+      "image": "/assets/uploads/st-andrew-navy-tee-white-background-7c1a69f7.png",
       "fit": ""
     },
     "polo-cotton-pique": {
@@ -3072,15 +3089,15 @@
       "fit": ""
     },
     "dryfit-polo": {
-      "image": "",
-      "fit": ""
+      "image": "/assets/uploads/suss-tee-mannequin-back-6e17b268.png",
+      "fit": "cover"
     },
     "premium-cvc-polo": {
-      "image": "",
+      "image": "/assets/uploads/temasek-custom-tee-front-white-background-d28e2385.png",
       "fit": ""
     },
     "sublimation-jersey": {
-      "image": "",
+      "image": "/assets/uploads/lefonse-rc02-03-black-09914269.png",
       "fit": ""
     },
     "custom-snapback": {
@@ -3232,6 +3249,20 @@
         "route": "/",
         "label": "Hero Title Lead",
         "fontScale": 0.95
+      },
+      {
+        "page": "why-mysos",
+        "selector": "[data-cms-path='[\"homepage\",\"headings\",\"whyProcessHeading\"]']",
+        "route": "/why-mysos/",
+        "label": "Why Process Heading",
+        "fontScale": 1.2
+      },
+      {
+        "page": "why-mysos",
+        "selector": "[data-cms-path='[\"homepage\",\"pages\",\"why\",\"benefitsEyebrow\"]']",
+        "route": "/why-mysos/",
+        "label": "Benefits Eyebrow",
+        "fontScale": 1.05
       }
     ]
   }
