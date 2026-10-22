@@ -124,13 +124,27 @@ describe('what the site offers to the manager', () => {
   });
 
   it('offers a value that can be typed into, not the list it sits in', () => {
-    // Three "popular search" chips each carried the address of the whole list,
-    // so clicking any one of them opened the same field, holding all three.
+    /*
+     * Three "popular search" chips each carried the address of the whole list,
+     * so clicking any one of them opened the same field, holding all three.
+     *
+     * A dropdown is the exception, and the only one. Its choices are drawn as
+     * <option> elements, which cannot be clicked in the manager's preview at
+     * all, so the list is addressed on the dropdown itself: selecting it offers
+     * every choice at once, with somewhere to add another. Anything whose
+     * choices are drawn as buttons addresses each of them on its own button.
+     */
+    const lists = [...addresses.keys()].filter((key) => Array.isArray(valueAt(JSON.parse(key))));
+    for (const key of lists) {
+      expect(JSON.parse(key).slice(0, 2), key).toEqual(['homepage', 'productSteps']);
+      expect(JSON.parse(key).at(-1), key).toBe('options');
+      for (const choice of valueAt(JSON.parse(key))) expect(typeof choice, key).toBe('string');
+    }
     const typed = [...addresses.keys()].filter((key) => {
       const value = valueAt(JSON.parse(key));
       return typeof value === 'string' || typeof value === 'number';
     });
-    expect(typed.length).toBe(addresses.size);
+    expect(typed.length + lists.length).toBe(addresses.size);
   });
 
   it('never offers a field whose value the site invents instead of reading', () => {

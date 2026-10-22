@@ -395,7 +395,19 @@ function ColourChoice({ name, chosen, onPick }) {
  * add-ons that can open a panel of their own, somewhere to put a logo and
  * somewhere to say the rest.
  */
-function DrawnStep({ step, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
+function DrawnStep({ step, path, number, product, answers, onAnswer, colours, methods, printing, href, onChart }) {
+  /*
+   * Where this step's wording lives, so it can be changed.
+   *
+   * Every question these steps ask, and every answer they offer, is content
+   * the client wrote: "Canvas weight", "Bag size", the names of the materials,
+   * the tag that says which one most people take. None of it carried an
+   * address, so none of it could be edited in the website manager -- on the
+   * seven product pages drawn this way, the whole of "Build your request" was
+   * the one part of the page nobody could change. That is 270 words, and it is
+   * the part that shapes what a customer actually asks for.
+   */
+  const at = (...rest) => cms([...path, ...rest]);
   // Whether a list of named sizes is showing. Declared before anything is
   // drawn, because a step returns early once it knows which kind it is.
   const [listOpen, setListOpen] = useState(false);
@@ -405,8 +417,10 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
   const mine = answers[step.id] ?? '';
   const head = <p className="pdp-step-head">
     <span className="pdp-step-number" aria-hidden="true">{number}</span>
-    <span>{step.question}{step.optional && <em className="pdp-step-optional"> (optional)</em>}</span>
-    {step.hint && <small>{step.hint}</small>}
+    {/* The question in a span of its own: the element carrying an address must
+        hold that value and nothing else, and "(optional)" is not part of it. */}
+    <span><span data-cms-path={at('question')}>{step.question}</span>{step.optional && <em className="pdp-step-optional"> (optional)</em>}</span>
+    {step.hint && <small data-cms-path={at('hint')}>{step.hint}</small>}
   </p>;
 
   if (step.type === 'dimensions') {
@@ -418,7 +432,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       {/* What it is made in, then the way to ask for something it is not. */}
       <div className={`pdp-sizing${sizes.length && !named.length ? ' is-sizes' : ''}`} role="radiogroup" aria-label={step.question}>
         {named.length || !sizes.length
-          ? <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(step.id, named.length ? (chosen?.name ?? 'standard') : 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>
+          ? <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} data-cms-path={step.standardLabel ? at('standardLabel') : wordPath('standardLabel')} onClick={() => set(step.id, named.length ? (chosen?.name ?? 'standard') : 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard size')}</button>
           : sizes.map((size) => <button
             key={size.name}
             type="button"
@@ -427,19 +441,19 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
             className={picked === size.name ? 'is-chosen' : ''}
             onClick={() => set(step.id, size.name)}
           >{size.name}</button>)}
-        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(step.id, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
+        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} data-cms-path={step.customLabel ? at('customLabel') : wordPath('customLabel')} onClick={() => set(step.id, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
       </div>
 
       {/* A size with a name and a shape of its own is chosen from a list that
           shows both, rather than typed in as three numbers. */}
       {named.length > 0 && !custom && <div className="pdp-sizepick">
-        {step.listLabel && <span className="pdp-sizepick-label">{step.listLabel}</span>}
+        {step.listLabel && <span className="pdp-sizepick-label" data-cms-path={at('listLabel')}>{step.listLabel}</span>}
         <button type="button" className="pdp-sizepick-toggle" aria-expanded={listOpen} onClick={() => setListOpen(!listOpen)}>
           <span>{chosen ? `${chosen.name} \u00b7 ${chosen.dims}` : (step.listPlaceholder ?? '')}</span>
           <Icon name={listOpen ? 'chevronUp' : 'chevronDown'} size={20} />
         </button>
         {listOpen && <ul className="pdp-sizepick-list" role="radiogroup" aria-label={step.listLabel ?? step.question}>
-          {named.map((size) => <li key={size.name}>
+          {named.map((size, place) => <li key={size.name}>
             <button
               type="button"
               role="radio"
@@ -449,8 +463,10 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
             >
               <span className="pdp-sizepick-mark"><Icon name={size.icon ?? 'tote'} size={26} /></span>
               <span className="pdp-sizepick-words">
-                <strong>{`${size.name} \u00b7 ${size.dims}`}</strong>
-                {size.note && <small>{size.note}</small>}
+                {/* The name and the measurements are two fields read as one
+                    line, so each is wrapped on its own to stay editable. */}
+                <strong><span data-cms-path={at('standardSizes', place, 'name')}>{size.name}</span>{' \u00b7 '}<span data-cms-path={at('standardSizes', place, 'dims')}>{size.dims}</span></strong>
+                {size.note && <small data-cms-path={at('standardSizes', place, 'note')}>{size.note}</small>}
               </span>
               <em className="pdp-sizepick-dot" aria-hidden="true" />
             </button>
@@ -459,8 +475,8 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       </div>}
 
       {(!named.length || custom) && <ul className="pdp-dimensions">
-        {step.fields.map((field) => <li key={field.id}>
-          <label htmlFor={`pdp-${field.id}`}>{field.label}</label>
+        {step.fields.map((field, place) => <li key={field.id}>
+          <label htmlFor={`pdp-${field.id}`} data-cms-path={at('fields', place, 'label')}>{field.label}</label>
           <input
             id={`pdp-${field.id}`}
             type="text"
@@ -474,7 +490,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       </ul>}
 
       {(step.notes?.length || onChart) && <div className="pdp-step-foot">
-        {step.notes?.length > 0 && <p className="pdp-step-notes">{step.notes.map((line) => <span key={line}>{line}</span>)}</p>}
+        {step.notes?.length > 0 && <p className="pdp-step-notes">{step.notes.map((line, place) => <span key={line} data-cms-path={at('notes', place)}>{line}</span>)}</p>}
         {onChart && <button type="button" className="pdp-chart-link" onClick={onChart}>
           <Icon name="design" size={19} />
           <span data-cms-path={wordPath('sizeChartLabel')}>{word('sizeChartLabel', 'View size chart')}</span>
@@ -488,7 +504,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
     return <section className="pdp-step">
       {head}
       <div className="pdp-choice-row" role="radiogroup" aria-label={step.question}>
-        {step.options.map((option) => <button
+        {step.options.map((option, place) => <button
           key={option.name}
           type="button"
           role="radio"
@@ -496,8 +512,8 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           className={mine === option.name ? 'is-chosen' : ''}
           onClick={() => set(step.id, option.name)}
         >
-          <span>{option.name}</span>
-          {option.tag && <em className="pdp-choice-tag">{option.tag}</em>}
+          <span data-cms-path={at('options', place, 'name')}>{option.name}</span>
+          {option.tag && <em className="pdp-choice-tag" data-cms-path={at('options', place, 'tag')}>{option.tag}</em>}
         </button>)}
       </div>
     </section>;
@@ -509,7 +525,7 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       {/* All of them in one row where they fit: a material is chosen by
           comparing, which is harder two at a time. */}
       <div className="pdp-methods is-row" role="radiogroup" aria-label={step.question}>
-        {step.options.map((option) => <button
+        {step.options.map((option, place) => <button
           key={option.name}
           type="button"
           role="radio"
@@ -524,10 +540,10 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           </span>
           {/* The one most people take, said once rather than left to be
               guessed from the order. */}
-          {option.tag && <em className="pdp-method-tag">{option.tag}</em>}
+          {option.tag && <em className="pdp-method-tag" data-cms-path={at('options', place, 'tag')}>{option.tag}</em>}
           <em className="pdp-pick-dot" aria-hidden="true" />
-          <strong>{option.name}</strong>
-          {option.note && <small>{option.note}</small>}
+          <strong data-cms-path={at('options', place, 'name')}>{option.name}</strong>
+          {option.note && <small data-cms-path={at('options', place, 'note')}>{option.note}</small>}
         </button>)}
       </div>
     </section>;
@@ -589,19 +605,22 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
     return <section className="pdp-step">
       {head}
       <div className="pdp-addons">
-        {step.options.map((option) => <label key={option.name} className={chosen.includes(option.name) ? 'is-chosen' : ''}>
+        {step.options.map((option, place) => <label key={option.name} className={chosen.includes(option.name) ? 'is-chosen' : ''}>
           <input type="checkbox" checked={chosen.includes(option.name)} onChange={() => toggle(option.name)} />
           <span className="pdp-method-shot"><Icon name={option.icon ?? 'spark'} size={26} /></span>
-          <strong>{option.name}</strong>
-          {option.note && <small>{option.note}</small>}
+          <strong data-cms-path={at('options', place, 'name')}>{option.name}</strong>
+          {option.note && <small data-cms-path={at('options', place, 'note')}>{option.note}</small>}
         </label>)}
       </div>
       {/* An add-on can ask for more: the panel belongs to it and only opens
           once it has been picked. */}
       {opened.map((option) => <div className="pdp-addon-panel" key={`${option.name}-panel`}>
+        {/* Addressed by where the add-on sits in the step, not by where it
+            sits among the ones currently open: those are different lists. */}
+        {((place) => <>
         <ul>
-          {option.fields.map((field) => <li key={field.id}>
-            <label htmlFor={`pdp-${field.id}`}>{field.label}</label>
+          {option.fields.map((field, slot) => <li key={field.id}>
+            <label htmlFor={`pdp-${field.id}`} data-cms-path={at('options', place, 'fields', slot, 'label')}>{field.label}</label>
             {field.type === 'select'
               ? <select id={`pdp-${field.id}`} value={answers[field.id] ?? field.options[0]} onChange={(event) => set(field.id, event.target.value)}>
                 {field.options.map((value) => <option key={value} value={value}>{value}</option>)}
@@ -616,10 +635,11 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
                   >{value}</button>)}
                 </span>
                 : <input id={`pdp-${field.id}`} type="text" inputMode="decimal" placeholder={field.placeholder ?? ''} value={answers[field.id] ?? ''} onChange={(event) => set(field.id, event.target.value)} />}
-            {field.note && <small>{field.note}</small>}
+            {field.note && <small data-cms-path={at('options', place, 'fields', slot, 'note')}>{field.note}</small>}
           </li>)}
         </ul>
-        {option.fieldsNote && <p className="pdp-addon-note">{option.fieldsNote}</p>}
+        {option.fieldsNote && <p className="pdp-addon-note" data-cms-path={at('options', place, 'fieldsNote')}>{option.fieldsNote}</p>}
+        </>)(step.options.indexOf(option))}
       </div>)}
     </section>;
   }
@@ -631,8 +651,8 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       {/* What is stocked, and the way to ask for something that is not. The
           two are the same answer, so they share one line on the request. */}
       {step.allowCustom && <div className="pdp-sizing" role="radiogroup" aria-label={step.question}>
-        <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} onClick={() => set(`${step.id}Mode`, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard')}</button>
-        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} onClick={() => set(`${step.id}Mode`, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
+        <button type="button" role="radio" aria-checked={!custom} className={custom ? '' : 'is-chosen'} data-cms-path={step.standardLabel ? at('standardLabel') : wordPath('standardLabel')} onClick={() => set(`${step.id}Mode`, 'standard')}>{step.standardLabel ?? word('standardLabel', 'Standard')}</button>
+        <button type="button" role="radio" aria-checked={custom} className={custom ? 'is-chosen' : ''} data-cms-path={step.customLabel ? at('customLabel') : wordPath('customLabel')} onClick={() => set(`${step.id}Mode`, 'custom')}>{step.customLabel ?? word('customLabel', 'Enter my own')}</button>
       </div>}
       {custom
         ? <input
@@ -643,11 +663,16 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
           value={mine}
           onChange={(event) => set(step.id, event.target.value)}
         />
-        : <select className="pdp-field" aria-label={step.question} value={mine} onChange={(event) => set(step.id, event.target.value)}>
+        /*
+         * The choices sit inside <option> elements, which nobody can click in
+         * the preview. The list itself is addressed on the dropdown, so
+         * selecting it offers every choice at once, with somewhere to add one.
+         */
+        : <select className="pdp-field" aria-label={step.question} data-cms-path={at('options')} value={mine} onChange={(event) => set(step.id, event.target.value)}>
           <option value="">{step.placeholder ?? ''}</option>
           {step.options.map((option) => <option key={option} value={option}>{option}</option>)}
         </select>}
-      {step.note && <p className="pdp-step-note">{step.note}</p>}
+      {step.note && <p className="pdp-step-note" data-cms-path={at('note')}>{step.note}</p>}
     </section>;
   }
 
@@ -659,9 +684,9 @@ function DrawnStep({ step, number, product, answers, onAnswer, colours, methods,
       <a className="pdp-dropzone" href={href}>
         <Icon name="upload" size={30} />
         <strong data-cms-path={wordPath('uploadCta')}>{word('uploadCta', 'Upload your logo or drop it here')}</strong>
-        {step.hint && <small>{step.hint}</small>}
+        {step.hint && <small data-cms-path={at('hint')}>{step.hint}</small>}
       </a>
-      {step.note && <p className="pdp-step-note">{step.note}</p>}
+      {step.note && <p className="pdp-step-note" data-cms-path={at('note')}>{step.note}</p>}
     </section>;
   }
 
@@ -798,6 +823,7 @@ function BuildPanel({ product, onChart }) {
       ? drawn.map((step, index) => <DrawnStep
         key={step.id}
         step={step}
+        path={contentPath('productSteps', product.public.subcategory, index)}
         number={index + 2}
         product={product}
         answers={answers}
