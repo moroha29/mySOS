@@ -4,7 +4,7 @@ import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { cms, configPath, contentPath, headingPath, labelPath, picture, scenePath, shownCategories, solutionPath } from '../cms';
 import { firstImage } from '../../utils/imageRegistry';
-import { getStories, REQUEST_PATH } from '../../utils/catalogue';
+import { getStories, REQUEST_PATH, storyFacts } from '../../utils/catalogue';
 import { mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/savedRequest';
 import { searchProducts } from '../../utils/solutionRequest';
 import useSavedRequest from '../useSavedRequest';
@@ -368,8 +368,8 @@ function SelectedWork({ stories }) {
         <span className="home-work-shot"><Photo style={story.imageStyle} image={picture(story.image, `stories/${story.slug}/cover`)} label={`${story.title} project`} /></span>
         <h3>{story.title}</h3>
         <p>{story.summary}</p>
-        {story.highlights?.length > 0 && <ul className="home-work-stats">
-          {story.highlights.map((highlight) => <li key={highlight.text}>
+        {storyFacts(story).length > 0 && <ul className="home-work-stats">
+          {storyFacts(story).map((highlight) => <li key={highlight.text}>
             <Icon name={highlight.icon} size={22} />
             <span>{highlight.text}</span>
           </li>)}
