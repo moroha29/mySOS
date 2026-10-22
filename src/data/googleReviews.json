@@ -1,10 +1,18 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-10-18T21:30:22.269Z",
+  "fetchedAt": "2026-10-22T22:20:26.133Z",
   "averageRating": 5,
   "totalReviewCount": 106,
   "reviews": [
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2tNemRYaHFjakF5YVRGb2QzUXdjbVJ1TlZWdVgzYxAB",
+      "author": "Mihika Joshi",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjU3uCZWAZjGI96OFwLaVGUNdYsO9ZbmrimfgoUxo0sR6XUM5ImF=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "Really good service. Owen helped me out with my shirts and was available around the clock. He even helped me improve the quality of my images that were originally not very good.",
+      "createTime": "2026-08-19T16:26:03.161909660Z"
+    },
     {
       "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2kxRFdIRnlVWE0yWW5OWlNWOVJhMGR5ZWsxSGMwRRAB",
       "author": "Heng Seng “Hengs” Cheah",
@@ -36,14 +44,6 @@
       "rating": 5,
       "text": "Absolutely loved the customized shirts! The printing quality was excellent, with sharp details and vibrant colors that came out exactly as expected. The design was really well thought out and looked super cool on everyone.",
       "createTime": "2026-06-08T04:25:43.941514618Z"
-    },
-    {
-      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT25KQlJXRldXV2xRZDJaaVUxbG9WelpCYVZwUlEyYxAB",
-      "author": "jing rong",
-      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjWgwYuYzWXYX5kGLnmtXJ4LrXsT92eaZDcTg2nD0i44c7CwKeFr=s128-c0x00000000-cc-rp-mo",
-      "rating": 5,
-      "text": "great service and fast delivery, mentioned that i needed shirts last minute and owen managed to prepare all my shirts by the deadline. super friendly and accommodating despite hard requests",
-      "createTime": "2026-06-02T17:01:04.536359688Z"
     }
   ]
 }
