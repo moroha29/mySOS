@@ -27,7 +27,10 @@ describe('production route rendering', () => {
     ['/solutions/', 'Solutions Designed'],
     ['/why-mysos/', 'Why MySOS'],
     ['/success-stories/', 'Success Stories'],
-    ['/success-stories/ntu-cca-jerseys-2024/', 'NTU CCA Jerseys 2024'],
+    // A story page shows its own story, whichever story that is: naming one
+    // here meant renaming it in the portal failed the check and blocked the
+    // publish.
+    [`/success-stories/${successStories[0].slug}/`, successStories[0].title],
   ])('renders %s without placeholder values', (pathname, expected) => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     const markup = renderAt(pathname);
@@ -52,8 +55,13 @@ describe('production route rendering', () => {
     expect(schools).toContain('Sublimation Jersey');
     expect(schools).toContain('href="/products/sublimation-jersey/"');
     const stories = renderAt('/success-stories/');
-    expect(stories).toContain('/success-stories/ntu-cca-jerseys-2024/');
-    expect(renderAt('/success-stories/ntu-cca-jerseys-2024/')).toContain('Need something similar?');
+    // Whichever stories the page chooses to show, each link it draws goes to a
+    // story that exists; naming one story here made renaming it fail the check.
+    const linked = [...stories.matchAll(/\/success-stories\/([^/"]+)\//g)].map((match) => match[1]);
+    expect(linked.length).toBeGreaterThan(0);
+    const slugs = new Set(successStories.map((story) => story.slug));
+    for (const slug of new Set(linked)) expect(slugs.has(slug), slug).toBe(true);
+    expect(renderAt(`/success-stories/${successStories[0].slug}/`)).toContain('Need something similar?');
   });
 
   it('sends every "Get a Quote" to the request page, not straight into a chat', () => {

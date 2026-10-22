@@ -102,9 +102,13 @@ describe('public and quotation integration', () => {
       ['/why-mysos/', 'why'],
       ['/success-stories/', 'stories'],
     ].map(([path, page]) => resolvePublicRoute(path).page === page)).toEqual([true, true, true, true, true]);
-    expect(resolvePublicRoute('/success-stories/ntu-cca-jerseys-2024/')).toEqual({ page: 'story', slug: 'ntu-cca-jerseys-2024' });
+    // Every story the site has, by its own address — rather than one story
+    // named here, which made renaming it in the portal a failing check.
+    for (const story of successStories) {
+      expect(resolvePublicRoute(`/success-stories/${story.slug}/`)).toEqual({ page: 'story', slug: story.slug });
+      expect(getStoryBySlug(story.slug), story.slug).toBe(story);
+    }
     expect(resolvePublicRoute('/not-a-page/')).toEqual({ page: 'not-found' });
-    expect(getStoryBySlug('ntu-cca-jerseys-2024')?.quantity).toBe(320);
   });
 
   it('filters stories by category', () => {
