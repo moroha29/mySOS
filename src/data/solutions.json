@@ -3,7 +3,7 @@
     "id": "schools",
     "name": "Schools",
     "description": "From orientation to graduation, we have got you covered.",
-    "imageStyle": "school",
+    "imageStyle": "Events",
     "icon": "school",
     "recommendedProducts": [
       "jersey-sublimation",
