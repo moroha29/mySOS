@@ -86,3 +86,40 @@ export function getStories({ category = 'all', sort = 'latest' } = {}) {
 export function getStoryBySlug(slug) {
   return successStories.find((story) => story.slug === slug) ?? null;
 }
+
+/*
+ * The facts a story shows, kept honest by the story itself.
+ *
+ * Each fact is its own piece of content, written beside numbers and outcomes
+ * that are written separately — so the two drift. A story rewritten from a 320
+ * jersey project into a 20,000 piece one still led with "320 jerseys", two
+ * lines above "Quantity: 20000 pcs"; another claimed "Delivered on time" when
+ * its outcomes no longer said anything of the kind. Both were caught by the
+ * website's checks at publish, which stopped the owner publishing anything at
+ * all until they were reconciled by hand.
+ *
+ * The page now settles it: the leading number is the story's own quantity, and
+ * a claim about the client's project is shown only where the story backs it up.
+ * The index each fact is edited at is kept, so the portal still writes to the
+ * fact that was clicked.
+ */
+const DESIGN_SUPPORT = 'Design support';
+const ON_TIME = 'Delivered on time';
+
+export function storyFacts(story) {
+  const quantity = Number(story?.quantity);
+  const backed = (fact) => {
+    if (fact.text === DESIGN_SUPPORT) return (story?.process ?? []).some((step) => /design|artwork/i.test(step));
+    if (fact.text === ON_TIME) return (story?.outcomes ?? []).some((outcome) => /on[- ]time|before/i.test(outcome));
+    return true;
+  };
+  return (story?.highlights ?? [])
+    .map((fact, index) => ({
+      index,
+      icon: fact?.icon,
+      text: index === 0 && Number.isFinite(quantity) && quantity > 0
+        ? String(fact?.text ?? '').replace(/^\s*[\d,]+/, String(quantity))
+        : String(fact?.text ?? ''),
+    }))
+    .filter((fact) => fact.text && backed(fact));
+}

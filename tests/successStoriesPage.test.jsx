@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import siteContent from '../src/data/siteContent.json';
 import successStories from '../src/data/successStories.json';
-import { getStories } from '../src/utils/catalogue';
+import { getStories, storyFacts } from '../src/utils/catalogue';
 import StoriesPage from '../src/public/pages/StoriesPage';
 
 const originalLocation = globalThis.location;
@@ -70,7 +70,8 @@ describe('Success Stories: a category tab', () => {
     expect(html).toContain('class="project-feature"');
     expect(html).toContain(schools[0].title);
     expect(html).toContain(schools[0].summary);
-    for (const fact of schools[0].highlights) expect(html).toContain(fact.text);
+    // The facts the story actually supports, which is what the page shows.
+    for (const fact of storyFacts(schools[0])) expect(html).toContain(fact.text);
     expect(html).toContain('Read Full Story');
     expect(html).toContain(`href="/success-stories/${schools[0].slug}/"`);
     expect(html).not.toContain('project-tile');
@@ -86,19 +87,36 @@ describe('Success Stories: a category tab', () => {
 });
 
 describe('project facts come from each story', () => {
-  it('every story leads with its quantity', () => {
+  it('leads with the quantity the story itself gives, whatever the fact was typed as', () => {
+    /*
+     * The number lives twice: in the story's quantity, and in the words of the
+     * first fact. A story rewritten from a 320 jersey project into a 20,000
+     * piece one still led with "320 jerseys" two lines above "Quantity: 20000
+     * pcs" — and because this check read the stored words, it failed, and a
+     * failed check is a publish the owner cannot make. The page settles it
+     * instead, so the two can no longer disagree on screen.
+     */
     for (const story of successStories) {
       expect(story.highlights[0].icon, story.slug).toBe('shirt');
-      expect(story.highlights[0].text, story.slug).toMatch(new RegExp(`^${story.quantity} `));
+      expect(storyFacts(story)[0].text, story.slug).toMatch(new RegExp(`^${story.quantity} `));
     }
+    const drifted = { ...successStories[0], quantity: 20000, highlights: [{ icon: 'shirt', text: '320 jerseys' }] };
+    expect(storyFacts(drifted)[0].text).toBe('20000 jerseys');
+    // The fact is still edited where it is stored, not where it is drawn.
+    expect(storyFacts(drifted)[0].index).toBe(0);
   });
 
   it('claims design support and on-time delivery only where the story shows it', () => {
+    // A claim about a named client's project is only shown where the story
+    // itself backs it up — on the page, so it holds however the facts and the
+    // outcomes are edited, and not only at the moment of publishing.
     for (const story of successStories) {
-      const texts = story.highlights.map((fact) => fact.text);
+      const texts = storyFacts(story).map((fact) => fact.text);
       expect(texts.includes('Design support'), story.slug).toBe(story.process.some((step) => /design|artwork/i.test(step)));
       expect(texts.includes('Delivered on time'), story.slug).toBe(story.outcomes.some((outcome) => /on[- ]time|before/i.test(outcome)));
     }
+    const unbacked = { ...successStories[0], quantity: 20000, outcomes: ['Delivered 20,000 pieces'], highlights: [{ icon: 'shirt', text: '1 pc' }, { icon: 'delivery', text: 'Delivered on time' }] };
+    expect(storyFacts(unbacked).map((fact) => fact.text)).toEqual(['20000 pc']);
   });
 });
 

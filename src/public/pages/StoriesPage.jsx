@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import siteContent from '../../data/siteContent.json';
 import solutions from '../../data/solutions.json';
 import { cms, headingPath, heroBackground, labelPath, pagePath, pageText, picture, scenePath, solutionPath, storyPath } from '../cms';
-import { getStories } from '../../utils/catalogue';
+import { getStories, storyFacts } from '../../utils/catalogue';
 import Icon from '../components/Icons';
 import { Button, heading, label, PageCTA, Photo, QuoteButton, useGoogleReviews } from '../components/Ui';
 import { formatRating, formatReviewDate, GOOGLE_REVIEWS_URL, initials } from '../../utils/googleReviews';
@@ -207,7 +207,7 @@ function CategoryShowcase({ stories }) {
   const [index, setIndex] = useState(0);
   const story = stories[Math.min(index, stories.length - 1)];
   const go = (next) => setIndex((next + stories.length) % stories.length);
-  const highlights = story.highlights ?? [];
+  const highlights = storyFacts(story);
 
   return <div className="projects-panel" data-reveal>
     <article className="project-feature">
@@ -219,9 +219,9 @@ function CategoryShowcase({ stories }) {
         <h2 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h2>
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
         {highlights.length > 0 && <ul className="project-facts">
-          {highlights.map((fact, i) => <li key={`${fact.icon}-${i}`}>
-            <Icon name={fact.icon} size={25} cmsPath={storyPath(story, 'highlights', i, 'icon')} />
-            <span data-cms-path={cms(storyPath(story, 'highlights', i, 'text'))}>{fact.text}</span>
+          {highlights.map((fact) => <li key={`${fact.icon}-${fact.index}`}>
+            <Icon name={fact.icon} size={25} cmsPath={storyPath(story, 'highlights', fact.index, 'icon')} />
+            <span data-cms-path={cms(storyPath(story, 'highlights', fact.index, 'text'))}>{fact.text}</span>
           </li>)}
         </ul>}
         <a className="project-feature-link" href={storyHref(story)}>
