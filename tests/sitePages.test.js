@@ -21,7 +21,10 @@ const pages = sitePages(content);
 describe('the pages this website has', () => {
   it('is what the build prerenders', () => {
     const prerender = readFileSync(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8');
-    expect(prerender).toMatch(/const routes = siteRoutes\(/);
+    // The whole entry, not only its path: the build writes each page's own
+    // title from the name this list gives it (see pageMeta.mjs).
+    expect(prerender).toMatch(/const pages = sitePages\(/);
+    expect(prerender).toMatch(/for \(const page of pages\) \{/);
     expect(siteRoutes(content)[0]).toBe('/');
     expect(siteRoutes(content)).toContain('/products/');
   });

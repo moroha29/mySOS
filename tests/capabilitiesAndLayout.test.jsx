@@ -247,8 +247,21 @@ describe('the home banner and the sections under it', () => {
       'homeWorkEyebrow', 'homeWorkHeading', 'homeProcessEyebrow', 'homeProcessHeading', 'homeClosingTitle']) {
       expect(markup, key).toContain(siteContent.headings[key].replaceAll("'", '&#x27;'));
     }
-    // The four promises it leads with, all four the same kind of thing.
-    expect(siteContent.homeStats.map((stat) => stat.value)).toEqual(['Products', 'Quality assured', 'Within 1 day', 'Free']);
+    /*
+     * The four promises it leads with, all four the same kind of thing: a row
+     * of four, each saying something, each shown on the page.
+     *
+     * Their wording used to be written out here, so rewording a promise in the
+     * portal failed the check and the owner could not publish the page at all.
+     * What the design needs is the shape, which is what is asked for now; the
+     * mark each one is drawn with is checked where the row is drawn.
+     */
+    expect(siteContent.homeStats).toHaveLength(4);
+    for (const stat of siteContent.homeStats) {
+      expect(String(stat.value || '').trim(), 'a promise with nothing on it').not.toBe('');
+      expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
+    }
+    expect(new Set(siteContent.homeStats.map((stat) => stat.value)).size).toBe(4);
   });
 
   it('sets the banner the way the concept sets it: small line, huge headline', () => {
