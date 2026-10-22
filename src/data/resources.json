@@ -6,7 +6,11 @@
     "lead": "Clear answers to the questions that come up before you print, order or launch.",
     "searchPlaceholder": "What do you want to learn?",
     "popularLabel": "Popular searches",
-    "popular": ["DTF vs silkscreen", "Choosing a T-shirt", "Artwork files"],
+    "popular": [
+      "DTF vs silkscreen",
+      "Choosing a T-shirt",
+      "Artwork files"
+    ],
     "allLabel": "All articles",
     "exploreTitle": "Explore the guides",
     "exploreLead": "Practical answers for your next custom merchandise project.",
@@ -22,11 +26,26 @@
     "ctaButton": "Ask MySOS"
   },
   "topics": [
-    { "id": "product-guides", "name": "Product Guides" },
-    { "id": "printing", "name": "Printing" },
-    { "id": "materials", "name": "Materials & Sizing" },
-    { "id": "artwork", "name": "Artwork" },
-    { "id": "ordering", "name": "Ordering" }
+    {
+      "id": "product-guides",
+      "name": "Product Guides"
+    },
+    {
+      "id": "printing",
+      "name": "Printing"
+    },
+    {
+      "id": "materials",
+      "name": "Materials & Sizing"
+    },
+    {
+      "id": "artwork",
+      "name": "Artwork"
+    },
+    {
+      "id": "ordering",
+      "name": "Ordering"
+    }
   ],
   "articles": [
     {
@@ -65,11 +84,27 @@
         }
       ],
       "table": {
-        "columns": ["Consideration", "DTF", "Silkscreen"],
+        "columns": [
+          "Consideration",
+          "DTF",
+          "Silkscreen"
+        ],
         "rows": [
-          ["Best for", "Detailed, colourful designs and smaller runs", "Simple designs and larger quantities"],
-          ["Design colours", "Full colour, gradients and fine details", "Best with fewer, solid colours"],
-          ["Typical order size", "Small to medium runs", "More cost-effective for medium to large runs"]
+          [
+            "Best for",
+            "Detailed, colourful designs and smaller runs",
+            "Simple designs and larger quantities"
+          ],
+          [
+            "Design colours",
+            "Full colour, gradients and fine details",
+            "Best with fewer, solid colours"
+          ],
+          [
+            "Typical order size",
+            "Small to medium runs",
+            "More cost-effective for medium to large runs"
+          ]
         ]
       },
       "closing": "Not sure which suits your artwork? Send it over and we will tell you which method we would use, and why."
