@@ -31,6 +31,49 @@ export const wordPath = (key) => cms(pagePath('solutionPage', key));
 const fill = (template, values) => String(template).replace(/\{(\w+)\}/g, (match, key) => (key in values ? values[key] : match));
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
+/*
+ * One product is not "1 products".
+ *
+ * The count is written into the label the portal holds, so the plural was
+ * fixed in the words themselves and a request with one thing in it read
+ * "1 products selected" — small, and the first thing anyone notices.
+ */
+const countLabel = (count) => {
+  const label = word('summaryCountLabel', '{count} products selected');
+  const one = word('summaryCountLabelOne', label.split('products').join('product'));
+  return fill(count === 1 ? one : label, { count });
+};
+
+/*
+ * A 40 KB logo is not "0.0 MB". Megabytes only once there is a megabyte to
+ * show; below that the number people recognise is the one in kilobytes.
+ */
+const fileSize = (bytes) => (bytes >= 1024 * 1024
+  ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+  : `${Math.max(1, Math.round(bytes / 1024))} KB`);
+
+/*
+ * Today, where the visitor is, read when the page runs rather than when it was
+ * built.
+ *
+ * This was a useMemo over `new Date()`, which on a prerendered page is the
+ * date the site was built: the floor under "Needed By" was baked into the
+ * HTML and hydration does not correct an attribute that only the clock
+ * changes. The day after a release a customer could ask for yesterday, and a
+ * month after one, for last month. toISOString was wrong twice over — it is
+ * UTC, so a date box in Singapore offered yesterday for the first eight hours
+ * of every day.
+ */
+function todayHere() {
+  const [today, setToday] = useState('');
+  useEffect(() => {
+    const now = new Date();
+    const pad = (value) => String(value).padStart(2, '0');
+    setToday(`${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`);
+  }, []);
+  return today;
+}
+
 // `onStep` adds to the latest quantity, so quick clicks each count.
 function Stepper({ value, onSet, onStep, label }) {
   return <span className="qty-stepper">
@@ -187,14 +230,24 @@ export default function RequestBuilder({
   leadPath = wordPath('packageLead'),
   includedTitle = word('includedTitle', 'Included Products'),
 }) {
-  // A solution page starts from its use case's package; the quote page starts
-  // with whatever product the visitor arrived from, or nothing at all.
-  const [lines, setLines] = useState(() => (useCase ? packageLines(useCase) : startWith.filter((item) => productFor(item.productId)).map((item) => makeLine(item, 'start'))));
+  /*
+   * A solution page starts from its use case's package, which is the same on
+   * every machine. The quote page starts empty and takes the product the
+   * visitor arrived with below, after mounting.
+   *
+   * It used to read the arrival here. These pages are drawn ahead of time, on a
+   * machine with no address bar, so "Add to my request" on a product page
+   * arrived at a page whose first render disagreed with the one it was sent —
+   * React threw the whole page away and built it again ("Minified React error
+   * #418"), on the one path that matters most.
+   */
+  const [lines, setLines] = useState(() => (useCase ? packageLines(useCase) : []));
   const [openKey, setOpenKey] = useState(null);
   const [focusPrinting, setFocusPrinting] = useState(false);
   const [sameQuantity, setSameQuantity] = useState(50);
   const [neededBy, setNeededBy] = useState('');
-  const [notes, setNotes] = useState(startNotes);
+  // Also from the address bar, so also after mounting.
+  const [notes, setNotes] = useState('');
   // Nothing is read from storage while rendering: these pages are drawn ahead
   // of time, and a first render that disagreed with the drawn page would flash.
   const [restored, setRestored] = useState(false);
@@ -214,12 +267,11 @@ export default function RequestBuilder({
     if (!remember || restored) return;
     const saved = readSavedRequest();
     const arrivals = startWith.filter((item) => productFor(item.productId));
-    if (saved?.lines?.length) {
-      const kept = arrivals.reduce((lines, arrival) => mergeArrival(lines, arrival), saved.lines);
-      setLines(kept.map((line) => makeLine(line, 'saved')));
-      if (saved.neededBy) setNeededBy(saved.neededBy);
-      if (saved.notes && !startNotes) setNotes(saved.notes);
-    }
+    const kept = arrivals.reduce((lines, arrival) => mergeArrival(lines, arrival), saved?.lines ?? []);
+    if (kept.length) setLines(kept.map((line) => makeLine(line, saved?.lines?.length ? 'saved' : 'start')));
+    if (saved?.neededBy) setNeededBy(saved.neededBy);
+    if (startNotes) setNotes(startNotes);
+    else if (saved?.notes) setNotes(saved.notes);
     setRestored(true);
   }, [remember, restored, startWith, startNotes]);
 
@@ -273,7 +325,7 @@ export default function RequestBuilder({
   const fileNames = allFileNames(lines, generalFiles.map((entry) => entry.file.name));
   const message = buildRequestMessage({ solutionName: topic, useCaseName: useCase?.name ?? '', lines, neededBy, notes, fileNames });
   const href = requestHref(message, topic);
-  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const today = todayHere();
 
   /*
    * Putting this package into the customer's own quote: beside what is already
@@ -390,7 +442,7 @@ export default function RequestBuilder({
             {generalFiles.length > 0 && <ul className="request-file-list">
               {generalFiles.map((entry) => <li key={`${entry.file.name}-${entry.file.size}`}>
                 <Icon name={/\.pdf$/i.test(entry.file.name) ? 'clipboard' : 'photos'} size={24} />
-                <span><strong>{entry.file.name}</strong><small>{(entry.file.size / (1024 * 1024)).toFixed(1)} MB</small></span>
+                <span><strong>{entry.file.name}</strong><small>{fileSize(entry.file.size)}</small></span>
                 <button type="button" aria-label={`Remove ${entry.file.name}`} onClick={() => setFiles((current) => current.filter((item) => item !== entry))}><Icon name="close" size={19} /></button>
               </li>)}
             </ul>}
@@ -400,7 +452,7 @@ export default function RequestBuilder({
 
       <aside className="request-summary" aria-labelledby="summary-title" data-reveal style={{ '--reveal-delay': '90ms' }}>
         <h3 id="summary-title" data-cms-path={wordPath('summaryTitle')}>{word('summaryTitle', 'Your Request')}</h3>
-        <p className="request-count">{fill(word('summaryCountLabel', '{count} products selected'), { count: lines.length })}</p>
+        <p className="request-count">{countLabel(lines.length)}</p>
         {/* The part that grows with the request scrolls inside the panel;
             the title above it and the button that sends it stay put. */}
         <div className="request-summary-scroll">
@@ -424,7 +476,7 @@ export default function RequestBuilder({
         </p>}
 
         <label className="request-summary-label" htmlFor="needed-by" data-cms-path={wordPath('neededByLabel')}>{word('neededByLabel', 'Needed By')}</label>
-        <span className="request-date"><Icon name="calendar" size={22} /><input id="needed-by" type="date" min={today} value={neededBy} onChange={(event) => setNeededBy(event.target.value)} /></span>
+        <span className="request-date"><Icon name="calendar" size={22} /><input id="needed-by" type="date" min={today || undefined} value={neededBy} onChange={(event) => setNeededBy(event.target.value)} /></span>
 
         <label className="request-summary-label" htmlFor="request-notes" data-cms-path={wordPath('additionalNotesLabel')}>{word('additionalNotesLabel', 'Additional Notes')}</label>
         <textarea id="request-notes" rows="4" placeholder={word('additionalNotesPlaceholder')} value={notes} onChange={(event) => setNotes(event.target.value)} />
