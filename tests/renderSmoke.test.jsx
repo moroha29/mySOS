@@ -75,17 +75,23 @@ describe('production route rendering', () => {
     }
   });
 
-  it('opens the request page empty, or on the product the visitor came from', () => {
+  it('opens the request page the same way, whatever the address says', () => {
+    /*
+     * The page is drawn ahead of time, on a machine with no address bar, so
+     * nothing from the address may reach the first render — "Add to my
+     * request" on a product page used to arrive at a page whose first render
+     * disagreed with the one it had been sent, and React threw the whole page
+     * away and built it again. The product the visitor came from is taken up
+     * by the builder after it mounts (see theQuotePageArrivesCleanly).
+     */
     const blank = renderAt('/request/');
     expect(blank).toContain('Add another product');
     expect(blank).toContain('0 products selected');
-    const withProduct = renderAt('/request/', '?product=canvas_tote_bag');
-    expect(withProduct).toContain('Canvas Tote Bag');
-    expect(withProduct).toContain('1 products selected');
-    // An address that names nothing real simply starts empty.
-    expect(renderAt('/request/', '?product=not_a_product')).toContain('0 products selected');
+    for (const search of ['?product=canvas_tote_bag', '?product=canvas_tote_bag&qty=250', '?ask=500%20hoodies', '?product=not_a_product']) {
+      expect(renderAt('/request/', search), search).toBe(blank);
+    }
     // No prices anywhere: this is a request, not a quotation.
-    expect(withProduct).not.toMatch(/\$\d/);
+    expect(blank).not.toMatch(/\$\d/);
   });
 
   it('renders the WhatsApp number and accessible navigation controls', () => {
