@@ -331,7 +331,8 @@ describe('the home banner and the sections under it', () => {
   it('sets the category strip in navy, with green under the cursor', () => {
     // On white it read as part of the banner under it, and a reader could not
     // see it was the menu of categories.
-    expect(css).toMatch(/\.category-strip \{ background: var\(--navy\);/);
+    // Somewhere in the rule, not necessarily first: it is also pinned there.
+    expect(css).toMatch(/\.category-strip \{[^}]*background: var\(--navy\)/);
     expect(css).toMatch(/\.category-strip ul a \{[^}]*color: #fff; \}/);
     expect(css).toMatch(/\.category-strip ul a:hover \{ background: var\(--green\); color: #fff; \}/);
     expect(css).toMatch(/\.category-strip ul a\.is-active \{ background: var\(--green\); color: #fff; \}/);
@@ -402,6 +403,27 @@ describe('the bar at the top of every page', () => {
     for (const rule of [/\.primary-nav \{[\s\S]{0,400}?top: var\(--header-now\)/, /scroll-padding-top: var\(--header-h\)/, /scroll-margin-top: (?:var|calc)\(var?\(?--header-(h|now)/]) {
       expect(css).toMatch(rule);
     }
+  });
+
+  it('pins the categories under the header, not behind it', () => {
+    /*
+     * Only the white bar was pinned, so scrolling a product page took the blue
+     * bar of categories away with the page and there was no way back to them
+     * without scrolling to the top. They are one piece of chrome.
+     */
+    expect(css).toMatch(/\.category-strip \{[^}]*position: sticky; top: var\(--header-now\)/);
+    // Under the header, which is 60, and above the page.
+    expect(css).toMatch(/\.category-strip \{[^}]*z-index: 55/);
+    /*
+     * The header takes .3s to tighten while --header-now changes at once, so
+     * without the same timing the strip spends that third of a second tucked
+     * under the header it is pinned to — measured at 16px of overlap.
+     */
+    expect(css).toMatch(/\.category-strip \{ transition: top \.3s cubic-bezier\(\.4, 0, \.2, 1\); \}/);
+    expect(css).toMatch(/\.site-header \{ transition: height \.3s cubic-bezier\(\.4, 0, \.2, 1\)/);
+    // And a category chosen from the strip scrolls clear of both bars.
+    expect(css).toMatch(/--strip-h: 58px;/);
+    expect(css).toMatch(/body:has\(\.category-strip\) \.products-collection \{ scroll-margin-top: calc\(var\(--header-now\) \+ var\(--strip-h\) \+ 24px\); \}/);
   });
 
   it('folds into a menu that can always be reached to the end', () => {

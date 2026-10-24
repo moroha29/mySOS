@@ -39,6 +39,9 @@
      under it. Anything pinned below the header follows this rather than the
      resting height, or a strip of the page shows through the gap between. */
   --header-now: var(--header-h);
+  /* The bar of categories that pins under the header on the product pages.
+     Stated once so the strip, and anything that has to clear it, agree. */
+  --strip-h: 58px;
 
   /* DM Sans, as the concept sets it: rounder and a touch wider than Inter,
      which is why the headlines read differently. Inter stays as the fallback
@@ -122,6 +125,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .btn:hover .inline-arrow.is-up { transform: rotate(180deg) translateY(2px); }
 /* Collapsing the product list scrolls back here; clear the sticky header. */
 .products-collection { scroll-margin-top: calc(var(--header-h) + 24px); }
+/* With the strip pinned too, a category chosen from it has both to clear. */
+body:has(.category-strip) .products-collection { scroll-margin-top: calc(var(--header-now) + var(--strip-h) + 24px); }
 
 .center-action { margin-top: 30px; display: flex; justify-content: center; }
 .badge {
@@ -1775,7 +1780,16 @@ main:not(.home-page) { background: var(--paper); }
 /* The category strip, shared by the homepage and the products page. */
 /* Navy, with white words: on white it read as part of the banner below it and
    a reader could not see it was the menu of categories. */
-.category-strip { background: var(--navy); border-bottom: 0; }
+/*
+ * The categories pin under the header, not behind it.
+ *
+ * Only the white bar was pinned, so scrolling a category page took the blue
+ * bar away with the page and left the categories unreachable without
+ * scrolling back to the top. They are one piece of chrome and they stay
+ * together. It follows --header-now rather than the resting height, or a
+ * slice of the page shows through the gap as the header tightens.
+ */
+.category-strip { position: sticky; top: var(--header-now); z-index: 55; min-height: var(--strip-h); background: var(--navy); border-bottom: 0; }
 .category-strip-inner { max-width: var(--content); margin: 0 auto; padding: 0 var(--pad); display: flex; align-items: center; }
 /* Eight categories no longer fit on one line of a laptop and the last of
    them was cut off against the edge, with nothing to say the row went on.
@@ -1848,6 +1862,10 @@ html.is-scrolled { --header-now: 72px; }
 html.is-scrolled .site-header { height: 72px; box-shadow: 0 10px 30px rgba(13, 42, 107, .10); background: rgba(255, 255, 255, .92); }
 html.is-scrolled .wordmark { height: 36px; }
 .wordmark { transition: height .3s cubic-bezier(.4, 0, .2, 1); }
+/* The strip is pinned to the header's height, and the header takes .3s to
+   tighten while --header-now changes at once — so without this the strip
+   spends that third of a second tucked under the header it is pinned to. */
+.category-strip { transition: top .3s cubic-bezier(.4, 0, .2, 1); }
 
 /* the banner picture drifts slowly across its own frame */
 .hero-card-slide { transform: scale(1.04); }
