@@ -4,6 +4,8 @@
  * tone and composition. Swap `image` on the data records to use a real photo instead.
  */
 
+import { getImage } from '../../utils/imageRegistry';
+
 const palettes = {
   navy: { base: '#0d2a6b', shade: '#081d4d', light: '#1b3f8f' },
   green: { base: '#0a5c3a', shade: '#053f28', light: '#0f7a4d' },
@@ -405,7 +407,17 @@ function MeasureDrawstring() {
 /* The drawing the guide opens on, by what the chart asks for. */
 const measureFigures = { tote: MeasureTote, bag: MeasureTote, drawstring: MeasureDrawstring };
 
+/*
+ * MySOS's own measurement drawings live in src/assets/images/measure/<diagram>,
+ * and each already carries its lettered arrows. One is used wherever it has
+ * been supplied; the drawings above stand in for the rest, as they did for all
+ * of them before.
+ */
 export function MeasureFigure({ type = 'tee' }) {
+  const drawing = getImage(`measure/${type}`);
+  if (drawing) {
+    return <img className="measure-photo" src={drawing} alt="Where each lettered measurement is taken" />;
+  }
   const Bag = measureFigures[type];
   return Bag ? <Bag /> : <MeasureGarment type={type} />;
 }

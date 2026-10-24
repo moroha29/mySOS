@@ -591,10 +591,15 @@ body:has(.category-strip) .products-collection { scroll-margin-top: calc(var(--h
 .journey-steps::after { width: calc((100% - 100% / 6) * var(--reached)); background: linear-gradient(90deg, var(--green), var(--green-light)); transition: width .7s cubic-bezier(.33, 1, .68, 1); }
 .journey-steps li { position: relative; z-index: 1; }
 .journey-steps button { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0; border: 0; background: none; cursor: pointer; }
-.journey-node { width: 40px; height: 40px; display: grid; place-items: center; margin-bottom: 8px; border-radius: 50%; background: #c3cbd8; color: #fff; transition: background-color .5s ease, box-shadow .5s ease; }
-.journey-steps .is-done .journey-node { background: var(--green); }
-.journey-steps .is-current .journey-node { background: #fff; box-shadow: inset 0 0 0 3px var(--green), 0 0 0 5px rgba(0, 166, 81, .14); }
-.journey-steps .is-current .journey-node::after { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--green); }
+/* Each step wears its own icon, and the icon is the disc: nothing is drawn
+   behind it, so the line joining the steps runs on under it. */
+.journey-node { width: 40px; height: 40px; display: grid; place-items: center; margin-bottom: 8px; border-radius: 50%; transition: box-shadow .5s ease; }
+.journey-node .icon { width: 100%; height: 100%; transition: filter .5s ease, opacity .5s ease; }
+/* Ahead of where the reader has got to, an icon keeps its shape and gives up
+   its colour -- which is what the tick and the grey dot used to say between
+   them, except that the tick said it six times over. */
+.journey-steps li:not(.is-done):not(.is-current) .journey-node .icon { filter: grayscale(1); opacity: .45; }
+.journey-steps .is-current .journey-node { box-shadow: 0 0 0 5px rgba(0, 166, 81, .14); }
 .journey-number { display: block; margin-bottom: 6px; font-size: 15px; font-weight: 700; color: var(--navy); }
 .journey-label { font-size: 17.5px; font-weight: 700; color: var(--navy); }
 
@@ -700,7 +705,7 @@ html[data-scroll-snap="why"] .why-choose, html[data-scroll-snap="why"] .process-
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reason-card, .reason-card-tab, .reason-card-copy, .journey-card-face, .journey-card-face > *, .journey-steps::after, .step-dots button, .journey-node { transition: none; }
+  .reason-card, .reason-card-tab, .reason-card-copy, .journey-card-face, .journey-card-face > *, .journey-steps::after, .step-dots button, .journey-node, .journey-node .icon { transition: none; }
   .scroll-hint .icon:last-child { animation: none; }
 }
 
@@ -2319,6 +2324,10 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
 
 /* Where to hold the tape. */
 .measure-figure { display: block; width: 100%; max-width: 330px; margin: 0 auto; height: auto; }
+/* A supplied drawing is sized by whichever side runs out first, because they
+   are not all upright: the lanyard is a tall strip and the cooler bag a wide
+   one, and either would overrun the window if only its width were held. */
+.measure-photo { display: block; width: auto; height: auto; max-width: min(100%, 400px); max-height: 380px; margin: 0 auto; }
 .size-measure-key { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 18px; }
 .size-measure-key li { display: flex; gap: 10px; }
 .size-measure-badge { flex: none; width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--green-dark); font-size: 13.5px; font-weight: 800; color: #fff; }
@@ -2346,6 +2355,7 @@ html.has-reveal [data-reveal].is-in .hero-card-slide, html.has-reveal [data-reve
   .size-chart-tabs button { min-height: 44px; border-bottom: 1px solid var(--line); }
   .size-measure-key { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .measure-figure { max-width: 240px; }
+  .measure-photo { max-width: min(100%, 260px); max-height: 300px; }
   /* The chart's own table stacks, the way a guide's does. */
   .size-chart-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .size-chart-table tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--line); }

@@ -6,6 +6,7 @@ import { Button, heading, label, PageCTA, Photo, QuoteButton, SectionHeading, St
 import ProcessJourney from '../components/ProcessJourney';
 import useScrollSteps from '../components/useScrollSteps';
 import { processPhoto } from '../processPhotos';
+import { brandIcon } from '../brandIcons';
 
 const two = (number) => String(number).padStart(2, '0');
 
@@ -121,7 +122,10 @@ function ClientLoyalty() {
     />
     <ul className="loyalty-grid">
       {promises.map((promise, index) => <li className="loyalty-card" key={promise.title} data-reveal style={{ '--reveal-delay': `${index * 70}ms` }}>
-        <Icon name={promise.icon} size={45} cmsPath={contentPath('loyalty', index, 'icon')} />
+        {/* Larger than the drawn icon it replaces: the client's mark is drawn
+            with room around it inside its own frame, so the same box would
+            have set it smaller on the card than everything beside it. */}
+        <Icon name={brandIcon('loyalty', promise.icon)} size={58} cmsPath={contentPath('loyalty', index, 'icon')} />
         <h3 data-cms-path={cms(contentPath('loyalty', index, 'title'))}>{promise.title}</h3>
         <p data-cms-path={cms(contentPath('loyalty', index, 'description'))}>{promise.description}</p>
       </li>)}
