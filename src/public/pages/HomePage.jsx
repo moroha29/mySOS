@@ -9,7 +9,7 @@ import { mergeArrival, readSavedRequest, writeSavedRequest } from '../../utils/s
 import { searchProducts } from '../../utils/solutionRequest';
 import useSavedRequest from '../useSavedRequest';
 import { hasGoogleReviews } from '../../utils/googleReviews';
-import Icon from '../components/Icons';
+import Icon, { isIconPicture } from '../components/Icons';
 import BrandMark from '../components/BrandMarks';
 import { Button, CategoryMark, heading, label, Photo, ProductShot, QuoteButton, Testimonials, useGoogleReviews } from '../components/Ui';
 import CategoryStrip from '../components/CategoryStrip';
@@ -413,6 +413,27 @@ function ClosingBand() {
   </section>;
 }
 
+/*
+ * The mark over one of the promises in the row.
+ *
+ * MySOS drew four of these, and a drawn one is used wherever the record names
+ * it. A picture uploaded in the website manager stands in the same box: before
+ * this it came through at the line icon's size and sat half as tall as the
+ * marks beside it, so replacing the four drawn marks with their own artwork --
+ * which is what the picker is for -- left the row looking broken.
+ */
+function StatMark({ stat, path }) {
+  if (stat.mark) return <BrandMark name={stat.mark} size={52} />;
+  if (!stat.icon) return null;
+  const supplied = isIconPicture(stat.icon);
+  return <Icon
+    name={stat.icon}
+    size={supplied ? 52 : 23}
+    className={supplied ? 'home-stat-mark' : ''}
+    cmsPath={path}
+  />;
+}
+
 /* ------------------------------------------------------------------- page */
 
 export default function HomePage() {
@@ -441,18 +462,18 @@ export default function HomePage() {
       </div>
     </section>
 
-    {/* Four promises, each one a column of the same row. "Products" used to
+    {/* The promises, each one a column of the same row. "Products" used to
         stand apart from the other three, under a MySOS logo that counted up
         to itself, which read as a heading over the row rather than the first
-        thing in it. */}
+        thing in it.
+
+        The row is as wide as there are promises. It used to be four columns
+        whatever the content held, so taking a promise out in the portal left
+        the row with a hole at the end of it. */}
     {stats.length > 0 && <section className="home-stats">
-      <ul className="home-stat-list">
+      <ul className="home-stat-list" style={{ '--stat-count': Math.min(4, stats.length) }}>
         {stats.map((stat, index) => <li key={stat.value} data-reveal style={{ '--reveal-delay': `${(index + 1) * 80}ms` }}>
-          {/* The client's own mark where they have drawn one, and the line
-              icon for anything added here later. */}
-          {stat.mark
-            ? <BrandMark name={stat.mark} size={52} />
-            : stat.icon && <Icon name={stat.icon} size={23} cmsPath={contentPath('homeStats', index, 'icon')} />}
+          <StatMark stat={stat} path={contentPath('homeStats', index, 'icon')} />
           <strong data-cms-path={cms(contentPath('homeStats', index, 'value'))}>{stat.value}</strong>
           {stat.note && <small data-cms-path={cms(contentPath('homeStats', index, 'note'))}>{stat.note}</small>}
         </li>)}

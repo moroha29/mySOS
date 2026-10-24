@@ -82,11 +82,20 @@ describe('an uploaded picture can stand in for an icon', () => {
 describe('icons on the page carry their content path', () => {
   it('on the home page', () => {
     const html = renderAt('/', HomePage);
-    // The reasons in the navy band. The four promises above them are the
-    // client's own two-colour marks, which are artwork rather than icons:
-    // they are not drawn from the library and not offered in its picker.
+    // The reasons in the navy band.
     expect(html).toMatch(/data-cms-path="\[&quot;homepage&quot;,&quot;benefits&quot;,0,&quot;(?:cardIcon|icon)&quot;\]" data-cms-icon="true"/);
-    expect(html).not.toContain('&quot;homeStats&quot;,0,&quot;icon&quot;');
+    /*
+     * The promises above them wear MySOS's own two-colour marks, which are
+     * artwork rather than icons and so are not offered in the picker. A
+     * picture put there in their place is: this used to assert that no
+     * promise carried an icon's address at all, so the owner uploading their
+     * own artwork over the marks -- which the manager lets them do -- failed
+     * the check and stopped the whole page being published.
+     */
+    for (const [index, stat] of (siteContent.homeStats ?? []).entries()) {
+      const marked = html.includes(`&quot;homeStats&quot;,${index},&quot;icon&quot;`);
+      expect(marked, stat.value).toBe(!stat.mark);
+    }
   });
 
   it('on the Why MySOS page', () => {
