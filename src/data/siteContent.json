@@ -1875,8 +1875,8 @@
           "note": "Measure from sleeve seam to sleeve hem"
         }
       ],
-      "tip": "Lay your tee flat and compare with a tee you already own.",
-      "diagram": "tee",
+      "tip": "Lay your polo flat and compare with one you already own.",
+      "diagram": "polo",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "hoodies": {
@@ -1944,11 +1944,11 @@
         {
           "key": "D",
           "label": "Sleeve length",
-          "note": "Measure from sleeve seam to sleeve hem"
+          "note": "Measure from the shoulder seam down the outside of the sleeve to the cuff"
         }
       ],
-      "tip": "Lay your tee flat and compare with a tee you already own.",
-      "diagram": "tee",
+      "tip": "Lay your hoodie flat and compare with one you already own.",
+      "diagram": "jacket",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "jerseys": {
@@ -2019,7 +2019,7 @@
           "note": "Measure from sleeve seam to sleeve hem"
         }
       ],
-      "tip": "Lay your tee flat and compare with a tee you already own.",
+      "tip": "Lay your jersey flat and compare with one you already own.",
       "diagram": "tee",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
@@ -2079,20 +2079,10 @@
           "key": "B",
           "label": "Body length",
           "note": "Measure from shoulder to hem"
-        },
-        {
-          "key": "C",
-          "label": "Shoulder width",
-          "note": "Measure from shoulder seam to shoulder seam"
-        },
-        {
-          "key": "D",
-          "label": "Sleeve length",
-          "note": "Measure from sleeve seam to sleeve hem"
         }
       ],
-      "tip": "Lay your tee flat and compare with a tee you already own.",
-      "diagram": "tee",
+      "tip": "Lay your singlet flat and compare with one you already own.",
+      "diagram": "singlet",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "jackets": {
@@ -2160,11 +2150,11 @@
         {
           "key": "D",
           "label": "Sleeve length",
-          "note": "Measure from sleeve seam to sleeve hem"
+          "note": "Measure from the shoulder seam down the outside of the sleeve to the cuff"
         }
       ],
-      "tip": "Lay your tee flat and compare with a tee you already own.",
-      "diagram": "tee",
+      "tip": "Lay your jacket flat and compare with one you already own.",
+      "diagram": "jacket",
       "noteInch": "Measurements are of the garment laid flat, in inches. Allow half an inch either way."
     },
     "totes": {
@@ -2263,16 +2253,141 @@
           "key": "B",
           "label": "Height",
           "note": "Measure from the top edge down to the base"
-        },
-        {
-          "key": "C",
-          "label": "Cord length",
-          "note": "Measure the drawcord end to end, pulled straight"
         }
       ],
       "tip": "Not sure which size? Tell us what has to fit inside and we will match it to the nearest standard bag.",
       "diagram": "drawstring",
       "noteInch": "Measurements are of the bag laid flat, in inches. Allow half an inch either way."
+    },
+    "lanyards": {
+      "note": "Measurements are of the lanyard, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Strap width",
+        "Length"
+      ],
+      "rows": [
+        [
+          "Slim",
+          "1",
+          "90"
+        ],
+        [
+          "Standard",
+          "2",
+          "90"
+        ],
+        [
+          "Wide",
+          "2.5",
+          "90"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Strap width",
+          "note": "Measure across the strap, at the clip end"
+        },
+        {
+          "key": "B",
+          "label": "Length",
+          "note": "Measure the strap end to end, pulled straight"
+        }
+      ],
+      "tip": "Not sure which width? Tell us what the lanyard has to carry and we will match it.",
+      "diagram": "lanyard",
+      "noteInch": "Measurements are of the lanyard, in inches. Allow half an inch either way."
+    },
+    "name-tents": {
+      "note": "Measurements are of one panel, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Width",
+        "Height"
+      ],
+      "rows": [
+        [
+          "Small",
+          "15",
+          "7"
+        ],
+        [
+          "Standard",
+          "21",
+          "10"
+        ],
+        [
+          "Large",
+          "29.7",
+          "10.5"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Height",
+          "note": "Measure the panel from the desk up to its top edge"
+        },
+        {
+          "key": "B",
+          "label": "Width",
+          "note": "Measure across the panel, side to side"
+        }
+      ],
+      "tip": "Not sure which size? Tell us how much has to fit on the card and we will match it.",
+      "diagram": "name-tent",
+      "noteInch": "Measurements are of one panel, in inches. Allow half an inch either way."
+    },
+    "bottles": {
+      "note": "Measurements are of the bottle, in centimetres. Allow 1-2 cm either way.",
+      "columns": [
+        "Size",
+        "Diameter",
+        "Height"
+      ],
+      "rows": [
+        [
+          "350 ml",
+          "6.5",
+          "18"
+        ],
+        [
+          "500 ml",
+          "7",
+          "22"
+        ],
+        [
+          "650 ml",
+          "7.5",
+          "24"
+        ],
+        [
+          "750 ml",
+          "7.5",
+          "26"
+        ],
+        [
+          "1 litre",
+          "8.5",
+          "29"
+        ]
+      ],
+      "measure": [
+        {
+          "key": "A",
+          "label": "Diameter",
+          "note": "Measure across the body at its widest"
+        },
+        {
+          "key": "B",
+          "label": "Height",
+          "note": "Measure from the base to the top of the cap"
+        }
+      ],
+      "tip": "Not sure which size? Tell us the capacity you need and we will match it to the nearest standard bottle.",
+      "diagram": "bottle",
+      "noteInch": "Measurements are of the bottle, in inches. Allow half an inch either way."
     }
   },
   "sizeRun": [

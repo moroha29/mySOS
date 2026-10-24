@@ -2,6 +2,7 @@ import siteContent from '../../data/siteContent.json';
 import { cms, contentPath } from '../cms';
 import { Photo, StepCount } from './Ui';
 import { processPhoto } from '../processPhotos';
+import { brandIcon } from '../brandIcons';
 import useScrollSteps from './useScrollSteps';
 import Icon from './Icons';
 
@@ -30,7 +31,11 @@ export default function ProcessJourney({ head, labelledBy }) {
     <ol className="journey-steps" style={{ '--reached': active / last }}>
       {steps.map((step, index) => <li key={step.title} className={index < active ? 'is-done' : index === active ? 'is-current' : ''}>
         <button type="button" aria-current={index === active ? 'step' : undefined} onClick={() => goTo(index)}>
-          <span className="journey-node" aria-hidden="true">{index < active && <Icon name="check" size={20} />}</span>
+          {/* The step's own icon rather than a tick: a tick said only that the
+              step was behind you, and said it six times over. A step not yet
+              reached keeps its icon and loses its colour, so the row still
+              reads as a journey with a place in it. */}
+          <span className="journey-node" aria-hidden="true"><Icon name={brandIcon('process', step.icon)} size={40} /></span>
           <span className="journey-number">{two(index + 1)}</span>
           <span className="journey-label" data-cms-path={cms(contentPath('process', index, 'title'))}>{step.title}</span>
         </button>

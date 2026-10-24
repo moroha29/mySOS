@@ -416,6 +416,54 @@ describe('the size guide, as the drawing has it', () => {
     expect(siteContent.sizeCharts.tshirts.measure).toHaveLength(4);
   });
 
+  /*
+   * The letters MySOS's own drawings carry. A chart naming a letter its
+   * drawing has not got leaves a badge pointing at nothing, and a chart whose
+   * `diagram` is misspelt falls back to the tee silently -- a jacket's reader
+   * would be shown short sleeves and never know the difference. Neither shows
+   * up in a page that still renders, so both are checked here.
+   */
+  const LETTERED = {
+    tee: 'ABCD', polo: 'ABCD', jacket: 'ABCD', singlet: 'AB',
+    tote: 'ABCD', drawstring: 'AB', backpack: 'ABC', 'laptop-bag': 'ABCD',
+    'cooler-bag': 'ABC', pouch: 'AB', lanyard: 'AB', 'name-tent': 'AB',
+    bottle: 'AB', tumbler: 'AB', flask: 'AB',
+  };
+
+  it('letters a chart the way its own drawing is lettered', () => {
+    const supplied = readdirSync(new URL('../src/assets/images/measure/', import.meta.url))
+      .map((file) => file.replace(/\.[^.]+$/, ''));
+    expect(Object.keys(LETTERED).sort()).toEqual([...supplied].sort());
+    // Every drawing resolved by name, so none is dropped in and forgotten.
+    expect(visuals).toContain('getImage(`measure/${type}`)');
+
+    const drawn = new Set(['tee', 'hoodie', 'bag']);
+    for (const [kind, chart] of Object.entries(siteContent.sizeCharts)) {
+      const diagram = chart.diagram ?? 'tee';
+      expect(supplied.includes(diagram) || drawn.has(diagram), `${kind} -> ${diagram}`).toBe(true);
+      if (!supplied.includes(diagram)) continue;
+      expect(chart.measure.map((row) => row.key).join(''), `${kind} -> ${diagram}`).toBe(LETTERED[diagram]);
+    }
+  });
+
+  it('opens on MySOS\'s own drawing, on the kinds that had no guide at all', () => {
+    // A lanyard, a name tent and a bottle each have a size now, so each has
+    // the button that opens the guide; before this they had neither.
+    for (const subcategory of ['lanyards', 'name-tents', 'bottles']) {
+      const product = productData.catalogue.find((item) => item.public.visible
+        && item.public.subcategory === subcategory);
+      expect(product, subcategory).toBeTruthy();
+      const html = render(`/products/${product.public.slug}/`);
+      const drawing = siteContent.sizeCharts[subcategory].diagram;
+      expect(html, subcategory).toContain(`measure/${drawing}.`);
+      expect(html, subcategory).toContain('class="measure-photo"');
+      expect(html, subcategory).toContain(siteContent.pages.product.sizeChartLabel);
+    }
+    // Width or height, whichever runs out first: the lanyard is a tall strip
+    // and would otherwise stand taller than the window it opens in.
+    expect(css).toMatch(/\.measure-photo \{[^}]*max-width: min\(100%, 400px\); max-height: 380px;/);
+  });
+
   it('measures a bag as well as a garment', () => {
     // A bag has a depth and a handle; a tee has neither, so the guide cannot
     // be one drawing with the words swapped.
@@ -425,9 +473,14 @@ describe('the size guide, as the drawing has it', () => {
     for (const kind of ['totes', 'drawstring']) {
       const chart = siteContent.sizeCharts[kind];
       expect(chart, kind).toBeTruthy();
-      // The legend and the table answer for the same measurements.
-      expect(chart.measure.length, kind).toBe(chart.columns.length - 1);
-      expect(chart.rows.every((row) => row.length === chart.columns.length), kind).toBe(true);
+      // Everything the legend letters is a column of the table, so no badge
+      // names a measurement the reader cannot then look up. The table may
+      // carry more than the drawing letters -- a drawstring bag's cord is a
+      // figure worth printing and MySOS's drawing has no arrow on it.
+      for (const row of chart.measure) {
+        expect(chart.columns, `${kind} ${row.key}`).toContain(row.label);
+      }
+      expect(chart.rows.every((line) => line.length === chart.columns.length), kind).toBe(true);
       expect(chart.noteInch, kind).toMatch(/inches/);
     }
     expect(siteContent.sizeCharts.totes.diagram).toBe('tote');
@@ -603,12 +656,18 @@ describe('the sizes a bag is made in', () => {
     }
   });
 
-  it('leaves a kind with no chart the one standard it had', () => {
-    // The lanyard has a standard size and no chart behind it; it keeps the
-    // two buttons rather than losing them to an empty list.
+  it('leaves a kind that does not take its sizes from the chart the one standard it had', () => {
+    /*
+     * The lanyard keeps its two buttons rather than losing them to an empty
+     * list. It has a chart to read, but cannot take its sizes from it: a chart
+     * is kept in one unit so that the inch tab can work it out, and the
+     * lanyard is asked for in two -- millimetres across the strap and
+     * centimetres along it, which is how lanyards are ordered.
+     */
     const step = siteContent.productSteps.lanyards.find((item) => item.type === 'dimensions');
     expect(step.sizesFromChart).toBeUndefined();
-    expect(siteContent.sizeCharts.lanyards).toBeUndefined();
+    expect(step.fields.some((field) => field.column)).toBe(false);
+    expect(step.fields.map((field) => field.label)).toEqual(['Lanyard width (mm)', 'Lanyard length (cm)']);
     expect(source).toContain("if (!step?.sizesFromChart) return [];");
     expect(source).toContain("step.standardLabel ?? word('standardLabel'");
   });

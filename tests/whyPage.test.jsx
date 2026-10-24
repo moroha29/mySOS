@@ -132,7 +132,42 @@ describe('our process: the tracker and its cards', () => {
   });
 });
 
+describe('the step a reader has reached', () => {
+  it('wears the step\'s own mark rather than a tick repeated six times', () => {
+    const html = render();
+    const nodes = [...html.matchAll(/<span class="journey-node"[^>]*>(.*?)<\/span>/g)].map((hit) => hit[1]);
+    expect(nodes).toHaveLength(siteContent.process.length);
+    for (const [index, step] of siteContent.process.entries()) {
+      const mark = getImage(`icons/process/${step.icon}`);
+      expect(mark, step.icon).toBeTruthy();
+      expect(nodes[index], step.title).toContain(`src="${mark}"`);
+    }
+  });
+
+  it('says how far along it is by colour, since every step now wears a mark', () => {
+    // Nothing is drawn behind the mark, so the line joining the steps runs on
+    // under it; a step still to come keeps its shape and gives up its colour.
+    expect(css).toMatch(/\.journey-steps li:not\(\.is-done\):not\(\.is-current\) \.journey-node \.icon \{ filter: grayscale\(1\); opacity: \.45; \}/);
+    expect(css).toMatch(/\.journey-steps \.is-current \.journey-node \{ box-shadow: 0 0 0 5px rgba\(0, 166, 81, \.14\); \}/);
+    expect(css).not.toMatch(/\.journey-steps \.is-current \.journey-node::after/);
+  });
+});
+
 describe('why clients come back', () => {
+  it('shows each promise under the client\'s own two-colour mark', () => {
+    const html = render();
+    for (const promise of siteContent.loyalty) {
+      const mark = getImage(`icons/loyalty/${promise.icon}`);
+      expect(mark, promise.icon).toBeTruthy();
+      expect(html, promise.title).toContain(`src="${mark}"`);
+    }
+    // The mark is still the content's own field, so it can be changed from the
+    // manager; a name with no artwork of its own falls back to the drawn icon.
+    expect(pageSource).toContain("brandIcon('loyalty', promise.icon)");
+    expect(readFileSync(new URL('../src/public/brandIcons.js', import.meta.url), 'utf8'))
+      .toContain('getImage(`icons/${set}/${name}`) ?? name');
+  });
+
   it('shows the four promises from the design, each editable with an icon that exists', () => {
     const html = render();
     expect(siteContent.loyalty.map((item) => item.title)).toEqual([
