@@ -253,15 +253,18 @@ describe('the home banner and the sections under it', () => {
      *
      * Their wording used to be written out here, so rewording a promise in the
      * portal failed the check and the owner could not publish the page at all.
-     * What the design needs is the shape, which is what is asked for now; the
-     * mark each one is drawn with is checked where the row is drawn.
+     * The count was written out here too, and did the same thing the moment a
+     * promise was taken out. What the design needs is the shape: a row of them,
+     * each saying something, no two saying the same thing. The mark each one
+     * carries is checked where the row is drawn.
      */
-    expect(siteContent.homeStats).toHaveLength(4);
+    expect(siteContent.homeStats.length, 'a row with no promises in it').toBeGreaterThan(0);
     for (const stat of siteContent.homeStats) {
       expect(String(stat.value || '').trim(), 'a promise with nothing on it').not.toBe('');
       expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
     }
-    expect(new Set(siteContent.homeStats.map((stat) => stat.value)).size).toBe(4);
+    expect(new Set(siteContent.homeStats.map((stat) => stat.value)).size)
+      .toBe(siteContent.homeStats.length);
   });
 
   it('sets the banner the way the concept sets it: small line, huge headline', () => {
@@ -281,7 +284,7 @@ describe('the home banner and the sections under it', () => {
     expect(css).toMatch(/font-family: 'DM Sans', Inter,/);
   });
 
-  it('sets the four promises in one row, each with its own mark', () => {
+  it('sets the promises in one row, each with a mark of its own', () => {
     const markup = render(HomePage, '/');
     // "Products" used to stand apart from the other three, under a MySOS logo
     // that counted up to itself: a heading over the row rather than the first
@@ -289,20 +292,33 @@ describe('the home banner and the sections under it', () => {
     expect([...markup.matchAll(/class="home-stat-list"/g)]).toHaveLength(1);
     expect(markup).not.toContain('home-figure');
     expect(home).not.toContain('CountToInfinity');
-    expect(siteContent.homeFigure).toBeUndefined();
-    expect(css).toContain('.home-stat-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));');
+    // What matters is that it is not drawn. A draft written before the figure
+    // was taken out still carries the key, and asserting the key was gone
+    // stopped such a draft being published over a value nothing reads.
+    expect(home).not.toContain('homeFigure');
+    // The row is as wide as there are promises, up to four. A fixed four left
+    // the last column empty as soon as one was taken out in the portal.
+    expect(css).toContain('.home-stat-list { display: grid; grid-template-columns: repeat(var(--stat-count, 4), minmax(0, 1fr));');
+    expect(home).toContain("style={{ '--stat-count': Math.min(4, stats.length) }}");
 
-    // Each one is drawn as the client drew it: two-colour artwork, in the box
-    // it was drawn in, not a line icon taking the colour of the text.
-    const marks = [...markup.matchAll(/class="brand-mark"/g)];
+    /*
+     * Every promise carries a mark, in the same box whichever kind it is:
+     * MySOS's own two-colour artwork where the record names one, and a picture
+     * uploaded in the manager where it does not. Which kind is the owner's to
+     * choose -- the row used to be checked for drawn marks only, so uploading
+     * their own artwork, which is what the picker is for, stopped the page
+     * being published at all.
+     */
+    const marks = [...markup.matchAll(/class="brand-mark"|class="icon icon-picture home-stat-mark"/g)];
     expect(marks).toHaveLength(siteContent.homeStats.length);
     for (const stat of siteContent.homeStats) {
-      expect(brandMarkNames, stat.value).toContain(stat.mark);
+      expect(Boolean(stat.mark || stat.icon), `${stat.value} has nothing over it`).toBe(true);
+      if (stat.mark) expect(brandMarkNames, stat.value).toContain(stat.mark);
       expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
-      // The line icon stays behind it, for anything added here later.
-      expect(stat.icon, stat.value).toBeTruthy();
     }
-    expect(markup).toContain('viewBox="0 0 140.584 125.253"');
+    // A drawn mark keeps the box it was drawn in rather than the icon's.
+    expect(home).toContain('<BrandMark name={stat.mark} size={52} />');
+    expect(home).toContain('size={supplied ? 52 : 23}');
   });
 
   it('writes a promise at the size of the promises beside it', () => {
