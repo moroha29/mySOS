@@ -17,6 +17,14 @@ const sections = [
 const sectionLabel = (section) => pageText('story', section.key, section.fallback);
 const sectionPath = (section) => pagePath('story', section.key);
 
+/*
+ * How a list of lines is set: as sentences, or with a tick in front of each.
+ * Anything the manager does not offer reads as sentences, so a value that is
+ * missing, empty or misspelt can never leave the page looking broken.
+ */
+export const LIST_STYLES = ['paragraphs', 'bullets'];
+const listStyle = (chosen) => (LIST_STYLES.includes(chosen) ? chosen : 'paragraphs');
+
 const processIcons = ['consult', 'design', 'sample', 'production', 'delivery'];
 
 /*
@@ -213,15 +221,26 @@ export default function StoryDetailPage({ slug }) {
         <section data-reveal className="narrative-block" id="outcome">
           <div>
             <div className="narrative-head"><span>04</span><h2 data-cms-path={cms(sectionPath(sections[3]))}>{sectionLabel(sections[3])}</h2></div>
-            {/* Paragraphs rather than a ticked list. MySOS writes the outcome
-                as sentences about the project, and a tick in front of each one
-                made every sentence read as an item checked off a list. One
-                still empty is not drawn, or adding an outcome in the manager
-                leaves a line with nothing on it until the first word. */}
-            <div className="outcome-copy">
+            {/* Sentences or a ticked list, whichever MySOS chose for this
+                story. The tick is drawn either way and hidden by the choice,
+                so changing it is a change of style and not of the page: the
+                manager's preview can show it without redrawing anything.
+
+                One outcome still empty is not drawn, or adding an outcome in
+                the manager leaves a line with nothing on it until the first
+                word is typed. It keeps its place in the list, because that
+                place is the address the manager writes to. */}
+            <div
+              className="outcome-copy"
+              data-list-style={listStyle(story.outcomesStyle)}
+              data-cms-path={cms(storyPath(story, 'outcomesStyle'))}
+            >
               {story.outcomes.map((outcome, index) => [outcome, index])
                 .filter(([outcome]) => String(outcome ?? '').trim())
-                .map(([outcome, index]) => <p key={index} data-cms-path={cms(storyPath(story, 'outcomes', index))}>{outcome}</p>)}
+                .map(([outcome, index]) => <p key={index}>
+                  <Icon name="check" size={19} />
+                  <span data-cms-path={cms(storyPath(story, 'outcomes', index))}>{outcome}</span>
+                </p>)}
             </div>
           </div>
           <Photo style={story.gallery[1] ?? story.imageStyle} imageKey={`stories/${story.slug}/outcome`} label="The finished project" />
