@@ -472,6 +472,11 @@ body:has(.category-strip) .products-collection { scroll-margin-top: calc(var(--h
 .story-meta .icon { color: #9fb8e6; }
 .story-meta dt { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fb8e6; }
 .story-meta dd { margin: 6px 0 0; font-size: 17px; font-weight: 700; }
+/* The industry is stored as the name the tabs filter on -- "businesses",
+   "sports-teams" -- and read here as a name. Capitalised in the stylesheet
+   rather than in the page, so the stored value stays the one the site matches
+   on and the manager's preview shows the same words the website will. */
+.story-industry { text-transform: capitalize; }
 
 /* As wide as there are photographs, up to five across: taking one out in the
    portal used to leave the last column standing empty. */

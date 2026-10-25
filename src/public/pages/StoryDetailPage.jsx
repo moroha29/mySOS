@@ -221,7 +221,7 @@ export default function StoryDetailPage({ slug }) {
               always has. Without one, clicking "schools" in the manager
               selected the word "Industry" above it and there was no way to
               say which industry the story belongs to. */}
-          <div><Icon name="business" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd data-cms-path={cms(storyPath(story, 'category'))}>{industry}</dd></span></div>
+          <div><Icon name="business" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd className="story-industry" data-cms-path={cms(storyPath(story, 'category'))}>{industry}</dd></span></div>
           <div><Icon name="shirt" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'productsLabel'))}>{pageText('story', 'productsLabel', 'Products')}</dt><dd>{products.map((item) => item.public.name).join(', ') || '—'}</dd></span></div>
           <div><Icon name="quantity" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'quantityLabel'))}>{pageText('story', 'quantityLabel', 'Quantity')}</dt><dd><span data-cms-path={cms(storyPath(story, 'quantity'))}>{story.quantity}</span> <span data-cms-path={cms(pagePath('story', 'quantitySuffix'))}>{pageText('story', 'quantitySuffix', 'pcs')}</span></dd></span></div>
           <div><Icon name="calendar" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'yearLabel'))}>{pageText('story', 'yearLabel', 'Year')}</dt><dd data-cms-path={cms(storyPath(story, 'year'))}>{story.year}</dd></span></div>

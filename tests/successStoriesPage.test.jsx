@@ -300,12 +300,20 @@ describe('the chapters of one story', () => {
     expect(html).not.toContain('class="photo-viewer" open');
   });
 
-  it('lets the industry be clicked, not just the word above it', () => {
+  it('lets the industry be clicked, and reads it as a name', () => {
     // "schools" carried no address, so clicking it in the manager selected the
     // label "Industry" and there was no way to say which industry it is.
     const story = successStories[0];
     globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
     const html = renderToStaticMarkup(<PublicApp />);
-    expect(html).toMatch(/<dd data-cms-path="[^"]*&quot;category&quot;\]"/);
+    expect(html).toMatch(/<dd class="story-industry" data-cms-path="[^"]*&quot;category&quot;\]"/);
+    /*
+     * Capitalised in the stylesheet, not in the page: the value stays the name
+     * the Success Stories tabs filter on, and the manager's preview -- which
+     * writes the stored value straight into the page -- shows the same words
+     * the website will rather than a lowercase "businesses".
+     */
+    expect(css).toContain('.story-industry { text-transform: capitalize; }');
+    expect(html).toContain(`>${story.category.replace('-', ' ')}</dd>`);
   });
 });
