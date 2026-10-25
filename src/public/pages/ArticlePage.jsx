@@ -83,7 +83,12 @@ export default function ArticlePage({ slug }) {
 
         {article.sections.map((section, position) => <section key={section.heading} id={slugFor(section.heading)} data-reveal>
           <h2 data-cms-path={cms(articlePath(index, 'sections', position, 'heading'))}>{section.heading}</h2>
-          {section.body.map((paragraph, line) => <p key={paragraph.slice(0, 24)} data-cms-path={cms(articlePath(index, 'sections', position, 'body', line))}>{paragraph}</p>)}
+          {/* A paragraph with nothing in it yet is not drawn, or it would be a
+              gap in the middle of the guide. It keeps its place in the list
+              either way, because that place is its address in the manager. */}
+          {section.body.map((paragraph, line) => [paragraph, line])
+            .filter(([paragraph]) => String(paragraph ?? '').trim())
+            .map(([paragraph, line]) => <p key={line} data-cms-path={cms(articlePath(index, 'sections', position, 'body', line))}>{paragraph}</p>)}
         </section>)}
 
         {article.table && <div className="article-table" data-reveal>
