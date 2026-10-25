@@ -147,7 +147,11 @@ export default function StoryDetailPage({ slug }) {
         <h1 data-cms-path={cms(storyPath(story, 'title'))}>{story.title}</h1>
         <p data-cms-path={cms(storyPath(story, 'summary'))}>{story.summary}</p>
         <dl className="story-meta">
-          <div><Icon name="business" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd>{industry}</dd></span></div>
+          {/* The industry carries its own address, as the label beside it
+              always has. Without one, clicking "schools" in the manager
+              selected the word "Industry" above it and there was no way to
+              say which industry the story belongs to. */}
+          <div><Icon name="business" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'industryLabel'))}>{pageText('story', 'industryLabel', 'Industry')}</dt><dd data-cms-path={cms(storyPath(story, 'category'))}>{industry}</dd></span></div>
           <div><Icon name="shirt" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'productsLabel'))}>{pageText('story', 'productsLabel', 'Products')}</dt><dd>{products.map((item) => item.public.name).join(', ') || '—'}</dd></span></div>
           <div><Icon name="quantity" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'quantityLabel'))}>{pageText('story', 'quantityLabel', 'Quantity')}</dt><dd><span data-cms-path={cms(storyPath(story, 'quantity'))}>{story.quantity}</span> <span data-cms-path={cms(pagePath('story', 'quantitySuffix'))}>{pageText('story', 'quantitySuffix', 'pcs')}</span></dd></span></div>
           <div><Icon name="calendar" size={25} /><span><dt data-cms-path={cms(pagePath('story', 'yearLabel'))}>{pageText('story', 'yearLabel', 'Year')}</dt><dd data-cms-path={cms(storyPath(story, 'year'))}>{story.year}</dd></span></div>
@@ -209,12 +213,16 @@ export default function StoryDetailPage({ slug }) {
         <section data-reveal className="narrative-block" id="outcome">
           <div>
             <div className="narrative-head"><span>04</span><h2 data-cms-path={cms(sectionPath(sections[3]))}>{sectionLabel(sections[3])}</h2></div>
-            <ul className="outcome-list">
-              {story.outcomes.map((outcome, index) => <li key={outcome}>
-                <Icon name="check" size={19} />
-                <span data-cms-path={cms(storyPath(story, 'outcomes', index))}>{outcome}</span>
-              </li>)}
-            </ul>
+            {/* Paragraphs rather than a ticked list. MySOS writes the outcome
+                as sentences about the project, and a tick in front of each one
+                made every sentence read as an item checked off a list. One
+                still empty is not drawn, or adding an outcome in the manager
+                leaves a line with nothing on it until the first word. */}
+            <div className="outcome-copy">
+              {story.outcomes.map((outcome, index) => [outcome, index])
+                .filter(([outcome]) => String(outcome ?? '').trim())
+                .map(([outcome, index]) => <p key={index} data-cms-path={cms(storyPath(story, 'outcomes', index))}>{outcome}</p>)}
+            </div>
           </div>
           <Photo style={story.gallery[1] ?? story.imageStyle} imageKey={`stories/${story.slug}/outcome`} label="The finished project" />
         </section>
