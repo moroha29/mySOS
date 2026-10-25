@@ -191,15 +191,35 @@ describe('a picture that has not been chosen yet', () => {
 
   it('reaches every guide, which is where it was noticed', () => {
     const marked = new Set();
+    const reachable = new Set();
     for (const [pathname, search] of routes) {
-      for (const [, raw] of render(pathname, search).matchAll(/data-cms-path="([^"]*)" data-cms-background/g)) {
-        marked.add(unescape(raw));
-      }
+      const html = render(pathname, search);
+      for (const [, raw] of html.matchAll(/data-cms-path="([^"]*)" data-cms-background/g)) marked.add(unescape(raw));
+      // Chosen or not: a picture already chosen is an <img> carrying its
+      // address, and a drawing standing in for one carries the same address
+      // as a background. Either way it can be clicked and changed.
+      for (const [, raw] of html.matchAll(/data-cms-path="([^"]*)"/g)) reachable.add(unescape(raw));
     }
     const guides = [...marked].filter((key) => key.includes('"resources"'));
     expect(guides.length).toBe(resources.articles.length);
     for (const key of guides) expect(valueAt(JSON.parse(key))).toBeDefined();
-    // And the success stories, which were in the same state.
-    expect([...marked].filter((key) => key.includes('"successStories"')).length).toBe(successStories.length);
+    /*
+     * And the success stories, which were in the same state -- every picture
+     * of every one of them, not a count: a story's photographs are pictures of
+     * their own now, so counting the stories asked for one each and would have
+     * gone on passing however many of the rest were unreachable.
+     */
+    for (const story of successStories) {
+      // Addressed the way storyPath addresses them, prefix and all.
+      const at = successStories.indexOf(story);
+      const wanted = [
+        ['additionalContent', 'successStories', at, 'image'],
+        ...(story.galleryImages ?? []).map((_, index) => ['additionalContent', 'successStories', at, 'galleryImages', index]),
+      ];
+      for (const path of wanted) {
+        expect(reachable.has(JSON.stringify(path)), `${story.slug}: ${path.join('.')}`).toBe(true);
+        expect(valueAt(path), `${story.slug}: ${path.join('.')}`).toBeDefined();
+      }
+    }
   });
 });

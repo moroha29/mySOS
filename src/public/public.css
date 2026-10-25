@@ -473,11 +473,28 @@ body:has(.category-strip) .products-collection { scroll-margin-top: calc(var(--h
 .story-meta dt { font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9fb8e6; }
 .story-meta dd { margin: 6px 0 0; font-size: 17px; font-weight: 700; }
 
-.gallery-strip { max-width: var(--content); margin: 0 auto; padding: 14px var(--pad) 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+/* As wide as there are photographs, up to five across: taking one out in the
+   portal used to leave the last column standing empty. */
+.gallery-strip { max-width: var(--content); margin: 0 auto; padding: 14px var(--pad) 0; display: grid; grid-template-columns: repeat(var(--tiles, 5), minmax(0, 1fr)); gap: 10px; }
+.gallery-tile { padding: 0; border: 0; background: none; cursor: pointer; }
 .gallery-strip .scene { height: 92px; border: 2px solid var(--line); border-radius: 8px; }
 .gallery-strip .scene.is-active { border-color: var(--green); }
-.gallery-more { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 92px; border: 1px solid var(--line); border-radius: 8px; font-size: 16px; font-weight: 700; color: var(--muted); }
-.gallery-more:hover { border-color: var(--navy); color: var(--navy); }
+.gallery-tile:hover .scene, .gallery-tile:focus-visible .scene { border-color: var(--navy); }
+.gallery-more { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; height: 92px; border: 1px solid var(--line); border-radius: 8px; background: none; font: inherit; font-size: 16px; font-weight: 700; color: var(--muted); cursor: pointer; }
+.gallery-more:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+.gallery-more:disabled { cursor: default; opacity: .6; }
+
+/* One photograph at full size, over the story rather than instead of it. */
+.photo-viewer { width: min(1000px, calc(100vw - 32px)); padding: 18px; border: 0; border-radius: 20px; background: #fff; color: var(--ink); box-shadow: 0 40px 90px rgba(13, 42, 107, .32); }
+.photo-viewer::backdrop { background: rgba(10, 33, 89, .62); }
+.photo-viewer-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.photo-viewer-head p { font-size: 18px; font-weight: 800; color: var(--navy); }
+.photo-viewer-close { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--ink); cursor: pointer; }
+.photo-viewer-shot { height: min(62vh, 560px); border-radius: 12px; overflow: hidden; }
+.photo-viewer-shot img { width: 100%; height: 100%; object-fit: contain; background: var(--paper); }
+.photo-viewer-foot { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 14px; font-size: 16px; font-weight: 700; color: var(--muted); }
+.photo-viewer-foot button { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: #fff; color: var(--ink); cursor: pointer; }
+.photo-viewer-foot button:disabled { opacity: .4; cursor: default; }
 
 .story-body { max-width: var(--content); margin: 0 auto; padding: 32px var(--pad) 48px; display: grid; grid-template-columns: 200px 1fr; gap: 34px; align-items: start; }
 .story-toc { position: sticky; top: 92px; display: grid; gap: 6px; padding: 14px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
