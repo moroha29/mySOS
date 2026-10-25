@@ -104,10 +104,69 @@ function useChapterInView(active) {
   return rail;
 }
 
+/*
+ * One photograph at full size, with the rest a key away.
+ *
+ * The strip used to end in a tile reading "View All Photos (4)" that was a
+ * span: it looked like a button, and clicking it did nothing at all. The
+ * photographs were never shown larger than a thumbnail anywhere on the site.
+ *
+ * A dialog rather than a page of its own, because the reader is partway
+ * through a story and should come back to where they were -- the same way the
+ * size guide opens on a product. Escape closes it, the backdrop closes it, and
+ * the arrows move along the strip without leaving.
+ */
+function PhotoViewer({ story, photos, styles, at, onMove, onClose }) {
+  const ref = useRef(null);
+  const open = Number.isInteger(at) && at >= 0 && at < photos.length;
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    if (open && !node.open) node.showModal();
+    if (!open && node.open) node.close();
+    return undefined;
+  }, [open, at]);
+  if (!photos.length) return null;
+
+  const step = (by) => onMove((at + by + photos.length) % photos.length);
+  const label = pageText('story', 'galleryLabel', 'View All Photos');
+  return <dialog
+    className="photo-viewer"
+    ref={ref}
+    aria-label={`${story.title}: ${label}`}
+    onClose={onClose}
+    onClick={(event) => { if (event.target === ref.current) onClose(); }}
+    onKeyDown={(event) => {
+      if (event.key === 'ArrowRight') { event.preventDefault(); step(1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); step(-1); }
+    }}
+  >
+    <div className="photo-viewer-head">
+      <p>{story.title}</p>
+      <button type="button" className="photo-viewer-close" aria-label="Close" onClick={onClose}><Icon name="close" size={22} /></button>
+    </div>
+    {open && <Photo
+      style={styles[at] ?? story.imageStyle}
+      image={picture(photos[at], `stories/${story.slug}/0${at + 1}`)}
+      className="photo-viewer-shot"
+      label={`${story.title} photo ${at + 1}`}
+      wide
+    />}
+    <div className="photo-viewer-foot">
+      <button type="button" aria-label="Previous photo" onClick={() => step(-1)} disabled={photos.length < 2}><Icon name="chevronLeft" size={22} /></button>
+      <span>{open ? at + 1 : 0} / {photos.length}</span>
+      <button type="button" aria-label="Next photo" onClick={() => step(1)} disabled={photos.length < 2}><Icon name="chevronRight" size={22} /></button>
+    </div>
+  </dialog>;
+}
+
 export default function StoryDetailPage({ slug }) {
   const story = getStoryBySlug(slug);
   const active = useActiveSection();
   const tocRef = useChapterInView(active);
+  // Which photograph is open, or null for none. Null on the server and on the
+  // first render in the browser alike, so the two agree.
+  const [viewing, setViewing] = useState(null);
 
   if (!story) {
     return <main className="not-found">
@@ -121,6 +180,9 @@ export default function StoryDetailPage({ slug }) {
   const products = story.products.map(getPublicProduct).filter(Boolean);
   const industry = story.category.replace('-', ' ');
   const gallery = story.gallery.slice(0, 4);
+  // The photographs the strip shows, one picture each. A story written before
+  // they were pictures has a slot for every drawing it was using.
+  const photos = story.galleryImages ?? gallery.map(() => '');
   // Each step carries where its caption came from, so the manager edits the
   // entry that actually produced the words on screen.
   const captions = processCaptions();
@@ -167,16 +229,43 @@ export default function StoryDetailPage({ slug }) {
       </div>
     </section>
 
-    <div className="gallery-strip" data-reveal>
-      {gallery.map((style, index) => <Photo
-        key={style}
-        style={style}
-        imageKey={`stories/${story.slug}/0${index + 1}`}
-        className={index === 0 ? 'is-active' : ''}
-        label={`${story.title} photo ${index + 1}`}
-      />)}
-      <span className="gallery-more"><Icon name="photos" size={24} /><span data-cms-path={cms(pagePath('story', 'galleryLabel'))}>{pageText('story', 'galleryLabel', 'View All Photos')}</span> ({story.gallery.length})</span>
+    {/* Each photograph is its own picture, so it can be clicked in the manager
+        and changed like every other picture on the page. Before this the four
+        were the only pictures on a story nobody could touch: they carried no
+        address at all, so clicking one selected nothing.
+
+        The row is as wide as there are photographs, up to five across, so
+        taking one out does not leave a hole at the end of it. */}
+    <div className="gallery-strip" data-reveal style={{ '--tiles': Math.min(5, photos.length + 1) }}>
+      {photos.map((photo, index) => <button
+        type="button"
+        className="gallery-tile"
+        key={`photo-${index}`}
+        onClick={() => setViewing(index)}
+        aria-label={`${story.title} photo ${index + 1} of ${photos.length}. Open larger`}
+      >
+        <Photo
+          style={gallery[index] ?? story.imageStyle}
+          image={picture(photo, `stories/${story.slug}/0${index + 1}`)}
+          imagePath={storyPath(story, 'galleryImages', index)}
+          className={index === 0 ? 'is-active' : ''}
+          label={`${story.title} photo ${index + 1}`}
+        />
+      </button>)}
+      <button type="button" className="gallery-more" onClick={() => setViewing(0)} disabled={!photos.length}>
+        <Icon name="photos" size={24} />
+        <span data-cms-path={cms(pagePath('story', 'galleryLabel'))}>{pageText('story', 'galleryLabel', 'View All Photos')}</span> ({photos.length})
+      </button>
     </div>
+
+    <PhotoViewer
+      story={story}
+      photos={photos}
+      styles={gallery}
+      at={viewing}
+      onMove={setViewing}
+      onClose={() => setViewing(null)}
+    />
 
     <div className="story-body">
       <aside className="story-toc" ref={tocRef}>

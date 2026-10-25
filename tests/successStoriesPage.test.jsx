@@ -259,6 +259,47 @@ describe('the chapters of one story', () => {
     expect(css).toContain('.outcome-copy p {');
   });
 
+  it('gives every photograph in the strip a picture of its own', () => {
+    /*
+     * The four were the only pictures on a story page nobody could change:
+     * they carried no address at all, so clicking one in the manager selected
+     * nothing. Each is its own picture now, chosen one at a time like every
+     * other picture on the site.
+     */
+    const story = successStories[0];
+    globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+    const html = renderToStaticMarkup(<PublicApp />);
+    const slots = [...html.matchAll(/data-cms-path="[^"]*&quot;galleryImages&quot;,(\d+)\]"/g)].map((hit) => Number(hit[1]));
+    expect(slots).toEqual(story.galleryImages.map((_, index) => index));
+    // The row is as wide as there are photographs, so removing one in the
+    // portal does not leave the last column standing empty.
+    expect(html).toContain(`style="--tiles:${Math.min(5, story.galleryImages.length + 1)}"`);
+    expect(css).toContain('grid-template-columns: repeat(var(--tiles, 5), minmax(0, 1fr))');
+  });
+
+  it('opens a photograph larger, which nothing on the page used to do', () => {
+    // "View All Photos (4)" was a span: it looked like a button and did
+    // nothing at all, and no photograph was ever shown above thumbnail size.
+    const story = successStories[0];
+    globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+    const html = renderToStaticMarkup(<PublicApp />);
+    expect(html).toMatch(/<button type="button" class="gallery-more"/);
+    expect(html).not.toMatch(/<span class="gallery-more"/);
+    // Every thumbnail opens it too, and says which one it is.
+    const tiles = [...html.matchAll(/<button type="button" class="gallery-tile"[^>]*aria-label="([^"]*)"/g)];
+    expect(tiles).toHaveLength(story.galleryImages.length);
+    expect(tiles[1][1]).toContain(`photo 2 of ${story.galleryImages.length}`);
+    // A dialog over the story, as the size guide is over a product: the
+    // reader is partway through and should come back to where they were.
+    expect(page).toContain('function PhotoViewer(');
+    expect(page).toContain("if (event.key === 'ArrowRight')");
+    expect(page).toContain("if (event.key === 'ArrowLeft')");
+    expect(css).toContain('.photo-viewer::backdrop');
+    // Closed until it is opened, on the server and in the browser alike.
+    expect(page).toContain('const [viewing, setViewing] = useState(null);');
+    expect(html).not.toContain('class="photo-viewer" open');
+  });
+
   it('lets the industry be clicked, not just the word above it', () => {
     // "schools" carried no address, so clicking it in the manager selected the
     // label "Industry" and there was no way to say which industry it is.
