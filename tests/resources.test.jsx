@@ -135,6 +135,27 @@ describe('one guide', () => {
       expect(html, path).toContain(path);
     }
   });
+
+  it('draws a paragraph for each paragraph, and none for one still empty', () => {
+    /*
+     * A section's body is a list, one entry for each paragraph on the page, so
+     * a paragraph added in the manager arrives as a new entry. One with
+     * nothing in it yet would be drawn as a gap in the middle of the guide, so
+     * it is left out -- but it keeps its place in the list, because that place
+     * is the address the manager writes to.
+     */
+    const section = first.sections[0];
+    const body = [...section.body];
+    try {
+      section.body = [body[0], '   ', ...body.slice(1)];
+      const html = markup();
+      const paragraphs = [...html.matchAll(/<p data-cms-path="[^"]*&quot;sections&quot;,0,&quot;body&quot;,(\d+)\]"/g)].map((hit) => hit[1]);
+      expect(paragraphs).toEqual(['0', '2'], 'the empty one is not drawn, and the one after keeps its own address');
+      for (const paragraph of body) expect(text(html)).toContain(paragraph);
+    } finally {
+      section.body = body;
+    }
+  });
 });
 
 describe('a guide on a narrow screen', () => {
