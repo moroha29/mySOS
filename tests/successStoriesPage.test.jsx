@@ -195,7 +195,39 @@ describe('the chapters of one story', () => {
     expect(narrow).toContain('.narrative-block { scroll-margin-top: calc(var(--header-now) + 72px); }');
   });
 
-  it('sets the outcome as sentences, not as a checklist', () => {
+  it('sets the outcome the way the story was given, sentences or ticks', () => {
+    /*
+     * The tick is drawn either way and hidden by the choice, so changing it is
+     * a change of style and not of the page -- which is what lets the manager
+     * show it without redrawing, and what makes a missing or misspelt value
+     * harmless: anything the manager does not offer reads as sentences.
+     */
+    const story = successStories[0];
+    const chosen = story.outcomesStyle;
+    const shownAs = () => {
+      globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+      return renderToStaticMarkup(<PublicApp />).match(/class="outcome-copy" data-list-style="(\w+)"/)?.[1];
+    };
+    try {
+      for (const [given, expected] of [['bullets', 'bullets'], ['paragraphs', 'paragraphs'], ['', 'paragraphs'], [undefined, 'paragraphs'], ['Bullets', 'paragraphs']]) {
+        story.outcomesStyle = given;
+        expect(shownAs(), String(given)).toBe(expected);
+      }
+    } finally {
+      story.outcomesStyle = chosen;
+    }
+    // Both forms are in the stylesheet, and the choice is what picks between them.
+    // Ticks only where ticks were asked for, so every other value reads as
+    // sentences rather than leaving the page looking like a half-made list.
+    expect(css).toMatch(/\.outcome-copy \.icon \{ display: none;/);
+    expect(css).toContain('.outcome-copy[data-list-style="bullets"] .icon { display: block; }');
+    // And the choice itself is editable, on the block it applies to.
+    expect(shownAs()).toBeTruthy();
+    globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+    expect(renderToStaticMarkup(<PublicApp />)).toMatch(/class="outcome-copy"[^>]*data-cms-path="[^"]*&quot;outcomesStyle&quot;\]"/);
+  });
+
+  it('draws an outcome for each outcome, and none for an empty one', () => {
     /*
      * MySOS writes the outcome as sentences about the project, and a tick in
      * front of each one made every sentence read as an item checked off a
@@ -208,7 +240,7 @@ describe('the chapters of one story', () => {
       story.outcomes = [outcomes[0], '  ', ...outcomes.slice(1)];
       globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
       const html = renderToStaticMarkup(<PublicApp />);
-      const drawn = [...html.matchAll(/<p data-cms-path="[^"]*&quot;outcomes&quot;,(\d+)\]"/g)].map((hit) => hit[1]);
+      const drawn = [...html.matchAll(/<span data-cms-path="[^"]*&quot;outcomes&quot;,(\d+)\]"/g)].map((hit) => hit[1]);
       // Every outcome with words in it, at the place it holds in the list,
       // which is the address the manager writes to. The published stories
       // already carry blank outcomes of their own, which is how two ticks
