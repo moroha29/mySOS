@@ -500,9 +500,9 @@ body:has(.category-strip) .products-collection { scroll-margin-top: calc(var(--h
 .narrative-block .scene { height: 156px; }
 .narrative-block .product-visual { height: 156px; border-radius: var(--radius-sm); background: var(--soft); }
 
-.outcome-list { display: grid; gap: 10px; }
-.outcome-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 17.5px; line-height: 1.6; color: var(--muted); }
-.outcome-list .icon { color: var(--green); margin-top: 1px; }
+/* The outcome is written as sentences, so it is set as sentences. */
+.outcome-copy { display: grid; gap: 14px; }
+.outcome-copy p { font-size: 17.5px; line-height: 1.6; color: var(--muted); }
 
 .feedback-block { display: grid; grid-template-columns: 1.25fr .75fr; gap: 26px; align-items: center; }
 .feedback-quote { padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--soft); font-size: 17.5px; line-height: 1.7; color: var(--ink); }

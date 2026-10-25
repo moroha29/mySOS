@@ -27,6 +27,10 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    test: { environment: 'node' },
+    // The same budget the workflow passes on the command line. Without it
+    // `npm test` ran on vitest's own five seconds, and the quotation engine's
+    // demo export -- which really does take about ten -- failed locally while
+    // passing in CI, which teaches you to ignore a red suite.
+    test: { environment: 'node', testTimeout: 30000 },
   };
 });

@@ -6,6 +6,7 @@ import siteContent from '../src/data/siteContent.json';
 import successStories from '../src/data/successStories.json';
 import { getStories, storyFacts } from '../src/utils/catalogue';
 import StoriesPage from '../src/public/pages/StoriesPage';
+import PublicApp from '../src/public/PublicApp';
 
 const originalLocation = globalThis.location;
 afterEach(() => {
@@ -192,5 +193,46 @@ describe('the chapters of one story', () => {
     expect(css).toContain('.narrative-block { scroll-margin-top: calc(var(--header-now) + 20px); }');
     const narrow = css.slice(css.indexOf('@media (max-width: 1080px)'));
     expect(narrow).toContain('.narrative-block { scroll-margin-top: calc(var(--header-now) + 72px); }');
+  });
+
+  it('sets the outcome as sentences, not as a checklist', () => {
+    /*
+     * MySOS writes the outcome as sentences about the project, and a tick in
+     * front of each one made every sentence read as an item checked off a
+     * list. One still empty is not drawn, or adding an outcome in the manager
+     * leaves a tick with nothing beside it until the first word is typed.
+     */
+    const story = successStories[0];
+    const outcomes = [...story.outcomes];
+    try {
+      story.outcomes = [outcomes[0], '  ', ...outcomes.slice(1)];
+      globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+      const html = renderToStaticMarkup(<PublicApp />);
+      const drawn = [...html.matchAll(/<p data-cms-path="[^"]*&quot;outcomes&quot;,(\d+)\]"/g)].map((hit) => hit[1]);
+      // Every outcome with words in it, at the place it holds in the list,
+      // which is the address the manager writes to. The published stories
+      // already carry blank outcomes of their own, which is how two ticks
+      // with nothing beside them came to be on the live page.
+      const written = story.outcomes
+        .map((outcome, at) => [outcome, at])
+        .filter(([outcome]) => String(outcome).trim());
+      expect(drawn).toEqual(written.map(([, at]) => String(at)));
+      expect(drawn).not.toContain('1');
+      expect(html).toContain('class="outcome-copy"');
+      expect(html).not.toContain('class="outcome-list"');
+      for (const [outcome] of written) expect(html).toContain(outcome.replaceAll('&', '&amp;'));
+    } finally {
+      story.outcomes = outcomes;
+    }
+    expect(css).toContain('.outcome-copy p {');
+  });
+
+  it('lets the industry be clicked, not just the word above it', () => {
+    // "schools" carried no address, so clicking it in the manager selected the
+    // label "Industry" and there was no way to say which industry it is.
+    const story = successStories[0];
+    globalThis.location = { pathname: `/success-stories/${story.slug}/`, search: '' };
+    const html = renderToStaticMarkup(<PublicApp />);
+    expect(html).toMatch(/<dd data-cms-path="[^"]*&quot;category&quot;\]"/);
   });
 });
