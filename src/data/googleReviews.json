@@ -1,7 +1,7 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-10-26T23:07:11.848Z",
+  "fetchedAt": "2026-10-27T22:56:55.790Z",
   "averageRating": 5,
   "totalReviewCount": 118,
   "reviews": [
@@ -38,12 +38,12 @@
       "createTime": "2026-07-15T04:50:22.648804349Z"
     },
     {
-      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT214VWRYRTFibmhXZFdNeVZXaEhhbnBaTFhaVVdtYxAB",
-      "author": "Hiya",
-      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocKdgsPk4BsQBvbRQTxaCts4EX473Ws0IOQyw3N6pgmBRCuC0g=s128-c0x00000000-cc-rp-mo",
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twUVRWbE1hM04yT0Y5SmIybHZabE4xVlZaWlJrRRAB",
+      "author": "Meher Bijlani",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocIqkbM62ntG3DpCvbEFbgucKqclQe18RRSccaooTEnAg1a9DA=s128-c0x00000000-cc-rp-mo",
       "rating": 5,
-      "text": "Absolutely loved the customized shirts! The printing quality was excellent, with sharp details and vibrant colors that came out exactly as expected. The design was really well thought out and looked super cool on everyone.",
-      "createTime": "2026-06-08T04:25:43.941514618Z"
+      "text": "we were able to get customised shirts within 10 days!! and they are good qualityyy.",
+      "createTime": "2026-06-08T04:26:07.757187928Z"
     }
   ]
 }
