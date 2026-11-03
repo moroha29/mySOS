@@ -11,7 +11,8 @@
     "test:watch": "vitest",
     "prerender": "node scripts/prerender.mjs",
     "dev:mock": "vite --mode mock",
-    "icons": "node scripts/export-icons.mjs"
+    "icons": "node scripts/export-icons.mjs",
+    "check:content-proof": "node scripts/contentProof.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

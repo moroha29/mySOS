@@ -32,9 +32,18 @@ const article = resources.articles[0];
 
 describe('what each page says about itself', () => {
   it('gives every page a title of its own, which is the name it already has', () => {
-    const titles = meta.map((item) => item.title);
-    expect(new Set(titles).size).toBe(titles.length);
     expect(at('/').title).toBe('MySOS | Custom Merchandise, Made Simple');
+    /*
+     * Not that no two titles repeat. Two pages repeat a title only when the
+     * same name was typed twice, and this check used to answer that by failing
+     * -- so renaming two caps to "CP28 Polyester Baseball Cap" meant nothing
+     * written that day could be published. What the site owes every page is a
+     * title taken from its own name, which is what is checked below, and never
+     * the one line they all used to share.
+     */
+    for (const item of meta.filter((entry) => entry.route !== '/')) {
+      expect(item.title, item.route).not.toBe('MySOS | Custom Merchandise, Made Simple');
+    }
     // Read from the content, not written out here: a page renamed in the
     // portal must not fail this check, or the rename cannot be published.
     for (const page of pages.filter((item) => item.path)) {
@@ -159,7 +168,9 @@ describe('somewhere for a search engine to start', () => {
     // two of each in a page and a search engine picks whichever it likes.
     expect(prerender).toMatch(/const shell = template\.replace\(HEAD_MARKER/);
     expect(prerender).toContain('{{head}}');
-    // Two pages that would share a title stop the build.
-    expect(prerender).toContain('would both be titled');
+    // A page with no title of its own, or two sharing one, is said at the end
+    // of the build and does not stop it: see theOwnerCannotBreakTheBuild.
+    expect(prerender).toContain('are both titled');
+    expect(prerender).toContain('worth a look');
   });
 });
