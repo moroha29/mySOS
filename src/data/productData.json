@@ -196,7 +196,7 @@
       "id": "polo_cotton_pique",
       "public": {
         "slug": "polo-cotton-pique",
-        "name": "Premium Cotton Tee 190GSM",
+        "name": "QD56 Interlock Drifit Tee",
         "category": "apparel",
         "subcategory": "polos",
         "description": "Smart cotton pique polos for staff, clubs and corporate teams.",
@@ -260,7 +260,7 @@
       "id": "polo_premium_cvc",
       "public": {
         "slug": "premium-cvc-polo",
-        "name": "Premium Polo Tee",
+        "name": "Premium Cotton Tee 190gsm",
         "category": "apparel",
         "subcategory": "polos",
         "description": "A polished premium-blend polo for client-facing teams.",
@@ -320,7 +320,7 @@
       "id": "snapback",
       "public": {
         "slug": "custom-snapback",
-        "name": "Custom Snapback",
+        "name": "Polyester Snapback Cap CP23",
         "category": "apparel",
         "subcategory": "caps",
         "description": "Structured headwear ready for embroidery or printed artwork.",
@@ -351,7 +351,7 @@
       "id": "dad_cap",
       "public": {
         "slug": "custom-dad-cap",
-        "name": "Dad Cap",
+        "name": "Cotton Cap CP28",
         "category": "apparel",
         "subcategory": "caps",
         "description": "Relaxed everyday cap with a comfortable low-profile fit.",
@@ -386,7 +386,7 @@
         "category": "apparel",
         "subcategory": "caps",
         "description": "Breathable mesh-back cap for outdoor crews and campaigns.",
-        "visible": true,
+        "visible": false,
         "featured": false,
         "imageStyle": "cap-navy",
         "displayPricing": {
@@ -413,17 +413,17 @@
       "id": "five_panel",
       "public": {
         "slug": "five-panel-cap",
-        "name": "5-Panel Cap",
+        "name": "Polyester Baseball Cap",
         "category": "apparel",
         "subcategory": "caps",
-        "description": "A modern five-panel shape for lifestyle merchandise.",
+        "description": "6 Panel | Adjustable Buckle Strap",
         "visible": true,
         "featured": false,
         "imageStyle": "cap-blue",
         "displayPricing": {
           "show": true,
           "prefix": "From",
-          "amount": 11.9,
+          "amount": 3.5,
           "unit": "piece"
         }
       },
@@ -479,7 +479,7 @@
         "category": "apparel",
         "subcategory": "caps",
         "description": "A premium fitted silhouette with a structured crown.",
-        "visible": true,
+        "visible": false,
         "featured": false,
         "imageStyle": "cap-black",
         "displayPricing": {
@@ -510,7 +510,7 @@
         "category": "apparel",
         "subcategory": "jackets",
         "description": "Made-to-order garments developed around your brand and brief.",
-        "visible": true,
+        "visible": false,
         "featured": false,
         "imageStyle": "jacket",
         "displayPricing": {
@@ -711,10 +711,10 @@
       "id": "long_sleeve_tee",
       "public": {
         "slug": "long-sleeve-tee",
-        "name": "Long Sleeve Tee",
+        "name": "Long-sleeved Fleece Sweater",
         "category": "apparel",
         "subcategory": "tshirts",
-        "description": "Full-sleeve cotton tee for cooler venues and layered looks.",
+        "description": "CVC Fleece ( 60% 40 % Polyester) 280gsm",
         "visible": true,
         "featured": false,
         "imageStyle": "long-sleeve-navy",
@@ -1053,6 +1053,68 @@
       "public": {
         "slug": "premium-airglide-polo-tee",
         "name": "Premium Airglide Polo Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-black",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "tee",
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
+    },
+    {
+      "id": "oren_qd84_honeycomb_lacoste_long_sleeve_polo_tee",
+      "public": {
+        "slug": "oren-qd84-honeycomb-lacoste-long-sleeve-polo-tee",
+        "name": "Oren QD84 Honeycomb Lacoste Long Sleeve Polo Tee",
+        "category": "apparel",
+        "subcategory": "tshirts",
+        "description": "",
+        "visible": true,
+        "featured": false,
+        "imageStyle": "tee-black",
+        "displayPricing": {
+          "show": false,
+          "prefix": "From",
+          "amount": 0,
+          "unit": "piece"
+        }
+      },
+      "quotation": {
+        "enabled": false,
+        "productId": "tee",
+        "minimumQuantity": 1,
+        "pricingModel": "tiered"
+      },
+      "printingMethods": [
+        "dtf",
+        "dtg",
+        "silkscreen",
+        "embroidery"
+      ]
+    },
+    {
+      "id": "qd74_honeycomb_cotton_lacoste_polo_short_sleeve",
+      "public": {
+        "slug": "qd74-honeycomb-cotton-lacoste-polo-short-sleeve",
+        "name": "QD74 Honeycomb Cotton Lacoste Polo Short sleeve",
         "category": "apparel",
         "subcategory": "tshirts",
         "description": "",
