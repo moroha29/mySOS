@@ -1,7 +1,7 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-11-01T22:49:43.805Z",
+  "fetchedAt": "2026-11-03T23:59:06.387Z",
   "averageRating": 5,
   "totalReviewCount": 118,
   "reviews": [
@@ -12,6 +12,14 @@
       "rating": 5,
       "text": "Hands down one of the best printing companies to work with, really professional and fast output, down to earth people that I highly recommend and their prices are honestly one of the most reasonable and the quality is still very good!!! will definitely be their regular ☺️",
       "createTime": "2026-10-06T10:01:40.505850717Z"
+    },
+    {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2xKd1FrMHpRM0V5T0hKdmVubFBiSFJWVWtJMU1IYxAB",
+      "author": "JIM NG GHIM HUNG",
+      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocJVZ_TX8nGfnYf6Eo9eLesCwSIzCuawsR9GxOnEUmVC51UEfg=s128-c0x00000000-cc-rp-mo-ba5",
+      "rating": 5,
+      "text": "Great service and very professional, Owen is the person to go to, he's very experienced and resourceful",
+      "createTime": "2026-09-28T15:00:47.854315Z"
     },
     {
       "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2tNemRYaHFjakF5YVRGb2QzUXdjbVJ1TlZWdVgzYxAB",
@@ -36,14 +44,6 @@
       "rating": 5,
       "text": "we were able to get customised shirts within 10 days!! and they are good qualityyy.",
       "createTime": "2026-06-08T04:26:07.757187928Z"
-    },
-    {
-      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT25KQlJXRldXV2xRZDJaaVUxbG9WelpCYVZwUlEyYxAB",
-      "author": "jing rong",
-      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjWgwYuYzWXYX5kGLnmtXJ4LrXsT92eaZDcTg2nD0i44c7CwKeFr=s128-c0x00000000-cc-rp-mo",
-      "rating": 5,
-      "text": "great service and fast delivery, mentioned that i needed shirts last minute and owen managed to prepare all my shirts by the deadline. super friendly and accommodating despite hard requests",
-      "createTime": "2026-06-02T17:01:04.536359688Z"
     }
   ]
 }
