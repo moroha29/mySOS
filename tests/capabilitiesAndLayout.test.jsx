@@ -6,7 +6,7 @@ import printData from '../src/data/printData.json';
 import productData from '../src/data/productData.json';
 import siteContent from '../src/data/siteContent.json';
 import { brandMarkNames } from '../src/public/components/BrandMarks';
-import HomePage from '../src/public/pages/HomePage';
+import HomePage, { TILE_TONES } from '../src/public/pages/HomePage';
 import ProductsPage from '../src/public/pages/ProductsPage';
 import StoriesPage from '../src/public/pages/StoriesPage';
 import WhyPage from '../src/public/pages/WhyPage';
@@ -231,7 +231,11 @@ describe('the home banner and the sections under it', () => {
     const shown = siteContent.categories.filter((category) => category.visible !== false);
     expect(shown.length).toBeGreaterThan(0);
     expect(tiles).toHaveLength(shown.length);
-    expect(new Set(tiles).size).toBe(shown.length);
+    // Each in its own wash while there are washes to go round, and then round
+    // again rather than a tile with none -- the palette is eight long, and a
+    // ninth category must not be the thing that stops the site building.
+    expect(new Set(tiles).size).toBe(Math.min(shown.length, TILE_TONES.length));
+    for (const [index, tone] of tiles.entries()) expect(tone).toBe(TILE_TONES[index % TILE_TONES.length]);
     for (const category of shown) expect(markup).toContain(category.description.replaceAll('&', '&amp;'));
     for (const category of siteContent.categories) {
       if (category.visible === false) expect(markup).not.toContain(`?category=${category.id}`);
@@ -263,8 +267,10 @@ describe('the home banner and the sections under it', () => {
       expect(String(stat.value || '').trim(), 'a promise with nothing on it').not.toBe('');
       expect(markup).toContain(stat.value.replaceAll('&', '&amp;'));
     }
-    expect(new Set(siteContent.homeStats.map((stat) => stat.value)).size)
-      .toBe(siteContent.homeStats.length);
+    // "No two saying the same thing" used to be checked here as well, and it
+    // was the same trap one line up: two promises worded alike is his to
+    // settle, the row draws both perfectly well, and nothing he can type into
+    // this row should cost him the publish.
   });
 
   it('sets the banner the way the concept sets it: small line, huge headline', () => {

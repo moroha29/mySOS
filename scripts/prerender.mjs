@@ -74,6 +74,7 @@ try {
   const originalLocation = globalThis.location;
 
   const titles = new Map();
+  const notes = [];
   for (const page of pages) {
     const route = `/${page.path}`;
     // PublicApp reads globalThis.location to resolve its route, exactly as the
@@ -87,13 +88,21 @@ try {
       throw new Error(`${route}: ${resolved.unresolved.length} asset(s) not in the build manifest, e.g. ${resolved.unresolved[0]}`);
     }
     /*
-     * Two pages sharing a title is what this is here to end, and a page with
-     * nothing to say about itself is no better than the one line they all used
-     * to share. Both stop the build rather than reaching the website.
+     * Two pages sharing a title is what this is here to end -- but a title is
+     * the name the owner typed, so the only way two pages share one is that he
+     * typed the same name twice, and this used to answer that by refusing to
+     * build his website at all. It happened: two caps were both renamed "CP28
+     * Polyester Baseball Cap" and nothing he had written that day could be
+     * published, with nothing on screen to say which two pages or which name.
+     *
+     * A duplicate title is his to settle, and worth telling him about where he
+     * can settle it -- the portal says so beside the products themselves. It
+     * is not worth a website that will not build, so it is said here and the
+     * page is written. Same for a page left with nothing to describe itself.
      */
     const meta = pageMeta(page, content);
-    if (titles.has(meta.title)) throw new Error(`${route} and ${titles.get(meta.title)} would both be titled "${meta.title}"`);
-    if (!meta.description) throw new Error(`${route} has no description to give a search result`);
+    if (titles.has(meta.title)) notes.push(`${route} and ${titles.get(meta.title)} are both titled "${meta.title}"`);
+    if (!meta.description) notes.push(`${route} has no description to give a search result`);
     titles.set(meta.title, route);
 
     const html = shell
@@ -105,6 +114,14 @@ try {
     written += 1;
     process.stdout.write(`  ${route.padEnd(42)} ${(html.length / 1024).toFixed(1)} kB\n`);
   }
+
+  // Said once, after the pages, so it is not lost among them. Nothing here
+  // stops the build: every one of these is the content's to settle, not the
+  // build's, and the portal is where it gets settled.
+  if (notes.length) process.stdout.write(`
+worth a look:
+${notes.map((note) => `  ${note}
+`).join('')}`);
 
   // Somewhere for a search engine to start, and the working pages kept out of it.
   await writeFile(path.join(dist, 'sitemap.xml'), sitemapXml(pages.map((page) => `/${page.path}`)), 'utf8');

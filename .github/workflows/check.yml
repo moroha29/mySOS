@@ -27,3 +27,20 @@ jobs:
       # has run past the default 5 seconds on a busy runner.
       - run: npx vitest run --testTimeout=30000
       - run: npm run build
+
+  # Not part of what his publish waits for. His publish is a pull request from
+  # a content/ branch, and this runs the suite a second time; more to the point,
+  # a failure here is ours and must never be the thing that stops him
+  # publishing. So it runs on our pull requests only.
+  content-proof:
+    name: Nothing the owner types can stop a publish
+    if: ${{ !startsWith(github.head_ref, 'content/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check:content-proof
