@@ -320,7 +320,7 @@
       "id": "snapback",
       "public": {
         "slug": "custom-snapback",
-        "name": "Custom Snapback",
+        "name": "CP28 Polyester Baseball Cap",
         "category": "apparel",
         "subcategory": "caps",
         "description": "Structured headwear ready for embroidery or printed artwork.",
@@ -351,7 +351,7 @@
       "id": "dad_cap",
       "public": {
         "slug": "custom-dad-cap",
-        "name": "Dad Cap",
+        "name": "CP01 Cotton Baseball Cap",
         "category": "apparel",
         "subcategory": "caps",
         "description": "Relaxed everyday cap with a comfortable low-profile fit.",
@@ -382,7 +382,7 @@
       "id": "trucker_mesh",
       "public": {
         "slug": "trucker-mesh-cap",
-        "name": "Trucker Mesh Cap",
+        "name": "Cotton Trucker Mesh Cap",
         "category": "apparel",
         "subcategory": "caps",
         "description": "Breathable mesh-back cap for outdoor crews and campaigns.",
@@ -413,10 +413,10 @@
       "id": "five_panel",
       "public": {
         "slug": "five-panel-cap",
-        "name": "5-Panel Cap",
+        "name": "CP28 Polyester Baseball Cap",
         "category": "apparel",
         "subcategory": "caps",
-        "description": "A modern five-panel shape for lifestyle merchandise.",
+        "description": "Adjustable buckle strap · 100% Polyester\n· Available in 11 Colours · 6-panel · Hologram sticker",
         "visible": true,
         "featured": false,
         "imageStyle": "cap-blue",
