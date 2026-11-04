@@ -320,10 +320,10 @@
       "id": "snapback",
       "public": {
         "slug": "custom-snapback",
-        "name": "Custom Snapback",
+        "name": "CP01 Cotton Baseball Cap",
         "category": "apparel",
         "subcategory": "caps",
-        "description": "Structured headwear ready for embroidery or printed artwork.",
+        "description": "· 100% Cotton\n· Available in 15 Colours\n· 6-Panel",
         "visible": true,
         "featured": false,
         "imageStyle": "cap",
@@ -711,7 +711,7 @@
       "id": "long_sleeve_tee",
       "public": {
         "slug": "long-sleeve-tee",
-        "name": "Long Sleeve Tee",
+        "name": "Long Sleeve Cotton Fleece Sweater",
         "category": "apparel",
         "subcategory": "tshirts",
         "description": "Full-sleeve cotton tee for cooler venues and layered looks.",
