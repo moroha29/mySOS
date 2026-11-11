@@ -1,7 +1,7 @@
 {
   "_note": "Written by scripts/fetch-google-reviews.mjs from Google. Do not edit by hand: the daily refresh overwrites it, and Google's terms do not allow changing review content. The 'source' field says which API it came from.",
   "source": "google-places",
-  "fetchedAt": "2026-11-03T23:59:06.387Z",
+  "fetchedAt": "2026-11-11T00:01:58.879Z",
   "averageRating": 5,
   "totalReviewCount": 118,
   "reviews": [
@@ -30,20 +30,20 @@
       "createTime": "2026-08-19T16:26:03.161909660Z"
     },
     {
+      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2xkSldYZFVkMGN4Y0VaMGJpMTVkbFpXUWtsdFFsRRAB",
+      "author": "Serena Wee",
+      "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjVFR0hVG3TKi8ntKSvPJA5c9RD3vSJ58U2MasRYK2WIXeeLKfdO=s128-c0x00000000-cc-rp-mo",
+      "rating": 5,
+      "text": "Good for school jackets and managed to find a affordable and low quality supplier so that we can order for our cca members! customer service is great too",
+      "createTime": "2026-07-27T03:38:03.291476281Z"
+    },
+    {
       "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twaldHSklVMmhGVkU5UE1tRmtla05TWjBoamJGRRAB",
       "author": "Tien Dat Nguyen",
       "photoUrl": "https://lh3.googleusercontent.com/a-/ALV-UjX8E3hFLN_4dehTVqlWGmEWR0V_SKDJmvryAtbeiB4zM_UEYlyz=s128-c0x00000000-cc-rp-mo",
       "rating": 5,
       "text": "Wonderful experience, Owen has been very communicative, responsive and helpful and delivery was way ahead of schedule even though we ordered the shirts last minute in a tight deadline. Shirt quality is excellent and turned out exactly as we hoped for. Price is also very reasonable and much better compared to other supplier. We will definitely work with mysourceofsolutions again in the future. Thank you so much Owen and team!",
       "createTime": "2026-07-15T04:50:22.648804349Z"
-    },
-    {
-      "id": "places/ChIJubVZL3m9ZQERNCpHxuYONNQ/reviews/Ci9DQUlRQUNvZENodHljRjlvT2twUVRWbE1hM04yT0Y5SmIybHZabE4xVlZaWlJrRRAB",
-      "author": "Meher Bijlani",
-      "photoUrl": "https://lh3.googleusercontent.com/a/ACg8ocIqkbM62ntG3DpCvbEFbgucKqclQe18RRSccaooTEnAg1a9DA=s128-c0x00000000-cc-rp-mo",
-      "rating": 5,
-      "text": "we were able to get customised shirts within 10 days!! and they are good qualityyy.",
-      "createTime": "2026-06-08T04:26:07.757187928Z"
     }
   ]
 }
